@@ -1,0 +1,37 @@
+{
+  "name": "webapi-admin-panel",
+  "version": "0.0.1",
+  "private": true,
+  "homepage": ".",
+  "proxy": "http://localhost:8080/",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-sass": "^2.3.2",
+    "react-scripts": "1.0.6"
+  },
+  "dependencies": {
+    "chart.js": "2.5.0",
+    "history": "^4.6.1",
+    "lodash": "^4.17.4",
+    "react": "^15.5.4",
+    "react-addons-css-transition-group": "15.5.2",
+    "react-addons-transition-group": "15.5.2",
+    "react-chartjs-2": "2.1.0",
+    "react-dom": "15.5.4",
+    "react-redux": "^5.0.5",
+    "react-router-dom": "4.1.1",
+    "react-select": "^1.0.0-rc.5",
+    "react-transition-group": "^1.2.0",
+    "reactstrap": "4.6.2",
+    "redux": "^3.6.0",
+    "redux-persist": "^4.8.1",
+    "superagent": "^3.5.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
