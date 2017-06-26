@@ -29,6 +29,7 @@ class Entities extends Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.create = this.create.bind(this);
 		this.changePage = this.changePage.bind(this);
+		this.filterChange = this.filterChange.bind(this);
 	}
 
 	componentDidMount() {
@@ -133,6 +134,7 @@ class Entities extends Component {
 
 						<Card>
 							<CardHeader>
+								<i className="fa fa-plus"></i>
 								Spawn an entity
 							</CardHeader>
 							<CardBlock>
@@ -219,6 +221,7 @@ class Entities extends Component {
 
 						<Card>
 							<CardHeader>
+								<i className="fa fa-filter"></i>
 								Filter entities
 							</CardHeader>
 							<CardBlock>
@@ -265,95 +268,103 @@ class Entities extends Component {
 					</Col>
 
 					<Col xs={12}>
-						<Table striped={true}>
-							<thead>
-								<tr>
-									<th>Type</th>
-									<th>UUID</th>
-									<th>Location</th>
-									<th>Health</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								{_.map(entities, entity =>
-									<tr key={entity.uuid}>
-										<td>{entity.type}</td>
-										<td>{entity.uuid}</td>
-										<td>
-											{entity.location ?
-												<Button type="button" color="link">
-													<i className="fa fa-globe"></i>&nbsp;&nbsp;
-													{entity.location.world.name} &nbsp; &nbsp;
-													{entity.location.position.x.toFixed(0)} |&nbsp;
-													{entity.location.position.y.toFixed(0)} |&nbsp;
-													{entity.location.position.z.toFixed(0)}
-												</Button>
-											: null}
-										</td>
-										<td>
-											{entity.health ?
-												<Progress
-													className="my-1" color="success"
-													value={(entity.health.current/entity.health.max)*100}
-												/>
-											: null}
-										</td>
-										<td>
-											<Button
-												type="button" color="danger" disabled={entity.updating}
-												onClick={() => this.delete(entity)}
-											>
-												Destroy
-											</Button>
-											&nbsp;
-											{entity.updating ?
-												<i className="fa fa-spinner fa-pulse"></i>
-											: null}
-										</td>
-									</tr>
-								)}
-							</tbody>
-						</Table>
-						{ maxPage > 1 ?
-							<Pagination>
-								{ page > 4 ?
-									<PaginationItem>
-										<PaginationLink onClick={e => this.changePage(e, 0)} href="#">
-											1
-										</PaginationLink>
-									</PaginationItem>
+						<Card>
+							<CardHeader>
+								<i className="fa fa-paw"></i>
+								Entities
+							</CardHeader>
+							<CardBlock>
+								<Table striped={true}>
+									<thead>
+										<tr>
+											<th>Type</th>
+											<th>UUID</th>
+											<th>Location</th>
+											<th>Health</th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{_.map(entities, entity =>
+											<tr key={entity.uuid}>
+												<td>{entity.type}</td>
+												<td>{entity.uuid}</td>
+												<td>
+													{entity.location ?
+														<Button type="button" color="link">
+															<i className="fa fa-globe"></i>&nbsp;&nbsp;
+															{entity.location.world.name} &nbsp; &nbsp;
+															{entity.location.position.x.toFixed(0)} |&nbsp;
+															{entity.location.position.y.toFixed(0)} |&nbsp;
+															{entity.location.position.z.toFixed(0)}
+														</Button>
+													: null}
+												</td>
+												<td>
+													{entity.health ?
+														<Progress
+															className="my-1" color="success"
+															value={(entity.health.current/entity.health.max)*100}
+														/>
+													: null}
+												</td>
+												<td>
+													<Button
+														type="button" color="danger" disabled={entity.updating}
+														onClick={() => this.delete(entity)}
+													>
+														Destroy
+													</Button>
+													&nbsp;
+													{entity.updating ?
+														<i className="fa fa-spinner fa-pulse"></i>
+													: null}
+												</td>
+											</tr>
+										)}
+									</tbody>
+								</Table>
+								{ maxPage > 1 ?
+									<Pagination>
+										{ page > 4 ?
+											<PaginationItem>
+												<PaginationLink onClick={e => this.changePage(e, 0)} href="#">
+													1
+												</PaginationLink>
+											</PaginationItem>
+										: null }
+										{ page > 5 ?
+											<PaginationItem>
+												<PaginationLink onClick={e => this.changePage(e, page - 5)} href="#">
+													...
+												</PaginationLink>
+											</PaginationItem>
+										: null }
+										{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
+											<PaginationItem key={p} active={p === page}>
+												<PaginationLink onClick={e => this.changePage(e, p)} href="#">
+													{p + 1}
+												</PaginationLink>
+											</PaginationItem>
+										))}
+										{ page < maxPage - 6 ?
+											<PaginationItem>
+												<PaginationLink onClick={e => this.changePage(e, page + 5)} href="#">
+													...
+												</PaginationLink>
+											</PaginationItem>
+										: null }
+										{ page < maxPage - 5 ?
+											<PaginationItem>
+												<PaginationLink onClick={e => this.changePage(e, maxPage - 1)} href="#">
+													{maxPage}
+												</PaginationLink>
+											</PaginationItem>
+										: null }
+									</Pagination>
 								: null }
-								{ page > 5 ?
-									<PaginationItem>
-										<PaginationLink onClick={e => this.changePage(e, page - 5)} href="#">
-											...
-										</PaginationLink>
-									</PaginationItem>
-								: null }
-								{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
-									<PaginationItem key={p} active={p === page}>
-										<PaginationLink onClick={e => this.changePage(e, p)} href="#">
-											{p + 1}
-										</PaginationLink>
-									</PaginationItem>
-								))}
-								{ page < maxPage - 6 ?
-									<PaginationItem>
-										<PaginationLink onClick={e => this.changePage(e, page + 5)} href="#">
-											...
-										</PaginationLink>
-									</PaginationItem>
-								: null }
-								{ page < maxPage - 5 ?
-									<PaginationItem>
-										<PaginationLink onClick={e => this.changePage(e, maxPage - 1)} href="#">
-											{maxPage}
-										</PaginationLink>
-									</PaginationItem>
-								: null }
-							</Pagination>
-						: null }
+							</CardBlock>
+						</Card>
 					</Col>
 
 				</Row>
@@ -367,7 +378,7 @@ const mapStateToProps = (_state) => {
 
 	return {
 		entities: state.entities,
-		worlds: state.worlds,
+		worlds: _state.world.worlds,
 		entTypes: _state.api.types[ENT_TYPES],
 		filter: state.filter,
 		creating: state.creating,

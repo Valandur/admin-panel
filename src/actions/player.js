@@ -7,6 +7,15 @@ export function requestPlayers(details = false) {
 	}
 }
 
+export const SET_FILTER = "PLAYER_SET_FILTER"
+export function setFilter(filter, value) {
+	return {
+		type: SET_FILTER,
+		filter: filter,
+		value: value,
+	}
+}
+
 export const PLAYER_KICK_REQUEST = "PLAYER_KICK_REQUEST"
 export const PLAYER_KICK_RESPONSE = "PLAYER_KICK_RESPONSE"
 export function requestKickPlayer(uuid) {

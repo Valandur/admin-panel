@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
-import { Row, Col, Table, Button, Progress, Badge } from 'reactstrap'
-import { Modal, ModalHeader, ModalBody } from "reactstrap"
+import { Row, Col, Table, Button, Progress, Badge, FormGroup, Label } from 'reactstrap'
+import { Modal, ModalHeader, ModalBody, Card, CardHeader, CardBlock } from "reactstrap"
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap"
+import Select from "react-select"
 import _ from 'lodash'
 
-import { requestPlayers, requestKickPlayer, requestBanPlayer } from "../../actions/player"
+import { requestWorlds } from "../../actions/world"
+import { setFilter, requestPlayers, requestKickPlayer, requestBanPlayer } from "../../actions/player"
 
 const ITEMS_PER_PAGE = 20;
 
@@ -22,16 +24,22 @@ class Players extends Component {
 		this.toggleModal = this.toggleModal.bind(this);
 		this.showInventory = this.showInventory.bind(this);
 		this.changePage = this.changePage.bind(this);
-
-		this.props.requestPlayers();
+		this.filterChange = this.filterChange.bind(this);
 	}
 
 	componentDidMount() {
+		this.props.requestPlayers();
+		this.props.requestWorlds();
+
 		this.interval = setInterval(this.props.requestPlayers, 5000);
 	}
 
 	componentWillUnmount() {
 		clearInterval(this.interval);
+	}
+
+	filterChange(filter, newValue) {
+		this.props.setFilter(filter, _.map(newValue, "value"));
 	}
 
 	kick(player) {
@@ -76,146 +84,189 @@ class Players extends Component {
 			<div className="animated fadeIn">
 				<Row>
 
+				<Col xs={12} md={6}>
+
+						<Card>
+							<CardHeader>
+								<i className="fa fa-filter"></i>
+								Filter players
+							</CardHeader>
+							<CardBlock>
+								<Row>
+
+									<Col md={12}>
+
+										<FormGroup row>
+											<Label md={3} for="filterWorld">World</Label>
+											<Col md={9}>
+												<Select
+													id="filterWorld"
+													multi={true}
+													value={this.props.filter.world}
+													onChange={val => this.filterChange("world", val)}
+													options={_.map(this.props.worlds, world => 
+														({ value: world.uuid, label: world.name + " (" + world.dimensionType.name + ")" })
+													)}
+												/>
+											</Col>
+										</FormGroup>
+
+									</Col>
+
+								</Row>
+							</CardBlock>
+						</Card>
+
+					</Col>
+
 					<Col xs={12}>
-						<Table striped={true}>
-							<thead>
-								<tr>
-									<th>Name / UUID</th>
-									<th>Location</th>
-									<th>Health & Food</th>
-									<th>GameMode</th>
-									<th>Level</th>
-									<th>Deaths</th>
-									<th>Source</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								{_.map(players, player =>
-									<tr key={player.uuid}>
-										<td>{player.name}<br />{player.uuid}</td>
-										<td>
-											{player.location ?
-												<div>
-													<Button type="button" color="link">
-														<i className="fa fa-globe"></i>&nbsp;&nbsp;
-														{player.location.world.name} &nbsp; &nbsp;
-														{player.location.position.x.toFixed(0)} |&nbsp;
-														{player.location.position.y.toFixed(0)} |&nbsp;
-														{player.location.position.z.toFixed(0)}
+						<Card>
+							<CardHeader>
+								<i className="fa fa-users"></i>
+								Players
+							</CardHeader>
+							<CardBlock>
+								<Table striped={true}>
+									<thead>
+										<tr>
+											<th>Name / UUID</th>
+											<th>Location</th>
+											<th>Health & Food</th>
+											<th>GameMode</th>
+											<th>Level</th>
+											<th>Deaths</th>
+											<th>Source</th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{_.map(players, player =>
+											<tr key={player.uuid}>
+												<td>{player.name}<br />{player.uuid}</td>
+												<td>
+													{player.location ?
+														<div>
+															<Button type="button" color="link">
+																<i className="fa fa-globe"></i>&nbsp;&nbsp;
+																{player.location.world.name} &nbsp; &nbsp;
+																{player.location.position.x.toFixed(0)} |&nbsp;
+																{player.location.position.y.toFixed(0)} |&nbsp;
+																{player.location.position.z.toFixed(0)}
+															</Button>
+														</div>
+													: null}
+												</td>
+												<td>
+													{player.health ?
+														<div>
+															<Progress
+																className="my-1" color="success"
+																value={(player.health.current/player.health.max)*100}
+															/>
+															<Progress
+																className="my-1" color="info"
+																value={(player.food.foodLevel/20)*100}
+															/>
+														</div>
+													: null}
+												</td>
+												<td>
+													{player.gameMode ?
+														<div>
+															{player.gameMode.name}
+														</div>
+													: null}
+												</td>
+												<td>
+													{player.experience ?
+														<div>
+															{player.experience.level}
+														</div>
+													: null}
+												</td>
+												<td>
+													{player.statistics ?
+														<div>
+															{player.statistics.deaths}
+														</div>
+													: null}
+												</td>
+												<td>
+													{player.connection ?
+														<div>
+															{player.connection.address.substring(1)}
+														</div>
+													: null}
+												</td>
+												<td>
+													<Button
+														type="button" color="primary" disabled={player.updating}
+														onClick={() => this.showInventory(player)}
+													>
+														Inventory
+													</Button>{" "}
+													<Button
+														type="button" color="warning" disabled={player.updating}
+														onClick={() => this.kick(player)}
+													>
+														Kick
+													</Button>{" "}
+													<Button
+														type="button" color="danger" disabled={player.updating}
+														onClick={() => this.ban(player)}
+													>
+														Ban
 													</Button>
-												</div>
-											: null}
-										</td>
-										<td>
-											{player.health ?
-												<div>
-													<Progress
-														className="my-1" color="success"
-														value={(player.health.current/player.health.max)*100}
-													/>
-													<Progress
-														className="my-1" color="info"
-														value={(player.food.foodLevel/20)*100}
-													/>
-												</div>
-											: null}
-										</td>
-										<td>
-											{player.gameMode ?
-												<div>
-													{player.gameMode.name}
-												</div>
-											: null}
-										</td>
-										<td>
-											{player.experience ?
-												<div>
-													{player.experience.level}
-												</div>
-											: null}
-										</td>
-										<td>
-											{player.statistics ?
-												<div>
-													{player.statistics.deaths}
-												</div>
-											: null}
-										</td>
-										<td>
-											{player.connection ?
-												<div>
-													{player.connection.address.substring(1)}
-												</div>
-											: null}
-										</td>
-										<td>
-											<Button
-												type="button" color="primary" disabled={player.updating}
-												onClick={() => this.showInventory(player)}
-											>
-												Inventory
-											</Button>{" "}
-											<Button
-												type="button" color="warning" disabled={player.updating}
-												onClick={() => this.kick(player)}
-											>
-												Kick
-											</Button>{" "}
-											<Button
-												type="button" color="danger" disabled={player.updating}
-												onClick={() => this.ban(player)}
-											>
-												Ban
-											</Button>
-											&nbsp;
-											{player.updating ?
-												<i className="fa fa-spinner fa-pulse"></i>
-											: null}
-										</td>
-									</tr>
-								)}
-							</tbody>
-						</Table>
-						{ maxPage > 1 ?
-							<Pagination>
-								{ page > 4 ?
-									<PaginationItem>
-										<PaginationLink onClick={e => this.changePage(e, 0)} href="#">
-											1
-										</PaginationLink>
-									</PaginationItem>
+													&nbsp;
+													{player.updating ?
+														<i className="fa fa-spinner fa-pulse"></i>
+													: null}
+												</td>
+											</tr>
+										)}
+									</tbody>
+								</Table>
+								{ maxPage > 1 ?
+									<Pagination>
+										{ page > 4 ?
+											<PaginationItem>
+												<PaginationLink onClick={e => this.changePage(e, 0)} href="#">
+													1
+												</PaginationLink>
+											</PaginationItem>
+										: null }
+										{ page > 5 ?
+											<PaginationItem>
+												<PaginationLink onClick={e => this.changePage(e, page - 5)} href="#">
+													...
+												</PaginationLink>
+											</PaginationItem>
+										: null }
+										{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
+											<PaginationItem key={p} active={p === page}>
+												<PaginationLink onClick={e => this.changePage(e, p)} href="#">
+													{p + 1}
+												</PaginationLink>
+											</PaginationItem>
+										))}
+										{ page < maxPage - 6 ?
+											<PaginationItem>
+												<PaginationLink onClick={e => this.changePage(e, page + 5)} href="#">
+													...
+												</PaginationLink>
+											</PaginationItem>
+										: null }
+										{ page < maxPage - 5 ?
+											<PaginationItem>
+												<PaginationLink onClick={e => this.changePage(e, maxPage - 1)} href="#">
+													{maxPage}
+												</PaginationLink>
+											</PaginationItem>
+										: null }
+									</Pagination>
 								: null }
-								{ page > 5 ?
-									<PaginationItem>
-										<PaginationLink onClick={e => this.changePage(e, page - 5)} href="#">
-											...
-										</PaginationLink>
-									</PaginationItem>
-								: null }
-								{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
-									<PaginationItem key={p} active={p === page}>
-										<PaginationLink onClick={e => this.changePage(e, p)} href="#">
-											{p + 1}
-										</PaginationLink>
-									</PaginationItem>
-								))}
-								{ page < maxPage - 6 ?
-									<PaginationItem>
-										<PaginationLink onClick={e => this.changePage(e, page + 5)} href="#">
-											...
-										</PaginationLink>
-									</PaginationItem>
-								: null }
-								{ page < maxPage - 5 ?
-									<PaginationItem>
-										<PaginationLink onClick={e => this.changePage(e, maxPage - 1)} href="#">
-											{maxPage}
-										</PaginationLink>
-									</PaginationItem>
-								: null }
-							</Pagination>
-						: null }
+							</CardBlock>
+						</Card>
 					</Col>
 
 					<Modal isOpen={this.state.modal} toggle={this.toggleModal} className={'modal-lg ' + this.props.className}>
@@ -275,6 +326,8 @@ const mapStateToProps = (_state) => {
 
 	return {
 		players: state.players,
+		worlds: _state.world.worlds,
+		filter: state.filter,
 	}
 }
 
@@ -283,6 +336,8 @@ const mapDispatchToProps = (dispatch) => {
 		requestPlayers: () => dispatch(requestPlayers(true)),
 		requestKickPlayer: (uuid) => dispatch(requestKickPlayer(uuid)),
 		requestBanPlayer: (name) => dispatch(requestBanPlayer(name)),
+		requestWorlds: () => dispatch(requestWorlds(true)),
+		setFilter: (filter, value) => dispatch(setFilter(filter, value)),
 	}
 }
 

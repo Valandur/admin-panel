@@ -10,6 +10,7 @@ import { PLAYERS_REQUEST, PLAYERS_RESPONSE, PLAYER_KICK_REQUEST, PLAYER_KICK_RES
 import { PLAYER_BAN_REQUEST, PLAYER_BAN_RESPONSE } from "../actions/player"
 import { PLUGINS_REQUEST, PLUGINS_RESPONSE } from "../actions/plugin"
 import { TILE_ENTITIES_REQUEST, TILE_ENTITIES_RESPONSE } from "../actions/tile-entity"
+import { PROPERTIES_REQUEST, PROPERTIES_RESPONSE, SAVE_PROPERTY_REQUEST, SAVE_PROPERTY_RESPONSE } from "../actions/settings"
 
 const apiUrl = "/api/"
 
@@ -209,6 +210,27 @@ const api = store => next => action => {
 					tileEntities: data.tileEntities,
 				})
 			});
+			break;
+
+		case PROPERTIES_REQUEST:
+			get("info/properties", data => {
+				next({
+					type: PROPERTIES_RESPONSE,
+					ok: data.ok,
+					properties: data.properties,
+				})
+			})
+			break;
+
+		case SAVE_PROPERTY_REQUEST:
+			post("info/properties", data => {
+				next({
+					type: SAVE_PROPERTY_RESPONSE,
+					ok: data.ok,
+					key: action.prop.key,
+					properties: data.properties,
+				})
+			}, { properties: { [action.prop.key]: action.prop.value }})
 			break;
 
 		default:
