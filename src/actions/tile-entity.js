@@ -6,3 +6,12 @@ export function requestTileEntities(details = false) {
 		details: details,
 	}
 }
+
+export const SET_FILTER = "TILE_ENTITY_SET_FILTER"
+export function setFilter(filter, value) {
+	return {
+		type: SET_FILTER,
+		filter: filter,
+		value: value,
+	}
+}

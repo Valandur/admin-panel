@@ -7,6 +7,7 @@ import entity from "./entity"
 import player from "./player"
 import plugin from "./plugin"
 import tileEntity from "./tile-entity"
+import settings from "./settings"
 
 const app = combineReducers({
 	api,
@@ -16,6 +17,7 @@ const app = combineReducers({
 	player,
 	plugin,
 	tileEntity,
+	settings,
 })
 
 export default app

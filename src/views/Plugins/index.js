@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
-import { Row, Col, Table } from 'reactstrap'
+import { Row, Col, Table, Card, CardHeader, CardBlock } from 'reactstrap'
 import _ from 'lodash'
 
 import { requestPlugins } from "../../actions/plugin"
@@ -20,24 +20,32 @@ class Plugins extends Component {
         <Row>
 
           <Col xs={12}>
-            <Table striped={true}>
-              <thead>
-                <tr>
-                  <th>Id</th>
-                  <th>Name</th>
-                  <th>Version</th>
-                </tr>
-              </thead>
-              <tbody>
-                {_.map(this.props.plugins, plugin =>
-                  <tr key={plugin.id}>
-                    <td>{plugin.id}</td>
-                    <td>{plugin.name}</td>
-                    <td>{plugin.version}</td>
-                  </tr>
-                )}
-              </tbody>
-            </Table>
+            <Card>
+              <CardHeader>
+                <i className="fa fa-plug"></i>
+                Plugins
+              </CardHeader>
+              <CardBlock>
+                <Table striped={true}>
+                  <thead>
+                    <tr>
+                      <th>Id</th>
+                      <th>Name</th>
+                      <th>Version</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {_.map(this.props.plugins, plugin =>
+                      <tr key={plugin.id}>
+                        <td>{plugin.id}</td>
+                        <td>{plugin.name}</td>
+                        <td>{plugin.version}</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </Table>
+              </CardBlock>
+            </Card>
           </Col>
 
         </Row>

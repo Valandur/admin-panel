@@ -1,6 +1,5 @@
 import _ from "lodash"
 
-import { WORLDS_RESPONSE } from "../actions/world"
 import { ENTITIES_RESPONSE, SET_FILTER, ENTITY_CREATE_REQUEST, ENTITY_CREATE_RESPONSE } from "../actions/entity"
 import { ENTITY_DELETE_REQUEST, ENTITY_DELETE_RESPONSE } from "../actions/entity"
 
@@ -10,11 +9,6 @@ const entity = (state = { entities: [], worlds: [], filter: {}}, action) => {
 			return _.assign({}, state, {
 				entities: _.sortBy(action.entities, "uuid"),
 			})
-
-		case WORLDS_RESPONSE:
-			return _.assign({}, state, {
-				worlds: _.sortBy(action.worlds, "name"),
-			});
 
 		case ENTITY_CREATE_REQUEST:
 			return _.assign({}, state, {
@@ -53,6 +47,7 @@ const entity = (state = { entities: [], worlds: [], filter: {}}, action) => {
 		case SET_FILTER:
 			return _.assign({}, state, {
 				filter: {
+					...state.filter,
 					[action.filter]: action.value,
 				}
 			});

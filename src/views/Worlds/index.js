@@ -159,6 +159,7 @@ class Worlds extends Component {
 					<Col xs={12}>
 						<Card>
 							<CardHeader>
+								<i className="fa fa-plus"></i>
 								Create a world
 							</CardHeader>
 							<CardBlock>
@@ -257,8 +258,8 @@ class Worlds extends Component {
 															name="loadOnStartup"
 															checked={this.state.loadOnStartup}
 															onChange={this.handleChange}
-														/>&nbsp;
-														Load on startup
+														/>
+														Load on startup<br />
 													</Label>
 												</FormGroup>
 												<FormGroup check>
@@ -268,8 +269,8 @@ class Worlds extends Component {
 															name="keepSpawnLoaded"
 															checked={this.state.keepSpawnLoaded}
 															onChange={this.handleChange}
-														/>&nbsp;
-														Keep spawn loaded
+														/>
+														Keep spawn loaded<br />
 													</Label>
 												</FormGroup>
 												<FormGroup check>
@@ -279,8 +280,8 @@ class Worlds extends Component {
 															name="commandsAllowed"
 															checked={this.state.commandsAllowed}
 															onChange={this.handleChange}
-														/>&nbsp;
-														Allow commands
+														/>
+														Allow commands<br />
 													</Label>
 												</FormGroup>
 												<FormGroup check>
@@ -290,8 +291,8 @@ class Worlds extends Component {
 															name="generateBonusChest"
 															checked={this.state.generateBonusChest}
 															onChange={this.handleChange}
-														/>&nbsp;
-														Generate bonus chests
+														/>
+														Generate bonus chests<br />
 													</Label>
 												</FormGroup>
 												<FormGroup check>
@@ -301,8 +302,9 @@ class Worlds extends Component {
 															name="usesMapFeatures"
 															checked={this.state.usesMapFeatures}
 															onChange={this.handleChange}
-														/>&nbsp;
-														Enable map features (villages, strongholds, etc.)
+														/>
+														Enable map features<br />
+														(villages, strongholds, etc.)
 													</Label>
 												</FormGroup>
 											</Col>
@@ -324,124 +326,121 @@ class Worlds extends Component {
 					</Col>
 
 					<Col xs={12}>
-						<Table striped={true}>
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>UUID</th>
-									<th>Dimension</th>
-									<th>Difficulty</th>
-									<th>Game Mode</th>
-									<th>Generator</th>
-									<th>Weather</th>
-									<th>Time</th>
-									<th>Seed</th>
-									<th>Status</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								{_.map(worlds, world =>
-									<tr key={world.uuid}>
-										<td>{world.name}</td>
-										<td>{world.uuid}</td>
-										<td>
-											{world.dimensionType ? world.dimensionType.name : "-"}
-										</td>
-										<td>
-											{world.difficulty ? world.difficulty.name : "-"}
-										</td>
-										<td>
-											{world.gameMode ? world.gameMode.name : "-"}
-										</td>
-										<td>
-											{world.generatorType ? world.generatorType.name : "-"}
-										</td>
-										<td>
-											{world.weather ? world.weather.name : "-"}
-										</td>
-										<td>
-											{world.time ? world.time : "-"}
-										</td>
-										<td>
-											{world.seed}
-										</td>
-										<td>
-											{world ?
-												<span className={"badge badge-" + (world.isLoaded ? "success" : "warning")}>
-													{world.isLoaded ? "Loaded" : "Unloaded"}
-												</span>
-											: null}
-										</td>
-										<td>
-											<Button
-												type="button" color="info" disabled={world.updating}
-												onClick={() => this.showGameRules(world)}
-											>
-												Game Rules
-											</Button>
-											<Button
-												type="button" color={world.isLoaded ? "warning" : "success"}
-												onClick={() => this.toggleLoad(world)} disabled={world.updating}
-											>
-												{world.isLoaded ? "Unload " : "Load "}
-											</Button>
-											{!world.isLoaded ?
-												<Button
-													type="button" color="danger" disabled={world.updating}
-													onClick={() => this.delete(world)}
-												>
-													Delete
-												</Button>
-											: null}
-											&nbsp;
-											{world.updating ?
-												<i className="fa fa-spinner fa-pulse"></i>
-											: null}
-										</td>
-									</tr>
-								)}
-							</tbody>
-						</Table>
-						{ maxPage > 1 ?
-							<Pagination>
-								{ page > 4 ?
-									<PaginationItem>
-										<PaginationLink onClick={e => this.changePage(e, 0)} href="#">
-											1
-										</PaginationLink>
-									</PaginationItem>
+						<Card>
+							<CardHeader>
+								<i className="fa fa-globe"></i>
+								Worlds
+							</CardHeader>
+							<CardBlock>
+								<Table striped={true}>
+									<thead>
+										<tr>
+											<th>Name / UUID</th>
+											<th>Dimension<br />Generator</th>
+											<th>Difficulty<br />Game Mode</th>
+											<th>Time<br />Weather</th>
+											<th>Seed</th>
+											<th>Status</th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{_.map(worlds, world =>
+											<tr key={world.uuid}>
+												<td>{world.name}<br />{world.uuid}</td>
+												<td>
+													{world.dimensionType ? world.dimensionType.name : "-"}<br />
+													{world.generatorType ? world.generatorType.name : "-"}
+												</td>
+												<td>
+													<i className="fa fa-signal"></i> {world.difficulty ? world.difficulty.name : "-"}<br />
+													<i className="fa fa-gamepad"></i> {world.gameMode ? world.gameMode.name : "-"}
+												</td>
+												<td>
+													<i className="fa fa-clock-o"></i> {world.time ? world.time : "-"}<br />
+													<i className="fa fa-cloud"></i> {world.weather ? world.weather.name : "-"}
+												</td>
+												<td>
+													{world.seed}
+												</td>
+												<td>
+													{world ?
+														<span className={"badge badge-" + (world.isLoaded ? "success" : "warning")}>
+															{world.isLoaded ? "Loaded" : "Unloaded"}
+														</span>
+													: null}
+												</td>
+												<td>
+													<Button
+														type="button" color="info" disabled={world.updating}
+														onClick={() => this.showGameRules(world)}
+													>
+														Game Rules
+													</Button>{" "}
+													<Button
+														type="button" color={world.isLoaded ? "warning" : "success"}
+														onClick={() => this.toggleLoad(world)} disabled={world.updating}
+													>
+														{world.isLoaded ? "Unload " : "Load "}
+													</Button>{" "}
+													{!world.isLoaded ?
+														<Button
+															type="button" color="danger" disabled={world.updating}
+															onClick={() => this.delete(world)}
+														>
+															Delete
+														</Button>
+													: null}
+													{" "}
+													{world.updating ?
+														<i className="fa fa-spinner fa-pulse"></i>
+													: null}
+												</td>
+											</tr>
+										)}
+									</tbody>
+								</Table>
+								{ maxPage > 1 ?
+									<Pagination>
+										{ page > 4 ?
+											<PaginationItem>
+												<PaginationLink onClick={e => this.changePage(e, 0)} href="#">
+													1
+												</PaginationLink>
+											</PaginationItem>
+										: null }
+										{ page > 5 ?
+											<PaginationItem>
+												<PaginationLink onClick={e => this.changePage(e, page - 5)} href="#">
+													...
+												</PaginationLink>
+											</PaginationItem>
+										: null }
+										{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
+											<PaginationItem key={p} active={p === page}>
+												<PaginationLink onClick={e => this.changePage(e, p)} href="#">
+													{p + 1}
+												</PaginationLink>
+											</PaginationItem>
+										))}
+										{ page < maxPage - 6 ?
+											<PaginationItem>
+												<PaginationLink onClick={e => this.changePage(e, page + 5)} href="#">
+													...
+												</PaginationLink>
+											</PaginationItem>
+										: null }
+										{ page < maxPage - 5 ?
+											<PaginationItem>
+												<PaginationLink onClick={e => this.changePage(e, maxPage - 1)} href="#">
+													{maxPage}
+												</PaginationLink>
+											</PaginationItem>
+										: null }
+									</Pagination>
 								: null }
-								{ page > 5 ?
-									<PaginationItem>
-										<PaginationLink onClick={e => this.changePage(e, page - 5)} href="#">
-											...
-										</PaginationLink>
-									</PaginationItem>
-								: null }
-								{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
-									<PaginationItem key={p} active={p === page}>
-										<PaginationLink onClick={e => this.changePage(e, p)} href="#">
-											{p + 1}
-										</PaginationLink>
-									</PaginationItem>
-								))}
-								{ page < maxPage - 6 ?
-									<PaginationItem>
-										<PaginationLink onClick={e => this.changePage(e, page + 5)} href="#">
-											...
-										</PaginationLink>
-									</PaginationItem>
-								: null }
-								{ page < maxPage - 5 ?
-									<PaginationItem>
-										<PaginationLink onClick={e => this.changePage(e, maxPage - 1)} href="#">
-											{maxPage}
-										</PaginationLink>
-									</PaginationItem>
-								: null }
-							</Pagination>
-						: null }
+							</CardBlock>
+						</Card>
 					</Col>
 
 					<Modal isOpen={this.state.modal} toggle={this.toggleModal} className={'modal-lg ' + this.props.className}>
