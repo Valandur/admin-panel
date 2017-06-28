@@ -114,8 +114,8 @@ class Entities extends Component {
 			return true;
 		});
 		
-		const page = this.state.page;
 		const maxPage = Math.ceil(entities.length / ITEMS_PER_PAGE);
+		const page = Math.min(this.state.page, maxPage - 1);
 
 		entities = entities.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 

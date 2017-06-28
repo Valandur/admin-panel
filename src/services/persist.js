@@ -1,4 +1,5 @@
-import { LOGIN_RESPONSE, LOGOUT_REQUEST } from "../actions"
+import { push } from "react-router-redux"
+import { LOGIN_RESPONSE, LOGOUT_REQUEST, CHECK_USER_RESPONSE } from "../actions"
 
 const persist = store => next => action => {
 	next(action)
@@ -14,7 +15,13 @@ const persist = store => next => action => {
 			if (window.localStorage) {
 				window.localStorage.removeItem("api");
 			}
+			next(push("/login"))
 			break;
+
+		case CHECK_USER_RESPONSE:
+			if (!action.user) {
+				next(push("/login"))
+			}
 
 		default:
 			break;

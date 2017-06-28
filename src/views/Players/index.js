@@ -75,8 +75,8 @@ class Players extends Component {
 	render() {
 		let players = _.filter(this.props.players, p => true);
 
-		const page = this.state.page;
 		const maxPage = Math.ceil(players.length / ITEMS_PER_PAGE);
+		const page = Math.min(this.state.page, maxPage - 1);
 
 		players = players.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 

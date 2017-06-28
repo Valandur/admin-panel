@@ -47,7 +47,7 @@ class Header extends Component {
 			<header className="app-header navbar">
 				<button className="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button" onClick={this.mobileSidebarToggle}>&#9776;</button>
 				{ // eslint-disable-next-line
-				} <a className="navbar-brand" href="/"></a>
+				} <a className="navbar-brand" href="."></a>
 				<ul className="nav navbar-nav d-md-down-none">
 					<li className="nav-item">
 						<button className="nav-link navbar-toggler sidebar-toggler" type="button" onClick={this.sidebarMinimize}>&#9776;</button>
