@@ -1,4 +1,5 @@
 import { combineReducers } from "redux"
+import { routerReducer } from "react-router-redux"
 
 import api from "./api"
 import dashboard from "./dashboard"
@@ -18,6 +19,7 @@ const app = combineReducers({
 	plugin,
 	tileEntity,
 	settings,
+	router: routerReducer,
 })
 
 export default app

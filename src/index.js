@@ -4,6 +4,7 @@ import { Provider } from "react-redux"
 import { createStore, applyMiddleware, compose } from "redux"
 import 'react-select/dist/react-select.css'
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import { ConnectedRouter, routerMiddleware, push } from 'react-router-redux'
 import { createBrowserHistory } from 'history'
 
 // Redux
@@ -31,16 +32,20 @@ if (window.localStorage) {
 }
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-let store = createStore(App, initialState, composeEnhancers(applyMiddleware(api, persist)));
+let store = createStore(
+	App, 
+	initialState, 
+	composeEnhancers(applyMiddleware(api, persist, routerMiddleware(history)))
+);
 
-// CHeck if the possibly saved state/key is still valid
+// Check if the possibly saved state/key is still valid
 if (store.getState().api.loggedIn) {
 	store.dispatch(requestCheckUser());
 }
 
 ReactDOM.render((
 	<Provider store={store}>
-		<Router history={history} basename="/admin">
+		<ConnectedRouter history={history} basename="/admin">
 			<Switch>
 				<Route path="/login" name="Login" component={Login} />
 				<Route path="/" name="Home" render={props => {
@@ -50,6 +55,6 @@ ReactDOM.render((
 						return <Redirect to={{ pathname: '/login', state: { from: props.location} }} />
 				}} />
 			</Switch>
-		</Router>
+		</ConnectedRouter>
 	</Provider>
 ), document.getElementById('root'))
