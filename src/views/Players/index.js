@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from "react-redux"
 import { Row, Col, Table, Button, Progress, Badge, FormGroup, Label } from 'reactstrap'
 import { Modal, ModalHeader, ModalBody, Card, CardHeader, CardBlock } from "reactstrap"
-import { Pagination, PaginationItem, PaginationLink } from "reactstrap"
+import { Pagination, PaginationItem, PaginationLink, Input } from "reactstrap"
 import Select from "react-select"
 import _ from 'lodash'
 
@@ -39,7 +39,10 @@ class Players extends Component {
 	}
 
 	filterChange(filter, newValue) {
-		this.props.setFilter(filter, _.map(newValue, "value"));
+		if (_.isArray(newValue))
+			this.props.setFilter(filter, _.map(newValue, "value"));
+		else
+			this.props.setFilter(filter, newValue);
 	}
 
 	kick(player) {
@@ -73,7 +76,16 @@ class Players extends Component {
 	}
 
 	render() {
-		let players = _.filter(this.props.players, p => true);
+		const reg = new RegExp(this.props.filter.name, "i")
+
+		let players = _.filter(this.props.players, player => {
+			if (!_.isEmpty(this.props.filter.name)) {
+				if (!reg.test(player.name) && !reg.test(player.uuid)) {
+					return false;
+				}
+			}
+			return true;
+		});
 
 		const maxPage = Math.ceil(players.length / ITEMS_PER_PAGE);
 		const page = Math.min(this.state.page, maxPage - 1);
@@ -84,7 +96,7 @@ class Players extends Component {
 			<div className="animated fadeIn">
 				<Row>
 
-				<Col xs={12} md={6}>
+				<Col xs={12}>
 
 						<Card>
 							<CardHeader>
@@ -94,11 +106,25 @@ class Players extends Component {
 							<CardBlock>
 								<Row>
 
-									<Col md={12}>
+									<Col xs={12} md={6}>
 
 										<FormGroup row>
-											<Label md={3} for="filterWorld">World</Label>
-											<Col md={9}>
+											<Label md={2} for="filterWorld">Name</Label>
+											<Col md={10}>
+												<Input
+													type="text" value={this.props.filter.name}
+													onChange={e => this.filterChange("name", e.target.value)}
+												/>
+											</Col>
+										</FormGroup>
+
+									</Col>
+
+									<Col xs={12} md={6}>
+
+										<FormGroup row>
+											<Label md={2} for="filterWorld">World</Label>
+											<Col md={10}>
 												<Select
 													id="filterWorld"
 													multi={true}

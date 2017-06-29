@@ -15,13 +15,14 @@ const persist = store => next => action => {
 			if (window.localStorage) {
 				window.localStorage.removeItem("api");
 			}
-			next(push("/login"))
+			next(push("/admin/login"))
 			break;
 
 		case CHECK_USER_RESPONSE:
 			if (!action.user) {
-				next(push("/login"))
+				next(push("/admin/login"))
 			}
+			break;
 
 		default:
 			break;
