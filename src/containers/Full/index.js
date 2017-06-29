@@ -5,7 +5,9 @@ import Sidebar from '../../components/Sidebar/';
 import Breadcrumb from '../../components/Breadcrumb/';
 import Footer from '../../components/Footer/';
 
-import Dashboard from '../../views/Dashboard/'
+import Dashboard from '../../views/Dashboard'
+import Chat from "../../views/Chat"
+import Commands from "../../views/Commands"
 import Worlds from '../../views/Worlds'
 import Players from '../../views/Players'
 import Entities from '../../views/Entities'
@@ -25,6 +27,8 @@ class Full extends Component {
 						<div className="container-fluid">
 							<Switch>
 								<Route path="/dashboard" name="Dashboard" component={Dashboard}/>
+								<Route path="/chat" name="Chat" component={Chat}/>
+								<Route path="/commands" name="Commands" component={Commands}/>
 								<Route path="/worlds" name="Worlds" component={Worlds}/>
 								<Route path="/players" name="Players" component={Players}/>
 								<Route path="/entities" name="Entities" component={Entities}/>

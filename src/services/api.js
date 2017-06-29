@@ -1,4 +1,5 @@
 import request from "superagent"
+import _ from "lodash"
 
 import { LOGIN_REQUEST, LOGIN_RESPONSE, requestLogout, INFO_REQUEST, INFO_RESPONSE } from "../actions"
 import { CHECK_USER_REQUEST, CHECK_USER_RESPONSE, CATALOG_REQUEST, CATALOG_RESPONSE } from "../actions"
@@ -11,6 +12,8 @@ import { PLAYER_BAN_REQUEST, PLAYER_BAN_RESPONSE } from "../actions/player"
 import { PLUGINS_REQUEST, PLUGINS_RESPONSE } from "../actions/plugin"
 import { TILE_ENTITIES_REQUEST, TILE_ENTITIES_RESPONSE } from "../actions/tile-entity"
 import { PROPERTIES_REQUEST, PROPERTIES_RESPONSE, SAVE_PROPERTY_REQUEST, SAVE_PROPERTY_RESPONSE } from "../actions/settings"
+import { CHAT_MESSAGES_REQUEST, CHAT_MESSAGES_RESPONSE } from "../actions/chat"
+import { COMMANDS_REQUEST, COMMANDS_RESPONSE, EXECUTE_REQUEST, EXECUTE_RESPONSE } from "../actions/command"
 
 const apiUrl = "/api/"
 
@@ -82,6 +85,24 @@ const api = store => next => action => {
 					})
 				})
 			}
+			break;
+
+		case CHAT_MESSAGES_REQUEST:
+			get("history/chat", data => {
+				next({
+					type: CHAT_MESSAGES_RESPONSE,
+					messages: _.orderBy(data.messages, "timestamp", "desc"),
+				})
+			})
+			break;
+
+		case COMMANDS_REQUEST:
+			get("history/cmd", data => {
+				next({
+					type: COMMANDS_RESPONSE,
+					commands: _.orderBy(data.calls, "timestamp", "desc"),
+				})
+			})
 			break;
 
 		case WORLDS_REQUEST:
@@ -231,6 +252,17 @@ const api = store => next => action => {
 					properties: data.properties,
 				})
 			}, { properties: { [action.prop.key]: action.prop.value }})
+			break;
+
+		case EXECUTE_REQUEST:
+			post("cmd", data => {
+				next({
+					type: EXECUTE_RESPONSE,
+					ok: data.ok,
+					result: data.result,
+					command: action.command,
+				})
+			}, { command: action.command })
 			break;
 
 		default:

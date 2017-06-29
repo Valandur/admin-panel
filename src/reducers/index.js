@@ -3,6 +3,8 @@ import { routerReducer } from "react-router-redux"
 
 import api from "./api"
 import dashboard from "./dashboard"
+import chat from "./chat"
+import command from "./command"
 import world from "./world"
 import entity from "./entity"
 import player from "./player"
@@ -13,6 +15,8 @@ import settings from "./settings"
 const app = combineReducers({
 	api,
 	dashboard,
+	chat,
+	command,
 	world,
 	entity,
 	player,

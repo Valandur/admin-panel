@@ -33,6 +33,14 @@ class Sidebar extends Component {
 						</li>
 
 						<li className="nav-item">
+							<NavLink to={'/chat'} className="nav-link" activeClassName="active"><i className="fa fa-comments"></i> Chat</NavLink>
+						</li>
+
+						<li className="nav-item">
+							<NavLink to={'/commands'} className="nav-link" activeClassName="active"><i className="fa fa-terminal"></i> Commands</NavLink>
+						</li>
+
+						<li className="nav-item">
 							<NavLink to={'/worlds'} className="nav-link" activeClassName="active"><i className="fa fa-globe"></i> Worlds</NavLink>
 						</li>
 
