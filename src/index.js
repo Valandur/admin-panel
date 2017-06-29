@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom'
 import { Provider } from "react-redux"
 import { createStore, applyMiddleware, compose } from "redux"
 import 'react-select/dist/react-select.css'
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
-import { ConnectedRouter, routerMiddleware, push } from 'react-router-redux'
+import { Route, Switch, Redirect } from 'react-router-dom'
+import { routerMiddleware } from 'react-router-redux'
 import { createBrowserHistory } from 'history'
 
 // Redux
@@ -15,6 +15,9 @@ import persist from "./services/persist"
 // Containers
 import Full from './containers/Full/'
 import Login from "./containers/Login"
+// Use our own connected router because the default one from 
+// react-router-redux does not support the basename prop
+import ConnectedRouter from "./components/ConnectedRouter"
 
 // Actions
 import { requestCheckUser } from "./actions"
