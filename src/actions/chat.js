@@ -1,8 +1,8 @@
-export const CHAT_MESSAGES_REQUEST = "CHAT_MESSAGES_REQUEST"
-export const CHAT_MESSAGES_RESPONSE = "CHAT_MESSAGES_RESPONSE"
-export function requestChatMessages() {
+export const CHAT_HISTORY_REQUEST = "CHAT_HISTORY_REQUEST"
+export const CHAT_HISTORY_RESPONSE = "CHAT_HISTORY_RESPONSE"
+export function requestChatHistory() {
 	return {
-		type: CHAT_MESSAGES_REQUEST,
+		type: CHAT_HISTORY_REQUEST,
 	}
 }
 

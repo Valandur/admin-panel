@@ -2,24 +2,19 @@ import React, { Component } from 'react'
 import { connect } from "react-redux"
 import _ from 'lodash'
 import {
-	Row,
-	Col,
-	Card,
-	CardHeader,
-	CardBlock,
-	InputGroup,
-	Table,
-	Label,
-	FormGroup,
-	Input,
-	Button,
-	Pagination,
-	PaginationItem,
-	PaginationLink,
-	InputGroupButton
+	Row, Col, Table,
+	Card, CardHeader, CardBlock,
+	FormGroup, InputGroup, InputGroupButton, Label, Input, Button,
+	Pagination, PaginationItem, PaginationLink,
 } from "reactstrap"
+import Autosuggest from "../../components/Autosuggest";
 
-import { requestCommands, setFilter, requestExecute } from "../../actions/command"
+import {
+	requestCommands,
+	requestCommandHistory,
+	setFilter,
+	requestExecute
+} from "../../actions/command"
 
 const ITEMS_PER_PAGE = 20
 
@@ -31,18 +26,73 @@ class Commands extends Component {
 		this.state = {
 			page: 0,
 			command: "",
+			executeCommand: "",
 		};
 
 		this.handleChange = this.handleChange.bind(this);
 		this.changePage = this.changePage.bind(this);
 		this.filterChange = this.filterChange.bind(this);
 		this.execute = this.execute.bind(this);
+
+		this.onGetSuggestions = this.onGetSuggestions.bind(this);
+		this.getSuggestionValue = this.getSuggestionValue.bind(this);
+		this.renderSuggestion = this.renderSuggestion.bind(this);
+		this.handleKeyPress = this.handleKeyPress.bind(this);
+	}
+
+	onGetSuggestions(value) {
+		const val = value.trim().toLowerCase();
+		const parts = val.split(" ");
+
+		let cmds = this.props.commands.filter(cmd => {
+			if (parts.length > 1)
+				return cmd.name.toLowerCase() === parts[0]
+			else
+				return _.startsWith(cmd.name.toLowerCase(), parts[0])
+		});
+
+		if (cmds.length > 0 && cmds[0].name.toLowerCase() === parts[0]) {
+			let subs = cmds[0].usage.replace(/(\[.*?])/g, "").split("|")
+			subs = _.map(subs, sub => sub.toLowerCase().trim())
+			subs = _.filter(subs, sub => sub !== "/" + cmds[0].name.toLowerCase() + " ?")
+
+			if (parts.length > 1 && !_.isEmpty(parts[1])) {
+				subs = subs.filter(sub =>
+					_.startsWith(sub, parts[1])
+				);
+			}
+			cmds = _.map(subs, sub => ({
+				name: sub,
+				base: cmds[0].name,
+				isSub: true,
+			}))
+		}
+
+		return cmds;
+	}
+	getSuggestionValue(suggestion) {
+		if (suggestion.isSub) {
+			return suggestion.base + " " + suggestion.name + " ";
+		}
+		return suggestion.name + " ";
+	}
+	renderSuggestion(suggestion) {
+		if (suggestion.isSub) {
+			return <div style={{ padding: 10 }}>
+				<b>{suggestion.base}</b> <i style={{fontSize:"90%"}}>{suggestion.name}</i>
+			</div>
+		}
+		return <div style={{ padding: 10 }}>
+			<b>{suggestion.name}</b> <i style={{fontSize:"90%"}}>{suggestion.usage}</i><br />
+			{suggestion.description}<br />
+		</div>;
 	}
 
 	componentDidMount() {
 		this.props.requestCommands();
+		this.props.requestCommandHistory();
 
-		this.interval = setInterval(this.props.requestCommands, 5000);
+		this.interval = setInterval(this.props.requestCommandHistory, 5000);
 	}
 
 	componentWillUnmount() {
@@ -76,6 +126,12 @@ class Commands extends Component {
 		});
 	}
 
+	handleKeyPress(event) {
+    if (event.key === "Enter") {
+    	this.execute();
+    }
+  }
+
 	changePage(event, page) {
 		event.preventDefault();
 
@@ -85,26 +141,25 @@ class Commands extends Component {
 	}
 
 	execute() {
-		this.props.requestExecute(this.state.command);
-		this.setState({
-			command: "",
-		})
+		console.log(this.state);
+		this.props.requestExecute(this.state.executeCommand);
 	}
 
 	render() {
 		const reg = new RegExp(this.props.filter.command, "i")
 
-		let commands = _.filter(this.props.commands, cmd => {
+		let history = _.filter(this.props.history, cmd => {
 			if (!_.isEmpty(this.props.filter.command)) {
-				return reg.test(cmd.command + " " + cmd.args)
+				const src = cmd.cause.source.name ? cmd.cause.source.name : cmd.cause.source;
+				return reg.test(cmd.command + " " + cmd.args + " " + src)
 			}
 			return true;
 		});
 		
-		const maxPage = Math.ceil(commands.length / ITEMS_PER_PAGE);
+		const maxPage = Math.ceil(history.length / ITEMS_PER_PAGE);
 		const page = Math.min(this.state.page, maxPage - 1);
 
-		commands = commands.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
+		history = history.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
 		return (
 			<div className="animated fadeIn">
@@ -120,11 +175,17 @@ class Commands extends Component {
 							<CardBlock>
 								<Row>
 
-									<Col md={12}>
+									<Col xs={12}>
 										<InputGroup>
-											<Input
-												type="text" id="command" placeholder="Command"
-												onChange={this.handleChange} value={this.state.command}
+											<Autosuggest
+												name="executeCommand"
+												placeholder="Execute a command"
+												suggestions={this.state.suggestions}
+												onGetSuggestions={this.onGetSuggestions}
+												getSuggestionValue={this.getSuggestionValue}
+												renderSuggestion={this.renderSuggestion}
+												onChange={this.handleChange}
+												onKeyPress={this.handleKeyPress}
 											/>
 											<InputGroupButton>
 												<Button
@@ -176,8 +237,8 @@ class Commands extends Component {
 					<Col xs={12}>
 						<Card>
 							<CardHeader>
-								<i className="fa fa-paw"></i>
-								Commands
+								<i className="fa fa-list"></i>
+								Command History
 							</CardHeader>
 							<CardBlock>
 								<Table striped={true}>
@@ -189,7 +250,7 @@ class Commands extends Component {
 										</tr>
 									</thead>
 									<tbody>
-										{_.map(commands, cmd =>
+										{_.map(history, cmd =>
 											<tr key={cmd.timestamp}>
 												<td>{cmd.timestamp}</td>
 												<td>{cmd.command} {cmd.args}</td>
@@ -253,14 +314,16 @@ const mapStateToProps = (_state) => {
 	const state = _state.command
 
 	return {
-		commands: state.commands,
+		history: state.history,
 		filter: state.filter,
+		commands: state.commands,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		requestCommands: () => dispatch(requestCommands()),
+		requestCommandHistory: () => dispatch(requestCommandHistory()),
 		setFilter: (filter, value) => dispatch(setFilter(filter, value)),
 		requestExecute: (command) => dispatch(requestExecute(command)),
 	}
