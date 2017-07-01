@@ -1,3 +1,11 @@
+export const COMMAND_HISTORY_REQUEST = "COMMAND_HISTORY_REQUEST"
+export const COMMAND_HISTORY_RESPONSE = "COMMAND_HISTORY_RESPONSE"
+export function requestCommandHistory() {
+	return {
+		type: COMMAND_HISTORY_REQUEST,
+	}
+}
+
 export const COMMANDS_REQUEST = "COMMANDS_REQUEST"
 export const COMMANDS_RESPONSE = "COMMANDS_RESPONSE"
 export function requestCommands() {

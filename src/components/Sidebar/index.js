@@ -29,39 +29,57 @@ class Sidebar extends Component {
 					<ul className="nav">
 					
 						<li className="nav-item">
-							<NavLink to={'/dashboard'} className="nav-link" activeClassName="active"><i className="icon-speedometer"></i> Dashboard</NavLink>
+							<NavLink to={'/dashboard'} className="nav-link" activeClassName="active">
+								<i className="icon-speedometer"></i> Dashboard
+							</NavLink>
 						</li>
 
 						<li className="nav-item">
-							<NavLink to={'/chat'} className="nav-link" activeClassName="active"><i className="fa fa-comments"></i> Chat</NavLink>
+							<NavLink to={'/chat'} className="nav-link" activeClassName="active">
+								<i className="fa fa-comments"></i> Chat
+							</NavLink>
 						</li>
 
 						<li className="nav-item">
-							<NavLink to={'/commands'} className="nav-link" activeClassName="active"><i className="fa fa-terminal"></i> Commands</NavLink>
+							<NavLink to={'/commands'} className="nav-link" activeClassName="active">
+								<i className="fa fa-terminal"></i> Commands
+							</NavLink>
 						</li>
 
 						<li className="nav-item">
-							<NavLink to={'/worlds'} className="nav-link" activeClassName="active"><i className="fa fa-globe"></i> Worlds</NavLink>
+							<NavLink to={'/worlds'} className="nav-link" activeClassName="active">
+								<i className="fa fa-globe"></i> Worlds
+							</NavLink>
 						</li>
 
 						<li className="nav-item">
-							<NavLink to={'/players'} className="nav-link" activeClassName="active"><i className="fa fa-users"></i> Players</NavLink>
+							<NavLink to={'/players'} className="nav-link" activeClassName="active">
+								<i className="fa fa-users"></i> Players
+							</NavLink>
 						</li>
 
 						<li className="nav-item">
-							<NavLink to={'/entities'} className="nav-link" activeClassName="active"><i className="fa fa-paw"></i> Entities</NavLink>
+							<NavLink to={'/entities'} className="nav-link" activeClassName="active">
+								<i className="fa fa-paw"></i> Entities
+							</NavLink>
 						</li>
 
 						<li className="nav-item">
-							<NavLink to={'/tile-entities'} className="nav-link" activeClassName="active"><i className="fa fa-puzzle-piece"></i> Tile Entities</NavLink>
+							<NavLink to={'/tile-entities'} className="nav-link" activeClassName="active">
+								<i className="fa fa-puzzle-piece"></i> Tile Entities
+							</NavLink>
 						</li>
 
 						<li className="nav-item">
-							<NavLink to={'/plugins'} className="nav-link" activeClassName="active"><i className="fa fa-plug"></i> Plugins</NavLink>
+							<NavLink to={'/plugins'} className="nav-link" activeClassName="active">
+								<i className="fa fa-plug"></i> Plugins
+							</NavLink>
 						</li>
 
 						<li className="nav-item">
-							<NavLink to={'/settings'} className="nav-link" activeClassName="active"><i className="fa fa-cog"></i> Server Settings</NavLink>
+							<NavLink to={'/settings'} className="nav-link" activeClassName="active">
+								<i className="fa fa-cog"></i> Server Settings
+							</NavLink>
 						</li>
 						
 					</ul>

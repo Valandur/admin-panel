@@ -1,19 +1,58 @@
 import request from "superagent"
 import _ from "lodash"
 
-import { LOGIN_REQUEST, LOGIN_RESPONSE, requestLogout, INFO_REQUEST, INFO_RESPONSE } from "../actions"
-import { CHECK_USER_REQUEST, CHECK_USER_RESPONSE, CATALOG_REQUEST, CATALOG_RESPONSE } from "../actions"
-import { WORLDS_REQUEST, WORLDS_RESPONSE, WORLD_CREATE_REQUEST, WORLD_CREATE_RESPONSE } from "../actions/world"
-import { WORLD_UPDATE_REQUEST, WORLD_UPDATE_RESPONSE, WORLD_DELETE_REQUEST, WORLD_DELETE_RESPONSE } from "../actions/world"
-import { ENTITIES_REQUEST, ENTITIES_RESPONSE, ENTITY_CREATE_REQUEST, ENTITY_CREATE_RESPONSE } from "../actions/entity"
-import { ENTITY_DELETE_REQUEST, ENTITY_DELETE_RESPONSE } from "../actions/entity"
-import { PLAYERS_REQUEST, PLAYERS_RESPONSE, PLAYER_KICK_REQUEST, PLAYER_KICK_RESPONSE } from "../actions/player"
-import { PLAYER_BAN_REQUEST, PLAYER_BAN_RESPONSE } from "../actions/player"
-import { PLUGINS_REQUEST, PLUGINS_RESPONSE } from "../actions/plugin"
-import { TILE_ENTITIES_REQUEST, TILE_ENTITIES_RESPONSE } from "../actions/tile-entity"
-import { PROPERTIES_REQUEST, PROPERTIES_RESPONSE, SAVE_PROPERTY_REQUEST, SAVE_PROPERTY_RESPONSE } from "../actions/settings"
-import { CHAT_MESSAGES_REQUEST, CHAT_MESSAGES_RESPONSE } from "../actions/chat"
-import { COMMANDS_REQUEST, COMMANDS_RESPONSE, EXECUTE_REQUEST, EXECUTE_RESPONSE } from "../actions/command"
+import {
+	LOGIN_REQUEST, LOGIN_RESPONSE, requestLogout,
+	INFO_REQUEST, INFO_RESPONSE
+} from "../actions"
+
+import {
+	CHECK_USER_REQUEST, CHECK_USER_RESPONSE,
+	CATALOG_REQUEST, CATALOG_RESPONSE,
+} from "../actions"
+
+import {
+	WORLDS_REQUEST, WORLDS_RESPONSE,
+	WORLD_CREATE_REQUEST, WORLD_CREATE_RESPONSE,
+	WORLD_UPDATE_REQUEST, WORLD_UPDATE_RESPONSE,
+	WORLD_DELETE_REQUEST, WORLD_DELETE_RESPONSE,
+} from "../actions/world"
+
+import {
+	ENTITIES_REQUEST, ENTITIES_RESPONSE,
+	ENTITY_CREATE_REQUEST, ENTITY_CREATE_RESPONSE,
+	ENTITY_DELETE_REQUEST, ENTITY_DELETE_RESPONSE,
+} from "../actions/entity"
+
+import {
+	PLAYERS_REQUEST, PLAYERS_RESPONSE,
+	PLAYER_KICK_REQUEST, PLAYER_KICK_RESPONSE,
+	PLAYER_BAN_REQUEST, PLAYER_BAN_RESPONSE,
+} from "../actions/player"
+
+import {
+	PLUGINS_REQUEST, PLUGINS_RESPONSE,
+} from "../actions/plugin"
+
+import {
+	TILE_ENTITIES_REQUEST, TILE_ENTITIES_RESPONSE,
+} from "../actions/tile-entity"
+
+import {
+	PROPERTIES_REQUEST, PROPERTIES_RESPONSE,
+	SAVE_PROPERTY_REQUEST, SAVE_PROPERTY_RESPONSE,
+} from "../actions/settings"
+
+import {
+	CHAT_HISTORY_REQUEST, CHAT_HISTORY_RESPONSE,
+} from "../actions/chat"
+
+import {
+	COMMANDS_REQUEST, COMMANDS_RESPONSE,
+	COMMAND_HISTORY_REQUEST, COMMAND_HISTORY_RESPONSE,
+	EXECUTE_REQUEST, EXECUTE_RESPONSE,
+} from "../actions/command"
+
 
 const apiUrl = "/api/"
 
@@ -27,10 +66,11 @@ const call = (method, key, path, callback, data) => {
 	})
 }
 
-const api = store => next => action => {
+const api = ({ getState, dispatch }) => next => action => {
 	next(action)
 
-	const key = store.getState().api.key
+	const state = getState()
+	const key = state.api.key
 	const get = call.bind(this, "GET", key)
 	const post = call.bind(this, "POST", key)
 	const put = call.bind(this, "PUT", key)
@@ -60,7 +100,7 @@ const api = store => next => action => {
 						user: data.user,
 					})
 				} else {
-					store.dispatch(requestLogout())
+					dispatch(requestLogout())
 				}
 			})
 			break;
@@ -75,7 +115,6 @@ const api = store => next => action => {
 			break;
 
 		case CATALOG_REQUEST:
-			const state = store.getState();
 			if (!state.api.types[action.class]) {
 				get("registry/org.spongepowered.api." + action.class, data => {
 					next({
@@ -87,20 +126,29 @@ const api = store => next => action => {
 			}
 			break;
 
-		case CHAT_MESSAGES_REQUEST:
+		case CHAT_HISTORY_REQUEST:
 			get("history/chat", data => {
 				next({
-					type: CHAT_MESSAGES_RESPONSE,
+					type: CHAT_HISTORY_RESPONSE,
 					messages: _.orderBy(data.messages, "timestamp", "desc"),
 				})
 			})
 			break;
 
 		case COMMANDS_REQUEST:
-			get("history/cmd", data => {
+			get("cmd?details", data => {
 				next({
 					type: COMMANDS_RESPONSE,
-					commands: _.orderBy(data.calls, "timestamp", "desc"),
+					commands: _.orderBy(data.commands, "name", "asc"),
+				})
+			})
+			break;
+
+		case COMMAND_HISTORY_REQUEST:
+			get("history/cmd", data => {
+				next({
+					type: COMMAND_HISTORY_RESPONSE,
+					history: _.orderBy(data.calls, "timestamp", "desc"),
 				})
 			})
 			break;

@@ -7,7 +7,7 @@ import Select from 'react-select'
 import _ from 'lodash'
 
 import { requestPlayers } from "../../actions/player"
-import { requestChatMessages, setFilter } from "../../actions/chat"
+import { requestChatHistory, setFilter } from "../../actions/chat"
 
 const ITEMS_PER_PAGE = 20
 
@@ -26,9 +26,9 @@ class Chat extends Component {
 
 	componentDidMount() {
 		this.props.requestPlayers();
-		this.props.requestChatMessages();
+		this.props.requestChatHistory();
 
-		this.interval = setInterval(this.props.requestChatMessages, 5000);
+		this.interval = setInterval(this.props.requestChatHistory, 5000);
 	}
 
 	componentWillUnmount() {
@@ -104,7 +104,7 @@ class Chat extends Component {
 					<Col xs={12}>
 						<Card>
 							<CardHeader>
-								<i className="fa fa-paw"></i>
+								<i className="fa fa-comments"></i>
 								Messages
 							</CardHeader>
 							<CardBlock>
@@ -187,7 +187,7 @@ const mapStateToProps = (_state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestChatMessages: () => dispatch(requestChatMessages()),
+		requestChatHistory: () => dispatch(requestChatHistory()),
 		requestPlayers: () => dispatch(requestPlayers(true)),
 		setFilter: (filter, value) => dispatch(setFilter(filter, value)),
 	}
