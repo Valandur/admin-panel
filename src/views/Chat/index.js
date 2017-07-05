@@ -5,6 +5,7 @@ import { Table, Label, FormGroup } from 'reactstrap'
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap"
 import Select from 'react-select'
 import _ from 'lodash'
+import moment from "moment"
 
 import { requestPlayers } from "../../actions/player"
 import { requestChatHistory, setFilter } from "../../actions/chat"
@@ -119,7 +120,7 @@ class Chat extends Component {
 									<tbody>
 										{_.map(messages, msg =>
 											<tr key={msg.timestamp}>
-												<td>{msg.timestamp}</td>
+												<td>{moment(msg.timestamp).timeAgo()}</td>
 												<td>{msg.sender.name}</td>
 												<td>{msg.message}</td>
 											</tr>

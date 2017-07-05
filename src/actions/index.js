@@ -24,14 +24,6 @@ export function requestCheckUser() {
 	}
 }
 
-export const INFO_REQUEST = "INFO_REQUEST"
-export const INFO_RESPONSE = "INFO_RESPONSE"
-export function requestInfo() {
-	return {
-		type: INFO_REQUEST
-	}
-}
-
 export const CATALOG_REQUEST = "CATALOG_REQUEST"
 export const CATALOG_RESPONSE = "CATALOG_RESPONSE"
 export function requestCatalog(clazz) {

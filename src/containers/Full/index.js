@@ -3,11 +3,11 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import Header from '../../components/Header/';
 import Sidebar from '../../components/Sidebar/';
 import Breadcrumb from '../../components/Breadcrumb/';
-import Footer from '../../components/Footer/';
 
 import Dashboard from '../../views/Dashboard'
 import Chat from "../../views/Chat"
 import Commands from "../../views/Commands"
+import Map from "../../views/Map"
 import Worlds from '../../views/Worlds'
 import Players from '../../views/Players'
 import Entities from '../../views/Entities'
@@ -29,6 +29,7 @@ class Full extends Component {
 								<Route path="/dashboard" name="Dashboard" component={Dashboard}/>
 								<Route path="/chat" name="Chat" component={Chat}/>
 								<Route path="/commands" name="Commands" component={Commands}/>
+								<Route path="/map" name="Map" component={Map}/>
 								<Route path="/worlds" name="Worlds" component={Worlds}/>
 								<Route path="/players" name="Players" component={Players}/>
 								<Route path="/entities" name="Entities" component={Entities}/>
@@ -41,7 +42,6 @@ class Full extends Component {
 						</div>
 					</main>
 				</div>
-				<Footer />
 			</div>
 		);
 	}

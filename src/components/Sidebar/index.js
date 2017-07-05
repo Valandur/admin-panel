@@ -47,6 +47,12 @@ class Sidebar extends Component {
 						</li>
 
 						<li className="nav-item">
+							<NavLink to={'/map'} className="nav-link" activeClassName="active">
+								<i className="fa fa-map"></i> Map
+							</NavLink>
+						</li>
+
+						<li className="nav-item">
 							<NavLink to={'/worlds'} className="nav-link" activeClassName="active">
 								<i className="fa fa-globe"></i> Worlds
 							</NavLink>
