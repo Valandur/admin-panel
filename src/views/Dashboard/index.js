@@ -4,7 +4,7 @@ import { Row, Col, Card, CardHeader, CardBlock } from "reactstrap"
 import { Line } from "react-chartjs-2";
 import _ from "lodash"
 
-import { requestInfo } from "../../actions"
+import { requestInfo, requestTpsInfo, requestPlayerInfo } from "../../actions/dashboard"
 
 const line = {
 	datasets: [
@@ -86,30 +86,37 @@ class Dashboard extends Component {
 	constructor(props) {
 		super(props);
 
-		this.props.requestInfo();
+		this.requestData = this.requestData.bind(this);
+	}
 
-		this.test = this.test.bind(this);
+	requestData() {
+		this.props.requestInfo();
+		this.props.requestTpsInfo();
+		this.props.requestPlayerInfo();
 	}
 
 	componentDidMount() {
-		this.interval = setInterval(this.props.requestInfo, 5000);
+		this.requestData();
+		
+		this.interval = setInterval(this.requestData, 5000);
 	}
 
 	componentWillUnmount() {
 		clearInterval(this.interval);
 	}
 
-	test() {
-		this.props.test();
-	}
-
 	render() {
 		if (!this.props.data)
 			return null;
 
-		line.labels = _.map(this.props.data.averageTps, tps => new Date(tps.first * 1000))
-		line.datasets[0].data = _.map(this.props.data.averageTps, tps => tps.second)
-		line.datasets[1].data = _.map(this.props.data.onlinePlayers, pls => pls.second)
+		line.datasets[0].data = _.map(this.props.tps, tps => ({
+			x: new Date(tps.timestamp * 1000),
+			y: tps.value,
+		}))
+		line.datasets[1].data = _.map(this.props.players, pls => ({
+			x: new Date(pls.timestamp * 1000),
+			y: pls.value,
+		}))
 
 		let playerState = "primary";
 		if (this.props.data) {
@@ -214,11 +221,11 @@ class Dashboard extends Component {
 					<Col xs={12}>
 						<Card>
 							<CardHeader>
-								Average TPS
+								Online players & Average TPS
 							</CardHeader>
 							<CardBlock>
 								<div className="chart-wrapper">
-									<Line data={line} options={options} />
+									<Line data={line} options={options} height={400} />
 								</div>
 							</CardBlock>
 						</Card>
@@ -234,15 +241,17 @@ const mapStateToProps = (_state) => {
 	const state = _state.dashboard
 
 	return {
-		data: state.data
+		data: state.data,
+		tps: state.tps,
+		players: state.players,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestInfo: () => {
-			dispatch(requestInfo())
-		},
+		requestInfo: () => dispatch(requestInfo()),
+		requestTpsInfo: () => dispatch(requestTpsInfo()),
+		requestPlayerInfo: () => dispatch(requestPlayerInfo()),
 	}
 }
 

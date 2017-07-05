@@ -3,13 +3,15 @@ import _ from "lodash"
 
 import {
 	LOGIN_REQUEST, LOGIN_RESPONSE, requestLogout,
-	INFO_REQUEST, INFO_RESPONSE
-} from "../actions"
-
-import {
 	CHECK_USER_REQUEST, CHECK_USER_RESPONSE,
 	CATALOG_REQUEST, CATALOG_RESPONSE,
 } from "../actions"
+
+import {
+	INFO_REQUEST, INFO_RESPONSE,
+	TPS_INFO_REQUEST, TPS_INFO_RESPONSE,
+	PLAYER_INFO_REQUEST, PLAYER_INFO_RESPONSE,
+} from "../actions/dashboard"
 
 import {
 	WORLDS_REQUEST, WORLDS_RESPONSE,
@@ -110,6 +112,24 @@ const api = ({ getState, dispatch }) => next => action => {
 				next({
 					type: INFO_RESPONSE,
 					data: data,
+				})
+			})
+			break;
+
+		case TPS_INFO_REQUEST:
+			get("info/tps", data => {
+				next({
+					type: TPS_INFO_RESPONSE,
+					tps: data.tps,
+				})
+			})
+			break;
+
+		case PLAYER_INFO_REQUEST:
+			get("info/player", data => {
+				next({
+					type: PLAYER_INFO_RESPONSE,
+					players: data.players,
 				})
 			})
 			break;
