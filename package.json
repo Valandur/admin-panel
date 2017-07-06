@@ -16,6 +16,7 @@
     "konva": "^1.6.3",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
+    "rc-slider": "^8.2.0",
     "react": "^15.6.1",
     "react-addons-css-transition-group": "15.5.2",
     "react-addons-transition-group": "15.5.2",

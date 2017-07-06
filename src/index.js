@@ -2,10 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from "react-redux"
 import { createStore, applyMiddleware, compose } from "redux"
-import 'react-select/dist/react-select.css'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { routerMiddleware, ConnectedRouter } from 'react-router-redux'
 import { createBrowserHistory } from 'history'
+
+
+// CSS
+import 'react-select/dist/react-select.css'
+import 'rc-slider/assets/index.css';
 
 // Redux
 import App from "./reducers"

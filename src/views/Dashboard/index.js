@@ -225,7 +225,7 @@ class Dashboard extends Component {
 							</CardHeader>
 							<CardBlock>
 								<div className="chart-wrapper">
-									<Line data={line} options={options} height={400} />
+									<Line data={line} options={options} />
 								</div>
 							</CardBlock>
 						</Card>
