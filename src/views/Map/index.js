@@ -138,7 +138,7 @@ class Map extends Component {
 
 	getBiome(x, z) {
 		const image = new window.Image();
-		image.src = "/api/world/" + this.state.worldId + "/map/" + (x / TILE_SIZE) + "/" + (z / TILE_SIZE);
+		image.src = "/api/world/" + this.state.worldId + "/map/" + (x / TILE_SIZE) + "/" + (z / TILE_SIZE) + "?key=" + this.props.apiKey;
 		image.onload = () => {
 			this.setState({
 				biomes: _.concat(this.state.biomes, {
@@ -376,6 +376,7 @@ const mapStateToProps = (_state) => {
 		worlds: _state.world.worlds,
 		players: _state.player.players,
 		tileEntities: _state.tileEntity.tileEntities,
+		apiKey: _state.api.key,
 	}
 }
 
