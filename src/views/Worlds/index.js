@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
-import { Row, Col, Card, CardHeader, CardBlock, CardFooter, Button, FormGroup } from "reactstrap"
-import { Label, Input, Table, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap"
-import { Pagination, PaginationItem, PaginationLink } from "reactstrap"
+import {
+	Row, Col, Button, FormGroup, Label, Input, Table, Badge,
+	Card, CardHeader, CardBlock, CardFooter,
+	Modal, ModalHeader, ModalBody, ModalFooter,
+	Pagination, PaginationItem, PaginationLink,
+} from "reactstrap"
 import Select from 'react-select'
 import _ from 'lodash'
 
@@ -365,9 +368,9 @@ class Worlds extends Component {
 												</td>
 												<td>
 													{world ?
-														<span className={"badge badge-" + (world.isLoaded ? "success" : "warning")}>
+														<Badge color={world.isLoaded ? "success" : "warning"}>
 															{world.isLoaded ? "Loaded" : "Unloaded"}
-														</span>
+														</Badge>
 													: null}
 												</td>
 												<td>

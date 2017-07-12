@@ -1,13 +1,13 @@
 import { push } from "react-router-redux"
 import { LOGIN_RESPONSE, LOGOUT_REQUEST, CHECK_USER_RESPONSE } from "../actions"
 
-const persist = store => next => action => {
+const persist = ({ dispatch, getState }) => next => action => {
 	next(action)
 
 	switch (action.type) {
 		case LOGIN_RESPONSE:
 			if (window.localStorage) {
-				window.localStorage.setItem("api", JSON.stringify(store.getState().api));
+				window.localStorage.setItem("api", JSON.stringify(getState().api));
 			}
 			break;
 
@@ -15,12 +15,12 @@ const persist = store => next => action => {
 			if (window.localStorage) {
 				window.localStorage.removeItem("api");
 			}
-			next(push("/admin/login"))
+			dispatch(push("login"))
 			break;
 
 		case CHECK_USER_RESPONSE:
 			if (!action.user) {
-				next(push("/admin/login"))
+				dispatch(push("login"))
 			}
 			break;
 

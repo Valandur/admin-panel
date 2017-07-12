@@ -10,6 +10,7 @@ import entity from "./entity"
 import player from "./player"
 import plugin from "./plugin"
 import tileEntity from "./tile-entity"
+import operations from "./operations"
 import settings from "./settings"
 
 const app = combineReducers({
@@ -22,6 +23,7 @@ const app = combineReducers({
 	player,
 	plugin,
 	tileEntity,
+	operations,
 	settings,
 	router: routerReducer,
 })

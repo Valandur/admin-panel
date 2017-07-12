@@ -3,6 +3,7 @@ const routes = {
 	'/dashboard': 'Dashboard',
 	"/chat": "Chat",
 	"/commands": "Commands",
+	"/map": "Map",
 	'/worlds': 'Worlds',
 	'/players': 'Players',
 	'/entities': 'Entities',

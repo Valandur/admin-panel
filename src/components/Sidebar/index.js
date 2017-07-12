@@ -47,6 +47,12 @@ class Sidebar extends Component {
 						</li>
 
 						<li className="nav-item">
+							<NavLink to={'/map'} className="nav-link" activeClassName="active">
+								<i className="fa fa-map"></i> Map
+							</NavLink>
+						</li>
+
+						<li className="nav-item">
 							<NavLink to={'/worlds'} className="nav-link" activeClassName="active">
 								<i className="fa fa-globe"></i> Worlds
 							</NavLink>
@@ -67,6 +73,12 @@ class Sidebar extends Component {
 						<li className="nav-item">
 							<NavLink to={'/tile-entities'} className="nav-link" activeClassName="active">
 								<i className="fa fa-puzzle-piece"></i> Tile Entities
+							</NavLink>
+						</li>
+
+						<li className="nav-item">
+							<NavLink to={'/operations'} className="nav-link" activeClassName="active">
+								<i className="fa fa-th-large"></i> Block Operations
 							</NavLink>
 						</li>
 

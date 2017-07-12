@@ -3,13 +3,15 @@ import _ from "lodash"
 
 import {
 	LOGIN_REQUEST, LOGIN_RESPONSE, requestLogout,
-	INFO_REQUEST, INFO_RESPONSE
-} from "../actions"
-
-import {
 	CHECK_USER_REQUEST, CHECK_USER_RESPONSE,
 	CATALOG_REQUEST, CATALOG_RESPONSE,
 } from "../actions"
+
+import {
+	INFO_REQUEST, INFO_RESPONSE,
+	TPS_INFO_REQUEST, TPS_INFO_RESPONSE,
+	PLAYER_INFO_REQUEST, PLAYER_INFO_RESPONSE,
+} from "../actions/dashboard"
 
 import {
 	WORLDS_REQUEST, WORLDS_RESPONSE,
@@ -37,6 +39,12 @@ import {
 import {
 	TILE_ENTITIES_REQUEST, TILE_ENTITIES_RESPONSE,
 } from "../actions/tile-entity"
+
+import {
+	OPERATIONS_REQUEST, OPERATIONS_RESPONSE,
+	OPERATION_PAUSE_REQUEST, OPERATION_PAUSE_RESPONSE,
+	OPERATION_STOP_REQUEST, OPERATION_STOP_RESPONSE,
+} from "../actions/operations"
 
 import {
 	PROPERTIES_REQUEST, PROPERTIES_RESPONSE,
@@ -110,6 +118,24 @@ const api = ({ getState, dispatch }) => next => action => {
 				next({
 					type: INFO_RESPONSE,
 					data: data,
+				})
+			})
+			break;
+
+		case TPS_INFO_REQUEST:
+			get("info/tps", data => {
+				next({
+					type: TPS_INFO_RESPONSE,
+					tps: data.tps,
+				})
+			})
+			break;
+
+		case PLAYER_INFO_REQUEST:
+			get("info/player", data => {
+				next({
+					type: PLAYER_INFO_RESPONSE,
+					players: data.players,
 				})
 			})
 			break;
@@ -300,6 +326,36 @@ const api = ({ getState, dispatch }) => next => action => {
 					properties: data.properties,
 				})
 			}, { properties: { [action.prop.key]: action.prop.value }})
+			break;
+
+		case OPERATIONS_REQUEST:
+			get("block/op" + (action.details ? "?details" : ""), (data) => {
+				next({
+					type: OPERATIONS_RESPONSE,
+					ok: data.ok,
+					operations: data.operations,
+				})
+			});
+			break;
+
+		case OPERATION_PAUSE_REQUEST:
+			put("block/op/" + action.operation.uuid, (data) => {
+				next({
+					type: OPERATION_PAUSE_RESPONSE,
+					ok: data.ok,
+					operation: data.operation,
+				})
+			}, { pause: action.pause });
+			break;
+
+		case OPERATION_STOP_REQUEST:
+			del("block/op/" + action.operation.uuid, (data) => {
+				next({
+					type: OPERATION_STOP_RESPONSE,
+					ok: data.ok,
+					operation: data.operation,
+				})
+			});
 			break;
 
 		case EXECUTE_REQUEST:
