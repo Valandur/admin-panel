@@ -77,6 +77,12 @@ class Sidebar extends Component {
 						</li>
 
 						<li className="nav-item">
+							<NavLink to={'/operations'} className="nav-link" activeClassName="active">
+								<i className="fa fa-th-large"></i> Block Operations
+							</NavLink>
+						</li>
+
+						<li className="nav-item">
 							<NavLink to={'/plugins'} className="nav-link" activeClassName="active">
 								<i className="fa fa-plug"></i> Plugins
 							</NavLink>

@@ -12,6 +12,7 @@ import Worlds from '../../views/Worlds'
 import Players from '../../views/Players'
 import Entities from '../../views/Entities'
 import TileEntities from '../../views/TileEntities'
+import Operations from '../../views/Operations'
 import Plugins from '../../views/Plugins'
 import Settings from '../../views/Settings'
 
@@ -34,6 +35,7 @@ class Full extends Component {
 								<Route path="/players" name="Players" component={Players}/>
 								<Route path="/entities" name="Entities" component={Entities}/>
 								<Route path="/tile-entities" name="Tile Entities" component={TileEntities}/>
+								<Route path="/operations" name="Block Operations" component={Operations}/>
 								<Route path="/plugins" name="Plugins" component={Plugins}/>
 								<Route path="/settings" name="Settings" component={Settings}/>
 								

@@ -41,6 +41,12 @@ import {
 } from "../actions/tile-entity"
 
 import {
+	OPERATIONS_REQUEST, OPERATIONS_RESPONSE,
+	OPERATION_PAUSE_REQUEST, OPERATION_PAUSE_RESPONSE,
+	OPERATION_STOP_REQUEST, OPERATION_STOP_RESPONSE,
+} from "../actions/operations"
+
+import {
 	PROPERTIES_REQUEST, PROPERTIES_RESPONSE,
 	SAVE_PROPERTY_REQUEST, SAVE_PROPERTY_RESPONSE,
 } from "../actions/settings"
@@ -320,6 +326,36 @@ const api = ({ getState, dispatch }) => next => action => {
 					properties: data.properties,
 				})
 			}, { properties: { [action.prop.key]: action.prop.value }})
+			break;
+
+		case OPERATIONS_REQUEST:
+			get("block/op" + (action.details ? "?details" : ""), (data) => {
+				next({
+					type: OPERATIONS_RESPONSE,
+					ok: data.ok,
+					operations: data.operations,
+				})
+			});
+			break;
+
+		case OPERATION_PAUSE_REQUEST:
+			put("block/op/" + action.operation.uuid, (data) => {
+				next({
+					type: OPERATION_PAUSE_RESPONSE,
+					ok: data.ok,
+					operation: data.operation,
+				})
+			}, { pause: action.pause });
+			break;
+
+		case OPERATION_STOP_REQUEST:
+			del("block/op/" + action.operation.uuid, (data) => {
+				next({
+					type: OPERATION_STOP_RESPONSE,
+					ok: data.ok,
+					operation: data.operation,
+				})
+			});
 			break;
 
 		case EXECUTE_REQUEST:
