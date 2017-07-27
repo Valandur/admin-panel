@@ -12,6 +12,7 @@ import { requestPlayers } from "../../actions/player"
 import { requestTileEntities } from "../../actions/tile-entity"
 
 const TILE_SIZE = 512;
+const HALF_TILE = TILE_SIZE / 2;
 const ZOOM_SPEED = 0.01;
 const MIN_ZOOM = 0.1;
 const MAX_ZOOM = 16.0;
@@ -113,8 +114,8 @@ class Map extends Component {
 
 		this.setState({
 			biomes: _.filter(this.state.biomes, biome => 
-				biome.x >= min.x && biome.x <= max.x && 
-				biome.z >= min.z && biome.z <= max.z)
+				biome.x + HALF_TILE >= min.x && biome.x - HALF_TILE <= max.x && 
+				biome.z + HALF_TILE >= min.z && biome.z - HALF_TILE <= max.z)
 		}, () => {
 			min.x = min.x - min.x % TILE_SIZE - TILE_SIZE
 			min.z = min.z - min.z % TILE_SIZE - TILE_SIZE
@@ -122,6 +123,7 @@ class Map extends Component {
 			max.x = max.x - max.x % TILE_SIZE + TILE_SIZE
 			max.z = max.z - max.z % TILE_SIZE + TILE_SIZE
 
+			let index = 0;
 			this.timeouts = [];
 			for (let x = min.x; x <= max.x; x += TILE_SIZE) {
 				for (let z = min.z; z <= max.z; z += TILE_SIZE) {
@@ -129,8 +131,9 @@ class Map extends Component {
 						continue;
 
 					this.timeouts.push(
-						setTimeout(() => this.getBiome(x, z), this.timeouts.length * 100)
+						setTimeout(() => this.getBiome(x, z), index * 100)
 					)
+					index++;	
 				}
 			}
 		})
@@ -138,7 +141,7 @@ class Map extends Component {
 
 	getBiome(x, z) {
 		const image = new window.Image();
-		image.src = "/api/world/" + this.state.worldId + "/map/" + (x / TILE_SIZE) + "/" + (z / TILE_SIZE) + "?key=" + this.props.apiKey;
+		image.src = "/api/map/" + this.state.worldId + "/" + (x / TILE_SIZE) + "/" + (z / TILE_SIZE) + "?key=" + this.props.apiKey;
 		image.onload = () => {
 			this.setState({
 				biomes: _.concat(this.state.biomes, {
@@ -171,6 +174,7 @@ class Map extends Component {
 						{obj.name ? obj.name : obj.type ? obj.type : obj.uuid ? obj.uuid : null}
 					</CardHeader>
 					<CardBlock>
+						{obj.uuid}<br />
 						{obj.inventory ?
 							_.map(obj.inventory.items, item =>
 								[<Badge color="primary" pill>
@@ -285,8 +289,8 @@ class Map extends Component {
 
 								return <Image
 									key={biome.x + "+" + biome.z}
-									x={pos.x}
-									y={pos.z}
+									x={pos.x - HALF_TILE * this.state.zoom}
+									y={pos.z - HALF_TILE * this.state.zoom}
 									image={biome.image}
 									width={TILE_SIZE * this.state.zoom}
 									height={TILE_SIZE * this.state.zoom}
@@ -303,8 +307,8 @@ class Map extends Component {
 
 								return <Circle
 									key={ent.uuid}
-									x={pos.x}
-									y={pos.z}
+									x={pos.x - 4}
+									y={pos.z - 4}
 									width={8}
 									height={8}
 									fill={"Red"}
@@ -317,8 +321,8 @@ class Map extends Component {
 
 								return <Circle
 									key={player.uuid}
-									x={pos.x}
-									y={pos.z}
+									x={pos.x - 4}
+									y={pos.z - 4}
 									width={8}
 									height={8}
 									fill={"Gold"}
@@ -331,8 +335,8 @@ class Map extends Component {
 
 								return <Circle
 									key={"te-" + te.location.position.x + "-" + te.location.position.z}
-									x={pos.x}
-									y={pos.z}
+									x={pos.x - 4}
+									y={pos.z - 4}
 									width={8}
 									height={8}
 									fill={"Green"}
@@ -350,6 +354,7 @@ class Map extends Component {
 					<Select
 						id="world"
 						placeholder="Select world..."
+						clearable={false}
 						value={this.state.worldId}
 						onChange={val => this.handleWorldChange(val)}
 						options={_.map(this.props.worlds, world => 
