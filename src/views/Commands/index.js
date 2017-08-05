@@ -20,8 +20,6 @@ class Commands extends Component {
 
 		this.state = {
 			page: 0,
-			command: "",
-			executeCommand: "",
 		};
 
 		this.handleChange = this.handleChange.bind(this);
@@ -133,7 +131,7 @@ class Commands extends Component {
 	}
 
 	execute() {
-		this.props.requestExecute(this.state.executeCommand);
+		this.props.requestExecute(this.state.execCmd, this.state.waitLines, this.state.waitTime);
 	}
 
 	render() {
@@ -164,10 +162,22 @@ class Commands extends Component {
 
 							<Form loading={this.props.executing}>
 								<Form.Field
-									control={Autosuggest} name="executeCommand"
+									control={Autosuggest} name="execCmd"
 									placeholder="Execute a command" getSuggestions={this.getSuggestions}
 									onChange={this.handleChange} onKeyPress={this.handleKeyPress}
 								/>
+
+								<Form.Group widths="equal">
+									<Form.Input
+										name="waitLines" placeholder="# of response lines to wait for"
+										label="Wait lines" type="number" onChange={this.handleChange}
+									/>
+
+									<Form.Input
+										name="waitTime" placeholder="Milliseconds to wait for a response"
+										label="Wait time" type="number" onChange={this.handleChange}
+									/>
+								</Form.Group>
 
 								<Button
 										color="blue" onClick={this.execute}
