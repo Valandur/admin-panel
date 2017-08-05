@@ -1,12 +1,28 @@
 import _ from "lodash"
 
-import { OPERATIONS_RESPONSE, OPERATION_PAUSE_RESPONSE, OPERATION_STOP_RESPONSE } from "../actions/operations"
+import {
+	OPERATION_RESPONSE,
+	OPERATIONS_RESPONSE,
+	OPERATION_CREATE_RESPONSE,
+	OPERATION_PAUSE_RESPONSE,
+	OPERATION_STOP_RESPONSE
+} from "../actions/operations"
 
 const operations = (state = { operations: []}, action) => {
 	switch(action.type) {
+		case OPERATION_RESPONSE:
+			return _.assign({}, state, {
+				operation: action.operation,
+			});
+
 		case OPERATIONS_RESPONSE:
 			return _.assign({}, state, {
 				operations: _.sortBy(action.operations, "uuid"),
+			});
+
+		case OPERATION_CREATE_RESPONSE:
+			return _.assign({}, state, {
+				operations: _.sortBy(_.concat(state.operations, action.operation), "uuid"),
 			});
 
 		case OPERATION_PAUSE_RESPONSE:

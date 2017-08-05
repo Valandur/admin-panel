@@ -34,9 +34,8 @@ const commands = (state = { commands: [], history: [], filter: {}, executing: fa
 			})
 
 		case EXECUTE_RESPONSE:
-			window.toastr.success(action.result, "Execute Command: " + action.command)
 			return _.assign({}, state, {
-				excuting: false,
+				executing: false,
 			});
 
 		default:

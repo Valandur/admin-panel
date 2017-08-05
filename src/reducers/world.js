@@ -1,7 +1,11 @@
 import _ from "lodash"
 
-import { WORLDS_RESPONSE, WORLD_UPDATE_REQUEST, WORLD_UPDATE_RESPONSE } from "../actions/world"
-import { WORLD_CREATE_REQUEST, WORLD_CREATE_RESPONSE, WORLD_DELETE_REQUEST, WORLD_DELETE_RESPONSE } from "../actions/world"
+import {
+	WORLDS_RESPONSE,
+	WORLD_UPDATE_REQUEST, WORLD_UPDATE_RESPONSE,
+	WORLD_CREATE_REQUEST, WORLD_CREATE_RESPONSE,
+	WORLD_DELETE_REQUEST, WORLD_DELETE_RESPONSE, 
+} from "../actions/world"
 
 const world = (state = { worlds: []}, action) => {
 	switch(action.type) {
@@ -27,7 +31,6 @@ const world = (state = { worlds: []}, action) => {
 					})
 				})
 			}
-			window.toastr.success((action.op ? action.op : "Updated") + " " + action.world.name);
 			return _.assign({}, state, {
 				worlds: _.map(state.worlds, w => {
 					if (w.uuid !== action.world.uuid) return w;
@@ -47,7 +50,6 @@ const world = (state = { worlds: []}, action) => {
 				})
 			}
 
-			window.toastr.success("Created " + action.world.name);
 			return _.assign({}, state, {
 				creating: false,
 				worlds: _.sortBy(_.concat(state.worlds, action.world), "name"),
@@ -65,7 +67,6 @@ const world = (state = { worlds: []}, action) => {
 			if (!action.ok)
 				return state;
 
-			window.toastr.success("Deleted " + action.world.name);
 			return _.assign({}, state, {
 				worlds: _.filter(state.worlds, w => w.uuid !== action.world.uuid)
 			})

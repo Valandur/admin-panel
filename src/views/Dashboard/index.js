@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
-import { Row, Col, Card, CardHeader, CardBlock } from "reactstrap"
+import { Grid, Segment, Card } from "semantic-ui-react"
 import { Line } from "react-chartjs-2";
 import _ from "lodash"
 
@@ -118,121 +118,150 @@ class Dashboard extends Component {
 			y: pls.value,
 		}))
 
-		let playerState = "primary";
+		let playerState = "blue";
 		if (this.props.data) {
 			const ratio = this.props.data.players / this.props.data.maxPlayers;
 			if (ratio > 0.95)
-				playerState = "danger";
+				playerState = "red";
 			else if (ratio > 0.8)
-				playerState = "warning";
+				playerState = "yellow";
 			else
-				playerState = "success";
+				playerState = "green";
 		}
 
-		let tpsState = "primary";
+		let tpsState = "blue";
 		if (this.props.data) {
 			if (this.props.data.tps >= 19.5)
-				tpsState = "success";
+				tpsState = "green";
 			else if (this.props.data.tps >= 15)
-				tpsState = "warning";
+				tpsState = "yellow";
 			else
-				tpsState = "danger";
+				tpsState = "red";
 		}
 
 		return (
-			<div className="animated fadeIn">
-				<Row>
+			<Segment basic>
 
-					<Col xs={6} lg={3}>
-						<Card inverse={true} color={playerState}>
-							<CardBlock className="pb-0">
-								<h4 className="mb-0">{this.props.data.players}/{this.props.data.maxPlayers}</h4>
-								<p>Online players</p>
-							</CardBlock>
+				<Grid columns={4} stackable doubling>
+      		
+      		<Grid.Column>
+						<Card color={playerState}>
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.players}/{this.props.data.maxPlayers}
+								</Card.Header>
+								<Card.Description>
+									Online players
+								</Card.Description>
+							</Card.Content>
 						</Card>
-					</Col>
+					</Grid.Column>
 
-					<Col xs={6} lg={3}>
-						<Card inverse={true} color={tpsState}>
-							<CardBlock className="pb-0">
-								<h4 className="mb-0">{this.props.data.tps}</h4>
-								<p>Current TPS</p>
-							</CardBlock>
+					<Grid.Column>
+						<Card color={tpsState}>
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.tps}
+								</Card.Header>
+								<Card.Description>
+									Current TPS
+								</Card.Description>
+							</Card.Content>
 						</Card>
-					</Col>
+					</Grid.Column>
 
-					<Col xs={6} lg={3}>
-						<Card inverse={true} color="info">
-							<CardBlock className="pb-0">
-								<h4 className="mb-0">{this.props.data.address}</h4>
-								<p>Address</p>
-							</CardBlock>
+					<Grid.Column>
+						<Card color="blue">
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.address}
+								</Card.Header>
+								<Card.Description>
+									Address
+								</Card.Description>
+							</Card.Content>
 						</Card>
-					</Col>
+					</Grid.Column>
 
-					<Col xs={6} lg={3}>
-						<Card inverse={true} color="info">
-							<CardBlock className="pb-0">
-								<h4 className="mb-0">{this.props.data.onlineMode ? "Yes" : "No"}</h4>
-								<p>Online mode</p>
-							</CardBlock>
+					<Grid.Column>
+						<Card color="blue">
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.onlineMode ? "Yes" : "No"}
+								</Card.Header>
+								<Card.Description>
+									Online mode
+								</Card.Description>
+							</Card.Content>
 						</Card>
-					</Col>
+					</Grid.Column>
 
-					<Col xs={6} lg={3}>
-						<Card inverse={true} color="primary">
-							<CardBlock className="pb-0">
-								<h4 className="mb-0">{this.props.data.uptimeTicks}</h4>
-								<p>Uptime ticks</p>
-							</CardBlock>
+					<Grid.Column>
+						<Card color="blue">
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.uptimeTicks}
+								</Card.Header>
+								<Card.Description>
+									Uptime ticks
+								</Card.Description>
+							</Card.Content>
 						</Card>
-					</Col>
+					</Grid.Column>
 
-					<Col xs={6} lg={3}>
-						<Card inverse={true} color="primary">
-							<CardBlock className="pb-0">
-								<h4 className="mb-0">{this.props.data.game.version}</h4>
-								<p>Minecraft Version</p>
-							</CardBlock>
+					<Grid.Column>
+						<Card color="blue">
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.game.version}
+								</Card.Header>
+								<Card.Description>
+									Minecraft Version
+								</Card.Description>
+							</Card.Content>
 						</Card>
-					</Col>
+					</Grid.Column>
 
-					<Col xs={6} lg={3}>
-						<Card inverse={true} color="primary">
-							<CardBlock className="pb-0">
-								<h4 className="mb-0">{this.props.data.api.version}</h4>
-								<p>API Version</p>
-							</CardBlock>
+					<Grid.Column>
+						<Card color="blue">
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.api.version}
+								</Card.Header>
+								<Card.Description>
+									API Version
+								</Card.Description>
+							</Card.Content>
 						</Card>
-					</Col>
+					</Grid.Column>
 
-					<Col xs={6} lg={3}>
-						<Card inverse={true} color="primary">
-							<CardBlock className="pb-0">
-								<h4 className="mb-0">{this.props.data.implementation.version}</h4>
-								<p>Implementation Version</p>
-							</CardBlock>
+					<Grid.Column>
+						<Card color="blue">
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.implementation.version}
+								</Card.Header>
+								<Card.Description>
+									Implementation Version
+								</Card.Description>
+							</Card.Content>
 						</Card>
-					</Col>
+					</Grid.Column>
 
-				</Row>
-				<Row>
+				</Grid>
 
-					<Col xs={12}>
-						<Card>
-							<CardHeader>
-								Online players & Average TPS
-							</CardHeader>
-							<CardBlock>
-								<div className="chart-wrapper">
-									<Line data={line} options={options} />
-								</div>
-							</CardBlock>
-						</Card>
-					</Col>
+				<Card style={{ width: "100%", height: "50vh" }}>
+					<Card.Content>
+						<Card.Header>
+							Online players & Average TPS
+						</Card.Header>
+					</Card.Content>
+					<div style={{ width: "100%", height: "100%", padding: "1em" }}>
+						<Line data={line} options={options} />
+					</div>
+				</Card>
 
-				</Row>
-			</div>
+			</Segment>
 		)
 	}
 }

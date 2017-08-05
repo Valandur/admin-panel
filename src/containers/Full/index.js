@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom'
-import Header from '../../components/Header/';
-import Sidebar from '../../components/Sidebar/';
-import Breadcrumb from '../../components/Breadcrumb/';
+import { Switch, Route, Redirect, NavLink } from 'react-router-dom'
+import { Sidebar, Menu, Image } from "semantic-ui-react"
 
 import Dashboard from '../../views/Dashboard'
 import Chat from "../../views/Chat"
@@ -19,32 +17,75 @@ import Settings from '../../views/Settings'
 class Full extends Component {
 	render() {
 		return (
-			<div className="app">
-				<Header />
-				<div className="app-body">
-					<Sidebar {...this.props}/>
-					<main className="main">
-						<Breadcrumb />
-						<div className="container-fluid">
-							<Switch>
-								<Route path="/dashboard" name="Dashboard" component={Dashboard}/>
-								<Route path="/chat" name="Chat" component={Chat}/>
-								<Route path="/commands" name="Commands" component={Commands}/>
-								<Route path="/map" name="Map" component={Map}/>
-								<Route path="/worlds" name="Worlds" component={Worlds}/>
-								<Route path="/players" name="Players" component={Players}/>
-								<Route path="/entities" name="Entities" component={Entities}/>
-								<Route path="/tile-entities" name="Tile Entities" component={TileEntities}/>
-								<Route path="/operations" name="Block Operations" component={Operations}/>
-								<Route path="/plugins" name="Plugins" component={Plugins}/>
-								<Route path="/settings" name="Settings" component={Settings}/>
-								
-								<Redirect from="/" to="/dashboard"/>
-							</Switch>
-						</div>
-					</main>
-				</div>
-			</div>
+			<Sidebar.Pushable style={{ height: "100vh" }}>
+        <Sidebar as={Menu} visible={true} vertical>
+					<Menu.Item as="a" header>
+						<Image size="small" centered src="/img/logo.png" />
+					</Menu.Item>
+
+					<Menu.Item name="dashboard" as={NavLink} to={'/dashboard'}>
+						<i className="icon-speedometer"></i> &nbsp; &nbsp; Dashboard
+					</Menu.Item>
+
+					<Menu.Item name="chat" as={NavLink} to={'/chat'}>
+						<i className="fa fa-comments"></i>&nbsp; &nbsp; Chat
+					</Menu.Item>
+
+					<Menu.Item name="commands" as={NavLink} to={'/commands'}>
+						<i className="fa fa-terminal"></i>&nbsp; &nbsp; Commands
+					</Menu.Item>
+
+					<Menu.Item name="map" as={NavLink} to={'/map'}>
+						<i className="fa fa-map"></i>&nbsp; &nbsp; Map
+					</Menu.Item>
+
+					<Menu.Item name="worlds" as={NavLink} to={'/worlds'}>
+						<i className="fa fa-globe"></i>&nbsp; &nbsp; Worlds
+					</Menu.Item>
+
+					<Menu.Item name="players" as={NavLink} to={'/players'}>
+						<i className="fa fa-users"></i>&nbsp; &nbsp; Players
+					</Menu.Item>
+
+					<Menu.Item name="entities" as={NavLink} to={'/entities'}>
+						<i className="fa fa-paw"></i>&nbsp; &nbsp; Entities
+					</Menu.Item>
+
+					<Menu.Item name="tile-entities" as={NavLink} to={'/tile-entities'}>
+						<i className="fa fa-puzzle-piece"></i>&nbsp; &nbsp; Tile Entities
+					</Menu.Item>
+
+					<Menu.Item name="operations" as={NavLink} to={'/operations'}>
+						<i className="fa fa-th-large"></i>&nbsp; &nbsp; Block Operations
+					</Menu.Item>
+
+					<Menu.Item name="plugins" as={NavLink} to={'/plugins'}>
+						<i className="fa fa-plug"></i>&nbsp; &nbsp; Plugins
+					</Menu.Item>
+
+					<Menu.Item name="settings" as={NavLink} to={'/settings'}>
+						<i className="fa fa-cog"></i>&nbsp; &nbsp; Server Settings
+					</Menu.Item>
+				</Sidebar>
+
+				<Sidebar.Pusher style={{ width: "calc(100% - 260px)", height: "100vh", overflowY: "scroll" }}>
+					<Switch>
+						<Route path="/dashboard" name="Dashboard" component={Dashboard}/>
+						<Route path="/chat" name="Chat" component={Chat}/>
+						<Route path="/commands" name="Commands" component={Commands}/>
+						<Route path="/map" name="Map" component={Map}/>
+						<Route path="/worlds" name="Worlds" component={Worlds}/>
+						<Route path="/players" name="Players" component={Players}/>
+						<Route path="/entities" name="Entities" component={Entities}/>
+						<Route path="/tile-entities" name="Tile Entities" component={TileEntities}/>
+						<Route path="/operations" name="Block Operations" component={Operations}/>
+						<Route path="/plugins" name="Plugins" component={Plugins}/>
+						<Route path="/settings" name="Settings" component={Settings}/>
+						
+						<Redirect from="/" to="/dashboard"/>
+					</Switch>
+				</Sidebar.Pusher>
+			</Sidebar.Pushable>
 		);
 	}
 }

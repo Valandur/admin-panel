@@ -8,6 +8,10 @@ import {
 } from "../actions"
 
 import {
+	showNotification
+} from "../actions/notification"
+
+import {
 	INFO_REQUEST, INFO_RESPONSE,
 	TPS_INFO_REQUEST, TPS_INFO_RESPONSE,
 	PLAYER_INFO_REQUEST, PLAYER_INFO_RESPONSE,
@@ -34,6 +38,7 @@ import {
 
 import {
 	PLUGINS_REQUEST, PLUGINS_RESPONSE,
+	PLUGIN_CONFIG_REQUEST, PLUGIN_CONFIG_RESPONSE,
 } from "../actions/plugin"
 
 import {
@@ -41,7 +46,9 @@ import {
 } from "../actions/tile-entity"
 
 import {
+	OPERATION_REQUEST, OPERATION_RESPONSE,
 	OPERATIONS_REQUEST, OPERATIONS_RESPONSE,
+	OPERATION_CREATE_REQUEST, OPERATION_CREATE_RESPONSE,
 	OPERATION_PAUSE_REQUEST, OPERATION_PAUSE_RESPONSE,
 	OPERATION_STOP_REQUEST, OPERATION_STOP_RESPONSE,
 } from "../actions/operations"
@@ -64,12 +71,25 @@ import {
 
 const apiUrl = "/api/"
 
-const call = (method, key, path, callback, data) => {
+const call = (method, key, dispatch, path, callback, data) => {
 	const req = request(method, apiUrl + path + (path.indexOf("?") >= 0 ? "&" : "?") + (key ? "key=" + key : ""));
 	if (data) req.send(data);
 	req.end((err, res) => {
-		if (err) return window.toastr.error(err);
-		if (res.statusCode !== 200 && res.statusCode !== 201) return window.toastr.error(res.statusMessage);
+		if (!res) {
+			dispatch(showNotification("error", "API Error", err))
+			return;
+		}
+
+		if (res.statusCode === 403) {
+			dispatch(requestLogout());
+			return;
+		}
+
+		if (res.statusCode !== 200 && res.statusCode !== 201) {
+			dispatch(showNotification("error", "API Error", res.statusText))
+			return;
+		}
+
 		if (callback) callback(res.body);
 	})
 }
@@ -79,10 +99,10 @@ const api = ({ getState, dispatch }) => next => action => {
 
 	const state = getState()
 	const key = state.api.key
-	const get = call.bind(this, "GET", key)
-	const post = call.bind(this, "POST", key)
-	const put = call.bind(this, "PUT", key)
-	const del = call.bind(this, "DELETE", key)
+	const get = call.bind(this, "GET", key, dispatch)
+	const post = call.bind(this, "POST", key, dispatch)
+	const put = call.bind(this, "PUT", key, dispatch)
+	const del = call.bind(this, "DELETE", key, dispatch)
 
 	switch (action.type) {
 		case LOGIN_REQUEST:
@@ -297,6 +317,16 @@ const api = ({ getState, dispatch }) => next => action => {
 			});
 			break;
 
+		case PLUGIN_CONFIG_REQUEST:
+			get("plugin/" + action.id + "/config", (data) => {
+				next({
+					type: PLUGIN_CONFIG_RESPONSE,
+					ok: data.ok,
+					configs: data.configs,
+				})
+			})
+			break;
+
 		case TILE_ENTITIES_REQUEST:
 			get("tile-entity" + (action.details ? "?details" : ""), (data) => {
 				next({
@@ -328,6 +358,17 @@ const api = ({ getState, dispatch }) => next => action => {
 			}, { properties: { [action.prop.key]: action.prop.value }})
 			break;
 
+
+		case OPERATION_REQUEST:
+			get("block/op/" + action.uuid, (data) => {
+				next({
+					type: OPERATION_RESPONSE,
+					ok: data.ok,
+					operation: data.operation,
+				})
+			});
+			break;
+
 		case OPERATIONS_REQUEST:
 			get("block/op" + (action.details ? "?details" : ""), (data) => {
 				next({
@@ -336,6 +377,16 @@ const api = ({ getState, dispatch }) => next => action => {
 					operations: data.operations,
 				})
 			});
+			break;
+
+		case OPERATION_CREATE_REQUEST:
+			post("block/op", (data) => {
+				next({
+					type: OPERATION_CREATE_RESPONSE,
+					ok: data.ok,
+					operation: data.operation,
+				})
+			}, action.operation)
 			break;
 
 		case OPERATION_PAUSE_REQUEST:

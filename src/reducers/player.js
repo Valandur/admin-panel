@@ -1,7 +1,10 @@
 import _ from "lodash"
 
-import { SET_FILTER, PLAYERS_RESPONSE, PLAYER_KICK_REQUEST } from "../actions/player"
-import { PLAYER_KICK_RESPONSE, PLAYER_BAN_REQUEST, PLAYER_BAN_RESPONSE } from "../actions/player"
+import {
+	SET_FILTER, PLAYERS_RESPONSE,
+	PLAYER_KICK_REQUEST, PLAYER_KICK_RESPONSE,
+	PLAYER_BAN_REQUEST, PLAYER_BAN_RESPONSE,
+} from "../actions/player"
 
 const player = (state = { players: [], filter: {}}, action) => {
 	switch(action.type) {
@@ -35,7 +38,6 @@ const player = (state = { players: [], filter: {}}, action) => {
 					})
 				})
 			}
-			window.toastr.success("Kicked " + action.player.name);
 			return _.assign({}, state, {
 				players: _.filter(state.players, p => p.uuid !== action.player.uuid)
 			})
@@ -57,7 +59,6 @@ const player = (state = { players: [], filter: {}}, action) => {
 					})
 				})
 			}
-			window.toastr.success("Banned " + action.player.name);
 			return _.assign({}, state, {
 				players: _.filter(state.players, p => p.name !== action.player.name)
 			})

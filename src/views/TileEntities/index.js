@@ -1,10 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 import { connect } from "react-redux"
-import { Row, Col, Table, Button, Badge, FormGroup, Label } from 'reactstrap'
-import { Card, CardHeader, CardBlock } from "reactstrap"
-import { Pagination, PaginationItem, PaginationLink } from "reactstrap"
-import Select from 'react-select'
-import _ from 'lodash'
+import { Segment, Table, Menu, Form, Dropdown, Button, Header, Label } from "semantic-ui-react"
+import _ from "lodash"
 
 import { setFilter, requestTileEntities } from "../../actions/tile-entity"
 import { requestCatalog } from "../../actions"
@@ -42,8 +39,9 @@ class TileEntities extends Component {
 		this.props.requestCatalog(TE_TYPES);
 	}
 
-	filterChange(filter, newValue) {
-		this.props.setFilter(filter, _.map(newValue, "value"));
+	filterChange(event, data) {
+		const name = data.name ? data.name : data.id;
+		this.props.setFilter(name, data.value);
 	}
 
 	changePage(event, page) {
@@ -82,149 +80,104 @@ class TileEntities extends Component {
 		});
 
 		return (
-			<div className="animated fadeIn">
-				<Row>
+			<Segment basic>
 
-					<Col xs={12} md={6} lg={4}>
+				<Segment>
+					<Header>
+						<i className="fa fa-filter"></i>
+						Filter tile entities
+					</Header>
 
-						<Card>
-							<CardHeader>
-								<i className="fa fa-filter"></i>
-								Filter tile entities
-							</CardHeader>
-							<CardBlock>
-								<Row>
+					<Form>
+						<Form.Group widths="equal">
+							<Form.Field name="type" label="Type" control={Dropdown} placeholder="Type"
+								fluid selection search multiple onChange={this.filterChange}
+								options={_.map(teTypes, ent => 
+									({ value: ent.id, text: ent.name + " (" + ent.mod + ")" })
+								)}
+							/>
 
-									<Col md={12}>
+							<Form.Field name="world" label="World" control={Dropdown} placeholder="World"
+								fluid selection search multiple onChange={this.filterChange}
+								options={_.map(this.props.worlds, w => 
+									({ value: w.uuid, text: w.name + " (" + w.dimensionType.name + ")" })
+								)}
+							/>
+						</Form.Group>
+					</Form>
+				</Segment>
 
-										<FormGroup row>
-											<Label md={3} for="filterType">Type</Label>
-											<Col md={9}>
-												<Select
-													id="filterType"
-													multi={true}
-													value={this.props.filter.type}
-													onChange={val => this.filterChange("type", val)}
-													options={_.map(teTypes, ent => 
-														({ value: ent.id, label: ent.name + " (" + ent.mod + ")" })
-													)}
-												/>
-											</Col>
-										</FormGroup>
+				<Header>
+					<i className="fa fa-puzzle-piece"></i> Tile Entities
+				</Header>
 
-										<FormGroup row>
-											<Label md={3} for="filterWorld">World</Label>
-											<Col md={9}>
-												<Select
-													id="filterWorld"
-													multi={true}
-													value={this.props.filter.world}
-													onChange={val => this.filterChange("world", val)}
-													options={_.map(this.props.worlds, world => 
-														({ value: world.uuid, label: world.name + " (" + world.dimensionType.name + ")" })
-													)}
-												/>
-											</Col>
-										</FormGroup>
+				<Table striped={true}>
+					<Table.Header>
+						<Table.Row>
+							<Table.HeaderCell>Type</Table.HeaderCell>
+							<Table.HeaderCell>Location</Table.HeaderCell>
+							<Table.HeaderCell>Inventory</Table.HeaderCell>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{_.map(tileEntities, te =>
+							<Table.Row key={te.id}>
+								<Table.Cell>{te.type}</Table.Cell>
+								<Table.Cell>
+									<Button color="blue">
+										<i className="fa fa-globe"></i>&nbsp;&nbsp;
+										{te.location.world.name} &nbsp; &nbsp;
+										{te.location.position.x.toFixed(0)} |&nbsp;
+										{te.location.position.y.toFixed(0)} |&nbsp;
+										{te.location.position.z.toFixed(0)}
+									</Button>
+								</Table.Cell>
+								<Table.Cell>
+									{te.inventory ?
+										<div>
+											{_.map(te.inventory.items, item =>
+												[<Label color="blue" pill>
+													{ item.quantity > 1 ? item.quantity + "x " : "" } {item.name}
+												</Label>," "]
+											)}
+										</div>
+									: null}
+								</Table.Cell>
+							</Table.Row>
+						)}
+					</Table.Body>
+				</Table>
+				{ maxPage > 1 ?
+					<Menu pagination>
+						{ page > 4 ?
+							<Menu.Item onClick={e => this.changePage(e, 0)}>
+								1
+							</Menu.Item>
+						: null }
+						{ page > 5 ?
+							<Menu.Item onClick={e => this.changePage(e, page - 5)}>
+								...
+							</Menu.Item>
+						: null }
+						{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
+							<Menu.Item key={p} onClick={e => this.changePage(e, p)} active={p === page}>
+								{p + 1}
+							</Menu.Item>
+						))}
+						{ page < maxPage - 6 ?
+							<Menu.Item onClick={e => this.changePage(e, page + 5)}>
+								...
+							</Menu.Item>
+						: null }
+						{ page < maxPage - 5 ?
+							<Menu.Item onClick={e => this.changePage(e, maxPage - 1)}>
+								{maxPage}
+							</Menu.Item>
+						: null }
+					</Menu>
+				: null }
 
-									</Col>
-
-								</Row>
-							</CardBlock>
-						</Card>
-
-					</Col>
-
-					<Col xs={12}>
-						<Card>
-							<CardHeader>
-								<i className="fa fa-puzzle-piece"></i>
-								Tile Entities
-							</CardHeader>
-							<CardBlock>
-								<Table striped={true}>
-									<thead>
-										<tr>
-											<th>Type</th>
-											<th>Location</th>
-											<th>Inventory</th>
-										</tr>
-									</thead>
-									<tbody>
-										{_.map(tileEntities, te =>
-											<tr key={te.id}>
-												<td>{te.type}</td>
-												<td>
-													<div>
-														<Button type="button" color="link">
-															<i className="fa fa-globe"></i>&nbsp;&nbsp;
-															{te.location.world.name} &nbsp; &nbsp;
-															{te.location.position.x.toFixed(0)} |&nbsp;
-															{te.location.position.y.toFixed(0)} |&nbsp;
-															{te.location.position.z.toFixed(0)}
-														</Button>
-													</div>
-												</td>
-												<td>
-													{te.inventory ?
-														<div>
-															{_.map(te.inventory.items, item =>
-																[<Badge color="primary" pill>
-																	{ item.quantity > 1 ? item.quantity + "x " : "" } {item.name}
-																</Badge>," "]
-															)}
-														</div>
-													: null}
-												</td>
-											</tr>
-										)}
-									</tbody>
-								</Table>
-								{ maxPage > 1 ?
-									<Pagination>
-										{ page > 4 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, 0)} href="#">
-													1
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-										{ page > 5 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, page - 5)} href="#">
-													...
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-										{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
-											<PaginationItem key={p} active={p === page}>
-												<PaginationLink onClick={e => this.changePage(e, p)} href="#">
-													{p + 1}
-												</PaginationLink>
-											</PaginationItem>
-										))}
-										{ page < maxPage - 6 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, page + 5)} href="#">
-													...
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-										{ page < maxPage - 5 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, maxPage - 1)} href="#">
-													{maxPage}
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-									</Pagination>
-								: null }
-							</CardBlock>
-						</Card>
-					</Col>
-
-				</Row>
-			</div>
+			</Segment>
 		)
 	}
 }

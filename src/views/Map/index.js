@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
 import { Stage, Layer, Image, Circle, Line } from "react-konva"
-import { Button, Badge, Progress, Card, CardHeader, CardBlock, CardFooter } from "reactstrap"
+import { Segment, Label, Header, Button, Progress, Dropdown } from "semantic-ui-react"
 import Slider from "rc-slider"
-import Select from "react-select"
-import _ from 'lodash'
+import _ from "lodash"
 
 import { requestWorlds } from "../../actions/world"
 import { requestEntities } from "../../actions/entity"
@@ -73,6 +72,7 @@ class Map extends Component {
 		this.handleMouseMove = this.handleMouseMove.bind(this)
 		this.handleMouseOutUp = this.handleMouseOutUp.bind(this)
 		this.handleWheel = this.handleWheel.bind(this)
+		this.handleWorldChange = this.handleWorldChange.bind(this)
 
 		this.updateDimensions = _.debounce(this.updateDimensions.bind(this), 500)
 		this.getAllBiomes = _.debounce(this.getAllBiomes.bind(this), 500)
@@ -96,6 +96,8 @@ class Map extends Component {
 	}
 
 	updateDimensions() {
+		if (!this.wrapper) return;
+		
 		this.setState({
 			width: this.wrapper.offsetWidth,
 			height: window.innerHeight - totalOffset(this.wrapper).top - 30,
@@ -153,10 +155,10 @@ class Map extends Component {
 		}
 	}
 
-	handleWorldChange({ label, value }) {
+	handleWorldChange(event, data) {
 		this.setState({
 			biomes: [],
-			worldId: value,
+			worldId: data.value,
 		}, () => this.getAllBiomes())
 	}
 
@@ -169,32 +171,25 @@ class Map extends Component {
 			left: loc.x,
 			top: loc.z,
 			display: "block",
-			content: <Card>
-					<CardHeader>
+			content: <Segment>
+					<Header>
 						{obj.name ? obj.name : obj.type ? obj.type : obj.uuid ? obj.uuid : null}
-					</CardHeader>
-					<CardBlock>
-						{obj.uuid}<br />
-						{obj.inventory ?
-							_.map(obj.inventory.items, item =>
-								[<Badge color="primary" pill>
-									{ item.quantity > 1 ? item.quantity + "x " : "" } {item.name}
-								</Badge>," "]
-							)
-						: null }
-						{obj.health ?
-							<Progress
-								className="my-1" color="success"
-								value={(obj.health.current/obj.health.max)*100}
-							/>
-						: null}
-					</CardBlock>
-					<CardFooter>
-						<Button type="button" color="danger" onClick={() => this.deleteEntity(obj)}>
-							Destroy
-						</Button>
-					</CardFooter>
-				</Card>,
+					</Header>
+					{obj.uuid}<br />
+					{obj.inventory ?
+						_.map(obj.inventory.items, item =>
+							[<Label color="blue" pill>
+								{ item.quantity > 1 ? item.quantity + "x " : "" } {item.name}
+							</Label>," "]
+						)
+					: null }
+					{obj.health ?
+						<Progress color="green" percent={(obj.health.current/obj.health.max)*100} />
+					: null}
+					<Button color="red" onClick={() => this.deleteEntity(obj)}>
+						Destroy
+					</Button>
+				</Segment>,
 		})
 	}
 
@@ -275,7 +270,7 @@ class Map extends Component {
 		const cZ = center.z
 
 		return (
-			<div className="animated fadeIn" style={{ position: "relative" }}>
+			<Segment basic style={{ position: "relative" }}>
 				<div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }} ref={w => this.wrapper = w}>
 					<Stage width={this.state.width} height={this.state.height} ref={s => this.stage = s}
 							onContentMouseDown={e => this.handleMouseDown(e)}
@@ -350,27 +345,24 @@ class Map extends Component {
 						{this.state.content}
 					</div>
 				</div>
-				<div style={{ position: "absolute", "top": 10, "left": 10, width: "20vh" }}>
-					<Select
-						id="world"
-						placeholder="Select world..."
-						clearable={false}
-						value={this.state.worldId}
-						onChange={val => this.handleWorldChange(val)}
+				<Segment style={{ position: "absolute", "top": 0, "left": 10 }}>
+					<Dropdown
+						id="world" placeholder="Select world..."
+						value={this.state.worldId} onChange={this.handleWorldChange}
 						options={_.map(this.props.worlds, world => 
-							({ value: world.uuid, label: world.name + " (" + world.dimensionType.name + ")" })
+							({ value: world.uuid, text: world.name + " (" + world.dimensionType.name + ")" })
 						)}
 					/>
-				</div>
-				<div style={{ position: "absolute", padding: "10px 5px", "top": 60, "left": 10, height: "25vh", backgroundColor: "white", border: "1px solid black", width: "60px" }}>
+				</Segment>
+				<Segment style={{ position: "absolute", "top": 60, "left": 10, height: "25vh", width: 80 }}>
 					<Slider
 						vertical marks={marks} min={0.400} max={2} step={0.001} value={Math.pow(this.state.zoom, 1/4)}
 						onChange={v => this.handleZoomChange(v)}
 						trackStyle={{ backgroundColor: 'blue' }}
 						handleStyle={{ borderColor: 'blue' }}
 					/>
-				</div>
-			</div>
+				</Segment>
+			</Segment>
 		)
 	}
 }

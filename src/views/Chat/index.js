@@ -1,10 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 import { connect } from "react-redux"
-import { Row, Col, Card, CardHeader, CardBlock } from "reactstrap"
-import { Table, Label, FormGroup } from 'reactstrap'
-import { Pagination, PaginationItem, PaginationLink } from "reactstrap"
-import Select from 'react-select'
-import _ from 'lodash'
+import { Segment, Menu, Form, Dropdown, Table, Header } from "semantic-ui-react"
+import _ from "lodash"
 import moment from "moment"
 
 import { requestPlayers } from "../../actions/player"
@@ -36,8 +33,9 @@ class Chat extends Component {
 		clearInterval(this.interval);
 	}
 
-	filterChange(filter, newValue) {
-		this.props.setFilter(filter, _.map(newValue, "value"));
+	filterChange(event, data) {
+		const name = data.name ? data.name : data.id;
+		this.props.setFilter(name, data.value);
 	}
 
 	changePage(event, page) {
@@ -64,114 +62,76 @@ class Chat extends Component {
 		messages = messages.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
 		return (
-			<div className="animated fadeIn">
-				<Row>
+			<Segment basic>
 
-					<Col xs={12} md={6} lg={4}>
+				<Segment>
+					<Header>
+						<i className="fa fa-filter"></i> Filter messages
+					</Header>
 
-						<Card>
-							<CardHeader>
-								<i className="fa fa-filter"></i>
-								Filter messages
-							</CardHeader>
-							<CardBlock>
-								<Row>
+					<Form>
+						<Form.Field id="player" label="Sender" control={Dropdown} placeholder="Player"
+							fluid selection search onChange={this.filterChange}
+							options={_.map(this.props.players, player => 
+								({ value: player.uuid, text: player.name })
+							)}
+						/>
+					</Form>
+				</Segment>
 
-									<Col md={12}>
+				<Header>
+					<i className="fa fa-comments"></i> Messages
+				</Header>
 
-										<FormGroup row>
-											<Label md={3} for="filterPlayer">Player</Label>
-											<Col md={9}>
-												<Select
-													id="filterPlayer"
-													multi={true}
-													value={this.props.filter.player}
-													onChange={val => this.filterChange("player", val)}
-													options={_.map(this.props.players, player => 
-														({ value: player.uuid, label: player.name })
-													)}
-												/>
-											</Col>
-										</FormGroup>
+				<Table striped={true}>
+					<Table.Header>
+						<Table.Row>
+							<Table.HeaderCell>Timestamp</Table.HeaderCell>
+							<Table.HeaderCell>Sender</Table.HeaderCell>
+							<Table.HeaderCell>Message</Table.HeaderCell>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{_.map(messages, msg =>
+							<Table.Row key={msg.timestamp}>
+								<Table.Cell>{moment(msg.timestamp).timeAgo()}</Table.Cell>
+								<Table.Cell>{msg.sender.name}</Table.Cell>
+								<Table.Cell>{msg.message}</Table.Cell>
+							</Table.Row>
+						)}
+					</Table.Body>
+				</Table>
+				{ maxPage > 1 ?
+					<Menu pagination>
+						{ page > 4 ?
+							<Menu.Item onClick={e => this.changePage(e, 0)}>
+								1
+							</Menu.Item>
+						: null }
+						{ page > 5 ?
+							<Menu.Item onClick={e => this.changePage(e, page - 5)}>
+								...
+							</Menu.Item>
+						: null }
+						{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
+							<Menu.Item key={p} onClick={e => this.changePage(e, p)} active={p === page}>
+								{p + 1}
+							</Menu.Item>
+						))}
+						{ page < maxPage - 6 ?
+							<Menu.Item onClick={e => this.changePage(e, page + 5)}>
+								...
+							</Menu.Item>
+						: null }
+						{ page < maxPage - 5 ?
+							<Menu.Item onClick={e => this.changePage(e, maxPage - 1)}>
+								{maxPage}
+							</Menu.Item>
+						: null }
+					</Menu>
+				: null }
 
-									</Col>
-
-								</Row>
-							</CardBlock>
-						</Card>
-
-					</Col>
-
-					<Col xs={12}>
-						<Card>
-							<CardHeader>
-								<i className="fa fa-comments"></i>
-								Messages
-							</CardHeader>
-							<CardBlock>
-								<Table striped={true}>
-									<thead>
-										<tr>
-											<th>Timestamp</th>
-											<th>Sender</th>
-											<th>Message</th>
-										</tr>
-									</thead>
-									<tbody>
-										{_.map(messages, msg =>
-											<tr key={msg.timestamp}>
-												<td>{moment(msg.timestamp).timeAgo()}</td>
-												<td>{msg.sender.name}</td>
-												<td>{msg.message}</td>
-											</tr>
-										)}
-									</tbody>
-								</Table>
-								{ maxPage > 1 ?
-									<Pagination>
-										{ page > 4 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, 0)} href="#">
-													1
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-										{ page > 5 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, page - 5)} href="#">
-													...
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-										{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
-											<PaginationItem key={p} active={p === page}>
-												<PaginationLink onClick={e => this.changePage(e, p)} href="#">
-													{p + 1}
-												</PaginationLink>
-											</PaginationItem>
-										))}
-										{ page < maxPage - 6 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, page + 5)} href="#">
-													...
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-										{ page < maxPage - 5 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, maxPage - 1)} href="#">
-													{maxPage}
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-									</Pagination>
-								: null }
-							</CardBlock>
-						</Card>
-					</Col>
-
-				</Row>
-			</div>
+			</Segment>
 		)
 	}
 }

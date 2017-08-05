@@ -1,13 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
-	Row, Col, Button, FormGroup, Label, Input, Table, Badge,
-	Card, CardHeader, CardBlock, CardFooter,
-	Modal, ModalHeader, ModalBody, ModalFooter,
-	Pagination, PaginationItem, PaginationLink,
-} from "reactstrap"
-import Select from 'react-select'
-import _ from 'lodash'
+	Segment, Grid, Header, Form, Modal, Menu, 
+	Dropdown, Label, Table, Button, 
+} from "semantic-ui-react"
+import _ from "lodash"
 
 import { requestCatalog } from "../../actions"
 import { requestWorlds, requestUpdateWorld, requestCreateWorld, requestDeleteWorld } from "../../actions/world"
@@ -34,6 +31,7 @@ class Worlds extends Component {
 			usesMapFeatures: true,
 		};
 
+		this.create = this.create.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.toggleModal = this.toggleModal.bind(this);
 		this.saveGameRules = this.saveGameRules.bind(this);
@@ -51,22 +49,17 @@ class Worlds extends Component {
 		clearInterval(this.interval);
 	}
 
-	handleChange(event, newValue) {
+	handleChange(event, data) {
 		let value = null;
 		let name = null;
 
-		if (_.isObject(event)) {
+		if (data) {
+			name = data.name ? data.name : data.id;
+			value = data.value;
+		} else {
 			const target = event.target;
 			value = target.type === 'checkbox' ? target.checked : target.value;
 			name = target.name ? target.name : target.id;
-		} else {
-			if (!newValue)
-				value = null;
-			else if (_.isArray(newValue))
-				value = _.map(newValue, "value");
-			else
-				value = newValue.value;
-			name = event;
 		}
 
 		this.setState({
@@ -147,6 +140,11 @@ class Worlds extends Component {
 		})
 	}
 
+	canCreate() {
+		return this.state.worldName && this.state.dimension && this.state.generator && 
+			this.state.difficulty && this.state.gameMode;
+	}
+
 	render() {
 		let worlds = _.filter(this.props.worlds, w => true);
 
@@ -156,376 +154,259 @@ class Worlds extends Component {
 		worlds = worlds.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
 		return (
-			<div className="animated fadeIn">
-				<Row>
+			<Segment basic>
 
-					<Col xs={12}>
-						<Card>
-							<CardHeader>
-								<i className="fa fa-plus"></i>
-								Create a world
-							</CardHeader>
-							<CardBlock>
-								<Row>
+				<Segment>
+					<Header>
+						<i className="fa fa-plus"></i> Create a world
+					</Header>
 
-									<Col lg={4} md={6} xs={12}>
+					<Form loading={this.props.creating}>
 
-										<FormGroup row>
-											<Label md={3} for="world-name">Name</Label>
-											<Col md={9}>
-												<Input
-													type="text"
-													id="world-name"
-													name="worldName"
-													placeholder="World name"
-													onChange={this.handleChange}
-												/>
-											</Col>
-										</FormGroup>
+						<Form.Group widths="equal">
+							<Form.Input
+								id="worldName" label="World name" placeholder="World name" 
+								required onChange={this.handleChange}
+							/>
 
-										<FormGroup row>
-											<Label md={3} for="dimension">Dimension</Label>
-											<Col md={9}>
-												<Select
-													id="dimension"
-													value={this.state.dimension}
-													onChange={val => this.handleChange("dimension", val)}
-													options={_.map(this.props.dimTypes, dim => ({ value: dim.id, label: dim.name }))}
-												/>
-											</Col>
-										</FormGroup>
+							<Form.Field id="dimension" label="Dimension" control={Dropdown} placeholder="Dimension"
+								required fluid selection search onChange={this.handleChange}
+								options={_.map(this.props.dimTypes, dim =>
+									({ value: dim.id, text: dim.name })
+								)}
+							/>
 
-										<FormGroup row>
-											<Label md={3} for="difficulty">Difficulty</Label>
-											<Col md={9}>
-												<Select
-													id="difficulty"
-													value={this.state.difficulty}
-													onChange={val => this.handleChange("difficulty", val)}
-													options={_.map(this.props.diffTypes, diff => ({ value: diff.id, label: diff.name }))}
-												/>
-											</Col>
-										</FormGroup>
+							<Form.Field id="generator" label="Generator" control={Dropdown} placeholder="Generator"
+								required fluid selection search onChange={this.handleChange}
+								options={_.map(this.props.genTypes, gen =>
+									({ value: gen.id, text: gen.name })
+								)}
+							/>
+						</Form.Group>
 
-									</Col>
+						<Form.Group widths="equal">
+							<Form.Field id="difficulty" label="Difficulty" control={Dropdown} placeholder="Difficulty"
+								required fluid selection search onChange={this.handleChange}
+								options={_.map(this.props.diffTypes, diff =>
+									({ value: diff.id, text: diff.name })
+								)}
+							/>
 
-									<Col lg={4} md={6} xs={12}>
+							<Form.Field id="gameMode" label="Game mode" control={Dropdown} placeholder="Game mode"
+								required fluid selection search onChange={this.handleChange}
+								options={_.map(this.props.gmTypes, gm =>
+									({ value: gm.id, text: gm.name })
+								)}
+							/>
 
-										<FormGroup row>
-											<Label md={3} for="generator">Generator</Label>
-											<Col md={9}>
-												<Select
-													id="generator"
-													value={this.state.generator}
-													onChange={val => this.handleChange("generator", val)}
-													options={_.map(this.props.genTypes, gen => ({ value: gen.id, label: gen.name }))}
-												/>
-											</Col>
-										</FormGroup>
+							<Form.Input id="seed" label="Seed" placeholder="Seed" onChange={this.handleChange} />
+						</Form.Group>
 
-										<FormGroup row>
-											<Label md={3} for="game-mode">Game mode</Label>
-											<Col md={9}>
-												<Select
-													id="gameMode"
-													value={this.state.gameMode}
-													onChange={val => this.handleChange("gameMode", val)}
-													options={_.map(this.props.gmTypes, gm => ({ value: gm.id, label: gm.name }))}
-												/>
-											</Col>
-										</FormGroup>
+						<Form.Group inline>
+							<label>Features:</label>
+							<Form.Checkbox
+								id="loadOnStartup" label="Load on startup"
+								checked={this.state.loadOnStartup} onChange={this.handleChange}
+							/>
+							<Form.Checkbox
+								id="keepSpawnLoaded" label="Keep spawn loaded"
+								checked={this.state.keepSpawnLoaded} onChange={this.handleChange}
+							/>
+							<Form.Checkbox
+								id="commandsAllowed" label="Commands allowed"
+								checked={this.state.commandsAllowed} onChange={this.handleChange}
+							/>
+							<Form.Checkbox
+								id="generateBonusChest" label="Generate bonus chest"
+								checked={this.state.generateBonusChest} onChange={this.handleChange}
+							/>
+							<Form.Checkbox
+								id="usesMapFeatures" label="Enable map features"
+								checked={this.state.usesMapFeatures} onChange={this.handleChange}
+							/>
+						</Form.Group>
 
-										<FormGroup row>
-											<Label md={3} for="seed">Seed</Label>
-											<Col md={9}>
-												<Input
-													type="text"
-													id="seed"
-													placeholder="Seed"
-													onChange={this.handleChange}
-												/>
-											</Col>
-										</FormGroup>
+						<Form.Button color="green" onClick={this.create} disabled={!this.canCreate()}>
+							Create
+						</Form.Button>
 
-									</Col>
+					</Form>
+				</Segment>
 
-									<Col lg={4} md={6} xs={12}>
+				<Header>
+					<i className="fa fa-globe"></i> Worlds
+				</Header>
 
-										<FormGroup row>
-											<Label md={2}>Features</Label>
-											<Col md={10}>
-												<FormGroup check>
-													<Label check>
-														<Input
-															type="checkbox"
-															name="loadOnStartup"
-															checked={this.state.loadOnStartup}
-															onChange={this.handleChange}
-														/>
-														Load on startup<br />
-													</Label>
-												</FormGroup>
-												<FormGroup check>
-													<Label check>
-														<Input
-															type="checkbox"
-															name="keepSpawnLoaded"
-															checked={this.state.keepSpawnLoaded}
-															onChange={this.handleChange}
-														/>
-														Keep spawn loaded<br />
-													</Label>
-												</FormGroup>
-												<FormGroup check>
-													<Label check>
-														<Input
-															type="checkbox"
-															name="commandsAllowed"
-															checked={this.state.commandsAllowed}
-															onChange={this.handleChange}
-														/>
-														Allow commands<br />
-													</Label>
-												</FormGroup>
-												<FormGroup check>
-													<Label check>
-														<Input
-															type="checkbox"
-															name="generateBonusChest"
-															checked={this.state.generateBonusChest}
-															onChange={this.handleChange}
-														/>
-														Generate bonus chests<br />
-													</Label>
-												</FormGroup>
-												<FormGroup check>
-													<Label check>
-														<Input
-															type="checkbox"
-															name="usesMapFeatures"
-															checked={this.state.usesMapFeatures}
-															onChange={this.handleChange}
-														/>
-														Enable map features<br />
-														(villages, strongholds, etc.)
-													</Label>
-												</FormGroup>
-											</Col>
-										</FormGroup>
-										
-									</Col>
-
-								</Row>
-							</CardBlock>
-							<CardFooter>
-								<button type="button" className="btn btn-success" onClick={() => this.create()} disabled={this.props.creating}>
-									Create&nbsp;
-									{this.props.creating ?
+				<Table striped>
+					<Table.Header>
+						<Table.Row>
+							<Table.HeaderCell>Name / UUID</Table.HeaderCell>
+							<Table.HeaderCell>Dimension<br />Generator</Table.HeaderCell>
+							<Table.HeaderCell>Difficulty<br />Game Mode</Table.HeaderCell>
+							<Table.HeaderCell>Time<br />Weather</Table.HeaderCell>
+							<Table.HeaderCell>Seed</Table.HeaderCell>
+							<Table.HeaderCell>Status</Table.HeaderCell>
+							<Table.HeaderCell>Actions</Table.HeaderCell>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{_.map(worlds, world =>
+							<Table.Row key={world.uuid}>
+								<Table.Cell>{world.name}<br />{world.uuid}</Table.Cell>
+								<Table.Cell>
+									{world.dimensionType ? world.dimensionType.name : "-"}<br />
+									{world.generatorType ? world.generatorType.name : "-"}
+								</Table.Cell>
+								<Table.Cell>
+									<i className="fa fa-signal"></i> {world.difficulty ? world.difficulty.name : "-"}<br />
+									<i className="fa fa-gamepad"></i> {world.gameMode ? world.gameMode.name : "-"}
+								</Table.Cell>
+								<Table.Cell>
+									<i className="fa fa-clock-o"></i> {world.time ? world.time : "-"}<br />
+									<i className="fa fa-cloud"></i> {world.weather ? world.weather.name : "-"}
+								</Table.Cell>
+								<Table.Cell>
+									{world.seed}
+								</Table.Cell>
+								<Table.Cell>
+									{world ?
+										<Label color={world.isLoaded ? "green" : "yellow"}>
+											{world.isLoaded ? "Loaded" : "Unloaded"}
+										</Label>
+									: null}
+								</Table.Cell>
+								<Table.Cell>
+									<Button
+										type="button" color="blue" disabled={world.updating}
+										onClick={() => this.showGameRules(world)}
+									>
+										Game Rules
+									</Button>{" "}
+									<Button
+										type="button" color={world.isLoaded ? "yellow" : "green"}
+										onClick={() => this.toggleLoad(world)} disabled={world.updating}
+									>
+										{world.isLoaded ? "Unload " : "Load "}
+									</Button>{" "}
+									{!world.isLoaded ?
+										<Button
+											type="button" color="red" disabled={world.updating}
+											onClick={() => this.delete(world)}
+										>
+											Delete
+										</Button>
+									: null}
+									{" "}
+									{world.updating ?
 										<i className="fa fa-spinner fa-pulse"></i>
 									: null}
-								</button>
-							</CardFooter>
-						</Card>
-					</Col>
+								</Table.Cell>
+							</Table.Row>
+						)}
+					</Table.Body>
+				</Table>
+				{ maxPage > 1 ?
+					<Menu pagination>
+						{ page > 4 ?
+							<Menu.Item onClick={e => this.changePage(e, 0)}>
+								1
+							</Menu.Item>
+						: null }
+						{ page > 5 ?
+							<Menu.Item onClick={e => this.changePage(e, page - 5)}>
+								...
+							</Menu.Item>
+						: null }
+						{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
+							<Menu.Item key={p} onClick={e => this.changePage(e, p)} active={p === page}>
+								{p + 1}
+							</Menu.Item>
+						))}
+						{ page < maxPage - 6 ?
+							<Menu.Item onClick={e => this.changePage(e, page + 5)}>
+								...
+							</Menu.Item>
+						: null }
+						{ page < maxPage - 5 ?
+							<Menu.Item onClick={e => this.changePage(e, maxPage - 1)}>
+								{maxPage}
+							</Menu.Item>
+						: null }
+					</Menu>
+				: null }
 
-					<Col xs={12}>
-						<Card>
-							<CardHeader>
-								<i className="fa fa-globe"></i>
-								Worlds
-							</CardHeader>
-							<CardBlock>
-								<Table striped={true}>
-									<thead>
-										<tr>
-											<th>Name / UUID</th>
-											<th>Dimension<br />Generator</th>
-											<th>Difficulty<br />Game Mode</th>
-											<th>Time<br />Weather</th>
-											<th>Seed</th>
-											<th>Status</th>
-											<th>Actions</th>
-										</tr>
-									</thead>
-									<tbody>
-										{_.map(worlds, world =>
-											<tr key={world.uuid}>
-												<td>{world.name}<br />{world.uuid}</td>
-												<td>
-													{world.dimensionType ? world.dimensionType.name : "-"}<br />
-													{world.generatorType ? world.generatorType.name : "-"}
-												</td>
-												<td>
-													<i className="fa fa-signal"></i> {world.difficulty ? world.difficulty.name : "-"}<br />
-													<i className="fa fa-gamepad"></i> {world.gameMode ? world.gameMode.name : "-"}
-												</td>
-												<td>
-													<i className="fa fa-clock-o"></i> {world.time ? world.time : "-"}<br />
-													<i className="fa fa-cloud"></i> {world.weather ? world.weather.name : "-"}
-												</td>
-												<td>
-													{world.seed}
-												</td>
-												<td>
-													{world ?
-														<Badge color={world.isLoaded ? "success" : "warning"}>
-															{world.isLoaded ? "Loaded" : "Unloaded"}
-														</Badge>
-													: null}
-												</td>
-												<td>
-													<Button
-														type="button" color="info" disabled={world.updating}
-														onClick={() => this.showGameRules(world)}
-													>
-														Game Rules
-													</Button>{" "}
-													<Button
-														type="button" color={world.isLoaded ? "warning" : "success"}
-														onClick={() => this.toggleLoad(world)} disabled={world.updating}
-													>
-														{world.isLoaded ? "Unload " : "Load "}
-													</Button>{" "}
-													{!world.isLoaded ?
-														<Button
-															type="button" color="danger" disabled={world.updating}
-															onClick={() => this.delete(world)}
-														>
-															Delete
-														</Button>
-													: null}
-													{" "}
-													{world.updating ?
-														<i className="fa fa-spinner fa-pulse"></i>
-													: null}
-												</td>
-											</tr>
-										)}
-									</tbody>
-								</Table>
-								{ maxPage > 1 ?
-									<Pagination>
-										{ page > 4 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, 0)} href="#">
-													1
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-										{ page > 5 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, page - 5)} href="#">
-													...
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-										{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
-											<PaginationItem key={p} active={p === page}>
-												<PaginationLink onClick={e => this.changePage(e, p)} href="#">
-													{p + 1}
-												</PaginationLink>
-											</PaginationItem>
-										))}
-										{ page < maxPage - 6 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, page + 5)} href="#">
-													...
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-										{ page < maxPage - 5 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, maxPage - 1)} href="#">
-													{maxPage}
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-									</Pagination>
-								: null }
-							</CardBlock>
-						</Card>
-					</Col>
+				{this.state.rules ?
+					<Modal open={this.state.modal} onClose={this.toggleModal}>
+						<Modal.Header>
+							Game Rules for '{this.state.rulesWorld.name}'
+							({this.state.rulesWorld.dimensionType.name})
+						</Modal.Header>
+						<Modal.Content>
+							<Grid columns={2}>
+								<Grid.Column>
+									<Table>
+										<Table.Header>
+											<Table.Row>
+												<Table.HeaderCell>Name</Table.HeaderCell>
+												<Table.HeaderCell>Value</Table.HeaderCell>
+											</Table.Row>
+										</Table.Header>
+										<Table.Body>
+											{_.map(_.slice(this.state.rules, 0, this.state.rules.length / 2), rule =>
+												<Table.Row key={rule.name}>
+													<Table.Cell>{rule.name}</Table.Cell>
+													<Table.Cell>
+														{rule.value === "true" || rule.value === "false" ?
+															<Button toggle active={rule.value === "true"}
+																onClick={() => this.toggleRule(rule.name)}
+															>
+																{rule.value === "true" ? "On" : "Off"}
+															</Button>
+														: rule.value}
+													</Table.Cell>
+												</Table.Row>
+											)}
+										</Table.Body>
+									</Table>
+								</Grid.Column>
 
-					<Modal isOpen={this.state.modal} toggle={this.toggleModal} className={'modal-lg ' + this.props.className}>
-						{this.state.rules ?
-							<div>
-								<ModalHeader toggle={this.toggleModal}>Game Rules</ModalHeader>
-								<ModalBody>
-									<Row>
-										<Col md={6}>
-											<Table>
-												<thead>
-													<tr>
-														<th>Name</th>
-														<th>Value</th>
-													</tr>
-												</thead>
-												<tbody>
-													{_.map(_.slice(this.state.rules, 0, this.state.rules.length / 2), rule =>
-														<tr key={rule.name}>
-															<td>{rule.name}</td>
-															<td>
-																{rule.value === "true" || rule.value === "false" ?
-																	<Label className="switch switch-3d switch-primary">
-																		<Input
-																			type="checkbox"
-																			className="switch-input"
-																			defaultChecked={rule.value === "true"}
-																			onChange={() => this.toggleRule(rule.name)}
-																		/>
-																		<span className="switch-label"></span>
-																		<span className="switch-handle"></span>
-																	</Label>
-																: rule.value}
-															</td>
-														</tr>
-													)}
-												</tbody>
-											</Table>
-										</Col>
-										<Col md={6}>
-											<Table>
-												<thead>
-													<tr>
-														<th>Name</th>
-														<th>Value</th>
-													</tr>
-												</thead>
-												<tbody>
-													{_.map(_.slice(this.state.rules, this.state.rules.length / 2), rule =>
-														<tr key={rule.name}>
-															<td>{rule.name}</td>
-															<td>
-																{rule.value === "true" || rule.value === "false" ?
-																	<Label className="switch switch-3d switch-primary">
-																		<Input
-																			type="checkbox"
-																			className="switch-input"
-																			defaultChecked={rule.value === "true"}
-																			onChange={() => this.toggleRule(rule.name)}
-																		/>
-																		<span className="switch-label"></span>
-																		<span className="switch-handle"></span>
-																	</Label>
-																: rule.value}
-															</td>
-														</tr>
-													)}
-												</tbody>
-											</Table>
-										</Col>
-									</Row>
-								</ModalBody>
-								<ModalFooter>
-									<Button color="primary" onClick={this.saveGameRules}>Save</Button>&nbsp;
-									<Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
-								</ModalFooter>
-							</div>
-						: null}
+								<Grid.Column>
+									<Table>
+										<Table.Header>
+											<Table.Row>
+												<Table.HeaderCell>Name</Table.HeaderCell>
+												<Table.HeaderCell>Value</Table.HeaderCell>
+											</Table.Row>
+										</Table.Header>
+										<Table.Body>
+											{_.map(_.slice(this.state.rules, this.state.rules.length / 2), rule =>
+												<Table.Row key={rule.name}>
+													<Table.Cell>{rule.name}</Table.Cell>
+													<Table.Cell>
+														{rule.value === "true" || rule.value === "false" ?
+															<Button toggle active={rule.value === "true"}
+																onClick={() => this.toggleRule(rule.name)}
+															>
+																{rule.value === "true" ? "On" : "Off"}
+															</Button>
+														: rule.value}
+													</Table.Cell>
+												</Table.Row>
+											)}
+										</Table.Body>
+									</Table>
+								</Grid.Column>
+
+								<Grid.Column>
+									<Button color="blue" onClick={this.saveGameRules}>Save</Button>&nbsp;
+									<Button onClick={this.toggleModal}>Cancel</Button>
+								</Grid.Column>
+							</Grid>
+						</Modal.Content>
 					</Modal>
+				: null}
 
-				</Row>
-			</div>
+			</Segment>
 		)
 	}
 }
