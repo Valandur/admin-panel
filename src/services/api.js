@@ -429,7 +429,11 @@ const api = ({ getState, dispatch }) => next => action => {
 					result: data.result,
 					command: action.command,
 				})
-			}, { command: action.command })
+			}, {
+				command: action.command,
+				waitLines: action.waitLines,
+				waitTime: action.waitTime,
+			})
 			break;
 
 		default:

@@ -276,7 +276,7 @@ const mapDispatchToProps = (dispatch) => {
 		requestCommands: () => dispatch(requestCommands()),
 		requestCommandHistory: () => dispatch(requestCommandHistory()),
 		setFilter: (filter, value) => dispatch(setFilter(filter, value)),
-		requestExecute: (command) => dispatch(requestExecute(command)),
+		requestExecute: (cmd, waitLines, waitTime) => dispatch(requestExecute(cmd, waitLines, waitTime)),
 	}
 }
 
