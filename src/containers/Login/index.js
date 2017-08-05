@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 import { connect } from "react-redux"
-import { Redirect } from 'react-router-dom'
+import { Redirect } from "react-router-dom"
+import { Grid, Header, Image, Form, Button, Segment } from "semantic-ui-react"
 
 import { requestLogin } from "../../actions"
 
@@ -30,59 +31,37 @@ class Login extends Component {
 
 	render() {
 		if (this.props.ok) {
-			return <Redirect to={{ pathname: '/', state: { from: this.props.location} }} />
+			return <Redirect to={{ pathname: "/", state: { from: this.props.location} }} />
 		}
 
 		return (
-			<form onSubmit={this.handleLogin}>
-				<div className="app flex-row align-items-center">
-					<div className="container">
-						<div className="row justify-content-center">
+			<Grid
+        textAlign="center"
+        style={{ height: "100vh" }}
+        verticalAlign="middle"
+      >
+        <Grid.Column style={{ maxWidth: 450 }}>
+          <Header as="h2" color="blue" textAlign="center">
+            <Image src="/img/logo.png" /> Admin Panel
+          </Header>
+          <Form size="large" loading={this.props.loggingIn}>
+            <Segment>
+              <Form.Input
+              	fluid icon="user" iconPosition="left" placeholder="Username"
+              	name="username" value={this.state.username} onChange={this.handleChange}
+              />
+              <Form.Input
+              	fluid icon="lock" iconPosition="left" placeholder="Password" type="password"
+              	name="password" value={this.state.password} onChange={this.handleChange}
+              />
 
-							<div className="col-md-6">
-								<div className="card-group mb-0">
-									<div className="card p-5">
-										<div className="card-block">
-											
-												<h1>Login</h1>
-												<p className="text-muted">Sign In to your account</p>
-												<div className="input-group mb-3">
-													<span className="input-group-addon"><i className="icon-user"></i></span>
-													<input
-														type="text"
-														name="username"
-														className="form-control"
-														placeholder="Username"
-														value={this.state.username}
-														onChange={this.handleChange}
-													/>
-												</div>
-												<div className="input-group mb-4">
-													<span className="input-group-addon"><i className="icon-lock"></i></span>
-													<input
-														type="password"
-														name="password"
-														className="form-control"
-														placeholder="Password"
-														value={this.state.password}
-														onChange={this.handleChange}
-													/>
-												</div>
-												<div className="row">
-													<div className="col-6">
-														<button type="submit" className="btn btn-primary px-4">Login</button>
-													</div>
-												</div>
-										
-										</div>
-									</div>
-								</div>
-							</div>
-
-						</div>
-					</div>
-				</div>
-			</form>
+              <Button color="blue" fluid size="large" onClick={this.handleLogin}>
+              	Login
+              </Button>
+            </Segment>
+          </Form>
+        </Grid.Column>
+      </Grid>
 		);
 	}
 }
@@ -90,6 +69,7 @@ class Login extends Component {
 const mapStateToProps = (_state) => {
 	return {
 		ok: _state.api.loggedIn,
+		loggingIn: _state.api.loggingIn,
 	}
 }
 

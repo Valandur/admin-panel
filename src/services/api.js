@@ -71,12 +71,22 @@ import {
 
 const apiUrl = "/api/"
 
-const call = (method, key, dispatch, path, callback, data) => {
+const call = (method, key, dispatch, path, callback, data, handleErrors = true) => {
 	const req = request(method, apiUrl + path + (path.indexOf("?") >= 0 ? "&" : "?") + (key ? "key=" + key : ""));
 	if (data) req.send(data);
 	req.end((err, res) => {
 		if (!res) {
 			dispatch(showNotification("error", "API Error", err))
+			return;
+		}
+
+		if (res.statusCode === 200 || res.statusCode === 201) {
+			callback(res.body);
+			return;
+		}
+
+		if (!handleErrors) {
+			callback({ ok: false, error: res.statusText });
 			return;
 		}
 
@@ -89,8 +99,6 @@ const call = (method, key, dispatch, path, callback, data) => {
 			dispatch(showNotification("error", "API Error", res.statusText))
 			return;
 		}
-
-		if (callback) callback(res.body);
 	})
 }
 
@@ -107,6 +115,10 @@ const api = ({ getState, dispatch }) => next => action => {
 	switch (action.type) {
 		case LOGIN_REQUEST:
 			post("user", data => {
+				if (!data.ok) {
+					next(showNotification("error", "Login error", "Invalid username or password"))
+				}
+
 				next({
 					type: LOGIN_RESPONSE,
 					ok: data.ok,
@@ -117,7 +129,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			}, {
 				username: action.username,
 				password: action.password,
-			})
+			}, false)
 			break;
 
 		case CHECK_USER_REQUEST:
