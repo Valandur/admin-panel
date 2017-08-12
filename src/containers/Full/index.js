@@ -15,15 +15,18 @@ import Operations from "../../views/Operations"
 import Plugins from "../../views/Plugins"
 import Settings from "../../views/Settings"
 
-import { requestLogout } from "../../actions"
+import Nucleus from "../Nucleus"
 
-const logoutStyle = { position: "absolute", bottom: 0, width: "100%" }
+import { requestLogout } from "../../actions"
 
 class Full extends Component {
 	render() {
+		console.log(this.props);
+
 		return (
-			<Sidebar.Pushable style={{ height: "100vh" }}>
-        <Sidebar as={Menu} visible={true} vertical secondary>
+			<Sidebar.Pushable style={{ minHeight: "100vh" }}>
+				<Sidebar width="thin" as={Menu} visible={true} vertical secondary>
+
 					<Menu.Item header as={NavLink} to="/">
 						<Image size="small" centered src="/img/logo.png" />
 					</Menu.Item>
@@ -61,7 +64,7 @@ class Full extends Component {
 					</Menu.Item>
 
 					<Menu.Item name="operations" as={NavLink} to="/operations">
-						<i className="fa fa-th-large"></i>&nbsp; &nbsp; Block Operations
+						<i className="fa fa-th-large"></i>&nbsp; &nbsp; Block Ops
 					</Menu.Item>
 
 					<Menu.Item name="plugins" as={NavLink} to="/plugins">
@@ -71,13 +74,29 @@ class Full extends Component {
 					<Menu.Item name="settings" as={NavLink} to="/settings">
 						<i className="fa fa-cog"></i>&nbsp; &nbsp; Server Settings
 					</Menu.Item>
-					
-					<Menu.Item name="logout" onClick={this.props.requestLogout} style={logoutStyle}>
+
+					{ this.props.servlets.nucleus &&
+					<Menu.Item>
+						<Menu.Header>Nucleus</Menu.Header>
+
+						<Menu.Menu>
+							<Menu.Item name="nucleus-kits" as={NavLink} to="/nucleus/kits">
+								<i className="fa fa-wrench"></i>&nbsp; &nbsp; Kits
+							</Menu.Item>
+
+							<Menu.Item name="nucleus-jails" as={NavLink} to="/nucleus/jails">
+								<i className="fa fa-archive"></i>&nbsp; &nbsp; Jails
+							</Menu.Item>
+						</Menu.Menu>
+					</Menu.Item>
+					}
+
+					<Menu.Item name="logout" onClick={this.props.requestLogout}>
 						<i className="fa fa-sign-out"></i>&nbsp; &nbsp; Logout
 					</Menu.Item>
 				</Sidebar>
 
-				<Sidebar.Pusher style={{ width: "calc(100% - 260px)", height: "100vh", overflowY: "scroll" }}>
+				<Sidebar.Pusher style={{ width: "calc(100% - 150px)", height: "100vh", overflowY: "scroll" }}>
 					<Switch>
 						<Route path="/dashboard" name="Dashboard" component={Dashboard} />
 						<Route path="/chat" name="Chat" component={Chat} />
@@ -90,6 +109,8 @@ class Full extends Component {
 						<Route path="/operations" name="Block Operations" component={Operations} />
 						<Route path="/plugins" name="Plugins" component={Plugins} />
 						<Route path="/settings" name="Settings" component={Settings} />
+
+						<Route path="/nucleus" name="Nucleus" component={Nucleus} />
 						
 						<Redirect from="/" to="/dashboard" />
 					</Switch>
@@ -100,7 +121,9 @@ class Full extends Component {
 }
 
 const mapStateToProps = (_state) => {
-	return {}
+	return {
+		servlets: _state.api.servlets,
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {

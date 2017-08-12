@@ -9,6 +9,9 @@ import {
 const player = (state = { players: [], filter: {}}, action) => {
 	switch(action.type) {
 		case PLAYERS_RESPONSE:
+			if (!action.ok)
+				return state;
+			
 			return _.assign({}, state, {
 				players: _.sortBy(action.players, "name"),
 			});

@@ -1,12 +1,21 @@
 import _ from "lodash"
 
 import {
+	SERVLETS_RESPONSE,
 	LOGIN_REQUEST, LOGIN_RESPONSE,
 	CHECK_USER_RESPONSE, LOGOUT_REQUEST, CATALOG_RESPONSE
 } from "../actions"
 
-const api = (state = { types: {}}, action) => {
+const api = (state = { servlets: {}, types: {}}, action) => {
 	switch(action.type) {
+		case SERVLETS_RESPONSE:
+			if (!action.ok)
+				return state;
+
+			return _.assign({}, state, {
+				servlets: action.servlets,
+			})
+
 		case LOGIN_REQUEST:
 			return _.assign({}, state, {
 				loggingIn: true,
@@ -28,11 +37,17 @@ const api = (state = { types: {}}, action) => {
 			})
 
 		case CHECK_USER_RESPONSE:
+			if (!action.ok)
+				return state;
+
 			return _.assign({}, state, {
 				user: action.user,
 			})
 
 		case CATALOG_RESPONSE:
+			if (!action.ok)
+				return state;
+
 			return _.assign({}, state, {
 				types: {
 					...state.types,

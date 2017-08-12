@@ -7,7 +7,6 @@ import { routerMiddleware, ConnectedRouter } from "react-router-redux"
 import { createBrowserHistory } from "history"
 import NotificationSystem from "react-notification-system"
 
-
 // CSS
 import "semantic-ui-css/semantic.min.css";
 import "react-select/dist/react-select.css"
@@ -24,7 +23,7 @@ import Full from "./containers/Full/"
 import Login from "./containers/Login"
 
 // Actions
-import { requestCheckUser } from "./actions"
+import { requestServlets, requestCheckUser } from "./actions"
 import { saveNotifRef } from "./actions/notification"
 
 
@@ -39,6 +38,9 @@ if (window.localStorage) {
 	initialState = {
 		api: prevApi ? JSON.parse(prevApi) : undefined,
 	};
+
+	// Fix servlets being undefined
+	initialState.api.servlets = {};
 }
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -53,6 +55,8 @@ if (store.getState().api.loggedIn) {
 	store.dispatch(requestCheckUser());
 }
 
+store.dispatch(requestServlets());
+
 class Main extends React.Component {
 	render() {
 		return <div>
@@ -64,7 +68,7 @@ class Main extends React.Component {
 							if (store.getState().api.loggedIn)
 								return <Full {...props} />
 							else
-								return <Redirect to={{ pathname: "/login", state: { from: props.location} }} />
+								return <Redirect to={{ pathname: "/login", state: { from: props.location }}} />
 						}} />
 					</Switch>
 				</ConnectedRouter>

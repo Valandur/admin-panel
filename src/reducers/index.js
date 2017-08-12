@@ -13,6 +13,8 @@ import tileEntity from "./tile-entity"
 import operations from "./operations"
 import settings from "./settings"
 
+import nucleus from "./nucleus"
+
 const app = combineReducers({
 	api,
 	dashboard,
@@ -25,6 +27,7 @@ const app = combineReducers({
 	tileEntity,
 	operations,
 	settings,
+	nucleus,
 	router: routerReducer,
 })
 

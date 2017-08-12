@@ -10,6 +10,9 @@ import {
 const world = (state = { worlds: []}, action) => {
 	switch(action.type) {
 		case WORLDS_RESPONSE:
+			if (!action.ok)
+				return state;
+
 			return _.assign({}, state, {
 				worlds: _.sortBy(action.worlds, "name"),
 			})
@@ -23,18 +26,10 @@ const world = (state = { worlds: []}, action) => {
 			})
 
 		case WORLD_UPDATE_RESPONSE:
-			if (!action.ok) {
-				return _.assign({}, state, {
-					worlds: _.map(state.worlds, w => {
-						if (w.uuid !== action.world.uuid) return w;
-						return _.assign({}, w, { updating: false })
-					})
-				})
-			}
 			return _.assign({}, state, {
 				worlds: _.map(state.worlds, w => {
 					if (w.uuid !== action.world.uuid) return w;
-					return _.assign({}, w, action.world, { updating: false })
+					return _.assign({}, w, action.ok ? action.world : null, { updating: false })
 				})
 			})
 
@@ -64,8 +59,14 @@ const world = (state = { worlds: []}, action) => {
 			})
 
 		case WORLD_DELETE_RESPONSE:
-			if (!action.ok)
-				return state;
+			if (!action.ok) {
+				return _.assign({}, state, {
+					worlds: _.map(state.worlds, w => {
+						if (w.uuid !== action.uuid) return w;
+						return _.assign({}, w, { updating: false })
+					})
+				})
+			}
 
 			return _.assign({}, state, {
 				worlds: _.filter(state.worlds, w => w.uuid !== action.world.uuid)

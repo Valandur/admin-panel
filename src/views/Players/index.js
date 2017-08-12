@@ -150,7 +150,7 @@ class Players extends Component {
 								<Table.Cell>
 									{player.health ?
 										<div>
-											<Progress color="green"
+											<Progress color="green" style={{marginBottom: "1em"}}
 												percent={(player.health.current/player.health.max)*100}
 											/>
 											<Progress color="blue"

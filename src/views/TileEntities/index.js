@@ -84,8 +84,7 @@ class TileEntities extends Component {
 
 				<Segment>
 					<Header>
-						<i className="fa fa-filter"></i>
-						Filter tile entities
+						<i className="fa fa-filter"></i> Filter tile entities
 					</Header>
 
 					<Form>

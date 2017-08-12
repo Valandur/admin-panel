@@ -9,6 +9,9 @@ import {
 } from "../actions/operations"
 
 const operations = (state = { operations: []}, action) => {
+	if (!action.ok)
+		return state;
+	
 	switch(action.type) {
 		case OPERATION_RESPONSE:
 			return _.assign({}, state, {

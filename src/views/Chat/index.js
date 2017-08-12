@@ -94,7 +94,7 @@ class Chat extends Component {
 					<Table.Body>
 						{_.map(messages, msg =>
 							<Table.Row key={msg.timestamp}>
-								<Table.Cell>{moment(msg.timestamp).timeAgo()}</Table.Cell>
+								<Table.Cell>{moment.unix(msg.timestamp).calendar()}</Table.Cell>
 								<Table.Cell>{msg.sender.name}</Table.Cell>
 								<Table.Cell>{msg.message}</Table.Cell>
 							</Table.Row>

@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { connect } from "react-redux"
 import _ from 'lodash'
 import { Segment, Form, Grid, Table, Menu, Header, Button } from "semantic-ui-react"
-import Autosuggest from "../../components/Autosuggest";
+import Autosuggest from "../../components/Autosuggest"
+import moment from "moment"
 
 import {
 	requestCommands,
@@ -216,7 +217,7 @@ class Commands extends Component {
 					<Table.Body>
 						{_.map(history, cmd =>
 							<Table.Row key={cmd.timestamp}>
-								<Table.Cell>{cmd.timestamp}</Table.Cell>
+								<Table.Cell>{moment.unix(cmd.timestamp).calendar()}</Table.Cell>
 								<Table.Cell>{cmd.command} {cmd.args}</Table.Cell>
 								<Table.Cell>
 									{cmd.cause.source.name ? cmd.cause.source.name : cmd.cause.source}

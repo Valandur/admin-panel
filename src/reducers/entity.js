@@ -9,6 +9,9 @@ import {
 const entity = (state = { entities: [], worlds: [], filter: {}}, action) => {
 	switch(action.type) {
 		case ENTITIES_RESPONSE:
+			if (!action.ok)
+				return state;
+
 			return _.assign({}, state, {
 				entities: _.sortBy(action.entities, "uuid"),
 			})
@@ -24,6 +27,7 @@ const entity = (state = { entities: [], worlds: [], filter: {}}, action) => {
 					creating: false,
 				})
 			}
+
 			return _.assign({}, state, {
 				creating: false,
 				entities: _.sortBy(_.concat(state.entities, action.entity), "uuid"),
@@ -38,8 +42,14 @@ const entity = (state = { entities: [], worlds: [], filter: {}}, action) => {
 			})
 
 		case ENTITY_DELETE_RESPONSE:
-			if (!action.ok)
-				return state;
+			if (!action.ok) {
+				return _.assign({}, state, {
+					entities: _.map(state.entities, e => {
+						if (e.uuid !== action.uuid) return e;
+						return _.assign({}, e, { updating: false })
+					})
+				})
+			}
 
 			return _.assign({}, state, {
 				entities: _.filter(state.entities, e => e.uuid !== action.entity.uuid)

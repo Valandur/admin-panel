@@ -153,9 +153,9 @@ class Entities extends Component {
 
 								<Form.Group inline>
 									<label>Position</label>
-									<Form.Input width={6} name="posX" placeholder="X" onChange={this.handleChange} />
-									<Form.Input width={6} name="posY" placeholder="Y" onChange={this.handleChange} />
-									<Form.Input width={6} name="posZ" placeholder="Z" onChange={this.handleChange} />
+									<Form.Input type="number" width={6} name="posX" placeholder="X" onChange={this.handleChange} />
+									<Form.Input type="number" width={6} name="posY" placeholder="Y" onChange={this.handleChange} />
+									<Form.Input type="number" width={6} name="posZ" placeholder="Z" onChange={this.handleChange} />
 								</Form.Group>
 
 								<Button color="green" onClick={this.create}>

@@ -2,6 +2,7 @@ import request from "superagent"
 import _ from "lodash"
 
 import {
+	SERVLETS_REQUEST, SERVLETS_RESPONSE, 
 	LOGIN_REQUEST, LOGIN_RESPONSE, requestLogout,
 	CHECK_USER_REQUEST, CHECK_USER_RESPONSE,
 	CATALOG_REQUEST, CATALOG_RESPONSE,
@@ -68,10 +69,16 @@ import {
 	EXECUTE_REQUEST, EXECUTE_RESPONSE,
 } from "../actions/command"
 
+import {
+	KITS_REQUEST, KITS_RESPONSE, 
+	JAILS_REQUEST, JAILS_RESPONSE, 
+	JAIL_CREATE_REQUEST, JAIL_CREATE_RESPONSE,
+	JAIL_DELETE_REQUEST, JAIL_DELETE_RESPONSE,
+} from "../actions/nucleus"
 
 const apiUrl = "/api/"
 
-const call = (method, key, dispatch, path, callback, data, handleErrors = true) => {
+const call = (method, key, dispatch, path, callback, data, showErrors = true) => {
 	const req = request(method, apiUrl + path + (path.indexOf("?") >= 0 ? "&" : "?") + (key ? "key=" + key : ""));
 	if (data) req.send(data);
 	req.end((err, res) => {
@@ -85,20 +92,16 @@ const call = (method, key, dispatch, path, callback, data, handleErrors = true) 
 			return;
 		}
 
-		if (!handleErrors) {
-			callback({ ok: false, error: res.statusText });
-			return;
-		}
-
 		if (res.statusCode === 403) {
 			dispatch(requestLogout());
 			return;
 		}
 
-		if (res.statusCode !== 200 && res.statusCode !== 201) {
+		if (showErrors) {
 			dispatch(showNotification("error", "API Error", res.statusText))
-			return;
 		}
+
+		callback({ ok: false, error: res.statusText });
 	})
 }
 
@@ -113,6 +116,16 @@ const api = ({ getState, dispatch }) => next => action => {
 	const del = call.bind(this, "DELETE", key, dispatch)
 
 	switch (action.type) {
+		case SERVLETS_REQUEST:
+			get("servlet", data => {
+				next({
+					type: SERVLETS_RESPONSE,
+					ok: data.ok,
+					servlets: data.servlets,
+				})
+			})
+			break;
+
 		case LOGIN_REQUEST:
 			post("user", data => {
 				if (!data.ok) {
@@ -134,14 +147,11 @@ const api = ({ getState, dispatch }) => next => action => {
 
 		case CHECK_USER_REQUEST:
 			get("user", data => {
-				if (data.ok) {
-					next({
-						type: CHECK_USER_RESPONSE,
-						user: data.user,
-					})
-				} else {
-					dispatch(requestLogout())
-				}
+				next({
+					type: CHECK_USER_RESPONSE,
+					ok: data.ok,
+					user: data.user,
+				})
 			})
 			break;
 
@@ -149,6 +159,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			get("info", data => {
 				next({
 					type: INFO_RESPONSE,
+					ok: data.ok,
 					data: data,
 				})
 			})
@@ -158,6 +169,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			get("info/tps", data => {
 				next({
 					type: TPS_INFO_RESPONSE,
+					ok: data.ok,
 					tps: data.tps,
 				})
 			})
@@ -167,27 +179,31 @@ const api = ({ getState, dispatch }) => next => action => {
 			get("info/player", data => {
 				next({
 					type: PLAYER_INFO_RESPONSE,
+					ok: data.ok,
 					players: data.players,
 				})
 			})
 			break;
 
 		case CATALOG_REQUEST:
-			if (!state.api.types[action.class]) {
-				get("registry/org.spongepowered.api." + action.class, data => {
-					next({
-						type: CATALOG_RESPONSE,
-						class: action.class,
-						types: data.types,
-					})
+			if (state.api.types[action.class])
+				break;
+
+			get("registry/org.spongepowered.api." + action.class, data => {
+				next({
+					type: CATALOG_RESPONSE,
+					ok: data.ok,
+					class: action.class,
+					types: data.types,
 				})
-			}
+			})
 			break;
 
 		case CHAT_HISTORY_REQUEST:
 			get("history/chat", data => {
 				next({
 					type: CHAT_HISTORY_RESPONSE,
+					ok: data.ok,
 					messages: _.orderBy(data.messages, "timestamp", "desc"),
 				})
 			})
@@ -197,6 +213,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			get("cmd?details", data => {
 				next({
 					type: COMMANDS_RESPONSE,
+					ok: data.ok,
 					commands: _.orderBy(data.commands, "name", "asc"),
 				})
 			})
@@ -206,6 +223,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			get("history/cmd", data => {
 				next({
 					type: COMMAND_HISTORY_RESPONSE,
+					ok: data.ok,
 					history: _.orderBy(data.calls, "timestamp", "desc"),
 				})
 			})
@@ -215,6 +233,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			get("world" + (action.details ? "?details" : ""), data => {
 				next({
 					type: WORLDS_RESPONSE,
+					ok: data.ok,
 					worlds: data.worlds,
 				})
 			})
@@ -255,6 +274,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			get("entity" + (action.details ? "?details" : ""), data => {
 				next({
 					type: ENTITIES_RESPONSE,
+					ok: data.ok,
 					entities: data.entities,
 				})
 			})
@@ -284,6 +304,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			get("player" + (action.details ? "?details" : ""), data => {
 				next({
 					type: PLAYERS_RESPONSE,
+					ok: data.ok,
 					players: data.players,
 				})
 			})
@@ -434,6 +455,46 @@ const api = ({ getState, dispatch }) => next => action => {
 				waitLines: action.waitLines,
 				waitTime: action.waitTime,
 			})
+			break;
+
+		case KITS_REQUEST:
+			get("nucleus/kit", data => {
+				next({
+					type: KITS_RESPONSE,
+					ok: data.ok,
+					kits: data.kits,
+				})
+			})
+			break;
+
+		case JAILS_REQUEST:
+			get("nucleus/jail", data => {
+				next({
+					type: JAILS_RESPONSE,
+					ok: data.ok,
+					jails: data.jails,
+				})
+			})
+			break;
+
+		case JAIL_CREATE_REQUEST:
+			post("nucleus/jail", data => {
+				next({
+					type: JAIL_CREATE_RESPONSE,
+					ok: data.ok,
+					jail: data.jail,
+				})
+			}, action.data)
+			break;
+
+		case JAIL_DELETE_REQUEST:
+			del("nucleus/jail/" + action.name, data => {
+				next({
+					type: JAIL_DELETE_RESPONSE,
+					ok: data.ok,
+					jail: data.jail,
+				})
+			}, action.data)
 			break;
 
 		default:
