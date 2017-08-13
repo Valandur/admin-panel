@@ -71,6 +71,8 @@ import {
 
 import {
 	KITS_REQUEST, KITS_RESPONSE, 
+	KIT_CREATE_REQUEST, KIT_CREATE_RESPONSE,
+	KIT_DELETE_REQUEST, KIT_DELETE_RESPONSE,
 	JAILS_REQUEST, JAILS_RESPONSE, 
 	JAIL_CREATE_REQUEST, JAIL_CREATE_RESPONSE,
 	JAIL_DELETE_REQUEST, JAIL_DELETE_RESPONSE,
@@ -78,7 +80,7 @@ import {
 
 const apiUrl = "/api/"
 
-const call = (method, key, dispatch, path, callback, data, showErrors = true) => {
+const call = (method, key, dispatch, path, callback, data, handleErrors = true) => {
 	const req = request(method, apiUrl + path + (path.indexOf("?") >= 0 ? "&" : "?") + (key ? "key=" + key : ""));
 	if (data) req.send(data);
 	req.end((err, res) => {
@@ -92,12 +94,12 @@ const call = (method, key, dispatch, path, callback, data, showErrors = true) =>
 			return;
 		}
 
-		if (res.statusCode === 403) {
-			dispatch(requestLogout());
-			return;
-		}
+		if (handleErrors) {
+			if (res.statusCode === 403) {
+				dispatch(requestLogout());
+				return;
+			}
 
-		if (showErrors) {
 			dispatch(showNotification("error", "API Error", res.statusText))
 		}
 
@@ -465,6 +467,26 @@ const api = ({ getState, dispatch }) => next => action => {
 					kits: data.kits,
 				})
 			})
+			break;
+
+		case KIT_CREATE_REQUEST:
+			post("nucleus/kit", data => {
+				next({
+					type: KIT_CREATE_RESPONSE,
+					ok: data.ok,
+					kit: data.kit,
+				})
+			}, action.data)
+			break;
+
+		case KIT_DELETE_REQUEST:
+			del("nucleus/kit/" + action.name, data => {
+				next({
+					type: KIT_DELETE_RESPONSE,
+					ok: data.ok,
+					kit: data.kit,
+				})
+			}, action.data)
 			break;
 
 		case JAILS_REQUEST:
