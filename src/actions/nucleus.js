@@ -7,21 +7,39 @@ export function requestKits(details = false) {
 	}
 }
 
+export const KIT_CREATE_REQUEST = "NUCLEUS_KIT_CREATE_REQUEST"
+export const KIT_CREATE_RESPONSE = "NUCLEUS_KIT_CREATE_RESPONSE"
+export function requestCreateKit(data) {
+	return {
+		type: KIT_CREATE_REQUEST,
+		data: data,
+	}
+}
+
+export const KIT_DELETE_REQUEST = "NUCLEUS_KIT_DELETE_REQUEST"
+export const KIT_DELETE_RESPONSE = "NUCLEUS_KIT_DELETE_RESPONSE"
+export function requestDeleteKit(name) {
+	return {
+		type: KIT_DELETE_REQUEST,
+		name: name,
+	}
+}
+
+export const KIT_SET_FILTER = "NUCLEUS_KIT_SET_FILTER"
+export function setKitFilter(filter, value) {
+	return {
+		type: KIT_SET_FILTER,
+		filter: filter,
+		value: value,
+	}
+}
+
 export const JAILS_REQUEST = "NUCLEUS_JAILS_REQUEST"
 export const JAILS_RESPONSE = "NUCLEUS_JAILS_RESPONSE"
 export function requestJails(details = false) {
 	return {
 		type: JAILS_REQUEST,
 		details: details,
-	}
-}
-
-export const SET_FILTER = "NUCLEUS_JAIL_SET_FILTER"
-export function setFilter(filter, value) {
-	return {
-		type: SET_FILTER,
-		filter: filter,
-		value: value,
 	}
 }
 
@@ -40,5 +58,14 @@ export function requestDeleteJail(name) {
 	return {
 		type: JAIL_DELETE_REQUEST,
 		name: name,
+	}
+}
+
+export const JAIL_SET_FILTER = "NUCLEUS_JAIL_SET_FILTER"
+export function setJailFilter(filter, value) {
+	return {
+		type: JAIL_SET_FILTER,
+		filter: filter,
+		value: value,
 	}
 }

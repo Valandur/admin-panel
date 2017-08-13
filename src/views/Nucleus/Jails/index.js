@@ -1,11 +1,14 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import { Segment, Header, Menu, Table, Grid, Form, Button, Dropdown } from "semantic-ui-react"
+import {
+	Segment, Header, Menu, Table, Grid,
+	Form, Button, Dropdown, Message
+} from "semantic-ui-react"
 import _ from "lodash"
 
 import { requestWorlds } from "../../../actions/world"
 import {
-	setFilter,
+	setJailFilter,
 	requestJails,
 	requestCreateJail,
 	requestDeleteJail
@@ -95,12 +98,20 @@ class Jails extends Component {
 		this.props.requestDeleteJail(jail.name);
 	}
 
-  render() {
-  	let jails = _.filter(this.props.jails, jail => {
+	render() {
+		let reg = new RegExp();
+		let regValid = false;
+
+		try {
 			if (this.props.filter.name && this.props.filter.name.length) {
-				return jail.name.indexOf(this.props.filter.name) >= 0;
+				reg = new RegExp(this.props.filter.name, "i");
 			}
-			return true;
+			regValid = true;
+		} catch (e) {}
+
+		let jails = _.filter(this.props.jails, jail => {
+			if (!regValid) return true;
+			return reg.test(jail.name)
 		});
 		
 		const maxPage = Math.ceil(jails.length / ITEMS_PER_PAGE);
@@ -108,10 +119,10 @@ class Jails extends Component {
 
 		jails = jails.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
-    return (
-    	<Segment basic>
+		return (
+			<Segment basic>
 
-    		<Grid columns={2} stackable doubling>
+				<Grid columns={2} stackable doubling>
 					<Grid.Column>
 						<Segment>
 							<Header>
@@ -163,19 +174,25 @@ class Jails extends Component {
 							</Header>
 
 							<Form>
-								<Form.Group widths="equal">
-									<Form.Input id="name" label="Name" placeholder="Name" onChange={this.filterChange} />
-								</Form.Group>
+								<Form.Input
+									id="name"
+									label="Name"
+									placeholder="Name"
+									onChange={this.filterChange}
+									error={!regValid} />
+								<Message
+									error visible={!regValid}
+									content="Search term must be a valid regex" />
 							</Form>
 						</Segment>
 					</Grid.Column>
 				</Grid>
 
-    		<Header>
-    			<i className="fa fa-archive"> Jails</i>
-    		</Header>
+				<Header>
+					<i className="fa fa-archive"> Jails</i>
+				</Header>
 
-    		<Table striped={true}>
+				<Table striped={true}>
 					<Table.Header>
 						<Table.Row>
 							<Table.HeaderCell>Name</Table.HeaderCell>
@@ -242,15 +259,15 @@ class Jails extends Component {
 
 			</Segment>
 		);
-  }
+	}
 }
 
 const mapStateToProps = (_state) => {
 	const state = _state.nucleus;
 
 	return {
-		creating: state.creating,
-		filter: state.filter,
+		creating: state.jailCreating,
+		filter: state.jailFilter,
 		jails: state.jails,
 		worlds: _state.world.worlds,
 	}
@@ -260,7 +277,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		requestWorlds: () => dispatch(requestWorlds(true)),
 		requestJails: () => dispatch(requestJails(true)),
-		setFilter: (filter, value) => dispatch(setFilter(filter, value)),
+		setFilter: (filter, value) => dispatch(setJailFilter(filter, value)),
 		requestCreateJail: (data) => dispatch(requestCreateJail(data)),
 		requestDeleteJail: (name) => dispatch(requestDeleteJail(name)),
 	}

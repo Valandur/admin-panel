@@ -38,9 +38,6 @@ if (window.localStorage) {
 	initialState = {
 		api: prevApi ? JSON.parse(prevApi) : undefined,
 	};
-
-	// Fix servlets being undefined
-	initialState.api.servlets = {};
 }
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
 import _ from 'lodash'
-import { Segment, Form, Grid, Table, Menu, Header, Button } from "semantic-ui-react"
+import { Segment, Form, Grid, Table, Menu, Header, Button, Message } from "semantic-ui-react"
 import Autosuggest from "../../components/Autosuggest"
 import moment from "moment"
 
@@ -136,14 +136,20 @@ class Commands extends Component {
 	}
 
 	render() {
-		const reg = new RegExp(this.props.filter.command, "i")
+		let reg = new RegExp();
+		let regValid = false;
+
+		try {
+			if (this.props.filter.command && this.props.filter.command.length) {
+				reg = new RegExp(this.props.filter.command, "i");
+			}
+			regValid = true;
+		} catch (e) {}
 
 		let history = _.filter(this.props.history, cmd => {
-			if (!_.isEmpty(this.props.filter.command)) {
-				const src = cmd.cause.source.name ? cmd.cause.source.name : cmd.cause.source;
-				return reg.test(cmd.command + " " + cmd.args + " " + src)
-			}
-			return true;
+			if (!regValid) return true;
+			const src = cmd.cause.source.name ? cmd.cause.source.name : cmd.cause.source;
+			return reg.test(cmd.command + " " + cmd.args + " " + src);
 		});
 		
 		const maxPage = Math.ceil(history.length / ITEMS_PER_PAGE);
@@ -192,11 +198,18 @@ class Commands extends Component {
 					<Grid.Column>
 						<Segment>
 							<Header>
-								<i className="fa fa-filter"></i> Filter commands
+								<i className="fa fa-filter"></i> Filter command history
 							</Header>
 
 							<Form>
-								<Form.Input id="command" placeholder="Command" onChange={this.filterChange} />
+								<Form.Input
+									id="command"
+									placeholder="Command"
+									onChange={this.filterChange}
+									error={!regValid} />
+								<Message
+									error visible={!regValid}
+									content="Search term must be a valid regex" />
 							</Form>
 						</Segment>
 					</Grid.Column>

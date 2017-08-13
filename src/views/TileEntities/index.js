@@ -120,7 +120,7 @@ class TileEntities extends Component {
 					</Table.Header>
 					<Table.Body>
 						{_.map(tileEntities, te =>
-							<Table.Row key={te.id}>
+							<Table.Row key={te.link}>
 								<Table.Cell>{te.type}</Table.Cell>
 								<Table.Cell>
 									<Button color="blue">
@@ -135,7 +135,7 @@ class TileEntities extends Component {
 									{te.inventory ?
 										<div>
 											{_.map(te.inventory.items, item =>
-												[<Label color="blue" pill>
+												[<Label color="blue">
 													{ item.quantity > 1 ? item.quantity + "x " : "" } {item.name}
 												</Label>," "]
 											)}

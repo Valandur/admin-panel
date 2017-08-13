@@ -21,8 +21,6 @@ import { requestLogout } from "../../actions"
 
 class Full extends Component {
 	render() {
-		console.log(this.props);
-
 		return (
 			<Sidebar.Pushable style={{ minHeight: "100vh" }}>
 				<Sidebar width="thin" as={Menu} visible={true} vertical secondary>
