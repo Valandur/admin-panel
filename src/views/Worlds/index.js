@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
 	Segment, Grid, Header, Form, Modal, Menu, 
-	Dropdown, Label, Table, Button, 
+	Dropdown, Label, Table, Button, Radio, 
 } from "semantic-ui-react"
 import _ from "lodash"
 
@@ -357,11 +357,10 @@ class Worlds extends Component {
 													<Table.Cell>{rule.name}</Table.Cell>
 													<Table.Cell>
 														{rule.value === "true" || rule.value === "false" ?
-															<Button toggle active={rule.value === "true"}
+															<Radio
+																toggle checked={rule.value === "true"}
 																onClick={() => this.toggleRule(rule.name)}
-															>
-																{rule.value === "true" ? "On" : "Off"}
-															</Button>
+															/>
 														: rule.value}
 													</Table.Cell>
 												</Table.Row>
@@ -384,11 +383,10 @@ class Worlds extends Component {
 													<Table.Cell>{rule.name}</Table.Cell>
 													<Table.Cell>
 														{rule.value === "true" || rule.value === "false" ?
-															<Button toggle active={rule.value === "true"}
+															<Radio 
+																toggle checked={rule.value === "true"}
 																onClick={() => this.toggleRule(rule.name)}
-															>
-																{rule.value === "true" ? "On" : "Off"}
-															</Button>
+															/>
 														: rule.value}
 													</Table.Cell>
 												</Table.Row>
