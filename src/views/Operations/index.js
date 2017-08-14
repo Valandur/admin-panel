@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
-	Segment, Modal, Header, Table, 
+	Segment, Modal, Header, Table, Icon, 
 	Button, Form, Label, Dropdown, Progress, 
 } from "semantic-ui-react"
 import _ from "lodash"
@@ -120,7 +120,7 @@ class Operations extends Component {
 
 				<Segment>
 					<Header>
-						<i className="fa fa-plus"></i> Start an operation
+						<Icon name="plus" fitted /> Start an operation
 					</Header>
 
 					<Form loading={this.props.creating}>
@@ -169,7 +169,7 @@ class Operations extends Component {
 				</Segment>
 
 				<Header>
-					<i className="fa fa-th-large"></i> Block Operations
+					<Icon className="fa-th-large" fitted /> Block Operations
 				</Header>
 
 				<Table striped>
@@ -220,7 +220,7 @@ class Operations extends Component {
 									{op.status === "RUNNING" || op.status === "PAUSED" ?
 										<Button color={op.status === "RUNNING" ? "yellow" : "green"}
 												onClick={e => this.props.requestPause(op, op.status === "RUNNING")}>
-											<i className={"fa fa-" + (op.status === "RUNNING" ? "pause" : "play")} />
+											<Icon name={(op.status === "RUNNING" ? "pause" : "play")} />
 											{" "}
 											{op.status === "RUNNING" ? "Pause" : "Resume"}
 										</Button>
@@ -228,7 +228,7 @@ class Operations extends Component {
 									{" "}
 									{op.status === "RUNNING" || op.status === "PAUSED" ? 
 										<Button color="red" onClick={e => this.props.requestStop(op)}>
-											<i className="fa fa-stop" /> Stop
+											<Icon name="stop" /> Stop
 										</Button>
 									: null}
 								</Table.Cell>

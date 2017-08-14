@@ -2,44 +2,35 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
 	Segment, Header, Menu, Table, Grid,
-	Form, Button, Dropdown, Message, Icon 
+	Form, Button, Message, Icon, Accordion, List 
 } from "semantic-ui-react"
 import _ from "lodash"
 
-import { requestWorlds } from "../../../actions/world"
 import {
-	setJailFilter,
-	requestJails,
-	requestCreateJail,
-	requestDeleteJail
-} from "../../../actions/nucleus"
+	setCrateFilter,
+	requestCrates,
+} from "../../../actions/husky"
 
 const ITEMS_PER_PAGE = 20
 
-class Jails extends Component {
+class Crates extends Component {
 
 	constructor(props) {
 		super(props)
 
 		this.state = {
 			page: 0,
-			rotX: 0,
-			rotY: 0,
-			rotZ: 0,
 		}
 
-		this.create = this.create.bind(this)
-		this.delete = this.delete.bind(this)
 		this.handleChange = this.handleChange.bind(this)
 		this.filterChange = this.filterChange.bind(this)
 		this.changePage = this.changePage.bind(this)
 	}
 
 	componentDidMount() {
-		this.props.requestJails()
-		this.props.requestWorlds()
+		this.props.requestCrates()
 
-		this.interval = setInterval(this.props.requestJails, 10000);
+		this.interval = setInterval(this.props.requestCrates, 10000);
 	}
 
 	componentWillUnmount() {
@@ -77,27 +68,6 @@ class Jails extends Component {
 		})
 	}
 
-	create() {
-		this.props.requestCreateJail({
-			name: this.state.name,
-			world: this.state.world,
-			position: {
-				x: this.state.posX,
-				y: this.state.posY,
-				z: this.state.posZ,
-			},
-			rotation: {
-				x: this.state.rotX,
-				y: this.state.rotY,
-				z: this.state.rotZ,
-			},
-		})
-	}
-
-	delete(jail) {
-		this.props.requestDeleteJail(jail.name);
-	}
-
 	render() {
 		let reg = new RegExp();
 		let regValid = false;
@@ -109,15 +79,15 @@ class Jails extends Component {
 			regValid = true;
 		} catch (e) {}
 
-		let jails = _.filter(this.props.jails, jail => {
+		let crates = _.filter(this.props.crates, jail => {
 			if (!regValid) return true;
 			return reg.test(jail.name)
 		});
 		
-		const maxPage = Math.ceil(jails.length / ITEMS_PER_PAGE);
+		const maxPage = Math.ceil(crates.length / ITEMS_PER_PAGE);
 		const page = Math.min(this.state.page, maxPage - 1);
 
-		jails = jails.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
+		crates = crates.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
 		return (
 			<Segment basic>
@@ -126,7 +96,7 @@ class Jails extends Component {
 					<Grid.Column>
 						<Segment>
 							<Header>
-								<Icon name="plus" fitted /> Create a jail
+								<Icon name="plus" fitted /> Create a crate
 							</Header>
 
 							<Form loading={this.props.creating}>
@@ -136,27 +106,6 @@ class Jails extends Component {
 										id="name" label="Name" placeholder="Name" 
 										required onChange={this.handleChange}
 									/>
-
-									<Form.Field id="world" label="World" control={Dropdown} placeholder="World"
-										required fluid selection search onChange={this.handleChange}
-										options={_.map(this.props.worlds, world => 
-											({ value: world.uuid, text: world.name + " (" + world.dimensionType.name + ")" })
-										)}
-									/>
-								</Form.Group>
-
-								<Form.Group inline>
-									<label>Position</label>
-									<Form.Input type="number" width={6} name="posX" placeholder="X" onChange={this.handleChange} />
-									<Form.Input type="number" width={6} name="posY" placeholder="Y" onChange={this.handleChange} />
-									<Form.Input type="number" width={6} name="posZ" placeholder="Z" onChange={this.handleChange} />
-								</Form.Group>
-
-								<Form.Group inline>
-									<label>Rotation</label>
-									<Form.Input type="number" width={6} name="rotX" placeholder="X" onChange={this.handleChange} />
-									<Form.Input type="number" width={6} name="rotY" placeholder="Y" onChange={this.handleChange} />
-									<Form.Input type="number" width={6} name="rotZ" placeholder="Z" onChange={this.handleChange} />
 								</Form.Group>
 
 								<Button color="green" onClick={this.create}>
@@ -170,7 +119,7 @@ class Jails extends Component {
 					<Grid.Column>
 						<Segment>
 							<Header>
-								<Icon name="filter" fitted /> Filter jails
+								<Icon name="filter" fitted /> Filter crates
 							</Header>
 
 							<Form>
@@ -189,36 +138,43 @@ class Jails extends Component {
 				</Grid>
 
 				<Header>
-					<Icon name="bars" rotated="clockwise" fitted /> Jails
+					<Icon name="archive" fitted /> Crates
 				</Header>
 
 				<Table striped={true}>
 					<Table.Header>
 						<Table.Row>
 							<Table.HeaderCell>Name</Table.HeaderCell>
-							<Table.HeaderCell>Location</Table.HeaderCell>
+							<Table.HeaderCell>Type</Table.HeaderCell>
+							<Table.HeaderCell>Free</Table.HeaderCell>
+							<Table.HeaderCell>Rewards</Table.HeaderCell>
 							<Table.HeaderCell>Actions</Table.HeaderCell>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{_.map(jails, jail =>
-							<Table.Row key={jail.name}>
-								<Table.Cell>{jail.name}</Table.Cell>
+						{_.map(crates, crate =>
+							<Table.Row key={crate.id}>
+								<Table.Cell>{crate.name}</Table.Cell>
+								<Table.Cell>{crate.type}</Table.Cell>
 								<Table.Cell>
-									{jail.location ?
-										<Button color="blue">
-											<Icon name="globe" />
-											{jail.location.world.name}&nbsp; &nbsp;
-											{jail.location.position.x.toFixed(0)} |&nbsp;
-											{jail.location.position.y.toFixed(0)} |&nbsp;
-											{jail.location.position.z.toFixed(0)}
-										</Button>
-									: null}
+									<Icon
+										color={crate.isFree ? "green" : "red"}
+										name={crate.isFree ? "check" : "remove"} />
+								</Table.Cell>
+								<Table.Cell>
+									<Accordion panels={[{
+										title: crate.rewards.length + " rewards" + (crate.rewards.length !== 1 ? "s" : ""),
+										content: <List bulleted>
+											{_.map(crate.rewards, reward => <List.Item>
+												{reward.name}
+											</List.Item>)}
+										</List>
+									}]} />
 								</Table.Cell>
 								<Table.Cell>
 									<Button
-										color="red" disabled={jail.updating}
-										loading={jail.updating} onClick={() => this.delete(jail)}
+										color="red" disabled={crate.updating}
+										loading={crate.updating} onClick={() => this.delete(crate)}
 									>
 										<Icon name="trash" /> Remove
 									</Button>
@@ -263,24 +219,20 @@ class Jails extends Component {
 }
 
 const mapStateToProps = (_state) => {
-	const state = _state.nucleus;
+	const state = _state.husky;
 
 	return {
-		creating: state.jailCreating,
-		filter: state.jailFilter,
-		jails: state.jails,
-		worlds: _state.world.worlds,
+		creating: state.crateCreating,
+		filter: state.crateFilter,
+		crates: state.crates,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestWorlds: () => dispatch(requestWorlds(true)),
-		requestJails: () => dispatch(requestJails(true)),
-		setFilter: (filter, value) => dispatch(setJailFilter(filter, value)),
-		requestCreateJail: (data) => dispatch(requestCreateJail(data)),
-		requestDeleteJail: (name) => dispatch(requestDeleteJail(name)),
+		requestCrates: () => dispatch(requestCrates(true)),
+		setFilter: (filter, value) => dispatch(setCrateFilter(filter, value)),
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Jails);
+export default connect(mapStateToProps, mapDispatchToProps)(Crates);

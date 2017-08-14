@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Switch, Route, Redirect, NavLink } from "react-router-dom"
-import { Sidebar, Menu, Image } from "semantic-ui-react"
+import { Sidebar, Menu, Image, Icon } from "semantic-ui-react"
 
 import Dashboard from "../../views/Dashboard"
 import Chat from "../../views/Chat"
@@ -16,6 +16,7 @@ import Plugins from "../../views/Plugins"
 import Settings from "../../views/Settings"
 
 import Nucleus from "../Nucleus"
+import HuskyCrates from "../HuskyCrates"
 
 import { requestLogout } from "../../actions"
 
@@ -30,47 +31,47 @@ class Full extends Component {
 					</Menu.Item>
 
 					<Menu.Item name="dashboard" as={NavLink} to="/dashboard">
-						<i className="icon-speedometer"></i> &nbsp; &nbsp; Dashboard
+						<Icon name="dashboard" /> Dashboard
 					</Menu.Item>
 
 					<Menu.Item name="chat" as={NavLink} to="/chat">
-						<i className="fa fa-comments"></i>&nbsp; &nbsp; Chat
+						<Icon name="comments" /> Chat
 					</Menu.Item>
 
 					<Menu.Item name="commands" as={NavLink} to="/commands">
-						<i className="fa fa-terminal"></i>&nbsp; &nbsp; Commands
+						<Icon name="terminal" /> Commands
 					</Menu.Item>
 
 					<Menu.Item name="map" as={NavLink} to="/map">
-						<i className="fa fa-map"></i>&nbsp; &nbsp; Map
+						<Icon name="map" /> Map
 					</Menu.Item>
 
 					<Menu.Item name="worlds" as={NavLink} to="/worlds">
-						<i className="fa fa-globe"></i>&nbsp; &nbsp; Worlds
+						<Icon name="globe" /> Worlds
 					</Menu.Item>
 
 					<Menu.Item name="players" as={NavLink} to="/players">
-						<i className="fa fa-users"></i>&nbsp; &nbsp; Players
+						<Icon name="users" /> Players
 					</Menu.Item>
 
 					<Menu.Item name="entities" as={NavLink} to="/entities">
-						<i className="fa fa-paw"></i>&nbsp; &nbsp; Entities
+						<Icon name="paw" /> Entities
 					</Menu.Item>
 
 					<Menu.Item name="tile-entities" as={NavLink} to="/tile-entities">
-						<i className="fa fa-puzzle-piece"></i>&nbsp; &nbsp; Tile Entities
+						<Icon name="puzzle" /> Tile Entities
 					</Menu.Item>
 
 					<Menu.Item name="operations" as={NavLink} to="/operations">
-						<i className="fa fa-th-large"></i>&nbsp; &nbsp; Block Ops
+						<Icon className="fa-th-large" /> Block Ops
 					</Menu.Item>
 
 					<Menu.Item name="plugins" as={NavLink} to="/plugins">
-						<i className="fa fa-plug"></i>&nbsp; &nbsp; Plugins
+						<Icon name="plug" /> Plugins
 					</Menu.Item>
 
 					<Menu.Item name="settings" as={NavLink} to="/settings">
-						<i className="fa fa-cog"></i>&nbsp; &nbsp; Server Settings
+						<Icon name="cogs" /> Server Settings
 					</Menu.Item>
 
 					{ this.props.servlets.nucleus &&
@@ -79,18 +80,30 @@ class Full extends Component {
 
 						<Menu.Menu>
 							<Menu.Item name="nucleus-kits" as={NavLink} to="/nucleus/kits">
-								<i className="fa fa-wrench"></i>&nbsp; &nbsp; Kits
+								<Icon name="wrench" /> Kits
 							</Menu.Item>
 
 							<Menu.Item name="nucleus-jails" as={NavLink} to="/nucleus/jails">
-								<i className="fa fa-archive"></i>&nbsp; &nbsp; Jails
+								<Icon name="bars" rotated="clockwise" /> Jails
+							</Menu.Item>
+						</Menu.Menu>
+					</Menu.Item>
+					}
+
+					{ this.props.servlets.husky &&
+					<Menu.Item>
+						<Menu.Header>Husky Crates</Menu.Header>
+
+						<Menu.Menu>
+							<Menu.Item name="husky-crates" as={NavLink} to="/husky/crates">
+								<Icon name="archive" /> Crates
 							</Menu.Item>
 						</Menu.Menu>
 					</Menu.Item>
 					}
 
 					<Menu.Item name="logout" onClick={this.props.requestLogout}>
-						<i className="fa fa-sign-out"></i>&nbsp; &nbsp; Logout
+						<Icon name="log out" /> Logout
 					</Menu.Item>
 				</Sidebar>
 
@@ -109,6 +122,7 @@ class Full extends Component {
 						<Route path="/settings" name="Settings" component={Settings} />
 
 						<Route path="/nucleus" name="Nucleus" component={Nucleus} />
+						<Route path="/husky" name="HuskyCrates" component={HuskyCrates} />
 						
 						<Redirect from="/" to="/dashboard" />
 					</Switch>

@@ -14,6 +14,7 @@ import operations from "./operations"
 import settings from "./settings"
 
 import nucleus from "./nucleus"
+import husky from "./husky"
 
 const app = combineReducers({
 	api,
@@ -28,6 +29,7 @@ const app = combineReducers({
 	operations,
 	settings,
 	nucleus,
+	husky,
 	router: routerReducer,
 })
 

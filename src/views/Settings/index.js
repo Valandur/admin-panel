@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
-import { Segment, Header, Table, Button, Input } from "semantic-ui-react"
+import { Segment, Header, Table, Button, Input, Icon } from "semantic-ui-react"
 import _ from "lodash"
 
 import { editProperty, setProperty, requestSaveProperty, requestProperties } from "../../actions/settings"
@@ -35,7 +35,7 @@ class Settings extends Component {
       <Segment basic>
 
   			<Header>
-  				<i className="fa fa-cog"></i> Properties
+  				<Icon name="cogs" fitted /> Properties
   			</Header>
 
 				<Table striped={true}>
@@ -63,7 +63,7 @@ class Settings extends Component {
 									{ prop.edit ? [
 										<Button key={1} color="green" 
 											disabled={prop.saving} onClick={e => this.handleSave(prop)}>
-											<i className="fa fa-save"></i> Save
+											<Icon name="save" /> Save
 										</Button>,
 										" ",
 										<Button key={2} color="yellow"
@@ -75,12 +75,12 @@ class Settings extends Component {
 									<Button color="blue" 
 										onClick={e => this.handleEdit(prop)}
 									>
-										<i className="fa fa-edit"></i> Edit
+										<Icon name="edit" /> Edit
 									</Button>
 									}
 									{" "}
 									{ prop.saving ?
-										<i className="fa fa-spinner fa-pulse"></i>
+										<Icon name="spinner" loading />
 									: null}
 								</td>
 							</tr>

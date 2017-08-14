@@ -78,6 +78,10 @@ import {
 	JAIL_DELETE_REQUEST, JAIL_DELETE_RESPONSE,
 } from "../actions/nucleus"
 
+import {
+	CRATES_REQUEST, CRATES_RESPONSE, 
+} from "../actions/husky"
+
 const apiUrl = "/api/"
 
 const call = (method, key, dispatch, path, callback, data, handleErrors = true) => {
@@ -460,7 +464,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case KITS_REQUEST:
-			get("nucleus/kit", data => {
+			get("nucleus/kit?details", data => {
 				next({
 					type: KITS_RESPONSE,
 					ok: data.ok,
@@ -490,7 +494,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case JAILS_REQUEST:
-			get("nucleus/jail", data => {
+			get("nucleus/jail?details", data => {
 				next({
 					type: JAILS_RESPONSE,
 					ok: data.ok,
@@ -517,6 +521,16 @@ const api = ({ getState, dispatch }) => next => action => {
 					jail: data.jail,
 				})
 			}, action.data)
+			break;
+
+		case CRATES_REQUEST:
+			get("husky/crate?details", data => {
+				next({
+					type: CRATES_RESPONSE,
+					ok: data.ok,
+					crates: data.crates,
+				})
+			})
 			break;
 
 		default:

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
 import { push } from "react-router-redux"
-import { Segment, Table, Button, Header, Modal, Label, Tab, TextArea } from "semantic-ui-react"
+import { Segment, Table, Button, Header, Modal, Label, Tab, TextArea, Icon } from "semantic-ui-react"
 import _ from 'lodash'
 
 import { requestPlugins, requestPluginConfig } from "../../actions/plugin"
@@ -49,7 +49,7 @@ class Plugins extends Component {
 		return (
 			<Segment basic>
 				<Header>
-					<i className="fa fa-plug"></i> Installed Plugins
+					<Icon name="plug" fitted /> Installed Plugins
 				</Header>
 				<Table striped>
 					<Table.Header>
@@ -68,7 +68,7 @@ class Plugins extends Component {
 								<Table.Cell>{plugin.version}</Table.Cell>
 								<Table.Cell>
 									<Button color="blue" onClick={e => this.showDetails(plugin)}>
-										<i className="fa fa-edit"></i> Edit
+										<Icon name="edit" /> Edit
 									</Button>
 								</Table.Cell>
 							</Table.Row>

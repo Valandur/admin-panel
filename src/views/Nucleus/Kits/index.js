@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
 	Segment, Header, Table, Accordion, List,
-	Grid, Form, Button, Menu, Message
+	Grid, Form, Button, Menu, Message, Icon 
 } from "semantic-ui-react"
 import _ from "lodash"
 
@@ -24,8 +24,10 @@ class Kits extends Component {
 			page: 0,
 		}
 
+		this.canCreate = this.canCreate.bind(this)
 		this.create = this.create.bind(this)
 		this.delete = this.delete.bind(this)
+		this.edit = this.edit.bind(this)
 		this.handleChange = this.handleChange.bind(this)
 		this.filterChange = this.filterChange.bind(this)
 		this.changePage = this.changePage.bind(this)
@@ -72,6 +74,10 @@ class Kits extends Component {
 		})
 	}
 
+	canCreate() {
+		return !_.isEmpty(this.state.name)
+	}
+
 	create() {
 		this.props.requestCreateKit({
 			name: this.state.name,
@@ -82,6 +88,10 @@ class Kits extends Component {
 
 	delete(kit) {
 		this.props.requestDeleteKit(kit.name);
+	}
+
+	edit(kit) {
+
 	}
 
   render() {
@@ -112,7 +122,7 @@ class Kits extends Component {
 					<Grid.Column>
 						<Segment>
 							<Header>
-								<i className="fa fa-plus"></i> Create a kit
+								<Icon name="plus" fitted /> Create a kit
 							</Header>
 
 							<Form loading={this.props.creating}>
@@ -136,7 +146,7 @@ class Kits extends Component {
 									/>
 								</Form.Group>
 
-								<Button color="green" onClick={this.create}>
+								<Button color="green" onClick={this.create} disabled={!this.canCreate()}>
 									Create
 								</Button>
 
@@ -147,7 +157,7 @@ class Kits extends Component {
 					<Grid.Column>
 						<Segment>
 							<Header>
-								<i className="fa fa-filter"></i> Filter kits
+								<Icon name="filter" fitted /> Filter kits
 							</Header>
 
 							<Form>
@@ -166,7 +176,7 @@ class Kits extends Component {
 				</Grid>
 
     		<Header>
-    			<i className="fa fa-wrench"> Kits</i>
+    			<Icon name="wrench" fitted /> Kits
     		</Header>
 
     		<Table striped={true}>
@@ -208,10 +218,17 @@ class Kits extends Component {
 								</Table.Cell>
 								<Table.Cell>
 									<Button
+										color="blue" disabled={kit.updating}
+										loading={kit.updating} onClick={() => this.edit(kit)}
+									>
+										<Icon name="edit" /> Edit
+									</Button>
+									{" "}
+									<Button
 										color="red" disabled={kit.updating}
 										loading={kit.updating} onClick={() => this.delete(kit)}
 									>
-										<i className="fa fa-trash" /> Remove
+										<Icon name="trash" /> Remove
 									</Button>
 								</Table.Cell>
 							</Table.Row>

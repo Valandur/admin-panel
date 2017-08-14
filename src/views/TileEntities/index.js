@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import { Segment, Table, Menu, Form, Dropdown, Button, Header, Label } from "semantic-ui-react"
+import { Segment, Table, Menu, Form, Dropdown, Button, Header, Label, Icon } from "semantic-ui-react"
 import _ from "lodash"
 
 import { setFilter, requestTileEntities } from "../../actions/tile-entity"
@@ -84,7 +84,7 @@ class TileEntities extends Component {
 
 				<Segment>
 					<Header>
-						<i className="fa fa-filter"></i> Filter tile entities
+						<Icon name="filter" fitted /> Filter tile entities
 					</Header>
 
 					<Form>
@@ -107,7 +107,7 @@ class TileEntities extends Component {
 				</Segment>
 
 				<Header>
-					<i className="fa fa-puzzle-piece"></i> Tile Entities
+					<Icon name="puzzle" fitted /> Tile Entities
 				</Header>
 
 				<Table striped={true}>
@@ -124,8 +124,8 @@ class TileEntities extends Component {
 								<Table.Cell>{te.type}</Table.Cell>
 								<Table.Cell>
 									<Button color="blue">
-										<i className="fa fa-globe"></i>&nbsp;&nbsp;
-										{te.location.world.name} &nbsp; &nbsp;
+										<Icon name="globe" />
+										{te.location.world.name}&nbsp; &nbsp;
 										{te.location.position.x.toFixed(0)} |&nbsp;
 										{te.location.position.y.toFixed(0)} |&nbsp;
 										{te.location.position.z.toFixed(0)}

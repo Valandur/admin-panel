@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
 	Segment, Grid, Header, Form, Modal, Menu, 
-	Dropdown, Label, Table, Button, Radio, 
+	Dropdown, Label, Table, Button, Radio, Icon 
 } from "semantic-ui-react"
 import _ from "lodash"
 
@@ -158,7 +158,7 @@ class Worlds extends Component {
 
 				<Segment>
 					<Header>
-						<i className="fa fa-plus"></i> Create a world
+						<Icon name="plus" fitted /> Create a world
 					</Header>
 
 					<Form loading={this.props.creating}>
@@ -234,7 +234,7 @@ class Worlds extends Component {
 				</Segment>
 
 				<Header>
-					<i className="fa fa-globe"></i> Worlds
+					<Icon name="globe" fitted /> Worlds
 				</Header>
 
 				<Table striped>
@@ -258,12 +258,12 @@ class Worlds extends Component {
 									{world.generatorType ? world.generatorType.name : "-"}
 								</Table.Cell>
 								<Table.Cell>
-									<i className="fa fa-signal"></i> {world.difficulty ? world.difficulty.name : "-"}<br />
-									<i className="fa fa-gamepad"></i> {world.gameMode ? world.gameMode.name : "-"}
+									<Icon name="signal" /> {world.difficulty ? world.difficulty.name : "-"}<br />
+									<Icon name="gamepad" /> {world.gameMode ? world.gameMode.name : "-"}
 								</Table.Cell>
 								<Table.Cell>
-									<i className="fa fa-clock-o"></i> {world.time ? world.time : "-"}<br />
-									<i className="fa fa-cloud"></i> {world.weather ? world.weather.name : "-"}
+									<Icon name="clock" /> {world.time ? world.time : "-"}<br />
+									<Icon name="cloud" /> {world.weather ? world.weather.name : "-"}
 								</Table.Cell>
 								<Table.Cell>
 									{world.seed}
@@ -298,7 +298,7 @@ class Worlds extends Component {
 									: null}
 									{" "}
 									{world.updating ?
-										<i className="fa fa-spinner fa-pulse"></i>
+										<Icon name="spinner" loading />
 									: null}
 								</Table.Cell>
 							</Table.Row>

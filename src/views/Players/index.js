@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
-	Segment, Form, Menu, Table, 
+	Segment, Form, Menu, Table, Icon, 
 	Dropdown, Modal, Header, Label, Progress, Button, 
 } from "semantic-ui-react"
 import _ from "lodash"
@@ -95,7 +95,7 @@ class Players extends Component {
 
 				<Segment>
 					<Header>
-						<i className="fa fa-filter"></i> Filter players
+						<Icon name="filter" fitted /> Filter players
 					</Header>
 
 					<Form>
@@ -116,7 +116,7 @@ class Players extends Component {
 				</Segment>
 
 				<Header>
-					<i className="fa fa-users"></i> Players
+					<Icon name="users" fitted /> Players
 				</Header>
 
 				<Table striped={true}>
@@ -139,8 +139,8 @@ class Players extends Component {
 								<Table.Cell>
 									{player.location ?
 										<Button color="blue">
-											<i className="fa fa-globe"></i>&nbsp;&nbsp;
-											{player.location.world.name} &nbsp; &nbsp;
+											<Icon name="globe" />
+											{player.location.world.name}&nbsp; &nbsp;
 											{player.location.position.x.toFixed(0)} |&nbsp;
 											{player.location.position.y.toFixed(0)} |&nbsp;
 											{player.location.position.z.toFixed(0)}

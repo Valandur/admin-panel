@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import { Segment, Menu, Form, Dropdown, Table, Header } from "semantic-ui-react"
+import { Segment, Menu, Form, Dropdown, Table, Header, Icon } from "semantic-ui-react"
 import _ from "lodash"
 import moment from "moment"
 
@@ -66,7 +66,7 @@ class Chat extends Component {
 
 				<Segment>
 					<Header>
-						<i className="fa fa-filter"></i> Filter messages
+						<Icon name="filter" fitted /> Filter messages
 					</Header>
 
 					<Form>
@@ -80,7 +80,7 @@ class Chat extends Component {
 				</Segment>
 
 				<Header>
-					<i className="fa fa-comments"></i> Messages
+					<Icon name="comments" fitted /> Messages
 				</Header>
 
 				<Table striped={true}>

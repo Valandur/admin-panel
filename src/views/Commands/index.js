@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
 import _ from 'lodash'
-import { Segment, Form, Grid, Table, Menu, Header, Button, Message } from "semantic-ui-react"
+import { Segment, Form, Grid, Table, Menu, Header, Button, Message, Icon } from "semantic-ui-react"
 import Autosuggest from "../../components/Autosuggest"
 import moment from "moment"
 
@@ -164,7 +164,7 @@ class Commands extends Component {
 					<Grid.Column>
 						<Segment>
 							<Header>
-								<i className="fa fa-terminal"></i> Execute a command
+								<Icon name="terminal" fitted /> Execute a command
 							</Header>
 
 							<Form loading={this.props.executing}>
@@ -189,7 +189,7 @@ class Commands extends Component {
 								<Button
 										color="blue" onClick={this.execute}
 										loading={this.props.executing} disabled={this.props.executing}>
-									Execute
+									<Icon name="play" /> Execute
 								</Button>
 							</Form>
 						</Segment>
@@ -198,7 +198,7 @@ class Commands extends Component {
 					<Grid.Column>
 						<Segment>
 							<Header>
-								<i className="fa fa-filter"></i> Filter command history
+								<Icon name="filter" fitted /> Filter command history
 							</Header>
 
 							<Form>
@@ -216,7 +216,7 @@ class Commands extends Component {
 				</Grid>
 
 				<Header>
-					<i className="fa fa-list"></i> Command History
+					<Icon name="list" fitted /> Command History
 				</Header>
 
 				<Table striped={true}>

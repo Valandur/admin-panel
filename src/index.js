@@ -26,7 +26,6 @@ import Login from "./containers/Login"
 import { requestServlets, requestCheckUser } from "./actions"
 import { saveNotifRef } from "./actions/notification"
 
-
 const history = createBrowserHistory({
 	basename: "/admin",
 });

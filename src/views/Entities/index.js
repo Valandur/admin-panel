@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
 	Segment, Header, Form, Grid, Table,
-	Button, Menu, Progress, Dropdown, 
+	Button, Menu, Progress, Dropdown, Icon 
 } from "semantic-ui-react"
 import _ from "lodash"
 
@@ -130,7 +130,7 @@ class Entities extends Component {
 					<Grid.Column>
 						<Segment>
 							<Header>
-								<i className="fa fa-plus"></i> Spawn an entity
+								<Icon name="plus" fitted /> Spawn an entity
 							</Header>
 
 							<Form loading={this.props.creating}>
@@ -169,7 +169,7 @@ class Entities extends Component {
 					<Grid.Column>
 						<Segment>
 							<Header>
-								<i className="fa fa-filter"></i> Filter entities
+								<Icon name="filter" fitted /> Filter entities
 							</Header>
 
 							<Form>
@@ -194,7 +194,7 @@ class Entities extends Component {
 				</Grid>
 
 				<Header>
-					<i className="fa fa-paw"></i> Entities
+					<Icon name="paw" fitted /> Entities
 				</Header>
 
 				<Table striped={true}>
@@ -215,8 +215,8 @@ class Entities extends Component {
 								<Table.Cell>
 									{entity.location ?
 										<Button color="blue">
-											<i className="fa fa-globe"></i>&nbsp;&nbsp;
-											{entity.location.world.name} &nbsp; &nbsp;
+											<Icon name="globe" />
+											{entity.location.world.name}&nbsp; &nbsp;
 											{entity.location.position.x.toFixed(0)} |&nbsp;
 											{entity.location.position.y.toFixed(0)} |&nbsp;
 											{entity.location.position.z.toFixed(0)}
