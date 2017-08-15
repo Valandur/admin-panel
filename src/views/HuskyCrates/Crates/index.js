@@ -1,10 +1,12 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
-	Segment, Header, Menu, Table, Grid,
-	Form, Button, Message, Icon, Accordion, List 
+	Segment, Header, Menu, Table, Grid, Label, 
+	Form, Button, Message, Icon
 } from "semantic-ui-react"
 import _ from "lodash"
+
+import ItemStack from "../../../components/ItemStack"
 
 import {
 	setCrateFilter,
@@ -152,8 +154,11 @@ class Crates extends Component {
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{_.map(crates, crate =>
-							<Table.Row key={crate.id}>
+						{_.map(crates, crate => {
+							const totalChance = _.sumBy(crate.rewards, "chance");
+							const format = chance => ((chance / totalChance) * 100).toFixed(2) + "%";
+
+							return <Table.Row key={crate.id}>
 								<Table.Cell>{crate.name}</Table.Cell>
 								<Table.Cell>{crate.type}</Table.Cell>
 								<Table.Cell>
@@ -162,16 +167,35 @@ class Crates extends Component {
 										name={crate.isFree ? "check" : "remove"} />
 								</Table.Cell>
 								<Table.Cell>
-									<Accordion panels={[{
-										title: crate.rewards.length + " rewards" + (crate.rewards.length !== 1 ? "s" : ""),
-										content: <List bulleted>
-											{_.map(crate.rewards, reward => <List.Item>
-												{reward.name}
-											</List.Item>)}
-										</List>
-									}]} />
+									<Table compact size="small">
+										<Table.Body>
+											{_.map(crate.rewards, reward =>
+												<Table.Row>
+													<Table.Cell>{format(reward.chance)}</Table.Cell>
+													<Table.Cell>{reward.name}</Table.Cell>
+													<Table.Cell>
+														{reward.shouldAnnounce && <Icon name="bullhorn" />}
+													</Table.Cell>
+													<Table.Cell>
+														{_.map(reward.rewards, (item, i) => {
+															if (typeof item === "string") {
+																return <Label key={i} color="red">/{item}</Label>
+															}
+															return <ItemStack key={i} item={item} />
+														})}
+													</Table.Cell>
+												</Table.Row>
+											)}
+										</Table.Body>
+									</Table>
 								</Table.Cell>
 								<Table.Cell>
+									<Button
+										color="blue" disabled={crate.updating}
+										loading={crate.updating} onClick={() => this.edit(crate)}
+									>
+										<Icon name="edit" /> Edit
+									</Button>
 									<Button
 										color="red" disabled={crate.updating}
 										loading={crate.updating} onClick={() => this.delete(crate)}
@@ -180,7 +204,7 @@ class Crates extends Component {
 									</Button>
 								</Table.Cell>
 							</Table.Row>
-						)}
+						})}
 					</Table.Body>
 				</Table>
 				{ maxPage > 1 ?
