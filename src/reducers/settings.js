@@ -8,6 +8,9 @@ const toPropItem = (value, key) => ({ key, value })
 const settings = (state = { properties: []}, action) => {
 	switch(action.type) {
 		case PROPERTIES_RESPONSE:
+			if (!action.ok)
+				return state;
+			
 			return _.assign({}, state, {
 				properties: _.map(action.properties, toPropItem),
 			});

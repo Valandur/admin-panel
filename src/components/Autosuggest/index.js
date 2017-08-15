@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import enhanceWithClickOutside from "react-click-outside"
 import _ from "lodash"
 
@@ -22,23 +22,31 @@ class Autosuggest extends Component {
 
 		this.setState({
 			value: newValue,
-			suggestions: this.props.onGetSuggestions(newValue),
+			suggestions: this.props.getSuggestions(newValue),
 		})
-		this.props.onChange(this.props.name, { value: newValue })
+		this.props.onChange(event, {
+			id: this.props.id,
+			name: this.props.name,
+			value: newValue,
+		})
 	}
 
-	handleClick(sugg) {
-		const newValue = this.props.getSuggestionValue(sugg);
+	handleClick(event, sugg) {
 		this.setState({
-			value: newValue,
+			value: sugg.value,
 			suggestions: [],
 		}, () => this.input.focus())
-		this.props.onChange(this.props.name, { value: newValue })
+
+		this.props.onChange(event, {
+			id: this.props.id,
+			name: this.props.name,
+			value: sugg.value,
+		})
 	}
 
 	handleFocus() {
 		this.setState({
-			suggestions: this.props.onGetSuggestions(this.state.value),
+			suggestions: this.props.getSuggestions(this.state.value),
 		})
 	}
 
@@ -51,15 +59,15 @@ class Autosuggest extends Component {
 	render() {
 		return <div style={{ width:"100%", position: "relative" }}>
 			<input
-				type="text" className="form-control" placeholder={this.props.placeholder}
+				type="text" placeholder={this.props.placeholder}
 				value={this.state.value} style={{width:"100%"}} ref={input => this.input = input}
 				onFocus={this.handleFocus} onChange={this.handleChange} onKeyPress={this.props.onKeyPress}
 			/>
 			{ this.state.suggestions.length ?
 				<div className="autosuggest-list">
 					{_.map(this.state.suggestions, (sugg, index) =>
-						<div key={index} onClick={this.handleClick.bind(this, sugg)}>
-							{ this.props.renderSuggestion(sugg) }
+						<div key={index} onClick={event => this.handleClick(event, sugg)}>
+							{ sugg.content }
 						</div>
 					)}
 				</div>

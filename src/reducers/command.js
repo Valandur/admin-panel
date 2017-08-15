@@ -11,11 +11,17 @@ import {
 const commands = (state = { commands: [], history: [], filter: {}, executing: false }, action) => {
 	switch(action.type) {
 		case COMMAND_HISTORY_RESPONSE:
+			if (!action.ok)
+				return state;
+			
 			return _.assign({}, state, {
 				history: action.history,
 			})
 
 		case COMMANDS_RESPONSE:
+			if (!action.ok)
+				return state;
+			
 			return _.assign({}, state, {
 				commands: action.commands,
 			})
@@ -34,9 +40,8 @@ const commands = (state = { commands: [], history: [], filter: {}, executing: fa
 			})
 
 		case EXECUTE_RESPONSE:
-			window.toastr.success(action.result, "Execute Command: " + action.command)
 			return _.assign({}, state, {
-				excuting: false,
+				executing: false,
 			});
 
 		default:

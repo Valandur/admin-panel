@@ -1,3 +1,11 @@
+export const SERVLETS_REQUEST = "SERVLETS_REQUEST"
+export const SERVLETS_RESPONSE = "SERVLETS_RESPONSE"
+export function requestServlets() {
+	return {
+		type: SERVLETS_REQUEST
+	}
+}
+
 export const LOGIN_REQUEST = "LOGIN_REQUEST"
 export const LOGIN_RESPONSE = "LOGIN_RESPONSE"
 export function requestLogin(username, password) {

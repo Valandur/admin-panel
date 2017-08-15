@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 import { connect } from "react-redux"
-import { Row, Col, Card, CardHeader, CardBlock, CardFooter } from "reactstrap"
-import { Table, Label, FormGroup, Progress, Input, Button } from 'reactstrap'
-import { Pagination, PaginationItem, PaginationLink } from "reactstrap"
-import Select from 'react-select'
-import _ from 'lodash'
+import {
+	Segment, Header, Form, Grid, Table,
+	Button, Menu, Progress, Dropdown, Icon 
+} from "semantic-ui-react"
+import _ from "lodash"
 
 import { requestCatalog } from "../../actions"
 import { setFilter, requestEntities, requestCreateEntity, requestDeleteEntity } from "../../actions/entity"
@@ -26,6 +26,7 @@ class Entities extends Component {
 			posZ: 0
 		};
 
+		this.create = this.create.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.create = this.create.bind(this);
 		this.changePage = this.changePage.bind(this);
@@ -44,26 +45,22 @@ class Entities extends Component {
 		clearInterval(this.interval);
 	}
 
-	filterChange(filter, newValue) {
-		this.props.setFilter(filter, _.map(newValue, "value"));
+	filterChange(event, data) {
+		const name = data.name ? data.name : data.id;
+		this.props.setFilter(name, data.value);
 	}
 
-	handleChange(event, newValue) {
+	handleChange(event, data) {
 		let value = null;
 		let name = null;
 
-		if (_.isObject(event)) {
+		if (data) {
+			name = data.name ? data.name : data.id;
+			value = data.value;
+		} else {
 			const target = event.target;
 			value = target.type === 'checkbox' ? target.checked : target.value;
 			name = target.name ? target.name : target.id;
-		} else {
-			if (!newValue)
-				value = null;
-			else if (_.isArray(newValue))
-				value = _.map(newValue, "value");
-			else
-				value = newValue.value;
-			name = event;
 		}
 
 		this.setState({
@@ -127,248 +124,153 @@ class Entities extends Component {
 		});
 
 		return (
-			<div className="animated fadeIn">
-				<Row>
+			<Segment basic>
 
-					<Col xs={12} md={6} lg={4}>
+				<Grid columns={2} stackable doubling>
+					<Grid.Column>
+						<Segment>
+							<Header>
+								<Icon name="plus" fitted /> Spawn an entity
+							</Header>
 
-						<Card>
-							<CardHeader>
-								<i className="fa fa-plus"></i>
-								Spawn an entity
-							</CardHeader>
-							<CardBlock>
-								<Row>
+							<Form loading={this.props.creating}>
 
-									<Col md={12}>
-
-										<FormGroup row>
-											<Label md={3} for="type">Type</Label>
-											<Col md={9}>
-												<Select
-													id="type"
-													value={this.state.type}
-													onChange={val => this.handleChange("type", val)}
-													options={_.map(entTypes, ent => 
-														({ value: ent.id, label: ent.name + " (" + ent.mod + ")" })
-													)}
-												/>
-											</Col>
-										</FormGroup>
-
-										<FormGroup row>
-											<Label md={3} for="world">World</Label>
-											<Col md={9}>
-												<Select
-													id="world"
-													value={this.state.world}
-													onChange={val => this.handleChange("world", val)}
-													options={_.map(this.props.worlds, world => 
-														({ value: world.uuid, label: world.name + " (" + world.dimensionType.name + ")" })
-													)}
-												/>
-											</Col>
-										</FormGroup>
-
-										<FormGroup row>
-											<Label md={3}>Position</Label>
-											<Col md={3}>
-												<Input
-													type="text"
-													name="posX"
-													className="form-control"
-													placeholder="X"
-													onChange={this.handleChange}
-												/>
-											</Col>
-											<Col md={3}>
-												<Input
-													type="text"
-													name="posY"
-													className="form-control"
-													placeholder="Y"
-													onChange={this.handleChange}
-												/>
-											</Col>
-											<Col md={3}>
-												<Input
-													type="text"
-													name="posZ"
-													className="form-control"
-													placeholder="Z"
-													onChange={this.handleChange}
-												/>
-											</Col>
-										</FormGroup>
-
-									</Col>
-
-								</Row>
-							</CardBlock>
-							<CardFooter>
-								<Button type="button" color="success" onClick={() => this.create()} disabled={this.props.creating}>
-									Create&nbsp;
-									{this.props.creating ?
-										<i className="fa fa-spinner fa-pulse"></i>
-									: null}
-								</Button>
-							</CardFooter>
-						</Card>
-
-					</Col>
-
-					<Col xs={12} md={6} lg={4}>
-
-						<Card>
-							<CardHeader>
-								<i className="fa fa-filter"></i>
-								Filter entities
-							</CardHeader>
-							<CardBlock>
-								<Row>
-
-									<Col md={12}>
-
-										<FormGroup row>
-											<Label md={3} for="filterType">Type</Label>
-											<Col md={9}>
-												<Select
-													id="filterType"
-													multi={true}
-													value={this.props.filter.type}
-													onChange={val => this.filterChange("type", val)}
-													options={_.map(entTypes, ent => 
-														({ value: ent.id, label: ent.name + " (" + ent.mod + ")" })
-													)}
-												/>
-											</Col>
-										</FormGroup>
-
-										<FormGroup row>
-											<Label md={3} for="filterWorld">World</Label>
-											<Col md={9}>
-												<Select
-													id="filterWorld"
-													multi={true}
-													value={this.props.filter.world}
-													onChange={val => this.filterChange("world", val)}
-													options={_.map(this.props.worlds, world => 
-														({ value: world.uuid, label: world.name + " (" + world.dimensionType.name + ")" })
-													)}
-												/>
-											</Col>
-										</FormGroup>
-
-									</Col>
-
-								</Row>
-							</CardBlock>
-						</Card>
-
-					</Col>
-
-					<Col xs={12}>
-						<Card>
-							<CardHeader>
-								<i className="fa fa-paw"></i>
-								Entities
-							</CardHeader>
-							<CardBlock>
-								<Table striped={true}>
-									<thead>
-										<tr>
-											<th>Type</th>
-											<th>UUID</th>
-											<th>Location</th>
-											<th>Health</th>
-											<th>Actions</th>
-										</tr>
-									</thead>
-									<tbody>
-										{_.map(entities, entity =>
-											<tr key={entity.uuid}>
-												<td>{entity.type}</td>
-												<td>{entity.uuid}</td>
-												<td>
-													{entity.location ?
-														<Button type="button" color="link">
-															<i className="fa fa-globe"></i>&nbsp;&nbsp;
-															{entity.location.world.name} &nbsp; &nbsp;
-															{entity.location.position.x.toFixed(0)} |&nbsp;
-															{entity.location.position.y.toFixed(0)} |&nbsp;
-															{entity.location.position.z.toFixed(0)}
-														</Button>
-													: null}
-												</td>
-												<td>
-													{entity.health ?
-														<Progress
-															className="my-1" color="success"
-															value={(entity.health.current/entity.health.max)*100}
-														/>
-													: null}
-												</td>
-												<td>
-													<Button
-														type="button" color="danger" disabled={entity.updating}
-														onClick={() => this.delete(entity)}
-													>
-														Destroy
-													</Button>
-													&nbsp;
-													{entity.updating ?
-														<i className="fa fa-spinner fa-pulse"></i>
-													: null}
-												</td>
-											</tr>
+								<Form.Group widths="equal">
+									<Form.Field id="type" label="Type" control={Dropdown} placeholder="Type"
+										required fluid selection search onChange={this.handleChange}
+										options={_.map(entTypes, ent => 
+											({ value: ent.id, text: ent.name + " (" + ent.mod + ")" })
 										)}
-									</tbody>
-								</Table>
-								{ maxPage > 1 ?
-									<Pagination>
-										{ page > 4 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, 0)} href="#">
-													1
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-										{ page > 5 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, page - 5)} href="#">
-													...
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-										{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
-											<PaginationItem key={p} active={p === page}>
-												<PaginationLink onClick={e => this.changePage(e, p)} href="#">
-													{p + 1}
-												</PaginationLink>
-											</PaginationItem>
-										))}
-										{ page < maxPage - 6 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, page + 5)} href="#">
-													...
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-										{ page < maxPage - 5 ?
-											<PaginationItem>
-												<PaginationLink onClick={e => this.changePage(e, maxPage - 1)} href="#">
-													{maxPage}
-												</PaginationLink>
-											</PaginationItem>
-										: null }
-									</Pagination>
-								: null }
-							</CardBlock>
-						</Card>
-					</Col>
+									/>
 
-				</Row>
-			</div>
+									<Form.Field id="world" label="World" control={Dropdown} placeholder="World"
+										required fluid selection search onChange={this.handleChange}
+										options={_.map(this.props.worlds, world => 
+											({ value: world.uuid, text: world.name + " (" + world.dimensionType.name + ")" })
+										)}
+									/>
+								</Form.Group>
+
+								<Form.Group inline>
+									<label>Position</label>
+									<Form.Input type="number" width={6} name="posX" placeholder="X" onChange={this.handleChange} />
+									<Form.Input type="number" width={6} name="posY" placeholder="Y" onChange={this.handleChange} />
+									<Form.Input type="number" width={6} name="posZ" placeholder="Z" onChange={this.handleChange} />
+								</Form.Group>
+
+								<Button color="green" onClick={this.create}>
+									Create
+								</Button>
+
+							</Form>
+						</Segment>
+					</Grid.Column>
+
+					<Grid.Column>
+						<Segment>
+							<Header>
+								<Icon name="filter" fitted /> Filter entities
+							</Header>
+
+							<Form>
+								<Form.Group widths="equal">
+									<Form.Field name="type" label="Type" control={Dropdown} placeholder="Type"
+										fluid selection search multiple onChange={this.filterChange}
+										options={_.map(entTypes, ent => 
+											({ value: ent.id, text: ent.name + " (" + ent.mod + ")" })
+										)}
+									/>
+
+									<Form.Field name="world" label="World" control={Dropdown} placeholder="World"
+										fluid selection search multiple onChange={this.filterChange}
+										options={_.map(this.props.worlds, w => 
+											({ value: w.uuid, text: w.name + " (" + w.dimensionType.name + ")" })
+										)}
+									/>
+								</Form.Group>
+							</Form>
+						</Segment>
+					</Grid.Column>
+				</Grid>
+
+				<Header>
+					<Icon name="paw" fitted /> Entities
+				</Header>
+
+				<Table striped={true}>
+					<Table.Header>
+						<Table.Row>
+							<Table.HeaderCell>Type</Table.HeaderCell>
+							<Table.HeaderCell>UUID</Table.HeaderCell>
+							<Table.HeaderCell>Location</Table.HeaderCell>
+							<Table.HeaderCell>Health</Table.HeaderCell>
+							<Table.HeaderCell>Actions</Table.HeaderCell>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{_.map(entities, entity =>
+							<Table.Row key={entity.uuid}>
+								<Table.Cell>{entity.type}</Table.Cell>
+								<Table.Cell>{entity.uuid}</Table.Cell>
+								<Table.Cell>
+									{entity.location ?
+										<Button color="blue">
+											<Icon name="globe" />
+											{entity.location.world.name}&nbsp; &nbsp;
+											{entity.location.position.x.toFixed(0)} |&nbsp;
+											{entity.location.position.y.toFixed(0)} |&nbsp;
+											{entity.location.position.z.toFixed(0)}
+										</Button>
+									: null}
+								</Table.Cell>
+								<Table.Cell>
+									{entity.health ?
+										<Progress color="green" percent={(entity.health.current/entity.health.max)*100} />
+									: null}
+								</Table.Cell>
+								<Table.Cell>
+									<Button
+										color="red" disabled={entity.updating}
+										loading={entity.updating} onClick={() => this.delete(entity)}
+									>
+										Destroy
+									</Button>
+								</Table.Cell>
+							</Table.Row>
+						)}
+					</Table.Body>
+				</Table>
+				{ maxPage > 1 ?
+					<Menu pagination>
+						{ page > 4 ?
+							<Menu.Item onClick={e => this.changePage(e, 0)}>
+								1
+							</Menu.Item>
+						: null }
+						{ page > 5 ?
+							<Menu.Item onClick={e => this.changePage(e, page - 5)}>
+								...
+							</Menu.Item>
+						: null }
+						{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
+							<Menu.Item key={p} onClick={e => this.changePage(e, p)} active={p === page}>
+								{p + 1}
+							</Menu.Item>
+						))}
+						{ page < maxPage - 6 ?
+							<Menu.Item onClick={e => this.changePage(e, page + 5)}>
+								...
+							</Menu.Item>
+						: null }
+						{ page < maxPage - 5 ?
+							<Menu.Item onClick={e => this.changePage(e, maxPage - 1)}>
+								{maxPage}
+							</Menu.Item>
+						: null }
+					</Menu>
+				: null }
+				
+			</Segment>
 		)
 	}
 }
