@@ -1,7 +1,9 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import { Segment, Table, Menu, Form, Dropdown, Button, Header, Label, Icon } from "semantic-ui-react"
+import { Segment, Table, Menu, Form, Dropdown, Button, Header, Icon } from "semantic-ui-react"
 import _ from "lodash"
+
+import ItemStack from "../../components/ItemStack"
 
 import { setFilter, requestTileEntities } from "../../actions/tile-entity"
 import { requestCatalog } from "../../actions"
@@ -133,13 +135,9 @@ class TileEntities extends Component {
 								</Table.Cell>
 								<Table.Cell>
 									{te.inventory ?
-										<div>
-											{_.map(te.inventory.items, item =>
-												[<Label color="blue">
-													{ item.quantity > 1 ? item.quantity + "x " : "" } {item.name}
-												</Label>," "]
-											)}
-										</div>
+										_.map(te.inventory.items, (item, i) =>
+											<ItemStack key={i} item={item} />
+										)
 									: null}
 								</Table.Cell>
 							</Table.Row>
