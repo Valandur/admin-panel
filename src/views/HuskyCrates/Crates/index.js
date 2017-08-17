@@ -94,30 +94,7 @@ class Crates extends Component {
 		return (
 			<Segment basic>
 
-				<Grid columns={2} stackable doubling>
-					<Grid.Column>
-						<Segment>
-							<Header>
-								<Icon name="plus" fitted /> Create a crate
-							</Header>
-
-							<Form loading={this.props.creating}>
-
-								<Form.Group widths="equal">
-									<Form.Input
-										id="name" label="Name" placeholder="Name" 
-										required onChange={this.handleChange}
-									/>
-								</Form.Group>
-
-								<Button color="green" onClick={this.create}>
-									Create
-								</Button>
-
-							</Form>
-						</Segment>
-					</Grid.Column>
-
+				<Grid stackable doubling>
 					<Grid.Column>
 						<Segment>
 							<Header>
@@ -169,8 +146,8 @@ class Crates extends Component {
 								<Table.Cell>
 									<Table compact size="small">
 										<Table.Body>
-											{_.map(crate.rewards, reward =>
-												<Table.Row>
+											{_.map(crate.rewards, (reward, i) =>
+												<Table.Row key={i}>
 													<Table.Cell>{format(reward.chance)}</Table.Cell>
 													<Table.Cell>{reward.name}</Table.Cell>
 													<Table.Cell>
@@ -179,7 +156,7 @@ class Crates extends Component {
 													<Table.Cell>
 														{_.map(reward.rewards, (item, i) => {
 															if (typeof item === "string") {
-																return <Label key={i} color="red">/{item}</Label>
+																return <Label key={i} color="blue">/{item}</Label>
 															}
 															return <ItemStack key={i} item={item} />
 														})}

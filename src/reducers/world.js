@@ -2,7 +2,7 @@ import _ from "lodash"
 
 import {
 	WORLDS_RESPONSE,
-	WORLD_UPDATE_REQUEST, WORLD_UPDATE_RESPONSE,
+	WORLD_CHANGE_REQUEST, WORLD_CHANGE_RESPONSE,
 	WORLD_CREATE_REQUEST, WORLD_CREATE_RESPONSE,
 	WORLD_DELETE_REQUEST, WORLD_DELETE_RESPONSE, 
 } from "../actions/world"
@@ -17,7 +17,7 @@ const world = (state = { worlds: []}, action) => {
 				worlds: _.sortBy(action.worlds, "name"),
 			})
 
-		case WORLD_UPDATE_REQUEST:
+		case WORLD_CHANGE_REQUEST:
 			return _.assign({}, state, {
 				worlds: _.map(state.worlds, w => {
 					if (w.uuid !== action.uuid) return w;
@@ -25,7 +25,7 @@ const world = (state = { worlds: []}, action) => {
 				})
 			})
 
-		case WORLD_UPDATE_RESPONSE:
+		case WORLD_CHANGE_RESPONSE:
 			return _.assign({}, state, {
 				worlds: _.map(state.worlds, w => {
 					if (w.uuid !== action.world.uuid) return w;

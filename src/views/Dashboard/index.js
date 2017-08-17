@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
-import { Grid, Segment, Card } from "semantic-ui-react"
+import { Grid, Segment, Card, Message } from "semantic-ui-react"
 import { Line } from "react-chartjs-2";
 import _ from "lodash"
 
@@ -142,9 +142,19 @@ class Dashboard extends Component {
 		return (
 			<Segment basic>
 
+				<Message info>
+					<Message.Header>Work in progress!</Message.Header>
+					<p>
+						The Web-API AdminPanel is still a work in progress, and not all of it's
+						functionality has been fully implemented yet. This means there may be 
+						bugs and other issues when using the AdminPanel! <br />
+						Please report any bugs you find <a href="https://github.com/Valandur/Web-API/issues">over on GitHub</a>
+					</p>
+				</Message>
+
 				<Grid columns={4} stackable doubling>
-      		
-      		<Grid.Column>
+					
+					<Grid.Column>
 						<Card color={playerState}>
 							<Card.Content>
 								<Card.Header>

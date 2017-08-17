@@ -107,14 +107,6 @@ class Operations extends Component {
 	}
 
 	render() {
-		const blockTypes = _.map(this.props.blockTypes, block => {
-			const index = block.id.indexOf(":");
-			return _.assign({}, block, {
-				mod: index !== -1 ? block.id.substring(0, index) : "???",
-				name: block.id.substring(index + 1),
-			});
-		});
-
 		return (
 			<Segment basic>
 
@@ -140,8 +132,8 @@ class Operations extends Component {
 
 							<Form.Field id="block" label="Block" control={Dropdown} placeholder="Block"
 								required fluid selection search onChange={this.handleChange}
-								options={_.map(blockTypes, block => 
-									({ value: block.id, text: block.name + " (" + block.mod + ")" })
+								options={_.map(this.props.blockTypes, block => 
+									({ value: block.id, text: block.name + " (" + block.id + ")" })
 								)}
 								disabled={this.state.type !== "CHANGE"}
 							/>

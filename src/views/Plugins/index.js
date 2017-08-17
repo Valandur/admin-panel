@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
 import { push } from "react-router-redux"
-import { Segment, Table, Button, Header, Modal, Label, Tab, TextArea, Icon } from "semantic-ui-react"
+import {
+	Segment, Table, Button, Header, Modal,
+	Label, Tab, TextArea, Icon, Message
+} from "semantic-ui-react"
 import _ from 'lodash'
 
 import { requestPlugins, requestPluginConfig } from "../../actions/plugin"
@@ -48,9 +51,16 @@ class Plugins extends Component {
 	render() {
 		return (
 			<Segment basic>
+
+				<Message warning>
+					<Message.Header>This section of the admin panel is not yet completed</Message.Header>
+					<p>Changing the config files of plugins does not do anything yet!</p>
+				</Message>
+
 				<Header>
 					<Icon name="plug" fitted /> Installed Plugins
 				</Header>
+
 				<Table striped>
 					<Table.Header>
 						<Table.Row>

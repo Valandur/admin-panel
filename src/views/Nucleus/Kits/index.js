@@ -1,19 +1,24 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
-	Segment, Header, Table, Accordion, List,
-	Grid, Form, Button, Menu, Message, Icon 
+	Segment, Header, Table, Label, Popup, Dropdown, 
+	Grid, Form, Button, Menu, Message, Icon, Input
 } from "semantic-ui-react"
 import _ from "lodash"
 
+import ItemStack from "../../../components/ItemStack"
+
+import { requestCatalog } from "../../../actions"
 import {
 	setKitFilter,
 	requestKits,
 	requestCreateKit,
+	requestChangeKit,
 	requestDeleteKit
 } from "../../../actions/nucleus"
 
 const ITEMS_PER_PAGE = 20
+const ITEM_TYPES = "item.ItemType"
 
 class Kits extends Component {
 
@@ -22,12 +27,15 @@ class Kits extends Component {
 
 		this.state = {
 			page: 0,
+			modal: false,
+			kit: null,
 		}
 
+		this.edit = this.edit.bind(this)
+		this.save = this.save.bind(this)
 		this.canCreate = this.canCreate.bind(this)
 		this.create = this.create.bind(this)
 		this.delete = this.delete.bind(this)
-		this.edit = this.edit.bind(this)
 		this.handleChange = this.handleChange.bind(this)
 		this.filterChange = this.filterChange.bind(this)
 		this.changePage = this.changePage.bind(this)
@@ -35,6 +43,7 @@ class Kits extends Component {
 
 	componentDidMount() {
 		this.props.requestKits()
+		this.props.requestCatalog(ITEM_TYPES)
 
 		this.interval = setInterval(this.props.requestKits, 10000)
 	}
@@ -87,15 +96,62 @@ class Kits extends Component {
 	}
 
 	delete(kit) {
-		this.props.requestDeleteKit(kit.name);
+		this.props.requestDeleteKit(kit);
+	}
+
+	addCmd(kit) {
+		let cmd = this.state.newKitCmd
+		if (_.startsWith(cmd, "/"))
+			cmd = cmd.substring(1)
+
+		this.props.requestChangeKit(kit, {
+			commands: _.concat(kit.commands, cmd)
+		})
+	}
+
+	removeCmd(kit, cmdIndex) {
+		this.props.requestChangeKit(kit, {
+			commands: _.filter(kit.commands, (__, i) => i !== cmdIndex)
+		})
+	}
+
+	addStack(kit) {
+		this.props.requestChangeKit(kit, {
+			stacks: _.concat(kit.stacks, {
+				type: {
+					id: this.state.newItemType,
+				},
+				quantity: this.state.newItemAmount ? this.state.newItemAmount : 1
+			})
+		})
+	}
+
+	removeStack(kit, itemIndex) {
+		this.props.requestChangeKit(kit, {
+			stacks: _.filter(kit.stacks, (__, i) => i !== itemIndex)
+		})
 	}
 
 	edit(kit) {
-
+		this.setState({
+			kit: kit,
+			kitCost: kit.cost,
+			kitInterval: kit.interval,
+		})
 	}
 
-  render() {
-  	let reg = new RegExp();
+	save(kit) {
+		this.props.requestChangeKit(kit, {
+			cost: this.state.kitCost,
+			interval: this.state.kitInterval,
+		})
+		this.setState({
+			kit: null,
+		})
+	}
+
+	render() {
+		let reg = new RegExp();
 		let regValid = false;
 
 		try {
@@ -105,8 +161,8 @@ class Kits extends Component {
 			regValid = true;
 		} catch (e) {}
 
-  	let kits = _.filter(this.props.kits, kit => {
-  		if (!regValid) return true;
+		let kits = _.filter(this.props.kits, kit => {
+			if (!regValid) return true;
 			return reg.test(kit.name);
 		});
 		
@@ -115,10 +171,10 @@ class Kits extends Component {
 
 		kits = kits.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
-    return (
-    	<Segment basic>
+		return (
+			<Segment basic>
 
-    		<Grid columns={2} stackable doubling>
+				<Grid columns={2} stackable doubling>
 					<Grid.Column>
 						<Segment>
 							<Header>
@@ -175,11 +231,11 @@ class Kits extends Component {
 					</Grid.Column>
 				</Grid>
 
-    		<Header>
-    			<Icon name="wrench" fitted /> Kits
-    		</Header>
+				<Header>
+					<Icon name="wrench" fitted /> Kits
+				</Header>
 
-    		<Table striped={true}>
+				<Table striped={true}>
 					<Table.Header>
 						<Table.Row>
 							<Table.HeaderCell>Name</Table.HeaderCell>
@@ -194,42 +250,107 @@ class Kits extends Component {
 						{_.map(kits, kit =>
 							<Table.Row key={kit.name}>
 								<Table.Cell>{kit.name}</Table.Cell>
-								<Table.Cell>{kit.cost}</Table.Cell>
-								<Table.Cell>{kit.interval}</Table.Cell>
 								<Table.Cell>
-									<Accordion panels={[{
-										title: kit.commands.length + " command" + (kit.commands.length !== 1 ? "s" : ""),
-										content: <List bulleted>
-											{_.map(kit.commands, cmd => <List.Item>
-												{cmd}
-											</List.Item>)}
-										</List>
-									}]} />
+									{this.state.kit && this.state.kit.name === kit.name ?
+										<Input
+											type="number"
+											name="kitCost"
+											placeholder="Cost"
+											value={this.state.kitCost}
+											onChange={this.handleChange}
+										/>
+									:
+										kit.cost
+									}
 								</Table.Cell>
 								<Table.Cell>
-									<Accordion panels={[{
-										title: kit.stacks.length + " stack" + (kit.stacks.length !== 1 ? "s" : ""),
-										content: <List bulleted>
-											{_.map(kit.stacks, stack => <List.Item>
-												{JSON.stringify(stack)}
-											</List.Item>)}
-										</List>
-									}]} />
+									{this.state.kit && this.state.kit.name === kit.name ?
+										<Input
+											type="number"
+											name="kitInterval"
+											placeholder="Interval"
+											value={this.state.kitInterval}
+											onChange={this.handleChange}
+										/>
+									:
+										kit.interval
+									}
 								</Table.Cell>
 								<Table.Cell>
-									<Button
-										color="blue" disabled={kit.updating}
-										loading={kit.updating} onClick={() => this.edit(kit)}
-									>
-										<Icon name="edit" /> Edit
-									</Button>
+									{_.map(kit.commands, (cmd, i) =>
+										<Label
+											key={i}
+											color="blue"
+											content={"/" + cmd}
+											onRemove={e => this.removeCmd(kit, i)}
+										/>
+									)}
+									<Popup
+										trigger={<Button color="green" icon="plus" size="mini" />}
+										content={
+											<Input
+												name="newKitCmd"
+												action={{
+													color: "green",
+													content: "Add",
+													onClick: e => this.addCmd(kit),
+												}}
+												placeholder="/say Hi"
+												onChange={this.handleChange}
+											/>
+										}
+										on="click" position="top right"
+									/>
+								</Table.Cell>
+								<Table.Cell>
+									{_.map(kit.stacks, (item, i) =>
+										<ItemStack
+											key={i}
+											item={item}
+											onRemove={e => this.removeStack(kit, i)}
+										/>
+									)}
+									<Popup
+										trigger={<Button color="green" icon="plus" size="mini" />}
+										content={<Form>
+											<Form.Field id="newItemType" control={Dropdown} placeholder="Type"
+												required fluid selection search onChange={this.handleChange}
+												options={_.map(this.props.itemTypes, type => 
+													({ value: type.id, text: type.name + " (" + type.id + ")" })
+												)}
+											/>
+											<Form.Input
+												id="newItemAmount"
+												type="number"
+												placeholder="Amount"
+												onChange={this.handleChange}
+												action={{
+													color: "green",
+													content: "Add",
+													onClick: e => this.addStack(kit),
+												}}
+											/>
+										</Form>}
+										on="click" position="top right"
+									/>
+								</Table.Cell>
+								<Table.Cell>
+									{this.state.kit && this.state.kit.name === kit.name ?
+										<Button
+											color="green" icon="save" content="Save" disabled={kit.updating}
+											loading={kit.updating} onClick={() => this.save(kit)}
+										/>
+									:
+										<Button
+											color="blue" icon="edit" content="Edit" disabled={kit.updating}
+											loading={kit.updating} onClick={() => this.edit(kit)}
+										/>
+									}
 									{" "}
 									<Button
-										color="red" disabled={kit.updating}
+										color="red" icon="trash" content="Remove" disabled={kit.updating}
 										loading={kit.updating} onClick={() => this.delete(kit)}
-									>
-										<Icon name="trash" /> Remove
-									</Button>
+									/>
 								</Table.Cell>
 							</Table.Row>
 						)}
@@ -267,7 +388,7 @@ class Kits extends Component {
 
 			</Segment>
 		);
-  }
+	}
 }
 
 const mapStateToProps = (_state) => {
@@ -277,6 +398,7 @@ const mapStateToProps = (_state) => {
 		creating: state.kitCreating,
 		filter: state.kitFilter,
 		kits: state.kits,
+		itemTypes: _state.api.types[ITEM_TYPES],
 	}
 }
 
@@ -284,8 +406,10 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		requestKits: () => dispatch(requestKits(true)),
 		setFilter: (filter, value) => dispatch(setKitFilter(filter, value)),
+		requestCatalog: type => dispatch(requestCatalog(type)),
 		requestCreateKit: (data) => dispatch(requestCreateKit(data)),
-		requestDeleteKit: (name) => dispatch(requestDeleteKit(name)),
+		requestChangeKit: (kit, data) => dispatch(requestChangeKit(kit, data)),
+		requestDeleteKit: (kit) => dispatch(requestDeleteKit(kit)),
 	}
 }
 

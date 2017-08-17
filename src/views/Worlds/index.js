@@ -7,7 +7,7 @@ import {
 import _ from "lodash"
 
 import { requestCatalog } from "../../actions"
-import { requestWorlds, requestUpdateWorld, requestCreateWorld, requestDeleteWorld } from "../../actions/world"
+import { requestWorlds, requestChangeWorld, requestCreateWorld, requestDeleteWorld } from "../../actions/world"
 
 const DIM_TYPES = "world.DimensionType"
 const GEN_TYPES = "world.GeneratorType"
@@ -93,7 +93,7 @@ class Worlds extends Component {
 	toggleLoad(world, callback) {
 		const newState = !world.isLoaded;
 
-		this.props.requestUpdateWorld(world.uuid, { loaded: newState }, newState ? "Loaded" : "Unloaded")
+		this.props.requestChangeWorld(world.uuid, { loaded: newState }, newState ? "Loaded" : "Unloaded")
 	}
 
 	showGameRules(world) {
@@ -118,7 +118,7 @@ class Worlds extends Component {
 		const world = this.state.rulesWorld;
 		const rules = _.mapValues(_.keyBy(this.state.rules, "name"), "value");
 
-		this.props.requestUpdateWorld(world.uuid, { gameRules: rules }, "Change game rules for")
+		this.props.requestChangeWorld(world.uuid, { gameRules: rules }, "Change game rules for")
 		this.toggleModal();
 	}
 
@@ -426,7 +426,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		requestWorlds: () => dispatch(requestWorlds(true)),
 		requestCatalog: type => dispatch(requestCatalog(type)),
-		requestUpdateWorld: (uuid, data, op) => dispatch(requestUpdateWorld(uuid, data, op)),
+		requestChangeWorld: (uuid, data, op) => dispatch(requestChangeWorld(uuid, data, op)),
 		requestCreateWorld: data => dispatch(requestCreateWorld(data)),
 		requestDeleteWorld: uuid => dispatch(requestDeleteWorld(uuid)),
 	}

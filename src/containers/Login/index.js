@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Redirect } from "react-router-dom"
-import { Grid, Header, Image, Form, Button, Segment } from "semantic-ui-react"
+import { Grid, Header, Form, Button, Segment } from "semantic-ui-react"
 
 import { requestLogin } from "../../actions"
 
@@ -42,7 +42,7 @@ class Login extends Component {
       >
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as="h2" color="blue" textAlign="center">
-            <Image src="/img/logo.png" /> Admin Panel
+            <span style={{color: "black"}}>Web-API</span> Admin Panel
           </Header>
           <Form size="large" loading={this.props.loggingIn}>
             <Segment>

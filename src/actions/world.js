@@ -7,11 +7,11 @@ export function requestWorlds(details = false) {
 	}
 }
 
-export const WORLD_UPDATE_REQUEST = "WORLD_UPDATE_REQUEST"
-export const WORLD_UPDATE_RESPONSE = "WORLD_UPDATE_RESPONSE"
-export function requestUpdateWorld(uuid, data, op) {
+export const WORLD_CHANGE_REQUEST = "WORLD_UPDATE_REQUEST"
+export const WORLD_CHANGE_RESPONSE = "WORLD_UPDATE_RESPONSE"
+export function requestChangeWorld(uuid, data, op) {
 	return {
-		type: WORLD_UPDATE_REQUEST,
+		type: WORLD_CHANGE_REQUEST,
 		uuid: uuid,
 		data: data,
 		op: op,
