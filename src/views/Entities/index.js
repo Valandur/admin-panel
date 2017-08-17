@@ -116,13 +116,6 @@ class Entities extends Component {
 
 		entities = entities.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
-		const entTypes = _.map(this.props.entTypes, ent => {
-			const index = ent.id.indexOf(":");
-			return _.assign({}, ent, {
-				mod: index !== -1 ? ent.id.substring(0, index) : "???"
-			});
-		});
-
 		return (
 			<Segment basic>
 
@@ -138,8 +131,8 @@ class Entities extends Component {
 								<Form.Group widths="equal">
 									<Form.Field id="type" label="Type" control={Dropdown} placeholder="Type"
 										required fluid selection search onChange={this.handleChange}
-										options={_.map(entTypes, ent => 
-											({ value: ent.id, text: ent.name + " (" + ent.mod + ")" })
+										options={_.map(this.props.entTypes, ent => 
+											({ value: ent.id, text: ent.name + " (" + ent.id + ")" })
 										)}
 									/>
 
@@ -176,8 +169,8 @@ class Entities extends Component {
 								<Form.Group widths="equal">
 									<Form.Field name="type" label="Type" control={Dropdown} placeholder="Type"
 										fluid selection search multiple onChange={this.filterChange}
-										options={_.map(entTypes, ent => 
-											({ value: ent.id, text: ent.name + " (" + ent.mod + ")" })
+										options={_.map(this.props.entTypes, ent => 
+											({ value: ent.id, text: ent.name + " (" + ent.id + ")" })
 										)}
 									/>
 

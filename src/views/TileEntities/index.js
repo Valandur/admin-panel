@@ -74,13 +74,6 @@ class TileEntities extends Component {
 
 		tileEntities = tileEntities.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
-		const teTypes = _.map(this.props.teTypes, te => {
-			const index = te.id.indexOf(":");
-			return _.assign({}, te, {
-				mod: index !== -1 ? te.id.substring(0, index) : "???"
-			});
-		});
-
 		return (
 			<Segment basic>
 
@@ -93,8 +86,8 @@ class TileEntities extends Component {
 						<Form.Group widths="equal">
 							<Form.Field name="type" label="Type" control={Dropdown} placeholder="Type"
 								fluid selection search multiple onChange={this.filterChange}
-								options={_.map(teTypes, ent => 
-									({ value: ent.id, text: ent.name + " (" + ent.mod + ")" })
+								options={_.map(this.props.teTypes, ent => 
+									({ value: ent.id, text: ent.name + " (" + ent.id + ")" })
 								)}
 							/>
 
