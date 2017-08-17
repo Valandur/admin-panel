@@ -8,7 +8,7 @@
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^3.1.0",
-    "react-scripts": "1.0.10"
+    "react-scripts": "1.0.11"
   },
   "dependencies": {
     "chart.js": "2.6.0",
@@ -20,18 +20,18 @@
     "react": "^15.6.1",
     "react-addons-css-transition-group": "15.6.0",
     "react-addons-transition-group": "15.6.0",
-    "react-chartjs-2": "2.5.5",
+    "react-chartjs-2": "2.5.7",
     "react-click-outside": "^2.3.1",
     "react-dom": "15.6.1",
     "react-konva": "^1.1.4",
     "react-notification-system": "^0.2.15",
-    "react-redux": "^5.0.5",
+    "react-redux": "^5.0.6",
     "react-router-dom": "4.1.2",
     "react-router-redux": "^5.0.0-alpha.6",
     "react-transition-group": "^2.2.0",
     "redux": "^3.7.2",
-    "semantic-ui-css": "^2.2.11",
-    "semantic-ui-react": "^0.71.3",
+    "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.71.4",
     "superagent": "^3.5.2"
   },
   "scripts": {
