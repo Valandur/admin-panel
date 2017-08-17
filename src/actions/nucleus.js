@@ -16,12 +16,22 @@ export function requestCreateKit(data) {
 	}
 }
 
+export const KIT_CHANGE_REQUEST = "NUCLEUS_KIT_CHANGE_REQUEST"
+export const KIT_CHANGE_RESPONSE = "NUCLEUS_KIT_CHANGE_RESPONSE"
+export function requestChangeKit(kit, data) {
+	return {
+		type: KIT_CHANGE_REQUEST,
+		kit: kit,
+		data: data,
+	}
+}
+
 export const KIT_DELETE_REQUEST = "NUCLEUS_KIT_DELETE_REQUEST"
 export const KIT_DELETE_RESPONSE = "NUCLEUS_KIT_DELETE_RESPONSE"
-export function requestDeleteKit(name) {
+export function requestDeleteKit(kit) {
 	return {
 		type: KIT_DELETE_REQUEST,
-		name: name,
+		kit: kit,
 	}
 }
 

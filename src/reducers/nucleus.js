@@ -3,6 +3,7 @@ import _ from "lodash"
 import {
 	KIT_SET_FILTER, KITS_RESPONSE,
 	KIT_CREATE_REQUEST, KIT_CREATE_RESPONSE, 
+	KIT_CHANGE_REQUEST, KIT_CHANGE_RESPONSE, 
 	KIT_DELETE_REQUEST, KIT_DELETE_RESPONSE, 
 	JAIL_SET_FILTER, JAILS_RESPONSE, 
 	JAIL_CREATE_REQUEST, JAIL_CREATE_RESPONSE, 
@@ -43,6 +44,22 @@ const nucleus = (state = { kits: [], jails: [], kitFilter: {}, jailFilter: {}}, 
 				kitCreating: false,
 				kits: _.sortBy(_.concat(state.kits, action.kit), "name"),
 			});
+
+		case KIT_CHANGE_REQUEST:
+			return _.assign({}, state, {
+				kits: _.map(state.kits, k => {
+					if (k.name !== action.name) return k;
+					return _.assign({}, k, { updating: true })
+				})
+			})
+
+		case KIT_CHANGE_RESPONSE:
+			return _.assign({}, state, {
+				kits: _.map(state.kits, k => {
+					if (k.name !== action.kit.name) return k;
+					return _.assign({}, k, action.ok ? action.kit : null, { updating: false })
+				})
+			})
 
 		case KIT_DELETE_REQUEST:
 			return _.assign({}, state, {
