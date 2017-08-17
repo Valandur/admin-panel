@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
-import { Segment, Header, Table, Button, Input, Icon } from "semantic-ui-react"
+import { Segment, Header, Table, Button, Input, Icon, Message } from "semantic-ui-react"
 import _ from "lodash"
 
 import { editProperty, setProperty, requestSaveProperty, requestProperties } from "../../actions/settings"
@@ -30,13 +30,18 @@ class Settings extends Component {
 		this.props.requestSaveProperty(prop);
 	}
 
-  render() {
-    return (
-      <Segment basic>
+	render() {
+		return (
+			<Segment basic>
 
-  			<Header>
-  				<Icon name="cogs" fitted /> Properties
-  			</Header>
+				<Message negative>
+					<Message.Header>This section of the admin panel is not yet completed</Message.Header>
+					<p>Changing any of these settings has no effect on the server!</p>
+				</Message>
+
+				<Header>
+					<Icon name="cogs" fitted /> Settings
+				</Header>
 
 				<Table striped={true}>
 					<thead>
@@ -88,9 +93,9 @@ class Settings extends Component {
 					</tbody>
 				</Table>
 
-      </Segment>
-    )
-  }
+			</Segment>
+		)
+	}
 }
 
 const mapStateToProps = (_state) => {
