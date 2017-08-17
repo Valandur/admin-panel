@@ -21,7 +21,7 @@ import {
 import {
 	WORLDS_REQUEST, WORLDS_RESPONSE,
 	WORLD_CREATE_REQUEST, WORLD_CREATE_RESPONSE,
-	WORLD_UPDATE_REQUEST, WORLD_UPDATE_RESPONSE,
+	WORLD_CHANGE_REQUEST, WORLD_CHANGE_RESPONSE,
 	WORLD_DELETE_REQUEST, WORLD_DELETE_RESPONSE,
 } from "../actions/world"
 
@@ -72,6 +72,7 @@ import {
 import {
 	KITS_REQUEST, KITS_RESPONSE, 
 	KIT_CREATE_REQUEST, KIT_CREATE_RESPONSE,
+	KIT_CHANGE_REQUEST, KIT_CHANGE_RESPONSE,
 	KIT_DELETE_REQUEST, KIT_DELETE_RESPONSE,
 	JAILS_REQUEST, JAILS_RESPONSE, 
 	JAIL_CREATE_REQUEST, JAIL_CREATE_RESPONSE,
@@ -245,10 +246,10 @@ const api = ({ getState, dispatch }) => next => action => {
 			})
 			break;
 
-		case WORLD_UPDATE_REQUEST:
+		case WORLD_CHANGE_REQUEST:
 			put("world/" + action.uuid, data => {
 				next({
-					type: WORLD_UPDATE_RESPONSE,
+					type: WORLD_CHANGE_RESPONSE,
 					ok: data.ok,
 					world: data.world,
 					op: action.op,
@@ -483,8 +484,18 @@ const api = ({ getState, dispatch }) => next => action => {
 			}, action.data)
 			break;
 
+		case KIT_CHANGE_REQUEST:
+			put("nucleus/kit/" + action.kit.name, data => {
+				next({
+					type: KIT_CHANGE_RESPONSE,
+					ok: data.ok,
+					kit: data.kit,
+				})
+			}, action.data)
+			break;
+
 		case KIT_DELETE_REQUEST:
-			del("nucleus/kit/" + action.name, data => {
+			del("nucleus/kit/" + action.kit.name, data => {
 				next({
 					type: KIT_DELETE_RESPONSE,
 					ok: data.ok,

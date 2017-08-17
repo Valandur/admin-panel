@@ -2,7 +2,7 @@ import { SAVE_NOTIF_REF, SHOW_NOTIFICATION } from "../actions/notification"
 import { EXECUTE_RESPONSE } from "../actions/command"
 import { ENTITY_CREATE_RESPONSE, ENTITY_DELETE_RESPONSE } from "../actions/entity"
 import { PLAYER_KICK_RESPONSE, PLAYER_BAN_RESPONSE } from "../actions/player"
-import { WORLD_UPDATE_RESPONSE, WORLD_CREATE_RESPONSE, WORLD_DELETE_RESPONSE } from "../actions/world"
+import { WORLD_CHANGE_RESPONSE, WORLD_CREATE_RESPONSE, WORLD_DELETE_RESPONSE } from "../actions/world"
 
 let notifRef = null;
 
@@ -51,7 +51,7 @@ const persist = ({ dispatch, getState }) => next => action => {
 			showNotif("success", "Player", "Banned " + action.player.name)
 			break;
 
-		case WORLD_UPDATE_RESPONSE:
+		case WORLD_CHANGE_RESPONSE:
 			if (!action.ok) break;
 			showNotif("success", "World", (action.op ? action.op : "Updated") + " " + action.world.name)
 			break;
