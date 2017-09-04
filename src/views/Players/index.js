@@ -2,9 +2,11 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
 	Segment, Form, Menu, Table, Icon, 
-	Dropdown, Modal, Header, Label, Progress, Button, 
+	Dropdown, Modal, Header, Progress, Button, 
 } from "semantic-ui-react"
 import _ from "lodash"
+
+import Inventory from "../../components/Inventory"
 
 import { requestWorlds } from "../../actions/world"
 import { setFilter, requestPlayers, requestKickPlayer, requestBanPlayer } from "../../actions/player"
@@ -150,11 +152,11 @@ class Players extends Component {
 								<Table.Cell>
 									{player.health ?
 										<div>
-											<Progress color="green" style={{marginBottom: "1em"}}
-												percent={(player.health.current/player.health.max)*100}
+											<Progress color="green" style={{marginBottom: "1em"}} progress
+												value={player.health.current} total={player.health.max}
 											/>
-											<Progress color="blue"
-												percent={(player.food.foodLevel/20)*100}
+											<Progress color="blue" progress
+												value={player.food.foodLevel} total={20}
 											/>
 										</div>
 									: null}
@@ -247,40 +249,7 @@ class Players extends Component {
 							{this.state.player.name}'s Inventory
 						</Modal.Header>
 						<Modal.Content>
-							<Table>
-								<Table.Header>
-									<Table.Row>
-										<Table.HeaderCell>Amount</Table.HeaderCell>
-										<Table.HeaderCell>Item</Table.HeaderCell>
-										<Table.HeaderCell>Data</Table.HeaderCell>
-									</Table.Row>
-								</Table.Header>
-								<Table.Body>
-									{_.map(this.state.inventory.items, (item, index) =>
-										<Table.Row key={index}>
-											<Table.Cell>{item.quantity}</Table.Cell>
-											<Table.Cell>{item.name}</Table.Cell>
-											<Table.Cell>
-											{ _.isEmpty(item.data) ?
-												null
-											: item.data.potionEffects ? 
-												_.map(item.data.potionEffects, effect =>
-													[<Label color="red" pill key={effect.id}>
-														{effect.name}
-													</Label>," "]
-												)
-											: item.data.spawn ?
-												<Label color="blue" pill>
-													{item.data.spawn.name}
-												</Label>
-											:
-												JSON.stringify(item.data)
-											}
-											</Table.Cell>
-										</Table.Row>
-									)}
-								</Table.Body>
-							</Table>
+							<Inventory items={this.state.inventory.items} stackOption={true} />
 						</Modal.Content>
 					</Modal>
 				: null}

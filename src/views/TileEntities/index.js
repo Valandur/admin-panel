@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { Segment, Table, Menu, Form, Dropdown, Button, Header, Icon } from "semantic-ui-react"
 import _ from "lodash"
 
-import ItemStack from "../../components/ItemStack"
+import Inventory from "../../components/Inventory"
 
 import { setFilter, requestTileEntities } from "../../actions/tile-entity"
 import { requestCatalog } from "../../actions"
@@ -128,9 +128,7 @@ class TileEntities extends Component {
 								</Table.Cell>
 								<Table.Cell>
 									{te.inventory ?
-										_.map(te.inventory.items, (item, i) =>
-											<ItemStack key={i} item={item} />
-										)
+										<Inventory items={te.inventory.items} />
 									: null}
 								</Table.Cell>
 							</Table.Row>
