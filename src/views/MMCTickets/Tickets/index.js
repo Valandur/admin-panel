@@ -1,21 +1,20 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
-	Segment, Header, Menu, Table, Grid, Label, 
-	Form, Button, Message, Icon
+	Segment, Header, Menu, Table, Grid, 
+	Form, Message, Icon
 } from "semantic-ui-react"
+import moment from "moment"
 import _ from "lodash"
 
-import ItemStack from "../../../components/ItemStack"
-
 import {
-	setCrateFilter,
-	requestCrates,
-} from "../../../actions/husky"
+	setTicketFilter,
+	requestTickets,
+} from "../../../actions/mmctickets"
 
 const ITEMS_PER_PAGE = 20
 
-class Crates extends Component {
+class Tickets extends Component {
 
 	constructor(props) {
 		super(props)
@@ -30,9 +29,9 @@ class Crates extends Component {
 	}
 
 	componentDidMount() {
-		this.props.requestCrates()
+		this.props.requestTickets()
 
-		this.interval = setInterval(this.props.requestCrates, 10000);
+		this.interval = setInterval(this.props.requestTickets, 10000);
 	}
 
 	componentWillUnmount() {
@@ -81,15 +80,15 @@ class Crates extends Component {
 			regValid = true;
 		} catch (e) {}
 
-		let crates = _.filter(this.props.crates, crate => {
+		let tickets = _.filter(this.props.tickets, ticket => {
 			if (!regValid) return true;
-			return reg.test(crate.name)
+			return reg.test(ticket.id) || reg.test(ticket.message) || reg.test(ticket.comment)
 		});
 		
-		const maxPage = Math.ceil(crates.length / ITEMS_PER_PAGE);
+		const maxPage = Math.ceil(tickets.length / ITEMS_PER_PAGE);
 		const page = Math.min(this.state.page, maxPage - 1);
 
-		crates = crates.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
+		tickets = tickets.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
 		return (
 			<Segment basic>
@@ -98,14 +97,14 @@ class Crates extends Component {
 					<Grid.Column>
 						<Segment>
 							<Header>
-								<Icon name="filter" fitted /> Filter crates
+								<Icon name="filter" fitted /> Filter tickets
 							</Header>
 
 							<Form>
 								<Form.Input
 									id="name"
 									label="Name"
-									placeholder="Name"
+									placeholder="Ticket #, Message or Comment"
 									onChange={this.filterChange}
 									error={!regValid} />
 								<Message
@@ -117,69 +116,31 @@ class Crates extends Component {
 				</Grid>
 
 				<Header>
-					<Icon name="archive" fitted /> Crates
+					<Icon name="ticket" fitted /> Tickets
 				</Header>
 
 				<Table striped={true}>
 					<Table.Header>
 						<Table.Row>
-							<Table.HeaderCell>Name</Table.HeaderCell>
-							<Table.HeaderCell>Type</Table.HeaderCell>
-							<Table.HeaderCell>Free</Table.HeaderCell>
-							<Table.HeaderCell>Rewards</Table.HeaderCell>
-							<Table.HeaderCell>Actions</Table.HeaderCell>
+							<Table.HeaderCell>ID</Table.HeaderCell>
+							<Table.HeaderCell>Timestamp</Table.HeaderCell>
+							<Table.HeaderCell>Status</Table.HeaderCell>
+							<Table.HeaderCell>Sender</Table.HeaderCell>
+							<Table.HeaderCell>Message</Table.HeaderCell>
+							<Table.HeaderCell>Assigned</Table.HeaderCell>
+							<Table.HeaderCell>Comment</Table.HeaderCell>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{_.map(crates, crate => {
-							const totalChance = _.sumBy(crate.rewards, "chance");
-							const format = chance => ((chance / totalChance) * 100).toFixed(2) + "%";
-
-							return <Table.Row key={crate.id}>
-								<Table.Cell>{crate.name}</Table.Cell>
-								<Table.Cell>{crate.type}</Table.Cell>
-								<Table.Cell>
-									<Icon
-										color={crate.isFree ? "green" : "red"}
-										name={crate.isFree ? "check" : "remove"} />
-								</Table.Cell>
-								<Table.Cell>
-									<Table compact size="small">
-										<Table.Body>
-											{_.map(crate.rewards, (reward, i) =>
-												<Table.Row key={i}>
-													<Table.Cell>{format(reward.chance)}</Table.Cell>
-													<Table.Cell>{reward.name}</Table.Cell>
-													<Table.Cell>
-														{reward.shouldAnnounce && <Icon name="bullhorn" />}
-													</Table.Cell>
-													<Table.Cell>
-														{_.map(reward.rewards, (item, i) => {
-															if (typeof item === "string") {
-																return <Label key={i} color="blue">/{item}</Label>
-															}
-															return <ItemStack key={i} item={item} />
-														})}
-													</Table.Cell>
-												</Table.Row>
-											)}
-										</Table.Body>
-									</Table>
-								</Table.Cell>
-								<Table.Cell>
-									<Button
-										color="blue" disabled={crate.updating}
-										loading={crate.updating} onClick={() => this.edit(crate)}
-									>
-										<Icon name="edit" /> Edit
-									</Button>
-									<Button
-										color="red" disabled={crate.updating}
-										loading={crate.updating} onClick={() => this.delete(crate)}
-									>
-										<Icon name="trash" /> Remove
-									</Button>
-								</Table.Cell>
+						{_.map(tickets, ticket => {
+							return <Table.Row key={ticket.id}>
+								<Table.Cell>{ticket.id}</Table.Cell>
+								<Table.Cell>{moment.unix(ticket.timestamp).calendar()}</Table.Cell>
+								<Table.Cell>{ticket.status}</Table.Cell>
+								<Table.Cell>{ticket.sender.name}</Table.Cell>
+								<Table.Cell>{ticket.message}</Table.Cell>
+								<Table.Cell>{ticket.staff.name}</Table.Cell>
+								<Table.Cell>{ticket.comment}</Table.Cell>
 							</Table.Row>
 						})}
 					</Table.Body>
@@ -220,20 +181,20 @@ class Crates extends Component {
 }
 
 const mapStateToProps = (_state) => {
-	const state = _state.husky;
+	const state = _state.mmctickets;
 
 	return {
-		creating: state.crateCreating,
-		filter: state.crateFilter,
-		crates: state.crates,
+		creating: state.ticketCreating,
+		filter: state.ticketFilter,
+		tickets: state.tickets,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestCrates: () => dispatch(requestCrates(true)),
-		setFilter: (filter, value) => dispatch(setCrateFilter(filter, value)),
+		requestTickets: () => dispatch(requestTickets(true)),
+		setFilter: (filter, value) => dispatch(setTicketFilter(filter, value)),
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Crates);
+export default connect(mapStateToProps, mapDispatchToProps)(Tickets);

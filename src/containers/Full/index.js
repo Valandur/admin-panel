@@ -17,6 +17,8 @@ import Settings from "../../views/Settings"
 
 import Nucleus from "../Nucleus"
 import HuskyCrates from "../HuskyCrates"
+import WebBooks from "../WebBooks"
+import MMCTickets from "../MMCTickets"
 
 import { requestLogout } from "../../actions"
 
@@ -24,7 +26,7 @@ class Full extends Component {
 	render() {
 		return (
 			<Sidebar.Pushable style={{ minHeight: "100vh" }}>
-				<Sidebar width="thin" as={Menu} visible={true} vertical secondary>
+				<Sidebar as={Menu} visible={true} vertical secondary style={{ width: "220px" }}>
 
 					<Menu.Item header as={NavLink} to="/">
 						<Image size="small" centered src="/img/logo.png" />
@@ -74,6 +76,30 @@ class Full extends Component {
 						<Icon name="cogs" /> Server Settings
 					</Menu.Item>
 
+					{ this.props.servlets.husky &&
+					<Menu.Item>
+						<Menu.Header>Husky Crates</Menu.Header>
+
+						<Menu.Menu>
+							<Menu.Item name="husky-crates" as={NavLink} to="/husky/crates">
+								<Icon name="archive" /> Crates
+							</Menu.Item>
+						</Menu.Menu>
+					</Menu.Item>
+					}
+
+					{ this.props.servlets.mmctickets &&
+					<Menu.Item>
+						<Menu.Header>MMCTickets</Menu.Header>
+
+						<Menu.Menu>
+							<Menu.Item name="mmc-tickets" as={NavLink} to="/mmctickets/tickets">
+								<Icon name="ticket" /> Tickets
+							</Menu.Item>
+						</Menu.Menu>
+					</Menu.Item>
+					}
+
 					{ this.props.servlets.nucleus &&
 					<Menu.Item>
 						<Menu.Header>Nucleus</Menu.Header>
@@ -90,13 +116,13 @@ class Full extends Component {
 					</Menu.Item>
 					}
 
-					{ this.props.servlets.husky &&
+					{ this.props.servlets.webbook &&
 					<Menu.Item>
-						<Menu.Header>Husky Crates</Menu.Header>
+						<Menu.Header>Web Books</Menu.Header>
 
 						<Menu.Menu>
-							<Menu.Item name="husky-crates" as={NavLink} to="/husky/crates">
-								<Icon name="archive" /> Crates
+							<Menu.Item name="web-books" as={NavLink} to="/webbooks/books">
+								<Icon name="book" /> Books
 							</Menu.Item>
 						</Menu.Menu>
 					</Menu.Item>
@@ -107,7 +133,7 @@ class Full extends Component {
 					</Menu.Item>
 				</Sidebar>
 
-				<Sidebar.Pusher style={{ width: "calc(100% - 150px)", height: "100vh", overflowY: "scroll" }}>
+				<Sidebar.Pusher style={{ width: "calc(100% - 220px)", height: "100vh", overflowY: "scroll" }}>
 					<Switch>
 						<Route path="/dashboard" name="Dashboard" component={Dashboard} />
 						<Route path="/chat" name="Chat" component={Chat} />
@@ -121,8 +147,10 @@ class Full extends Component {
 						<Route path="/plugins" name="Plugins" component={Plugins} />
 						<Route path="/settings" name="Settings" component={Settings} />
 
-						<Route path="/nucleus" name="Nucleus" component={Nucleus} />
 						<Route path="/husky" name="HuskyCrates" component={HuskyCrates} />
+						<Route path="/mmctickets" name="MMCTickets" component={MMCTickets} />
+						<Route path="/nucleus" name="Nucleus" component={Nucleus} />
+						<Route path="/webbooks" name="WebBooks" component={WebBooks} />
 						
 						<Redirect from="/" to="/dashboard" />
 					</Switch>

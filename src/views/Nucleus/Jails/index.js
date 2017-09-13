@@ -95,7 +95,7 @@ class Jails extends Component {
 	}
 
 	delete(jail) {
-		this.props.requestDeleteJail(jail.name);
+		this.props.requestDeleteJail(jail);
 	}
 
 	render() {
@@ -279,7 +279,7 @@ const mapDispatchToProps = (dispatch) => {
 		requestJails: () => dispatch(requestJails(true)),
 		setFilter: (filter, value) => dispatch(setJailFilter(filter, value)),
 		requestCreateJail: (data) => dispatch(requestCreateJail(data)),
-		requestDeleteJail: (name) => dispatch(requestDeleteJail(name)),
+		requestDeleteJail: (jail) => dispatch(requestDeleteJail(jail)),
 	}
 }
 
