@@ -15,3 +15,13 @@ export function setTicketFilter(filter, value) {
 		value: value,
 	}
 }
+
+export const TICKET_CHANGE_REQUEST = "MMCTICKETS_TICKET_CHANGE_REQUEST"
+export const TICKET_CHANGE_RESPONSE = "MMCTICKETS_TICKET_CHANGE_RESPONSE"
+export function requestChangeTicket(ticket, data) {
+	return {
+		type: TICKET_CHANGE_REQUEST,
+		ticket: ticket,
+		data: data,
+	}
+}

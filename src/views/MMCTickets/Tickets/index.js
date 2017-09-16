@@ -1,8 +1,8 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
-	Segment, Header, Menu, Table, Grid, 
-	Form, Message, Icon
+	Segment, Header, Menu, Table, Grid, Input,
+	Form, Message, Icon, Button, Dropdown
 } from "semantic-ui-react"
 import moment from "moment"
 import _ from "lodash"
@@ -10,9 +10,23 @@ import _ from "lodash"
 import {
 	setTicketFilter,
 	requestTickets,
+	requestChangeTicket
 } from "../../../actions/mmctickets"
 
 const ITEMS_PER_PAGE = 20
+const ticketStates = [{
+	value: "Open",
+	text: "Open",
+}, {
+	value: "Claimed",
+	text: "Claimed",
+}, {
+	value: "Held",
+	text: "Held",
+}, {
+	value: "Closed",
+	text: "Closed"
+}];
 
 class Tickets extends Component {
 
@@ -21,8 +35,11 @@ class Tickets extends Component {
 
 		this.state = {
 			page: 0,
+			ticket: null,
 		}
 
+		this.edit = this.edit.bind(this)
+		this.save = this.save.bind(this)
 		this.handleChange = this.handleChange.bind(this)
 		this.filterChange = this.filterChange.bind(this)
 		this.changePage = this.changePage.bind(this)
@@ -67,6 +84,22 @@ class Tickets extends Component {
 		this.setState({
 			page: page,
 		})
+	}
+
+	edit(ticket) {
+		this.setState({
+			ticket: ticket,
+			status: ticket ? ticket.status : null,
+			comment: ticket ? ticket.comment : null,
+		})
+	}
+
+	save(ticket) {
+		this.props.requestChange(ticket, {
+			status: this.state.status,
+			comment: this.state.comment,
+		})
+		this.edit(null)
 	}
 
 	render() {
@@ -126,21 +159,62 @@ class Tickets extends Component {
 							<Table.HeaderCell>Timestamp</Table.HeaderCell>
 							<Table.HeaderCell>Status</Table.HeaderCell>
 							<Table.HeaderCell>Sender</Table.HeaderCell>
-							<Table.HeaderCell>Message</Table.HeaderCell>
 							<Table.HeaderCell>Assigned</Table.HeaderCell>
+							<Table.HeaderCell>Message</Table.HeaderCell>
 							<Table.HeaderCell>Comment</Table.HeaderCell>
+							<Table.HeaderCell>Actions</Table.HeaderCell>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
 						{_.map(tickets, ticket => {
 							return <Table.Row key={ticket.id}>
-								<Table.Cell>{ticket.id}</Table.Cell>
-								<Table.Cell>{moment.unix(ticket.timestamp).calendar()}</Table.Cell>
-								<Table.Cell>{ticket.status}</Table.Cell>
-								<Table.Cell>{ticket.sender.name}</Table.Cell>
-								<Table.Cell>{ticket.message}</Table.Cell>
-								<Table.Cell>{ticket.staff.name}</Table.Cell>
-								<Table.Cell>{ticket.comment}</Table.Cell>
+								<Table.Cell collapsing>{ticket.id}</Table.Cell>
+								<Table.Cell collapsing>{moment.unix(ticket.timestamp).calendar()}</Table.Cell>
+								<Table.Cell collapsing>
+									{this.state.ticket && this.state.ticket.id === ticket.id ?
+										<Dropdown id="status" label="Status" placeholder="Type"
+											required fluid selection onChange={this.handleChange}
+											options={ticketStates} value={this.state.status}
+										/>
+									:
+										ticket.status
+									}
+								</Table.Cell>
+								<Table.Cell collapsing>{ticket.sender.name}</Table.Cell>
+								<Table.Cell collapsing>{ticket.staff.name}</Table.Cell>
+								<Table.Cell collapsing>{ticket.message}</Table.Cell>
+								<Table.Cell>
+									{this.state.ticket && this.state.ticket.id === ticket.id ? 
+										<Input type="text" id="comment" placeholder="Comment" required
+											fluid onChange={this.handleChange} value={this.state.comment}
+										/>
+									:
+										ticket.comment
+									}
+								</Table.Cell>
+								<Table.Cell collapsing>
+									{this.state.ticket && this.state.ticket.id === ticket.id ? 
+										[<Button
+											color="green" disabled={ticket.updating}
+											loading={ticket.updating} onClick={() => this.save(ticket)}
+										>
+											<Icon name="save" /> Save
+										</Button>,
+										<Button
+											color="red" disabled={ticket.updating}
+											loading={ticket.updating} onClick={() => this.edit()}
+										>
+											<Icon name="cancel" /> Cancel
+										</Button>]
+									:
+										<Button
+											color="blue" disabled={ticket.updating}
+											loading={ticket.updating} onClick={() => this.edit(ticket)}
+										>
+											<Icon name="edit" /> Edit
+										</Button>
+									}
+								</Table.Cell>
 							</Table.Row>
 						})}
 					</Table.Body>
@@ -193,6 +267,7 @@ const mapStateToProps = (_state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		requestTickets: () => dispatch(requestTickets(true)),
+		requestChange: (ticket, data) => dispatch(requestChangeTicket(ticket, data)),
 		setFilter: (filter, value) => dispatch(setTicketFilter(filter, value)),
 	}
 }

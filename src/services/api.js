@@ -85,6 +85,7 @@ import {
 
 import {
 	TICKETS_REQUEST, TICKETS_RESPONSE, 
+	TICKET_CHANGE_REQUEST, TICKET_CHANGE_RESPONSE
 } from "../actions/mmctickets"
 
 import {
@@ -563,6 +564,16 @@ const api = ({ getState, dispatch }) => next => action => {
 					tickets: data.tickets,
 				})
 			})
+			break;
+
+		case TICKET_CHANGE_REQUEST:
+			put("mmctickets/ticket/" + action.ticket.id, data => {
+				next({
+					type: TICKET_CHANGE_RESPONSE,
+					ok: data.ok,
+					ticket: data.ticket,
+				})
+			}, action.data)
 			break;
 
 		case BOOKS_REQUEST:
