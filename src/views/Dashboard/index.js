@@ -148,7 +148,7 @@ class Dashboard extends Component {
 						The Web-API AdminPanel is still a work in progress, and not all of it's
 						functionality has been fully implemented yet. This means there may be 
 						bugs and other issues when using the AdminPanel! <br />
-						Please report any bugs you find <a href="https://github.com/Valandur/Web-API/issues">over on GitHub</a>
+						Please report any bugs you find <a href="https://github.com/Valandur/Web-API/issues" target="_blank" rel="noopener noreferrer">over on GitHub</a>
 					</p>
 				</Message>
 
