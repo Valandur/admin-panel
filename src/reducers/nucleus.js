@@ -48,7 +48,7 @@ const nucleus = (state = { kits: [], jails: [], kitFilter: {}, jailFilter: {}}, 
 		case KIT_CHANGE_REQUEST:
 			return _.assign({}, state, {
 				kits: _.map(state.kits, k => {
-					if (k.name !== action.name) return k;
+					if (k.name !== action.kit.name) return k;
 					return _.assign({}, k, { updating: true })
 				})
 			})
@@ -64,7 +64,7 @@ const nucleus = (state = { kits: [], jails: [], kitFilter: {}, jailFilter: {}}, 
 		case KIT_DELETE_REQUEST:
 			return _.assign({}, state, {
 				kits: _.map(state.kits, k => {
-					if (k.name !== action.name) return k;
+					if (k.name !== action.kit.name) return k;
 					return _.assign({}, k, { updating: true })
 				})
 			})

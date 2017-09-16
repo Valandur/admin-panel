@@ -1,21 +1,19 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
-	Segment, Header, Menu, Table, Grid, Label, 
-	Form, Button, Message, Icon
+	Segment, Header, Menu, Table, Grid, TextArea,
+	Form, Button, Message, Icon 
 } from "semantic-ui-react"
 import _ from "lodash"
 
-import ItemStack from "../../../components/ItemStack"
-
 import {
-	setCrateFilter,
-	requestCrates,
-} from "../../../actions/husky"
+	requestBooks, setBookFilter,
+	requestCreateBook, requestChangeBook, requestDeleteBook
+} from "../../../actions/webbooks"
 
 const ITEMS_PER_PAGE = 20
 
-class Crates extends Component {
+class Books extends Component {
 
 	constructor(props) {
 		super(props)
@@ -24,19 +22,21 @@ class Crates extends Component {
 			page: 0,
 		}
 
+		this.create = this.create.bind(this)
+		this.delete = this.delete.bind(this)
 		this.handleChange = this.handleChange.bind(this)
 		this.filterChange = this.filterChange.bind(this)
 		this.changePage = this.changePage.bind(this)
 	}
 
 	componentDidMount() {
-		this.props.requestCrates()
+		this.props.requestBooks()
 
-		this.interval = setInterval(this.props.requestCrates, 10000);
+		this.interval = setInterval(this.props.requestBooks, 10000)
 	}
 
 	componentWillUnmount() {
-		clearInterval(this.interval);
+		clearInterval(this.interval)
 	}
 
 	handleChange(event, data) {
@@ -70,42 +70,83 @@ class Crates extends Component {
 		})
 	}
 
+	create() {
+		this.props.requestCreate({
+			id: this.state.id,
+			body: this.state.body,
+		})
+	}
+
+	delete(book) {
+		this.props.requestDelete(book);
+	}
+
 	render() {
 		let reg = new RegExp();
 		let regValid = false;
 
 		try {
-			if (this.props.filter.name && this.props.filter.name.length) {
-				reg = new RegExp(this.props.filter.name, "i");
+			if (this.props.filter.id && this.props.filter.id.length) {
+				reg = new RegExp(this.props.filter.id, "i");
 			}
 			regValid = true;
 		} catch (e) {}
 
-		let crates = _.filter(this.props.crates, crate => {
+		let books = _.filter(this.props.books, book => {
 			if (!regValid) return true;
-			return reg.test(crate.name)
+			return reg.test(book.id)
 		});
 		
-		const maxPage = Math.ceil(crates.length / ITEMS_PER_PAGE);
+		const maxPage = Math.ceil(books.length / ITEMS_PER_PAGE);
 		const page = Math.min(this.state.page, maxPage - 1);
 
-		crates = crates.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
+		books = books.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
 		return (
 			<Segment basic>
 
-				<Grid stackable doubling>
+				<Grid columns={2} stackable doubling>
 					<Grid.Column>
 						<Segment>
 							<Header>
-								<Icon name="filter" fitted /> Filter crates
+								<Icon name="plus" fitted /> Create a web book
+							</Header>
+
+							<Form loading={this.props.creating}>
+
+								<Form.Group widths="equal">
+									<Form.Input
+										name="id" label="Id" placeholder="Id" 
+										required onChange={this.handleChange}
+									/>
+								</Form.Group>
+
+								<Form.Group widths="equal">
+									<TextArea
+										name="body" label="Body" required onChange={this.handleChange}
+										placeholder="<!DOCTYPE html><html>..."
+									/>
+								</Form.Group>
+
+								<Button color="green" onClick={this.create}>
+									Create
+								</Button>
+
+							</Form>
+						</Segment>
+					</Grid.Column>
+
+					<Grid.Column>
+						<Segment>
+							<Header>
+								<Icon name="filter" fitted /> Filter web books
 							</Header>
 
 							<Form>
 								<Form.Input
-									id="name"
-									label="Name"
-									placeholder="Name"
+									name="id"
+									label="Id"
+									placeholder="Id"
 									onChange={this.filterChange}
 									error={!regValid} />
 								<Message
@@ -117,71 +158,34 @@ class Crates extends Component {
 				</Grid>
 
 				<Header>
-					<Icon name="archive" fitted /> Crates
+					<Icon name="book" fitted /> Web Books
 				</Header>
 
 				<Table striped={true}>
 					<Table.Header>
 						<Table.Row>
-							<Table.HeaderCell>Name</Table.HeaderCell>
-							<Table.HeaderCell>Type</Table.HeaderCell>
-							<Table.HeaderCell>Free</Table.HeaderCell>
-							<Table.HeaderCell>Rewards</Table.HeaderCell>
+							<Table.HeaderCell>Id</Table.HeaderCell>
+							<Table.HeaderCell>Preview</Table.HeaderCell>
 							<Table.HeaderCell>Actions</Table.HeaderCell>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{_.map(crates, crate => {
-							const totalChance = _.sumBy(crate.rewards, "chance");
-							const format = chance => ((chance / totalChance) * 100).toFixed(2) + "%";
-
-							return <Table.Row key={crate.id}>
-								<Table.Cell>{crate.name}</Table.Cell>
-								<Table.Cell>{crate.type}</Table.Cell>
+						{_.map(books, book =>
+							<Table.Row key={book.id}>
+								<Table.Cell>{book.id}</Table.Cell>
 								<Table.Cell>
-									<Icon
-										color={crate.isFree ? "green" : "red"}
-										name={crate.isFree ? "check" : "remove"} />
-								</Table.Cell>
-								<Table.Cell>
-									<Table compact size="small">
-										<Table.Body>
-											{_.map(crate.rewards, (reward, i) =>
-												<Table.Row key={i}>
-													<Table.Cell>{format(reward.chance)}</Table.Cell>
-													<Table.Cell>{reward.name}</Table.Cell>
-													<Table.Cell>
-														{reward.shouldAnnounce && <Icon name="bullhorn" />}
-													</Table.Cell>
-													<Table.Cell>
-														{_.map(reward.rewards, (item, i) => {
-															if (typeof item === "string") {
-																return <Label key={i} color="blue">/{item}</Label>
-															}
-															return <ItemStack key={i} item={item} />
-														})}
-													</Table.Cell>
-												</Table.Row>
-											)}
-										</Table.Body>
-									</Table>
+									<div dangerouslySetInnerHTML={{ __html: book.body }} />
 								</Table.Cell>
 								<Table.Cell>
 									<Button
-										color="blue" disabled={crate.updating}
-										loading={crate.updating} onClick={() => this.edit(crate)}
-									>
-										<Icon name="edit" /> Edit
-									</Button>
-									<Button
-										color="red" disabled={crate.updating}
-										loading={crate.updating} onClick={() => this.delete(crate)}
+										color="red" disabled={book.updating}
+										loading={book.updating} onClick={() => this.delete(book)}
 									>
 										<Icon name="trash" /> Remove
 									</Button>
 								</Table.Cell>
 							</Table.Row>
-						})}
+						)}
 					</Table.Body>
 				</Table>
 				{ maxPage > 1 ?
@@ -220,20 +224,24 @@ class Crates extends Component {
 }
 
 const mapStateToProps = (_state) => {
-	const state = _state.husky;
+	const state = _state.webbooks;
 
 	return {
-		creating: state.crateCreating,
-		filter: state.crateFilter,
-		crates: state.crates,
+		creating: state.bookCreating,
+		filter: state.bookFilter,
+		books: state.books,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestCrates: () => dispatch(requestCrates(true)),
-		setFilter: (filter, value) => dispatch(setCrateFilter(filter, value)),
+		setFilter: (filter, value) => dispatch(setBookFilter(filter, value)),
+		requestBooks: () => dispatch(requestBooks(true)),
+		request: () => dispatch(requestBooks(true)),
+		requestCreate: (data) => dispatch(requestCreateBook(data)),
+		requestChange: (id, data) => dispatch(requestChangeBook(id, data)),
+		requestDelete: (id) => dispatch(requestDeleteBook(id)),
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Crates);
+export default connect(mapStateToProps, mapDispatchToProps)(Books);

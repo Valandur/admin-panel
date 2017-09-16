@@ -64,10 +64,10 @@ export function requestCreateJail(data) {
 
 export const JAIL_DELETE_REQUEST = "NUCLEUS_JAIL_DELETE_REQUEST"
 export const JAIL_DELETE_RESPONSE = "NUCLEUS_JAIL_DELETE_RESPONSE"
-export function requestDeleteJail(name) {
+export function requestDeleteJail(jail) {
 	return {
 		type: JAIL_DELETE_REQUEST,
-		name: name,
+		jail: jail,
 	}
 }
 

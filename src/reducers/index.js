@@ -13,8 +13,10 @@ import tileEntity from "./tile-entity"
 import operations from "./operations"
 import settings from "./settings"
 
-import nucleus from "./nucleus"
 import husky from "./husky"
+import mmctickets from "./mmctickets"
+import nucleus from "./nucleus"
+import webbooks from "./webbooks"
 
 const app = combineReducers({
 	api,
@@ -28,8 +30,12 @@ const app = combineReducers({
 	tileEntity,
 	operations,
 	settings,
-	nucleus,
+	
 	husky,
+	mmctickets,
+	nucleus,
+	webbooks,
+
 	router: routerReducer,
 })
 

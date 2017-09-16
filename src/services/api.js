@@ -83,6 +83,18 @@ import {
 	CRATES_REQUEST, CRATES_RESPONSE, 
 } from "../actions/husky"
 
+import {
+	TICKETS_REQUEST, TICKETS_RESPONSE, 
+	TICKET_CHANGE_REQUEST, TICKET_CHANGE_RESPONSE
+} from "../actions/mmctickets"
+
+import {
+	BOOKS_REQUEST, BOOKS_RESPONSE,
+	BOOK_CREATE_REQUEST, BOOK_CREATE_RESPONSE,
+	BOOK_CHANGE_REQUEST, BOOK_CHANGE_RESPONSE,
+	BOOK_DELETE_REQUEST, BOOK_DELETE_RESPONSE, 
+} from "../actions/webbooks"
+
 const apiUrl = "/api/"
 
 const call = (method, key, dispatch, path, callback, data, handleErrors = true) => {
@@ -489,7 +501,7 @@ const api = ({ getState, dispatch }) => next => action => {
 				next({
 					type: KIT_CHANGE_RESPONSE,
 					ok: data.ok,
-					kit: data.kit,
+					kit: data.ok ? data.kit : action.kit,
 				})
 			}, action.data)
 			break;
@@ -499,7 +511,7 @@ const api = ({ getState, dispatch }) => next => action => {
 				next({
 					type: KIT_DELETE_RESPONSE,
 					ok: data.ok,
-					kit: data.kit,
+					kit: data.ok ? data.kit : action.kit,
 				})
 			}, action.data)
 			break;
@@ -525,11 +537,11 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case JAIL_DELETE_REQUEST:
-			del("nucleus/jail/" + action.name, data => {
+			del("nucleus/jail/" + action.jail.name, data => {
 				next({
 					type: JAIL_DELETE_RESPONSE,
 					ok: data.ok,
-					jail: data.jail,
+					jail: data.ok ? data.jail : action.jail,
 				})
 			}, action.data)
 			break;
@@ -542,6 +554,66 @@ const api = ({ getState, dispatch }) => next => action => {
 					crates: data.crates,
 				})
 			})
+			break;
+
+		case TICKETS_REQUEST:
+			get("mmctickets/ticket?details", data => {
+				next({
+					type: TICKETS_RESPONSE,
+					ok: data.ok,
+					tickets: data.tickets,
+				})
+			})
+			break;
+
+		case TICKET_CHANGE_REQUEST:
+			put("mmctickets/ticket/" + action.ticket.id, data => {
+				next({
+					type: TICKET_CHANGE_RESPONSE,
+					ok: data.ok,
+					ticket: data.ticket,
+				})
+			}, action.data)
+			break;
+
+		case BOOKS_REQUEST:
+			get("webbook?details", data => {
+				next({
+					type: BOOKS_RESPONSE,
+					ok: data.ok,
+					books: data.books,
+				})
+			})
+			break;
+
+		case BOOK_CREATE_REQUEST:
+			post("webbook", data => {
+				next({
+					type: BOOK_CREATE_RESPONSE,
+					ok: data.ok,
+					book: data.book,
+				})
+			}, action.data)
+			break;
+
+		case BOOK_CHANGE_REQUEST:
+			put("webbook/" + action.book.id, data => {
+				next({
+					type: BOOK_CHANGE_RESPONSE,
+					ok: data.ok,
+					book: data.ok ? data.book : action.book,
+				})
+			}, action.data)
+			break;
+
+		case BOOK_DELETE_REQUEST:
+			del("webbook/" + action.book.id, data => {
+				next({
+					type: BOOK_DELETE_RESPONSE,
+					ok: data.ok,
+					book: data.ok ? data.book : action.book,
+				})
+			}, action.data)
 			break;
 
 		default:
