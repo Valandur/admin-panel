@@ -1,14 +1,15 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
-	Segment, Header, Menu, Table, Grid, TextArea,
-	Form, Button, Message, Icon 
+	Segment, Header, Menu, Table, Grid,
+	Form, Button, Message, Icon, List, Input
 } from "semantic-ui-react"
 import _ from "lodash"
+import copy from "copy-to-clipboard";
 
 import {
 	requestBooks, setBookFilter,
-	requestCreateBook, requestChangeBook, requestDeleteBook
+	requestCreateBook, requestChangeBook, requestDeleteBook,
 } from "../../../actions/webbooks"
 
 const ITEMS_PER_PAGE = 20
@@ -19,6 +20,10 @@ class Books extends Component {
 		super(props)
 
 		this.state = {
+			book: null,
+			title: "",
+			newItem: "",
+			lines: [],
 			page: 0,
 		}
 
@@ -27,6 +32,7 @@ class Books extends Component {
 		this.handleChange = this.handleChange.bind(this)
 		this.filterChange = this.filterChange.bind(this)
 		this.changePage = this.changePage.bind(this)
+		this.addLine = this.addLine.bind(this)
 	}
 
 	componentDidMount() {
@@ -73,12 +79,62 @@ class Books extends Component {
 	create() {
 		this.props.requestCreate({
 			id: this.state.id,
-			body: this.state.body,
+			title: this.state.newTitle,
+		})
+	}
+
+	edit(book) {
+		this.setState({
+			book: book,
+			title: book ? book.title : "",
+			lines: book ? book.lines : [],
 		})
 	}
 
 	delete(book) {
 		this.props.requestDelete(book);
+	}
+
+	addLine() {
+		this.setState({
+			lines: _.concat(this.state.lines, this.state.newItem),
+			newItem: "",
+		})
+	}
+
+	moveLineUp(index) {
+		this.setState({
+			lines: _.map(this.state.lines, (line, i) =>
+				i === index ? this.state.lines[index - 1] : 
+				(i === index - 1 ? this.state.lines[index] : line)),
+		})
+	}
+
+	moveLineDown(index) {
+		this.setState({
+			lines: _.map(this.state.lines, (line, i) =>
+				i === index ? this.state.lines[index + 1] : 
+				(i === index + 1 ? this.state.lines[index] : line)),
+		})
+	}
+
+	deleteLine(index) {
+		this.setState({
+			lines: _.filter(this.state.lines, (line, i) => i !== index),
+			newItem: "",
+		})
+	}
+
+	save(book) {
+		this.props.requestChange(book, {
+			title: this.state.title,
+			lines: this.state.lines,
+		})
+		this.edit(null);
+	}
+
+	copy(book) {
+		copy(window.location.origin + "/api/webbooks/book/" + book.id + "/html")
 	}
 
 	render() {
@@ -122,9 +178,9 @@ class Books extends Component {
 								</Form.Group>
 
 								<Form.Group widths="equal">
-									<TextArea
-										name="body" label="Body" required onChange={this.handleChange}
-										placeholder="<!DOCTYPE html><html>..."
+									<Form.Input
+										id="newTitle" label="Title" placeholder="Title" required
+										onChange={this.handleChange} value={this.state.newTitle}
 									/>
 								</Form.Group>
 
@@ -165,8 +221,10 @@ class Books extends Component {
 					<Table.Header>
 						<Table.Row>
 							<Table.HeaderCell>Id</Table.HeaderCell>
-							<Table.HeaderCell>Preview</Table.HeaderCell>
+							<Table.HeaderCell>Title</Table.HeaderCell>
+							<Table.HeaderCell>Content</Table.HeaderCell>
 							<Table.HeaderCell>Actions</Table.HeaderCell>
+							<Table.HeaderCell>Link</Table.HeaderCell>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
@@ -174,15 +232,82 @@ class Books extends Component {
 							<Table.Row key={book.id}>
 								<Table.Cell>{book.id}</Table.Cell>
 								<Table.Cell>
-									<div dangerouslySetInnerHTML={{ __html: book.body }} />
+									{this.state.book && this.state.book.id === book.id ?
+										<Input
+											id="title" placeholder="Title"
+											onChange={this.handleChange} value={this.state.title}
+										/>
+									:
+										book.title
+									}
 								</Table.Cell>
 								<Table.Cell>
+									{this.state.book && this.state.book.id === book.id ?
+										[<List size="large" key="list">
+											{_.map(this.state.lines, (line, index) => 
+												<List.Item key={index}>
+													<Button
+														icon="delete" color="red" size="mini" compact
+														onClick={e => this.deleteLine(index)}
+													/>
+													{line}
+													<Button
+														icon="arrow down" color="blue" size="mini" compact
+														floated="right" onClick={e => this.moveLineDown(index)}
+														disabled={index >= this.state.lines.length - 1}
+													/>
+													<Button
+														icon="arrow up" color="blue" size="mini" compact
+														floated="right" onClick={e => this.moveLineUp(index)}
+														disabled={index <= 0}
+													/>
+												</List.Item>
+											)}
+										</List>,
+										<Input
+											key="new" id="newItem" placeholder="New line"
+											onChange={this.handleChange} value={this.state.newItem}
+											action={{ color: "green", icon: "plus", onClick: this.addLine }}
+										/>]
+									:
+										<div dangerouslySetInnerHTML={{ __html: book.html }} />
+									}
+								</Table.Cell>
+								<Table.Cell>
+									{this.state.book && this.state.book.id === book.id ?
+										 [<Button
+											key="save" color="green" disabled={book.updating}
+											loading={book.updating} onClick={() => this.save(book)}
+										>
+											<Icon name="save" /> Save
+										</Button>,
+										<Button
+											key="cancel" color="yellow" disabled={book.updating}
+											loading={book.updating} onClick={() => this.edit(null)}
+										>
+											<Icon name="cancel" /> Cancel
+										</Button>]
+									:
+										<Button
+											color="blue" disabled={book.updating}
+											loading={book.updating} onClick={() => this.edit(book)}
+										>
+											<Icon name="edit" /> Edit
+										</Button>
+									}
 									<Button
 										color="red" disabled={book.updating}
 										loading={book.updating} onClick={() => this.delete(book)}
 									>
 										<Icon name="trash" /> Remove
 									</Button>
+								</Table.Cell>
+								<Table.Cell>
+									<Input
+										fluid onFocus={e => e.target.select()}
+										action={{ color: "teal", icon: "linkify", onClick: e => this.copy(book) }}
+										value={window.location.origin + "/api/webbooks/book/" + book.id + "/html"}
+									/>
 								</Table.Cell>
 							</Table.Row>
 						)}
@@ -239,8 +364,8 @@ const mapDispatchToProps = (dispatch) => {
 		requestBooks: () => dispatch(requestBooks(true)),
 		request: () => dispatch(requestBooks(true)),
 		requestCreate: (data) => dispatch(requestCreateBook(data)),
-		requestChange: (id, data) => dispatch(requestChangeBook(id, data)),
-		requestDelete: (id) => dispatch(requestDeleteBook(id)),
+		requestChange: (book, data) => dispatch(requestChangeBook(book, data)),
+		requestDelete: (book) => dispatch(requestDeleteBook(book)),
 	}
 }
 

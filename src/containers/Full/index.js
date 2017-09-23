@@ -116,7 +116,7 @@ class Full extends Component {
 					</Menu.Item>
 					}
 
-					{ this.props.servlets.webbook &&
+					{ this.props.servlets.webbooks &&
 					<Menu.Item>
 						<Menu.Header>Web Books</Menu.Header>
 

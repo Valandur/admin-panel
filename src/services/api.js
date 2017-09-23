@@ -577,7 +577,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case BOOKS_REQUEST:
-			get("webbook?details", data => {
+			get("webbooks/book?details", data => {
 				next({
 					type: BOOKS_RESPONSE,
 					ok: data.ok,
@@ -587,7 +587,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case BOOK_CREATE_REQUEST:
-			post("webbook", data => {
+			post("webbooks/book", data => {
 				next({
 					type: BOOK_CREATE_RESPONSE,
 					ok: data.ok,
@@ -597,7 +597,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case BOOK_CHANGE_REQUEST:
-			put("webbook/" + action.book.id, data => {
+			put("webbooks/book/" + action.book.id, data => {
 				next({
 					type: BOOK_CHANGE_RESPONSE,
 					ok: data.ok,
@@ -607,7 +607,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case BOOK_DELETE_REQUEST:
-			del("webbook/" + action.book.id, data => {
+			del("webbooks/book/" + action.book.id, data => {
 				next({
 					type: BOOK_DELETE_RESPONSE,
 					ok: data.ok,
