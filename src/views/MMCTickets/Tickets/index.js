@@ -201,7 +201,7 @@ class Tickets extends Component {
 											<Icon name="save" /> Save
 										</Button>,
 										<Button
-											color="red" disabled={ticket.updating}
+											color="yellow" disabled={ticket.updating}
 											loading={ticket.updating} onClick={() => this.edit()}
 										>
 											<Icon name="cancel" /> Cancel
