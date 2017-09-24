@@ -148,7 +148,7 @@ class Commands extends Component {
 
 		let history = _.filter(this.props.history, cmd => {
 			if (!regValid) return true;
-			const src = cmd.cause.source.name ? cmd.cause.source.name : cmd.cause.source;
+			const src = cmd.cause.source && cmd.cause.source.name ? cmd.cause.source.name : cmd.cause.source;
 			return reg.test(cmd.command + " " + cmd.args + " " + src);
 		});
 		
@@ -233,7 +233,7 @@ class Commands extends Component {
 								<Table.Cell>{moment.unix(cmd.timestamp).calendar()}</Table.Cell>
 								<Table.Cell>{cmd.command} {cmd.args}</Table.Cell>
 								<Table.Cell>
-									{cmd.cause.source.name ? cmd.cause.source.name : cmd.cause.source}
+									{cmd.cause.source && cmd.cause.source.name ? cmd.cause.source.name : cmd.cause.source}
 								</Table.Cell>
 							</Table.Row>
 						)}
