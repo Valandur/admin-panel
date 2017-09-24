@@ -29,7 +29,7 @@ class Full extends Component {
 				<Sidebar as={Menu} visible={true} vertical secondary style={{ width: "220px" }}>
 
 					<Menu.Item header as={NavLink} to="/">
-						<Image size="small" centered src="/img/logo.png" />
+						<Image size="small" centered src="img/logo.png" />
 					</Menu.Item>
 
 					<Menu.Item name="dashboard" as={NavLink} to="/dashboard">
