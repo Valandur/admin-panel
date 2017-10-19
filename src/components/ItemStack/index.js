@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Label, Progress } from "semantic-ui-react"
+import { Label, Progress, Button } from "semantic-ui-react"
 import _ from "lodash"
 
 const getAmplifier = effect => getRoman(effect.amplifier + 1)
@@ -27,6 +27,15 @@ class ItemStack extends Component {
 
 		return <div style={itemStackStyle}>
 			<strong>{item.type.name}</strong>
+			{this.props.onRemove &&
+				<Button
+					compact
+					size="mini"
+					icon="delete"
+					floated="right"
+					onClick={this.props.onRemove}
+				/>
+			}
 			<div style={{ color: "gray", marginBottom: "0.5em" }}>{item.type.id}</div>
 			<div>
 				{item.data.durability ? 
@@ -34,17 +43,23 @@ class ItemStack extends Component {
 						<Label size="tiny">Unbreakable</Label>
 					:
 						<Progress
-							size="small" color="blue" progress
+							progress
+							size="small"
+							color="blue"
 							value={item.data.durability.durability}
 							total={item.data.useLimit}
 							style={{ margin: 0 }}
 						/>
 				: null}
 				{item.quantity > 1 &&
-					<Label size="tiny" color="blue">x{item.quantity}</Label>
+					<Label size="tiny" color="blue">
+						x{item.quantity}
+					</Label>
 				}
 				{item.data.spawn &&
-					<Label size="tiny">{item.data.spawn.name}</Label>
+					<Label size="tiny">
+						{item.data.spawn.name}
+					</Label>
 				}
 				{item.data.potionEffects &&
 					_.map(item.data.potionEffects, effect =>

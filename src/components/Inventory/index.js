@@ -28,7 +28,6 @@ class Inventory extends React.Component {
 				_.each(_.tail(itemGroup), newItem => item = _.mergeWith(item, newItem, customizer))
 				return _.merge(item, { quantity: _.sumBy(itemGroup, "quantity") });
 			})
-			console.log(items)
 		}
 
 		return <div>
