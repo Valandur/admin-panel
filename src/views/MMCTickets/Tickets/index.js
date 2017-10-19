@@ -172,7 +172,7 @@ class Tickets extends Component {
 								<Table.Cell collapsing>{moment.unix(ticket.timestamp).calendar()}</Table.Cell>
 								<Table.Cell collapsing>
 									{this.state.ticket && this.state.ticket.id === ticket.id ?
-										<Dropdown id="status" label="Status" placeholder="Type"
+										<Dropdown id="status" label="Status" placeholder="Status"
 											required fluid selection onChange={this.handleChange}
 											options={ticketStates} value={this.state.status}
 										/>

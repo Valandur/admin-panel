@@ -91,7 +91,7 @@ class Kits extends Component {
 		this.props.requestCreateKit({
 			name: this.state.name,
 			cost: this.state.cost,
-			interval: this.state.interval,
+			cooldown: this.state.cooldown,
 		})
 	}
 
@@ -126,9 +126,9 @@ class Kits extends Component {
 		})
 	}
 
-	removeStack(kit, itemIndex) {
+	removeStack(kit, index) {
 		this.props.requestChangeKit(kit, {
-			stacks: _.filter(kit.stacks, (__, i) => i !== itemIndex)
+			stacks: _.filter(kit.stacks, (__, i) => i !== index)
 		})
 	}
 
@@ -136,14 +136,14 @@ class Kits extends Component {
 		this.setState({
 			kit: kit,
 			kitCost: kit.cost,
-			kitInterval: kit.interval,
+			kitCooldown: kit.cooldown,
 		})
 	}
 
 	save(kit) {
 		this.props.requestChangeKit(kit, {
 			cost: this.state.kitCost,
-			interval: this.state.kitInterval,
+			cooldown: this.state.kitCooldown,
 		})
 		this.setState({
 			kit: null,
@@ -197,8 +197,8 @@ class Kits extends Component {
 									/>
 
 									<Form.Input
-										name="interval" placeholder="The interval in seconds"
-										label="Interval (seconds)" type="number" onChange={this.handleChange}
+										name="cooldown" placeholder="The cooldown in milliseconds"
+										label="Cooldown (milliseconds)" type="number" onChange={this.handleChange}
 									/>
 								</Form.Group>
 
@@ -240,7 +240,7 @@ class Kits extends Component {
 						<Table.Row>
 							<Table.HeaderCell>Name</Table.HeaderCell>
 							<Table.HeaderCell>Cost</Table.HeaderCell>
-							<Table.HeaderCell>Interval</Table.HeaderCell>
+							<Table.HeaderCell>Cooldown</Table.HeaderCell>
 							<Table.HeaderCell>Commands</Table.HeaderCell>
 							<Table.HeaderCell>Stacks</Table.HeaderCell>
 							<Table.HeaderCell>Actions</Table.HeaderCell>
@@ -267,13 +267,13 @@ class Kits extends Component {
 									{this.state.kit && this.state.kit.name === kit.name ?
 										<Input
 											type="number"
-											name="kitInterval"
-											placeholder="Interval"
-											value={this.state.kitInterval}
+											name="kitCooldown"
+											placeholder="Cooldown"
+											value={this.state.kitCooldown}
 											onChange={this.handleChange}
 										/>
 									:
-										kit.interval
+										kit.cooldown
 									}
 								</Table.Cell>
 								<Table.Cell>

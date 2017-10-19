@@ -91,7 +91,7 @@ class Worlds extends Component {
 	}
 
 	toggleLoad(world, callback) {
-		const newState = !world.isLoaded;
+		const newState = !world.loaded;
 
 		this.props.requestChangeWorld(world.uuid, { loaded: newState }, newState ? "Loaded" : "Unloaded")
 	}
@@ -270,8 +270,8 @@ class Worlds extends Component {
 								</Table.Cell>
 								<Table.Cell>
 									{world ?
-										<Label color={world.isLoaded ? "green" : "yellow"}>
-											{world.isLoaded ? "Loaded" : "Unloaded"}
+										<Label color={world.loaded ? "green" : "yellow"}>
+											{world.loaded ? "Loaded" : "Unloaded"}
 										</Label>
 									: null}
 								</Table.Cell>
@@ -283,12 +283,12 @@ class Worlds extends Component {
 										Game Rules
 									</Button>{" "}
 									<Button
-										type="button" color={world.isLoaded ? "yellow" : "green"}
+										type="button" color={world.loaded ? "yellow" : "green"}
 										onClick={() => this.toggleLoad(world)} disabled={world.updating}
 									>
-										{world.isLoaded ? "Unload " : "Load "}
+										{world.loaded ? "Unload " : "Load "}
 									</Button>{" "}
-									{!world.isLoaded ?
+									{!world.loaded ?
 										<Button
 											type="button" color="red" disabled={world.updating}
 											onClick={() => this.delete(world)}

@@ -81,6 +81,9 @@ import {
 
 import {
 	CRATES_REQUEST, CRATES_RESPONSE, 
+	CRATE_CREATE_REQUEST, CRATE_CREATE_RESPONSE,
+	CRATE_CHANGE_REQUEST, CRATE_CHANGE_RESPONSE,
+	CRATE_DELETE_REQUEST, CRATE_DELETE_RESPONSE,
 } from "../actions/husky"
 
 import {
@@ -513,7 +516,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					ok: data.ok,
 					kit: data.ok ? data.kit : action.kit,
 				})
-			}, action.data)
+			})
 			break;
 
 		case JAILS_REQUEST:
@@ -543,7 +546,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					ok: data.ok,
 					jail: data.ok ? data.jail : action.jail,
 				})
-			}, action.data)
+			})
 			break;
 
 		case CRATES_REQUEST:
@@ -552,6 +555,36 @@ const api = ({ getState, dispatch }) => next => action => {
 					type: CRATES_RESPONSE,
 					ok: data.ok,
 					crates: data.crates,
+				})
+			})
+			break;
+
+		case CRATE_CREATE_REQUEST:
+			post("husky/crate", data => {
+				next({
+					type: CRATE_CREATE_RESPONSE,
+					ok: data.ok,
+					crate: data.crate,
+				})
+			}, action.data)
+			break;
+
+		case CRATE_CHANGE_REQUEST:
+			put("husky/crate/" + action.crate.id, data => {
+				next({
+					type: CRATE_CHANGE_RESPONSE,
+					ok: data.ok,
+					crate: data.ok ? data.crate : action.crate,
+				})
+			}, action.data)
+			break;
+
+		case CRATE_DELETE_REQUEST:
+			del("husky/crate/" + action.crate.id, data => {
+				next({
+					type: CRATE_DELETE_RESPONSE,
+					ok: data.ok,
+					crate: data.ok ? data.crate : action.crate,
 				})
 			})
 			break;
@@ -613,7 +646,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					ok: data.ok,
 					book: data.ok ? data.book : action.book,
 				})
-			}, action.data)
+			})
 			break;
 
 		default:
