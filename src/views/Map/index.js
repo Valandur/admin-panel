@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
 import { Stage, Layer, Image, Circle, Line } from "react-konva"
-import { Segment, Label, Header, Button, Progress, Dropdown } from "semantic-ui-react"
+import { Segment, Header, Button, Progress, Dropdown } from "semantic-ui-react"
 import Slider from "rc-slider"
 import _ from "lodash"
+
+import Inventory from "../../components/Inventory"
 
 import { requestWorlds } from "../../actions/world"
 import { requestEntities } from "../../actions/entity"
@@ -177,11 +179,7 @@ class Map extends Component {
 					</Header>
 					{obj.uuid}<br />
 					{obj.inventory ?
-						_.map(obj.inventory.items, item =>
-							[<Label color="blue" pill>
-								{ item.quantity > 1 ? item.quantity + "x " : "" } {item.name}
-							</Label>," "]
-						)
+						<Inventory items={obj.inventory.items} />
 					: null }
 					{obj.health ?
 						<Progress color="green" percent={(obj.health.current/obj.health.max)*100} />

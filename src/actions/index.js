@@ -2,7 +2,7 @@ export const SERVLETS_REQUEST = "SERVLETS_REQUEST"
 export const SERVLETS_RESPONSE = "SERVLETS_RESPONSE"
 export function requestServlets() {
 	return {
-		type: SERVLETS_REQUEST
+		type: SERVLETS_REQUEST,
 	}
 }
 

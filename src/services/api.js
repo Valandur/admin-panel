@@ -47,14 +47,6 @@ import {
 } from "../actions/tile-entity"
 
 import {
-	OPERATION_REQUEST, OPERATION_RESPONSE,
-	OPERATIONS_REQUEST, OPERATIONS_RESPONSE,
-	OPERATION_CREATE_REQUEST, OPERATION_CREATE_RESPONSE,
-	OPERATION_PAUSE_REQUEST, OPERATION_PAUSE_RESPONSE,
-	OPERATION_STOP_REQUEST, OPERATION_STOP_RESPONSE,
-} from "../actions/operations"
-
-import {
 	PROPERTIES_REQUEST, PROPERTIES_RESPONSE,
 	SAVE_PROPERTY_REQUEST, SAVE_PROPERTY_RESPONSE,
 } from "../actions/settings"
@@ -70,35 +62,19 @@ import {
 } from "../actions/command"
 
 import {
-	KITS_REQUEST, KITS_RESPONSE, 
-	KIT_CREATE_REQUEST, KIT_CREATE_RESPONSE,
-	KIT_CHANGE_REQUEST, KIT_CHANGE_RESPONSE,
-	KIT_DELETE_REQUEST, KIT_DELETE_RESPONSE,
-	JAILS_REQUEST, JAILS_RESPONSE, 
-	JAIL_CREATE_REQUEST, JAIL_CREATE_RESPONSE,
-	JAIL_DELETE_REQUEST, JAIL_DELETE_RESPONSE,
-} from "../actions/nucleus"
-
-import {
-	CRATES_REQUEST, CRATES_RESPONSE, 
-} from "../actions/husky"
-
-import {
-	TICKETS_REQUEST, TICKETS_RESPONSE, 
-	TICKET_CHANGE_REQUEST, TICKET_CHANGE_RESPONSE
-} from "../actions/mmctickets"
-
-import {
-	BOOKS_REQUEST, BOOKS_RESPONSE,
-	BOOK_CREATE_REQUEST, BOOK_CREATE_RESPONSE,
-	BOOK_CHANGE_REQUEST, BOOK_CHANGE_RESPONSE,
-	BOOK_DELETE_REQUEST, BOOK_DELETE_RESPONSE, 
-} from "../actions/webbooks"
+	DATA_LIST_REQUEST, DATA_LIST_RESPONSE,
+	DATA_DETAILS_REQUEST, DATA_DETAILS_RESPONSE,
+	DATA_CREATE_REQUEST, DATA_CREATE_RESPONSE,
+	DATA_CHANGE_REQUEST, DATA_CHANGE_RESPONSE,
+	DATA_DELETE_REQUEST, DATA_DELETE_RESPONSE,
+} from "../actions/dataview"
 
 const apiUrl = "/api/"
 
 const call = (method, key, dispatch, path, callback, data, handleErrors = true) => {
-	const req = request(method, apiUrl + path + (path.indexOf("?") >= 0 ? "&" : "?") + (key ? "key=" + key : ""));
+	const req = request(method, apiUrl + path + (path.indexOf("?") >= 0 ? "&" : "?") + 
+		(key ? "key=" + key : ""));
+
 	if (data) req.send(data);
 	req.end((err, res) => {
 		if (!res) {
@@ -410,57 +386,6 @@ const api = ({ getState, dispatch }) => next => action => {
 			}, { properties: { [action.prop.key]: action.prop.value }})
 			break;
 
-
-		case OPERATION_REQUEST:
-			get("block/op/" + action.uuid, (data) => {
-				next({
-					type: OPERATION_RESPONSE,
-					ok: data.ok,
-					operation: data.operation,
-				})
-			});
-			break;
-
-		case OPERATIONS_REQUEST:
-			get("block/op" + (action.details ? "?details" : ""), (data) => {
-				next({
-					type: OPERATIONS_RESPONSE,
-					ok: data.ok,
-					operations: data.operations,
-				})
-			});
-			break;
-
-		case OPERATION_CREATE_REQUEST:
-			post("block/op", (data) => {
-				next({
-					type: OPERATION_CREATE_RESPONSE,
-					ok: data.ok,
-					operation: data.operation,
-				})
-			}, action.operation)
-			break;
-
-		case OPERATION_PAUSE_REQUEST:
-			put("block/op/" + action.operation.uuid, (data) => {
-				next({
-					type: OPERATION_PAUSE_RESPONSE,
-					ok: data.ok,
-					operation: data.operation,
-				})
-			}, { pause: action.pause });
-			break;
-
-		case OPERATION_STOP_REQUEST:
-			del("block/op/" + action.operation.uuid, (data) => {
-				next({
-					type: OPERATION_STOP_RESPONSE,
-					ok: data.ok,
-					operation: data.operation,
-				})
-			});
-			break;
-
 		case EXECUTE_REQUEST:
 			post("cmd", data => {
 				next({
@@ -475,145 +400,72 @@ const api = ({ getState, dispatch }) => next => action => {
 				waitTime: action.waitTime,
 			})
 			break;
+		
+		case DATA_LIST_REQUEST:
+			get(action.endpoint + (action.details ? "?details" : ""), data => {
+				const obj = _.find(data, (__, key) => key !== "ok");
 
-		case KITS_REQUEST:
-			get("nucleus/kit?details", data => {
 				next({
-					type: KITS_RESPONSE,
+					type: DATA_LIST_RESPONSE,
+					endpoint: action.endpoint,
 					ok: data.ok,
-					kits: data.kits,
+					data: obj,
 				})
 			})
 			break;
 
-		case KIT_CREATE_REQUEST:
-			post("nucleus/kit", data => {
-				next({
-					type: KIT_CREATE_RESPONSE,
-					ok: data.ok,
-					kit: data.kit,
-				})
-			}, action.data)
-			break;
+		case DATA_DETAILS_REQUEST:
+			get(action.endpoint + "/" + _.get(action.data, action.id), data => {
+				const obj = _.find(data, (__, key) => key !== "ok");
 
-		case KIT_CHANGE_REQUEST:
-			put("nucleus/kit/" + action.kit.name, data => {
 				next({
-					type: KIT_CHANGE_RESPONSE,
+					type: DATA_DETAILS_RESPONSE,
+					endpoint: action.endpoint,
 					ok: data.ok,
-					kit: data.ok ? data.kit : action.kit,
-				})
-			}, action.data)
-			break;
-
-		case KIT_DELETE_REQUEST:
-			del("nucleus/kit/" + action.kit.name, data => {
-				next({
-					type: KIT_DELETE_RESPONSE,
-					ok: data.ok,
-					kit: data.ok ? data.kit : action.kit,
-				})
-			}, action.data)
-			break;
-
-		case JAILS_REQUEST:
-			get("nucleus/jail?details", data => {
-				next({
-					type: JAILS_RESPONSE,
-					ok: data.ok,
-					jails: data.jails,
+					data: obj,
 				})
 			})
 			break;
 
-		case JAIL_CREATE_REQUEST:
-			post("nucleus/jail", data => {
+		case DATA_CREATE_REQUEST:
+			post(action.endpoint, data => {
+				const obj = _.find(data, (__, key) => key !== "ok");
+
 				next({
-					type: JAIL_CREATE_RESPONSE,
+					type: DATA_CREATE_RESPONSE,
+					endpoint: action.endpoint,
 					ok: data.ok,
-					jail: data.jail,
+					data: obj,
 				})
 			}, action.data)
 			break;
 
-		case JAIL_DELETE_REQUEST:
-			del("nucleus/jail/" + action.jail.name, data => {
+		case DATA_CHANGE_REQUEST:
+			put(action.endpoint + "/" + _.get(action.data, action.id), data => {
+				const obj =  _.find(data, (__, key) => key !== "ok");
+
 				next({
-					type: JAIL_DELETE_RESPONSE,
+					type: DATA_CHANGE_RESPONSE,
+					endpoint: action.endpoint,
 					ok: data.ok,
-					jail: data.ok ? data.jail : action.jail,
+					id: action.id,
+					data: data.ok ? obj : action.data,
 				})
-			}, action.data)
+			}, action.newData)
 			break;
 
-		case CRATES_REQUEST:
-			get("husky/crate?details", data => {
+		case DATA_DELETE_REQUEST:
+			del(action.endpoint + "/" + _.get(action.data, action.id), data => {
+				const obj = _.find(data, (__, key) => key !== "ok");
+
 				next({
-					type: CRATES_RESPONSE,
+					type: DATA_DELETE_RESPONSE,
+					endpoint: action.endpoint,
 					ok: data.ok,
-					crates: data.crates,
+					id: action.id,
+					data: data.ok ? obj : action.data,
 				})
 			})
-			break;
-
-		case TICKETS_REQUEST:
-			get("mmctickets/ticket?details", data => {
-				next({
-					type: TICKETS_RESPONSE,
-					ok: data.ok,
-					tickets: data.tickets,
-				})
-			})
-			break;
-
-		case TICKET_CHANGE_REQUEST:
-			put("mmctickets/ticket/" + action.ticket.id, data => {
-				next({
-					type: TICKET_CHANGE_RESPONSE,
-					ok: data.ok,
-					ticket: data.ticket,
-				})
-			}, action.data)
-			break;
-
-		case BOOKS_REQUEST:
-			get("webbooks/book?details", data => {
-				next({
-					type: BOOKS_RESPONSE,
-					ok: data.ok,
-					books: data.books,
-				})
-			})
-			break;
-
-		case BOOK_CREATE_REQUEST:
-			post("webbooks/book", data => {
-				next({
-					type: BOOK_CREATE_RESPONSE,
-					ok: data.ok,
-					book: data.book,
-				})
-			}, action.data)
-			break;
-
-		case BOOK_CHANGE_REQUEST:
-			put("webbooks/book/" + action.book.id, data => {
-				next({
-					type: BOOK_CHANGE_RESPONSE,
-					ok: data.ok,
-					book: data.ok ? data.book : action.book,
-				})
-			}, action.data)
-			break;
-
-		case BOOK_DELETE_REQUEST:
-			del("webbooks/book/" + action.book.id, data => {
-				next({
-					type: BOOK_DELETE_RESPONSE,
-					ok: data.ok,
-					book: data.ok ? data.book : action.book,
-				})
-			}, action.data)
 			break;
 
 		default:

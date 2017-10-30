@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
-import { push } from "react-router-redux"
 import {
-	Segment, Table, Button, Header, Modal,
-	Label, Tab, TextArea, Icon, Message
+	Segment, Button, Modal,
+	Label, Tab, TextArea, Message
 } from "semantic-ui-react"
 import _ from 'lodash'
 
-import { requestPlugins, requestPluginConfig } from "../../actions/plugin"
+import { requestPluginConfig } from "../../actions/plugin"
+
+import DataViewFunc from "../../components/DataView"
+const DataView = DataViewFunc("plugin", "id", true)
 
 class Plugins extends Component {
 
@@ -17,13 +19,10 @@ class Plugins extends Component {
 		this.state = {
 			activeTab: false,
 			modal: false,
+			plugin: {},
 		};
 
 		this.toggleModal = this.toggleModal.bind(this);
-	}
-
-	componentWillMount() {
-		this.props.requestPlugins();
 	}
 
 	toggleModal() {
@@ -32,11 +31,12 @@ class Plugins extends Component {
 		})
 	}
 
-	showDetails(plugin) {
+	showDetails(plugin, view) {
 		this.setState({
 			modal: true,
 			plugin: plugin,
 		})
+		view.details(plugin);
 		this.props.requestPluginConfig(plugin.id);
 	}
 
@@ -49,64 +49,52 @@ class Plugins extends Component {
   }
 
 	render() {
-		return (
+		return <div>
 			<Segment basic>
-
 				<Message warning>
 					<Message.Header>This section of the admin panel is not yet completed</Message.Header>
 					<p>Changing the config files of plugins does not do anything yet!</p>
 				</Message>
-
-				<Header>
-					<Icon name="plug" fitted /> Installed Plugins
-				</Header>
-
-				<Table striped>
-					<Table.Header>
-						<Table.Row>
-							<Table.HeaderCell>Id</Table.HeaderCell>
-							<Table.HeaderCell>Name</Table.HeaderCell>
-							<Table.HeaderCell>Version</Table.HeaderCell>
-							<Table.HeaderCell>Config</Table.HeaderCell>
-						</Table.Row>
-					</Table.Header>
-					<Table.Body>
-						{_.map(this.props.plugins, plugin =>
-							<Table.Row key={plugin.id}>
-								<Table.Cell>{plugin.id}</Table.Cell>
-								<Table.Cell>{plugin.name}</Table.Cell>
-								<Table.Cell>{plugin.version}</Table.Cell>
-								<Table.Cell>
-									<Button color="blue" onClick={e => this.showDetails(plugin)}>
-										<Icon name="edit" /> Edit
-									</Button>
-								</Table.Cell>
-							</Table.Row>
-						)}
-					</Table.Body>
-				</Table>
-
-				{this.state.plugin &&
-				<Modal open={this.state.modal} onClose={this.toggleModal}>
-					<Modal.Header>
-						{this.state.plugin.name}{" "}
-						<Label color="primary">{this.state.plugin.version}</Label>
-					</Modal.Header>
-					<Modal.Content>
-						<Tab panes={
-							_.map(this.props.configs, (conf, name) => ({
-								menuItem: name,
-								render: () => <Tab.Pane>
-									<TextArea autoHeight value={JSON.stringify(conf, null, 2)} style={{width:"100%"}}>
-									</TextArea>
-								</Tab.Pane>
-							}))
-						} />
-					</Modal.Content>
-				</Modal>
-				}
 			</Segment>
-		)
+			<DataView
+				title="Installed Plugins"
+				icon="plug"
+				fields={{
+					id: "Id",
+					name: "Name",
+					version: "Version",
+				}}
+				actions={(plugin, view) => <div>
+					<Button
+							color="blue"
+							onClick={e => this.showDetails(plugin, view)}>
+						Details
+					</Button>
+				</div>}
+			/>
+
+			{this.renderModal()}
+		</div>
+	}
+
+	renderModal() {
+		return <Modal open={this.state.modal} onClose={this.toggleModal}>
+			<Modal.Header>
+				{this.state.plugin.name}{" "}
+				<Label color="primary">{this.state.plugin.version}</Label>
+			</Modal.Header>
+			<Modal.Content>
+				<Tab panes={
+					_.map(this.props.configs, (conf, name) => ({
+						menuItem: name,
+						render: () => <Tab.Pane>
+							<TextArea autoHeight value={JSON.stringify(conf, null, 2)} style={{width:"100%"}}>
+							</TextArea>
+						</Tab.Pane>
+					}))
+				} />
+			</Modal.Content>
+		</Modal>
 	}
 }
 
@@ -121,9 +109,7 @@ const mapStateToProps = (_state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestPlugins: () => dispatch(requestPlugins(true)),
 		requestPluginConfig: (id) => dispatch(requestPluginConfig(id)),
-		push: (url) => dispatch(push(url)),
 	}
 }
 

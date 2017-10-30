@@ -218,7 +218,10 @@ class Entities extends Component {
 								</Table.Cell>
 								<Table.Cell>
 									{entity.health ?
-										<Progress color="green" percent={(entity.health.current/entity.health.max)*100} />
+										<Progress
+											color="green"
+											percent={(entity.health.current/entity.health.max)*100}
+										/>
 									: null}
 								</Table.Cell>
 								<Table.Cell>

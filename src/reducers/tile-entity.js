@@ -2,12 +2,12 @@ import _ from "lodash"
 
 import { SET_FILTER, TILE_ENTITIES_RESPONSE } from "../actions/tile-entity"
 
-const tileEntity = (state = { tileEntities: [], worlds: [], filter: {}}, action) => {
-	if (!action.ok)
-		return state;
-	
+const tileEntity = (state = { tileEntities: [], worlds: [], filter: {}}, action) => {	
 	switch(action.type) {
 		case TILE_ENTITIES_RESPONSE:
+			if (!action.ok)
+				return state;
+
 			return _.assign({}, state, {
 				tileEntities: action.tileEntities,
 			});
