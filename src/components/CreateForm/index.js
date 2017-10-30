@@ -12,22 +12,38 @@ class CreateForm extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {}
+		const newData = {};
+		_.each(props.fields, (field, name) => newData[name] = "")
+		this.state = {
+			newData: newData,
+		};
 
-		this.handleChange = handleChange.bind(this)
+		this.doHandleChange = this.doHandleChange.bind(this)
+		this.handleChange = handleChange.bind(this, this.doHandleChange)
 		this.create = this.create.bind(this)
 	}
 
+	doHandleChange(key, value) {
+		this.setState({
+			newData: _.assign({}, this.state.newData, {
+				[key]: value
+			})
+		})
+	}
+
 	create() {
-		const data = {}
-		_.each(this.props.fields, (field, name) => data[name] = this.state[name])
+		const data = {};
+		_.each(this.state.newData, (value, name) => _.set(data, name, value))
 		
-		this.props.onCreate(data)
+		this.props.onCreate(data, {
+			handleChange: this.handleChange,
+			state: this.state.newData,
+		})
 	}
 
 	canCreate() {
 		return _.every(this.props.fields, (field, name) =>
-			typeof field === "string" || !field.required || this.state[name]
+			typeof field === "string" || !field.required || this.state.newData[name]
 		)
 	}
 
@@ -37,7 +53,7 @@ class CreateForm extends Component {
 		const fieldGroups = [];
 		_.each(fields, (field, name) => {
 			const newField = {
-				name: name,
+				name: field.createName ? field.createName : name,
 			};
 			if (typeof field === "string") {
 				newField.label = field;
@@ -45,7 +61,9 @@ class CreateForm extends Component {
 				_.assign(newField, field);
 			}
 
-			if (fieldGroups.length && !fieldGroups[fieldGroups.length - 1].second) {
+			if (newField.isGroup) {
+				fieldGroups.push({ only: newField, second: true })
+			} else if (fieldGroups.length && !fieldGroups[fieldGroups.length - 1].second) {
 				fieldGroups[fieldGroups.length - 1].second = newField;
 			} else {
 				fieldGroups.push({ first: newField })
@@ -58,28 +76,42 @@ class CreateForm extends Component {
 			</Header>
 
 			<Form loading={creating}>
-
-			{_.map(fieldGroups, (fieldGroup, i) =>
-				<Form.Group key={i} widths="equal">
-					{fieldGroup.first &&
-						this.renderField(fieldGroup.first)
+				{_.map(fieldGroups, (fg, i) => {
+					if (fg.only) {
+						return <div key={i}>
+							{this.renderField(fg.only)}
+						</div>
 					}
 
-					{fieldGroup.second &&
-						this.renderField(fieldGroup.second)
-					}
-				</Form.Group>
-			)}
+					return <Form.Group key={i} widths="equal">
+						{fg.first &&
+							this.renderField(fg.first)
+						}
+
+						{fg.second &&
+							this.renderField(fg.second)
+						}
+					</Form.Group>
+				})}
 
 				<Button color="green" onClick={this.create} disabled={!this.canCreate()}>
 					Create
 				</Button>
-
 			</Form>
 		</Segment>
 	}
 
 	renderField(field) {
+		const state = this.state.newData;
+
+		if (typeof field.create === "function") {
+			return field.create({
+				handleChange: this.handleChange,
+				state: state,
+				value: state[field.name],
+			})
+		}
+
 		if (field.options) {
 			return <Form.Field
 				fluid selection search
@@ -89,16 +121,19 @@ class CreateForm extends Component {
 				label={field.label}
 				placeholder={field.label}
 				onChange={this.handleChange}
+				value={state[field.name]}
 				options={field.options}
 			/>
 		}
 
 		return <Form.Input
 			required={field.required}
+			type={field.type ? field.type : "text"}
 			name={field.name}
 			label={field.label}
 			placeholder={field.label}
 			onChange={this.handleChange}
+			value={state[field.name]}
 		/>
 	}
 }
