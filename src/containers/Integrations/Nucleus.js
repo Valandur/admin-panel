@@ -2,8 +2,8 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Switch, Route } from "react-router-dom"
 
-import Kits from "../../views/Nucleus/Kits"
-import Jails from "../../views/Nucleus/Jails"
+import Kits from "../../views/Integrations/Nucleus/Kits"
+import Jails from "../../views/Integrations/Nucleus/Jails"
 
 class Nucleus extends Component {
 	render() {

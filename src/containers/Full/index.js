@@ -15,14 +15,19 @@ import Operations from "../../views/Operations"
 import Plugins from "../../views/Plugins"
 import Settings from "../../views/Settings"
 
-import Nucleus from "../Nucleus"
-import HuskyCrates from "../HuskyCrates"
-import WebBooks from "../WebBooks"
-import MMCTickets from "../MMCTickets"
+import Nucleus from "../Integrations/Nucleus"
+import HuskyCrates from "../Integrations/HuskyCrates"
+import WebBooks from "../Integrations/WebBooks"
+import MMCTickets from "../Integrations/MMCTickets"
 
-import { requestLogout } from "../../actions"
+import { requestServlets, requestLogout } from "../../actions"
 
 class Full extends Component {
+	
+	componentDidMount() {
+		this.props.requestServlets();
+	}
+
 	render() {
 		return (
 			<Sidebar.Pushable style={{ minHeight: "100vh" }}>
@@ -168,9 +173,8 @@ const mapStateToProps = (_state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestLogout: () => {
-			dispatch(requestLogout())
-		}
+		requestLogout: () => dispatch(requestLogout()),
+		requestServlets: () => dispatch(requestServlets()),
 	}
 }
 

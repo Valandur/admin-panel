@@ -2,13 +2,13 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Switch, Route } from "react-router-dom"
 
-import Tickets from "../../views/MMCTickets/Tickets"
+import Crates from "../../views/Integrations/HuskyCrates/Crates"
 
-class MMCTickets extends Component {
+class HuskyCrates extends Component {
 	render() {
 		return (
 			<Switch>
-				<Route path="/mmctickets/tickets" name="Tickets" component={Tickets} />
+				<Route path="/husky/crates" name="Crates" component={Crates} />
 			</Switch>
 		)
 	}
@@ -22,4 +22,4 @@ const mapDispatchToProps = (dispatch) => {
 	return {}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MMCTickets)
+export default connect(mapStateToProps, mapDispatchToProps)(HuskyCrates)
