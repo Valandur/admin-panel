@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
-	Segment, Header, Form, Grid, Table,
+	Segment, Header, Form, Grid, Table, Label,
 	Button, Menu, Progress, Dropdown, Icon 
 } from "semantic-ui-react"
 import _ from "lodash"
@@ -197,6 +197,7 @@ class Entities extends Component {
 							<Table.HeaderCell>UUID</Table.HeaderCell>
 							<Table.HeaderCell>Location</Table.HeaderCell>
 							<Table.HeaderCell>Health</Table.HeaderCell>
+							<Table.HeaderCell>Info</Table.HeaderCell>
 							<Table.HeaderCell>Actions</Table.HeaderCell>
 						</Table.Row>
 					</Table.Header>
@@ -217,12 +218,28 @@ class Entities extends Component {
 									: null}
 								</Table.Cell>
 								<Table.Cell>
-									{entity.health ?
+									{entity.health &&
 										<Progress
 											color="green"
 											percent={(entity.health.current/entity.health.max)*100}
-										/>
-									: null}
+										/>}
+								</Table.Cell>
+								<Table.Cell>
+									{entity.career &&
+										<Label>
+											Career
+											<Label.Detail>{entity.career.name}</Label.Detail>
+										</Label>}
+									{entity.age &&
+										<Label>
+											Age
+											<Label.Detail>{entity.age.age}</Label.Detail>
+										</Label>}
+									{entity.age &&
+										<Label>
+											Adult
+											<Label.Detail>{entity.age.adult ? "Yes" : "No"}</Label.Detail>
+										</Label>}
 								</Table.Cell>
 								<Table.Cell>
 									<Button
