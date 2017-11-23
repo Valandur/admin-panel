@@ -8,6 +8,7 @@ import { Route, Switch, Redirect } from "react-router-dom"
 import { routerMiddleware, ConnectedRouter } from "react-router-redux"
 import { createBrowserHistory } from "history"
 import NotificationSystem from "react-notification-system"
+import pkg from "../package.json" 
 
 // CSS
 import "semantic-ui-css/semantic.min.css";
@@ -30,6 +31,7 @@ import { saveNotifRef } from "./actions/notification"
 
 // Sentry
 Raven.config("https://61d75957355b4aa486ff8653dc64acd0@sentry.io/203544").install()
+Raven.setTagsContext({ release: pkg.version });
 
 const history = createBrowserHistory({
 	basename: "/admin",
