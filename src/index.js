@@ -1,5 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
+import Raven from "raven-js"
+import createRavenMiddleware from "raven-for-redux"
 import { Provider } from "react-redux"
 import { createStore, applyMiddleware, compose } from "redux"
 import { Route, Switch, Redirect } from "react-router-dom"
@@ -26,6 +28,9 @@ import Login from "./containers/Login"
 import { requestServlets, requestCheckUser } from "./actions"
 import { saveNotifRef } from "./actions/notification"
 
+// Sentry
+Raven.config("https://61d75957355b4aa486ff8653dc64acd0@sentry.io/203544").install()
+
 const history = createBrowserHistory({
 	basename: "/admin",
 });
@@ -43,7 +48,15 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 let store = createStore(
 	App, 
 	initialState, 
-	composeEnhancers(applyMiddleware(api, persist, notification, routerMiddleware(history)))
+	composeEnhancers(
+		applyMiddleware(
+			api,
+			persist,
+			notification,
+			routerMiddleware(history),
+			createRavenMiddleware(Raven, {})
+		)
+	)
 );
 
 // Check if the possibly saved state/key is still valid
