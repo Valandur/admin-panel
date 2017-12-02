@@ -6,6 +6,7 @@ import {
 } from "semantic-ui-react"
 import _ from "lodash"
 
+import { formatRange } from "../../components/Util"
 import { requestCatalog } from "../../actions"
 import { setFilter, requestEntities, requestCreateEntity, requestDeleteEntity } from "../../actions/entity"
 import { requestWorlds } from "../../actions/world"
@@ -129,17 +130,33 @@ class Entities extends Component {
 							<Form loading={this.props.creating}>
 
 								<Form.Group widths="equal">
-									<Form.Field id="type" label="Type" control={Dropdown} placeholder="Type"
-										required fluid selection search onChange={this.handleChange}
+									<Form.Field
+										required fluid selection search
+										id="type"
+										label="Type"
+										control={Dropdown}
+										placeholder="Type"
+										onChange={this.handleChange}
 										options={_.map(this.props.entTypes, ent => 
-											({ value: ent.id, text: ent.name + " (" + ent.id + ")" })
+											({
+												value: ent.id,
+												text: ent.name + " (" + ent.id + ")"
+											})
 										)}
 									/>
 
-									<Form.Field id="world" label="World" control={Dropdown} placeholder="World"
-										required fluid selection search onChange={this.handleChange}
+									<Form.Field
+										required fluid selection search
+										id="world"
+										label="World"
+										control={Dropdown}
+										placeholder="World"
+										onChange={this.handleChange}
 										options={_.map(this.props.worlds, world => 
-											({ value: world.uuid, text: world.name + " (" + world.dimensionType.name + ")" })
+											({
+												value: world.uuid,
+												text: world.name + " (" + world.dimensionType.name + ")"
+											})
 										)}
 									/>
 								</Form.Group>
@@ -167,17 +184,33 @@ class Entities extends Component {
 
 							<Form>
 								<Form.Group widths="equal">
-									<Form.Field name="type" label="Type" control={Dropdown} placeholder="Type"
-										fluid selection search multiple onChange={this.filterChange}
+									<Form.Field
+										fluid selection search multiple
+										name="type"
+										label="Type"
+										control={Dropdown}
+										placeholder="Type"
+										onChange={this.filterChange}
 										options={_.map(this.props.entTypes, ent => 
-											({ value: ent.id, text: ent.name + " (" + ent.id + ")" })
+											({
+												value: ent.id,
+												text: ent.name + " (" + ent.id + ")"
+											})
 										)}
 									/>
 
-									<Form.Field name="world" label="World" control={Dropdown} placeholder="World"
-										fluid selection search multiple onChange={this.filterChange}
+									<Form.Field
+										fluid selection search multiple
+										name="world"
+										label="World"
+										control={Dropdown}
+										placeholder="World"
+										onChange={this.filterChange}
 										options={_.map(this.props.worlds, w => 
-											({ value: w.uuid, text: w.name + " (" + w.dimensionType.name + ")" })
+											({
+												value: w.uuid,
+												text: w.name + " (" + w.dimensionType.name + ")"
+											})
 										)}
 									/>
 								</Form.Group>
@@ -194,7 +227,6 @@ class Entities extends Component {
 					<Table.Header>
 						<Table.Row>
 							<Table.HeaderCell>Type</Table.HeaderCell>
-							<Table.HeaderCell>UUID</Table.HeaderCell>
 							<Table.HeaderCell>Location</Table.HeaderCell>
 							<Table.HeaderCell>Health</Table.HeaderCell>
 							<Table.HeaderCell>Info</Table.HeaderCell>
@@ -204,9 +236,8 @@ class Entities extends Component {
 					<Table.Body>
 						{_.map(entities, entity =>
 							<Table.Row key={entity.uuid}>
-								<Table.Cell>{entity.type}</Table.Cell>
-								<Table.Cell>{entity.uuid}</Table.Cell>
-								<Table.Cell>
+								<Table.Cell collapsing>{entity.type}</Table.Cell>
+								<Table.Cell collapsing>
 									{entity.location ?
 										<Button color="blue">
 											<Icon name="globe" />
@@ -220,28 +251,54 @@ class Entities extends Component {
 								<Table.Cell>
 									{entity.health &&
 										<Progress
-											color="green"
-											percent={(entity.health.current/entity.health.max)*100}
+											progress
+											color="red"
+											percent={formatRange(entity.health.current, entity.health.max)}
 										/>}
 								</Table.Cell>
 								<Table.Cell>
+									{entity.aiEnabled &&
+										<Label>
+											AI
+										</Label>}
+									{entity.age &&
+										<Label>
+											Age
+											<Label.Detail>
+												{entity.age.adult ? "Adult" : entity.age.age}
+											</Label.Detail>
+										</Label>}
+									{entity.breedable &&
+										<Label>
+											Breedable
+										</Label>}
 									{entity.career &&
 										<Label>
 											Career
 											<Label.Detail>{entity.career.name}</Label.Detail>
 										</Label>}
-									{entity.age &&
+									{entity.flying &&
 										<Label>
-											Age
-											<Label.Detail>{entity.age.age}</Label.Detail>
+											Flying
 										</Label>}
-									{entity.age &&
+									{entity.glowing &&
 										<Label>
-											Adult
-											<Label.Detail>{entity.age.adult ? "Yes" : "No"}</Label.Detail>
+											Glowing
+										</Label>}
+									{entity.silent &&
+										<Label>
+											Silent
+										</Label>}
+									{entity.sneaking &&
+										<Label>
+											Sneaking
+										</Label>}
+									{entity.sprinting &&
+										<Label>
+											Sprinting
 										</Label>}
 								</Table.Cell>
-								<Table.Cell>
+								<Table.Cell collapsing>
 									<Button
 										color="red" disabled={entity.updating}
 										loading={entity.updating} onClick={() => this.delete(entity)}
