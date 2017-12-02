@@ -1,6 +1,6 @@
 {
   "name": "webapi-admin-panel",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "private": true,
   "homepage": ".",
   "proxy": "http://localhost:8080/",
@@ -17,6 +17,8 @@
     "konva": "^1.6.7",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
+    "raven-for-redux": "^1.1.1",
+    "raven-js": "^3.20.1",
     "rc-slider": "^8.3.1",
     "react": "^15.6.1",
     "react-addons-css-transition-group": "15.6.0",

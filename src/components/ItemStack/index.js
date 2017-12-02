@@ -2,6 +2,8 @@ import React, { Component } from "react"
 import { Label, Progress, Button } from "semantic-ui-react"
 import _ from "lodash"
 
+import { formatRange } from "../Util"
+
 const getAmplifier = effect => getRoman(effect.amplifier + 1)
 const getRoman = number => {
 	if (number === 1) return "I";
@@ -38,42 +40,54 @@ class ItemStack extends Component {
 			}
 			<div style={{ color: "gray", marginBottom: "0.5em" }}>{item.type.id}</div>
 			<div>
-				{item.data.durability ? 
-					item.data.durability.unbreakable ?
+				{item.data.durability && 
+					(item.data.durability.unbreakable ?
 						<Label size="tiny">Unbreakable</Label>
 					:
 						<Progress
 							progress
 							size="small"
-							color="blue"
-							value={item.data.durability.durability}
-							total={item.data.useLimit}
+							color="gray"
+							percent={formatRange(item.data.durability.durability, item.data.useLimit)}
 							style={{ margin: 0 }}
-						/>
-				: null}
+						/>)}
 				{item.quantity > 1 &&
 					<Label size="tiny" color="blue">
 						x{item.quantity}
-					</Label>
-				}
+					</Label>}
+				{item.data.enchantments && 
+					<div>
+						{_.map(item.data.enchantments, enchant =>
+							<Label color="purple" size="tiny" key={enchant.enchantment.id}>
+								{enchant.enchantment.name}
+								<Label.Detail>{enchant.level}</Label.Detail>
+							</Label>
+						)}
+					</div>}
 				{item.data.spawn &&
 					<Label size="tiny">
 						{item.data.spawn.name}
-					</Label>
-				}
+					</Label>}
 				{item.data.potionEffects &&
 					_.map(item.data.potionEffects, effect =>
 						<Label size="tiny" color="brown" key={effect.id}>
 							{effect.name} {getAmplifier(effect)}
 						</Label>
-					)
-				}
+					)}
 				{item.data.foodRestoration &&
-					<Label size="tiny" color="green" icon="food" content={item.data.foodRestoration} />
-				}
+					<Label
+						size="tiny"
+						color="green"
+						icon="food"
+						content={item.data.foodRestoration}
+					/>}
 				{item.data.burningFuel &&
-					<Label size="tiny" color="red" icon="fire" content={item.data.burningFuel} />
-				}
+					<Label
+						size="tiny"
+						color="red"
+						icon="fire"
+						content={item.data.burningFuel}
+					/>}
 			</div>
 		</div>
 	}

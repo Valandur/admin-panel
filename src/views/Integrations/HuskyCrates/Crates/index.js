@@ -76,8 +76,6 @@ class Crates extends Component {
 
 	handleRewardChange(reward, event, data) {
 		handleChange((name, value) => {
-			console.log(name, value);
-
 			const newReward = _.assign({}, reward);
 			_.set(newReward, name, value);
 

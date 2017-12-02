@@ -1,4 +1,9 @@
 
+export function formatRange(current, max, a = 1) {
+	const acc = Math.pow(10, a);
+	return Math.round((current / max) * 100 * acc) / acc;
+}
+
 export function handleChange(setState, event, data) {
 	let value = null;
 	let name = null;

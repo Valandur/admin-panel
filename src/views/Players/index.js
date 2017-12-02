@@ -1,12 +1,13 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
-	Segment, Form, Menu, Table, Icon, 
+	Segment, Form, Menu, Table, Icon, Label, 
 	Dropdown, Modal, Header, Progress, Button, 
 } from "semantic-ui-react"
 import _ from "lodash"
 
 import Inventory from "../../components/Inventory"
+import { formatRange } from "../../components/Util"
 
 import { requestWorlds } from "../../actions/world"
 import { setFilter, requestPlayers, requestKickPlayer, requestBanPlayer } from "../../actions/player"
@@ -121,24 +122,25 @@ class Players extends Component {
 					<Icon name="users" fitted /> Players
 				</Header>
 
-				<Table striped={true}>
+				<Table striped={true} stackable>
 					<Table.Header>
 						<Table.Row>
 							<Table.HeaderCell>Name / UUID</Table.HeaderCell>
 							<Table.HeaderCell>Location</Table.HeaderCell>
 							<Table.HeaderCell>Health & Food</Table.HeaderCell>
-							<Table.HeaderCell>GameMode</Table.HeaderCell>
-							<Table.HeaderCell>Level</Table.HeaderCell>
-							<Table.HeaderCell>Deaths</Table.HeaderCell>
-							<Table.HeaderCell>Source</Table.HeaderCell>
+							<Table.HeaderCell>Info</Table.HeaderCell>
 							<Table.HeaderCell>Actions</Table.HeaderCell>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
 						{_.map(players, player =>
 							<Table.Row key={player.uuid}>
-								<Table.Cell>{player.name}<br />{player.uuid}</Table.Cell>
-								<Table.Cell>
+								<Table.Cell collapsing>
+									{player.name}<br />
+									{player.uuid}<br />
+									{player.address}
+								</Table.Cell>
+								<Table.Cell collapsing>
 									{player.location ?
 										<Button color="blue">
 											<Icon name="globe" />
@@ -152,44 +154,32 @@ class Players extends Component {
 								<Table.Cell>
 									{player.health ?
 										<div>
-											<Progress color="green" style={{marginBottom: "1em"}} progress
-												value={player.health.current} total={player.health.max}
+											<Progress
+												progress
+												color="red"
+												style={{marginBottom: "1em"}}
+												percent={formatRange(player.health.current, player.health.max)}
 											/>
-											<Progress color="blue" progress
-												value={player.food.foodLevel} total={20}
+											<Progress
+												progress
+												color="green"
+												percent={formatRange(player.food.foodLevel, 20)}
 											/>
 										</div>
 									: null}
 								</Table.Cell>
 								<Table.Cell>
-									{player.gameMode ?
-										<div>
+									{player.gameMode &&
+										<Label>
 											{player.gameMode.name}
-										</div>
-									: null}
+										</Label>}
+									{player.experience &&
+										<Label>
+											Level
+											<Label.Detail>{player.experience.level}</Label.Detail>
+										</Label>}
 								</Table.Cell>
-								<Table.Cell>
-									{player.experience ?
-										<div>
-											{player.experience.level}
-										</div>
-									: null}
-								</Table.Cell>
-								<Table.Cell>
-									{player.statistics ?
-										<div>
-											{player.statistics.deaths}
-										</div>
-									: null}
-								</Table.Cell>
-								<Table.Cell>
-									{player.connection ?
-										<div>
-											{player.connection.address.substring(1)}
-										</div>
-									: null}
-								</Table.Cell>
-								<Table.Cell>
+								<Table.Cell collapsing>
 									<Button
 										color="blue" loading={player.updating} disabled={player.updating}
 										onClick={() => this.showInventory(player)}
@@ -249,7 +239,10 @@ class Players extends Component {
 							{this.state.player.name}'s Inventory
 						</Modal.Header>
 						<Modal.Content>
-							<Inventory items={this.state.inventory.items} stackOption={true} />
+							<Inventory
+								items={this.state.inventory.items}
+								dontCollapse={true}
+							/>
 						</Modal.Content>
 					</Modal>
 				: null}

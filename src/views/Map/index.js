@@ -6,6 +6,7 @@ import Slider from "rc-slider"
 import _ from "lodash"
 
 import Inventory from "../../components/Inventory"
+import { formatRange } from "../../components/Util"
 
 import { requestWorlds } from "../../actions/world"
 import { requestEntities } from "../../actions/entity"
@@ -177,13 +178,20 @@ class Map extends Component {
 					<Header>
 						{obj.name ? obj.name : obj.type ? obj.type : obj.uuid ? obj.uuid : null}
 					</Header>
-					{obj.uuid}<br />
-					{obj.inventory ?
-						<Inventory items={obj.inventory.items} />
-					: null }
-					{obj.health ?
-						<Progress color="green" percent={(obj.health.current/obj.health.max)*100} />
-					: null}
+					{obj.inventory &&
+						<Inventory items={obj.inventory.items} />}
+					{obj.health &&
+						<Progress
+							progress
+							color="red"
+							percent={formatRange(obj.health.current, obj.health.max)}
+						/>}
+					{obj.food &&
+						<Progress
+							progress
+							color="green"
+							percent={formatRange(obj.food.foodLevel, 20)}
+						/>}
 					<Button color="red" onClick={() => this.deleteEntity(obj)}>
 						Destroy
 					</Button>
@@ -348,13 +356,21 @@ class Map extends Component {
 						id="world" placeholder="Select world..."
 						value={this.state.worldId} onChange={this.handleWorldChange}
 						options={_.map(this.props.worlds, world => 
-							({ value: world.uuid, text: world.name + " (" + world.dimensionType.name + ")" })
+							({
+								value: world.uuid,
+								text: world.name + " (" + world.dimensionType.name + ")"
+							})
 						)}
 					/>
 				</Segment>
 				<Segment style={{ position: "absolute", "top": 60, "left": 10, height: "25vh", width: 80 }}>
 					<Slider
-						vertical marks={marks} min={0.400} max={2} step={0.001} value={Math.pow(this.state.zoom, 1/4)}
+						vertical
+						marks={marks}
+						min={0.400}
+						max={2}
+						step={0.001}
+						value={Math.pow(this.state.zoom, 1/4)}
 						onChange={v => this.handleZoomChange(v)}
 						trackStyle={{ backgroundColor: 'blue' }}
 						handleStyle={{ borderColor: 'blue' }}
