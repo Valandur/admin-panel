@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import { Segment, Table, Menu, Form, Dropdown, Button, Header, Icon } from "semantic-ui-react"
+import { Segment, Table, Menu, Form, 
+	Dropdown, Button, Header, Icon, Label } from "semantic-ui-react"
 import _ from "lodash"
 
 import Inventory from "../../components/Inventory"
@@ -110,14 +111,14 @@ class TileEntities extends Component {
 						<Table.Row>
 							<Table.HeaderCell>Type</Table.HeaderCell>
 							<Table.HeaderCell>Location</Table.HeaderCell>
-							<Table.HeaderCell>Inventory</Table.HeaderCell>
+							<Table.HeaderCell>Info</Table.HeaderCell>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
 						{_.map(tileEntities, te =>
 							<Table.Row key={te.link}>
-								<Table.Cell>{te.type}</Table.Cell>
-								<Table.Cell>
+								<Table.Cell collapsing>{te.type}</Table.Cell>
+								<Table.Cell collapsing>
 									<Button color="blue">
 										<Icon name="globe" />
 										{te.location.world.name}&nbsp; &nbsp;
@@ -127,9 +128,15 @@ class TileEntities extends Component {
 									</Button>
 								</Table.Cell>
 								<Table.Cell>
-									{te.inventory ?
-										<Inventory items={te.inventory.items} />
-									: null}
+									{te.mobSpawner &&
+										<Label>
+											Mob spawner
+											<Label.Detail>
+												{te.mobSpawner.nextEntityToSpawn.type.name}
+											</Label.Detail>
+										</Label>}
+									{te.inventory &&
+										<Inventory items={te.inventory.items} />}
 								</Table.Cell>
 							</Table.Row>
 						)}
