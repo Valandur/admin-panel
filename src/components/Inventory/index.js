@@ -1,13 +1,13 @@
 import React from "react"
-import { Radio } from "semantic-ui-react"
+import { Accordion, Radio, Button } from "semantic-ui-react"
 import _ from "lodash"
 
 import ItemStack from "../ItemStack"
 
 const customizer = (objValue, srcValue) => {
-  if (_.isArray(objValue)) {
-    return objValue.concat(srcValue);
-  }
+	if (_.isArray(objValue)) {
+		return objValue.concat(srcValue);
+	}
 }
 
 class Inventory extends React.Component {
@@ -15,11 +15,26 @@ class Inventory extends React.Component {
 		super(props)
 
 		this.state = {
+			shown: false,
 			stacked: true
 		}
+
+		this.toggle = this.toggle.bind(this);
+	}
+
+	toggle() {
+		this.setState({
+			shown: !this.state.shown,
+		})
 	}
 
 	render() {
+		if (this.props.items.length === 0) {
+			return <Button color="blue" disabled>
+				Empty Inventory
+			</Button>
+		}
+
 		let items = _.sortBy(this.props.items, "type.name")
 		if (!this.props.dontStack && this.state.stacked) {
 			items = _.groupBy(items, "type.id")
@@ -30,7 +45,7 @@ class Inventory extends React.Component {
 			})
 		}
 
-		return <div>
+		const content = <div>
 			{this.props.stackOption && [
 				<Radio
 					toggle
@@ -43,6 +58,19 @@ class Inventory extends React.Component {
 				<ItemStack key={i} item={item} />
 			)}
 		</div>
+
+		if (this.props.dontCollapse) {
+			return content;
+		}
+
+		return <Accordion>
+			<Accordion.Title as={Button} primary active={this.state.shown} onClick={this.toggle}>
+				{this.state.shown ? "Hide" : "Show"} Inventory
+			</Accordion.Title>
+			<Accordion.Content active={this.state.shown}>
+				{content}
+			</Accordion.Content>
+		</Accordion>
 	}
 }
 
