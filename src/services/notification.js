@@ -23,7 +23,9 @@ const persist = ({ dispatch, getState }) => next => action => {
 			break;
 
 		case SHOW_NOTIFICATION:
-			showNotif(action.level, action.title, action.message)
+			let msg = action.message;
+			if (_.isObject(message)) msg = msg.message;
+			showNotif(action.level, action.title, msg)
 			break;
 
 		case EXECUTE_RESPONSE:
