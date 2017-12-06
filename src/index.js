@@ -30,8 +30,9 @@ import { requestServlets, requestCheckUser } from "./actions"
 import { saveNotifRef } from "./actions/notification"
 
 // Sentry
-Raven.config("https://61d75957355b4aa486ff8653dc64acd0@sentry.io/203544").install()
-Raven.setTagsContext({ release: pkg.version });
+Raven.config("https://61d75957355b4aa486ff8653dc64acd0@sentry.io/203544", {
+	release: pkg.version,
+}).install()
 
 const history = createBrowserHistory({
 	basename: "/admin",
