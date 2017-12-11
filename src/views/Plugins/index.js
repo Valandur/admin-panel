@@ -8,6 +8,7 @@ import _ from 'lodash'
 
 import { requestPluginConfig } from "../../actions/plugin"
 
+import ConfigTree from "../../components/ConfigTree"
 import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("plugin", "id", true)
 
@@ -36,17 +37,16 @@ class Plugins extends Component {
 			modal: true,
 			plugin: plugin,
 		})
-		view.details(plugin);
 		this.props.requestPluginConfig(plugin.id);
 	}
 
 	toggle(tab) {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab
-      });
-    }
-  }
+		if (this.state.activeTab !== tab) {
+			this.setState({
+				activeTab: tab
+			});
+		}
+	}
 
 	render() {
 		return <div>
@@ -87,10 +87,7 @@ class Plugins extends Component {
 				<Tab panes={
 					_.map(this.props.configs, (conf, name) => ({
 						menuItem: name,
-						render: () => <Tab.Pane>
-							<TextArea autoHeight value={JSON.stringify(conf, null, 2)} style={{width:"100%"}}>
-							</TextArea>
-						</Tab.Pane>
+						render: () => <ConfigTree conf={conf} />
 					}))
 				} />
 			</Modal.Content>

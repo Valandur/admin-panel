@@ -38,7 +38,6 @@ import {
 } from "../actions/player"
 
 import {
-	PLUGINS_REQUEST, PLUGINS_RESPONSE,
 	PLUGIN_CONFIG_REQUEST, PLUGIN_CONFIG_RESPONSE,
 } from "../actions/plugin"
 
@@ -335,16 +334,6 @@ const api = ({ getState, dispatch }) => next => action => {
 			});
 			break;
 
-		case PLUGINS_REQUEST:
-			get("plugin" + (action.details ? "?details" : ""), (data) => {
-				next({
-					type: PLUGINS_RESPONSE,
-					ok: data.ok,
-					plugins: data.plugins,
-				})
-			});
-			break;
-
 		case PLUGIN_CONFIG_REQUEST:
 			get("plugin/" + action.id + "/config", (data) => {
 				next({
@@ -421,6 +410,7 @@ const api = ({ getState, dispatch }) => next => action => {
 				next({
 					type: DATA_DETAILS_RESPONSE,
 					endpoint: action.endpoint,
+					id: action.id,
 					ok: data.ok,
 					data: obj,
 				})
