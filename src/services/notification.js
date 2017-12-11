@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { SAVE_NOTIF_REF, SHOW_NOTIFICATION } from "../actions/notification"
 import { EXECUTE_RESPONSE } from "../actions/command"
 import { ENTITY_CREATE_RESPONSE, ENTITY_DELETE_RESPONSE } from "../actions/entity"
@@ -24,7 +26,7 @@ const persist = ({ dispatch, getState }) => next => action => {
 
 		case SHOW_NOTIFICATION:
 			let msg = action.message;
-			if (_.isObject(message)) msg = msg.message;
+			if (_.isObject(msg)) msg = msg.message;
 			showNotif(action.level, action.title, msg)
 			break;
 
