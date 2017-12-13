@@ -1,20 +1,12 @@
 import _ from "lodash"
 
-import { PROPERTIES_RESPONSE, EDIT_PROPERTY, SET_PROPERTY } from "../actions/settings"
+import { EDIT_PROPERTY, SET_PROPERTY } from "../actions/settings"
 import { SAVE_PROPERTY_REQUEST, SAVE_PROPERTY_RESPONSE } from "../actions/settings"
 
 const toPropItem = (value, key) => ({ key, value })
 
 const settings = (state = { properties: []}, action) => {
 	switch(action.type) {
-		case PROPERTIES_RESPONSE:
-			if (!action.ok)
-				return state;
-			
-			return _.assign({}, state, {
-				properties: _.map(action.properties, toPropItem),
-			});
-
 		case EDIT_PROPERTY:
 			return _.assign({}, state, {
 				properties: _.map(state.properties, prop => {

@@ -46,7 +46,6 @@ import {
 } from "../actions/tile-entity"
 
 import {
-	PROPERTIES_REQUEST, PROPERTIES_RESPONSE,
 	SAVE_PROPERTY_REQUEST, SAVE_PROPERTY_RESPONSE,
 } from "../actions/settings"
 
