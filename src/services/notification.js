@@ -2,7 +2,7 @@ import _ from "lodash";
 
 import { SAVE_NOTIF_REF, SHOW_NOTIFICATION } from "../actions/notification"
 import { EXECUTE_RESPONSE } from "../actions/command"
-import { ENTITY_CREATE_RESPONSE, ENTITY_DELETE_RESPONSE } from "../actions/entity"
+import { DATA_CREATE_RESPONSE, DATA_CHANGE_RESPONSE, DATA_DELETE_RESPONSE } from "../actions/dataview"
 import { PLAYER_KICK_RESPONSE, PLAYER_BAN_RESPONSE } from "../actions/player"
 import { WORLD_CHANGE_RESPONSE, WORLD_CREATE_RESPONSE, WORLD_DELETE_RESPONSE } from "../actions/world"
 
@@ -35,16 +35,21 @@ const persist = ({ dispatch, getState }) => next => action => {
 			showNotif("success", "Execute Command: " + action.command, action.result)
 			break;
 
-		case ENTITY_CREATE_RESPONSE:
+		case DATA_CREATE_RESPONSE:
 			if (!action.ok) break;
-			showNotif("success", "Entity", "Created " + action.entity.type)
+			showNotif("success", _.upperFirst(action.endpoint), "Created " + _.get(action.data, action.id))
 			break;
 
-		case ENTITY_DELETE_RESPONSE:
+		case DATA_CHANGE_RESPONSE:
 			if (!action.ok) break;
-			showNotif("success", "Entity", "Deleted " + action.entity.type);
+			showNotif("success", _.upperFirst(action.endpoint), "Changed " + _.get(action.data, action.id))
 			break;
 
+		case DATA_DELETE_RESPONSE:
+			if (!action.ok) break;
+			showNotif("success", _.upperFirst(action.endpoint), "Deleted " + _.get(action.data, action.id))
+			break;
+		
 		case PLAYER_KICK_RESPONSE:
 			if (!action.ok) break;
 			showNotif("success", "Player", "Kicked " + action.player.name)
