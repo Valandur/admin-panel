@@ -28,9 +28,10 @@ class TileEntities extends Component {
 			icon="puzzle"
 			filterTitle="Filter tile entities"
 			fields={{
-				type: {
+				"type.name": {
 					label: "Type",
 					filter: true,
+					filterName: "type.id",
 					options: _.map(this.props.teTypes, type => 
 						({
 							value: type.id,

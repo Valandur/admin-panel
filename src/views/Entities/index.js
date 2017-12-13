@@ -28,10 +28,12 @@ class Entities extends Component {
 			filterTitle="Filter entities"
 			createTitle="Spawn an enttiy"
 			fields={{
-				type: {
+				"type.name": {
 					label: "Type",
 					create: true,
 					filter: true,
+					filterName: "type.id",
+					view: entity => entity.type.name,
 					options: _.map(this.props.entTypes, type => 
 						({
 							value: type.id,
