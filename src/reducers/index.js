@@ -1,5 +1,6 @@
 import { combineReducers } from "redux"
 import { routerReducer } from "react-router-redux"
+import _ from "lodash"
 
 import api from "./api"
 import dashboard from "./dashboard"
@@ -13,7 +14,7 @@ import tileEntity from "./tile-entity"
 import settings from "./settings"
 import dataview from "./dataview"
 
-const app = combineReducers({
+let app = combineReducers({
 	api,
 	dashboard,
 	chat,
@@ -21,11 +22,12 @@ const app = combineReducers({
 	world,
 	entity,
 	player,
-	plugin,
 	tileEntity,
 	settings,
-	dataview,
-
+	dataview: (state = {}, action) =>
+		_.merge({}, dataview(state, action), {
+			plugin: plugin(state.plugin, action)
+		}),
 	router: routerReducer,
 })
 

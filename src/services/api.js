@@ -39,6 +39,7 @@ import {
 
 import {
 	PLUGIN_CONFIG_REQUEST, PLUGIN_CONFIG_RESPONSE,
+	PLUGIN_CONFIG_SAVE_REQUEST, PLUGIN_CONFIG_SAVE_RESPONSE,
 } from "../actions/plugin"
 
 import {
@@ -343,6 +344,16 @@ const api = ({ getState, dispatch }) => next => action => {
 			})
 			break;
 
+		case PLUGIN_CONFIG_SAVE_REQUEST:
+			post("plugin/" + action.id + "/config", (data) => {
+				next({
+					type: PLUGIN_CONFIG_SAVE_RESPONSE,
+					ok: data.ok,
+					configs: data.configs,
+				})
+			}, action.configs)
+			break;
+
 		case TILE_ENTITIES_REQUEST:
 			get("tile-entity" + (action.details ? "?details" : ""), (data) => {
 				next({
@@ -351,16 +362,6 @@ const api = ({ getState, dispatch }) => next => action => {
 					tileEntities: data.tileEntities,
 				})
 			});
-			break;
-
-		case PROPERTIES_REQUEST:
-			get("info/properties", data => {
-				next({
-					type: PROPERTIES_RESPONSE,
-					ok: data.ok,
-					properties: data.properties,
-				})
-			})
 			break;
 
 		case SAVE_PROPERTY_REQUEST:

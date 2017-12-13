@@ -18,7 +18,7 @@ const dataview = (state = {}, action) => {
 		case DATA_LIST_RESPONSE:
 			if (!action.ok)
 				return state;
-
+			
 			return _.assign({}, state, {
 				[path]: {
 					...state[path],
