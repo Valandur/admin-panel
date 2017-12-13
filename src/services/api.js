@@ -26,12 +26,6 @@ import {
 } from "../actions/world"
 
 import {
-	ENTITIES_REQUEST, ENTITIES_RESPONSE,
-	ENTITY_CREATE_REQUEST, ENTITY_CREATE_RESPONSE,
-	ENTITY_DELETE_REQUEST, ENTITY_DELETE_RESPONSE,
-} from "../actions/entity"
-
-import {
 	PLAYERS_REQUEST, PLAYERS_RESPONSE,
 	PLAYER_KICK_REQUEST, PLAYER_KICK_RESPONSE,
 	PLAYER_BAN_REQUEST, PLAYER_BAN_RESPONSE,
@@ -256,36 +250,6 @@ const api = ({ getState, dispatch }) => next => action => {
 					type: WORLD_DELETE_RESPONSE,
 					ok: data.ok,
 					world: data.world,
-				})
-			})
-			break;
-
-		case ENTITIES_REQUEST:
-			get("entity" + (action.details ? "?details" : ""), data => {
-				next({
-					type: ENTITIES_RESPONSE,
-					ok: data.ok,
-					entities: data.entities,
-				})
-			})
-			break;
-
-		case ENTITY_CREATE_REQUEST:
-			post("entity", data => {
-				next({
-					type: ENTITY_CREATE_RESPONSE,
-					ok: data.ok,
-					entity: data.entity,
-				})
-			}, action.data);
-			break;
-
-		case ENTITY_DELETE_REQUEST:
-			del("entity/" + action.uuid, data => {
-				next({
-					type: ENTITY_DELETE_RESPONSE,
-					ok: data.ok,
-					entity: data.entity,
 				})
 			})
 			break;

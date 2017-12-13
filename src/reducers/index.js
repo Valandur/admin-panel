@@ -7,7 +7,6 @@ import dashboard from "./dashboard"
 import chat from "./chat"
 import command from "./command"
 import world from "./world"
-import entity from "./entity"
 import player from "./player"
 import plugin from "./plugin"
 import settings from "./settings"
@@ -19,7 +18,6 @@ let app = combineReducers({
 	chat,
 	command,
 	world,
-	entity,
 	player,
 	settings,
 	dataview: (state = {}, action) =>
