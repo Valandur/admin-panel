@@ -394,13 +394,12 @@ class Worlds extends Component {
 										</Table.Body>
 									</Table>
 								</Grid.Column>
-
-								<Grid.Column>
-									<Button color="blue" onClick={this.saveGameRules}>Save</Button>&nbsp;
-									<Button onClick={this.toggleModal}>Cancel</Button>
-								</Grid.Column>
 							</Grid>
 						</Modal.Content>
+						<Modal.Actions>
+							<Button color="blue" onClick={this.saveGameRules}>Save</Button>&nbsp;
+							<Button onClick={this.toggleModal}>Cancel</Button>
+						</Modal.Actions>
 					</Modal>
 				: null}
 
