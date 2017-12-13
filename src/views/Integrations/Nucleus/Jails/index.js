@@ -42,7 +42,7 @@ class Jails extends Component {
 					required: true,
 				},
 				position: {
-					label: "Position",
+					label: "Location",
 					isGroup: true,
 					wide: true,
 					view: (jail) =>
