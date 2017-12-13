@@ -10,7 +10,6 @@ import world from "./world"
 import entity from "./entity"
 import player from "./player"
 import plugin from "./plugin"
-import tileEntity from "./tile-entity"
 import settings from "./settings"
 import dataview from "./dataview"
 
@@ -22,7 +21,6 @@ let app = combineReducers({
 	world,
 	entity,
 	player,
-	tileEntity,
 	settings,
 	dataview: (state = {}, action) =>
 		_.merge({}, dataview(state, action), {

@@ -45,17 +45,16 @@ class Jails extends Component {
 					label: "Position",
 					isGroup: true,
 					wide: true,
-					view: (jail) => {
-						return <Button color="blue">
+					view: (jail) =>
+						<Button color="blue">
 							<Icon name="globe" />
 							{jail.location.world.name}&nbsp; &nbsp;
 							{jail.location.position.x.toFixed(0)} |&nbsp;
 							{jail.location.position.y.toFixed(0)} |&nbsp;
 							{jail.location.position.z.toFixed(0)}
-						</Button>
-					},
-					create: (view) => {
-						return <Form.Group inline>
+						</Button>,
+					create: (view) =>
+						<Form.Group inline>
 							<label>Position</label>
 							<Form.Input
 								type="number"
@@ -81,8 +80,7 @@ class Jails extends Component {
 								value={view.state["position.z"]}
 								onChange={view.handleChange}
 							/>
-						</Form.Group>
-					}
+						</Form.Group>,
 				}
 			}}
 		/>

@@ -43,10 +43,6 @@ import {
 } from "../actions/plugin"
 
 import {
-	TILE_ENTITIES_REQUEST, TILE_ENTITIES_RESPONSE,
-} from "../actions/tile-entity"
-
-import {
 	SAVE_PROPERTY_REQUEST, SAVE_PROPERTY_RESPONSE,
 } from "../actions/settings"
 
@@ -352,16 +348,6 @@ const api = ({ getState, dispatch }) => next => action => {
 					configs: data.configs,
 				})
 			}, action.configs)
-			break;
-
-		case TILE_ENTITIES_REQUEST:
-			get("tile-entity" + (action.details ? "?details" : ""), (data) => {
-				next({
-					type: TILE_ENTITIES_RESPONSE,
-					ok: data.ok,
-					tileEntities: data.tileEntities,
-				})
-			});
 			break;
 
 		case SAVE_PROPERTY_REQUEST:
