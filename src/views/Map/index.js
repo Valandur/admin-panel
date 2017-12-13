@@ -9,9 +9,9 @@ import Inventory from "../../components/Inventory"
 import { formatRange } from "../../components/Util"
 
 import { requestWorlds } from "../../actions/world"
-import { requestEntities } from "../../actions/entity"
+//import { requestEntities } from "../../actions/entity"
 import { requestPlayers } from "../../actions/player"
-import { requestTileEntities } from "../../actions/tile-entity"
+//import { requestTileEntities } from "../../actions/tile-entity"
 
 const TILE_SIZE = 512;
 const HALF_TILE = TILE_SIZE / 2;
@@ -85,9 +85,9 @@ class Map extends Component {
 	}
 
 	componentDidMount() {
-		this.props.requestEntities();
+		//this.props.requestEntities();
 		this.props.requestPlayers();
-		this.props.requestTileEntities();
+		//this.props.requestTileEntities();
 		this.props.requestWorlds();
 
 		window.addEventListener("resize", this.updateDimensions);
@@ -394,9 +394,9 @@ const mapStateToProps = (_state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		requestWorlds: () => dispatch(requestWorlds(true)),
-		requestEntities: () => dispatch(requestEntities(true)),
+		//requestEntities: () => dispatch(requestEntities(true)),
 		requestPlayers: () => dispatch(requestPlayers(true)),
-		requestTileEntities: () => dispatch(requestTileEntities(true)),
+		//requestTileEntities: () => dispatch(requestTileEntities(true)),
 	}
 }
 
