@@ -26,7 +26,6 @@ import {
 } from "../actions/world"
 
 import {
-	PLAYERS_REQUEST, PLAYERS_RESPONSE,
 	PLAYER_KICK_REQUEST, PLAYER_KICK_RESPONSE,
 	PLAYER_BAN_REQUEST, PLAYER_BAN_RESPONSE,
 } from "../actions/player"
@@ -254,18 +253,8 @@ const api = ({ getState, dispatch }) => next => action => {
 			})
 			break;
 
-		case PLAYERS_REQUEST:
-			get("player" + (action.details ? "?details" : ""), data => {
-				next({
-					type: PLAYERS_RESPONSE,
-					ok: data.ok,
-					players: data.players,
-				})
-			})
-			break;
-
 		case PLAYER_KICK_REQUEST:
-			post("player/" + action.uuid, (data) => {
+			post("player/" + action.uuid + "/method", (data) => {
 				next({
 					type: PLAYER_KICK_RESPONSE,
 					ok: data.ok,

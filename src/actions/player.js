@@ -1,21 +1,3 @@
-export const PLAYERS_REQUEST = "PLAYERS_REQUEST"
-export const PLAYERS_RESPONSE = "PLAYERS_RESPONSE"
-export function requestPlayers(details = false) {
-	return {
-		type: PLAYERS_REQUEST,
-		details: details,
-	}
-}
-
-export const SET_FILTER = "PLAYER_SET_FILTER"
-export function setFilter(filter, value) {
-	return {
-		type: SET_FILTER,
-		filter: filter,
-		value: value,
-	}
-}
-
 export const PLAYER_KICK_REQUEST = "PLAYER_KICK_REQUEST"
 export const PLAYER_KICK_RESPONSE = "PLAYER_KICK_RESPONSE"
 export function requestKickPlayer(uuid) {

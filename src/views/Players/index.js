@@ -1,18 +1,17 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import {
-	Segment, Form, Menu, Table, Icon, Label, 
-	Dropdown, Modal, Header, Progress, Button, 
-} from "semantic-ui-react"
+import { Icon, Label, Modal, Progress, Button } from "semantic-ui-react"
 import _ from "lodash"
 
 import Inventory from "../../components/Inventory"
 import { formatRange } from "../../components/Util"
 
 import { requestWorlds } from "../../actions/world"
-import { setFilter, requestPlayers, requestKickPlayer, requestBanPlayer } from "../../actions/player"
+import { requestKickPlayer, requestBanPlayer } from "../../actions/player"
 
-const ITEMS_PER_PAGE = 20;
+import DataViewFunc from "../../components/DataView"
+const DataView = DataViewFunc("player", "uuid")
+
 
 class Players extends Component {
 
@@ -20,30 +19,15 @@ class Players extends Component {
 		super(props);
 
 		this.state = {
-			page: 0,
 			modal: false,
 		};
 
 		this.toggleModal = this.toggleModal.bind(this);
 		this.showInventory = this.showInventory.bind(this);
-		this.changePage = this.changePage.bind(this);
-		this.filterChange = this.filterChange.bind(this);
 	}
 
 	componentDidMount() {
-		this.props.requestPlayers();
 		this.props.requestWorlds();
-
-		this.interval = setInterval(this.props.requestPlayers, 5000);
-	}
-
-	componentWillUnmount() {
-		clearInterval(this.interval);
-	}
-
-	filterChange(event, data) {
-		const name = data.name ? data.name : data.id;
-		this.props.setFilter(name, data.value);
 	}
 
 	kick(player) {
@@ -54,7 +38,9 @@ class Players extends Component {
 		this.props.requestBanPlayer(player.name);
 	}
 
-	showInventory(player) {
+	showInventory(player, view) {
+		view.details(player)
+
 		this.setState({
 			modal: true,
 			player: player,
@@ -68,207 +54,134 @@ class Players extends Component {
 		})
 	}
 
-	changePage(event, page) {
-		event.preventDefault();
-
-		this.setState({
-			page: page,
-		})
-	}
-
 	render() {
-		const reg = new RegExp(this.props.filter.name, "i")
-
-		let players = _.filter(this.props.players, player => {
-			if (!_.isEmpty(this.props.filter.name)) {
-				if (!reg.test(player.name) && !reg.test(player.uuid)) {
-					return false;
+		return <div>
+			<DataView
+				title="Players"
+				filterTitle="Filter players"
+				icon="users"
+				fields={{
+					name: {
+						label: "Name & UUID",
+						filter: true,
+						view: player => 
+							<div>
+								{player.name}<br />
+								{player.uuid}<br />
+								{player.address}
+							</div>,
+					},
+					world: {
+						label: "World",
+						view: false,
+						filter: true,
+						filterName: "location.world.uuid",
+						options: _.map(this.props.worlds, world => 
+							({
+								value: world.uuid,
+								text: world.name + " (" + world.dimensionType.name + ")"
+							})
+						),
+						required: true,
+					},
+					location: {
+						label: "Location",
+						view: player =>
+							<Button color="blue">
+								<Icon name="globe" />
+								{player.location.world.name}&nbsp; &nbsp;
+								{player.location.position.x.toFixed(0)} |&nbsp;
+								{player.location.position.y.toFixed(0)} |&nbsp;
+								{player.location.position.z.toFixed(0)}
+							</Button>,
+					},
+					health: {
+						label: "Health & Food",
+						wide: true,
+						view: player => 
+							<div>
+								<Progress
+									progress
+									color="red"
+									style={{marginBottom: "1em"}}
+									percent={formatRange(player.health.current, player.health.max)}
+								/>
+								<Progress
+									progress
+									color="green"
+									percent={formatRange(player.food.foodLevel, 20)}
+								/>
+							</div>
+					},
+					info: {
+						label: "Info",
+						wide: true,
+						view: player =>
+							<div>
+								{player.gameMode &&
+									<Label>
+										{player.gameMode.name}
+									</Label>}
+								{player.experience &&
+									<Label>
+										Level
+										<Label.Detail>{player.experience.level}</Label.Detail>
+									</Label>}
+							</div>,
+					}
+				}}
+				actions={(player, view) =>
+					<div>
+						<Button
+							color="blue" loading={player.updating} disabled={player.updating}
+							onClick={() => this.showInventory(player, view)}
+						>
+							Inventory
+						</Button>{" "}
+						<Button
+							color="yellow" loading={player.updating} disabled={player.updating}
+							onClick={() => this.kick(player)}
+						>
+							Kick
+						</Button>{" "}
+						<Button
+							color="red" loading={player.updating} disabled={player.updating}
+							onClick={() => this.ban(player)}
+						>
+							Ban
+						</Button>
+					</div>
 				}
-			}
-			return true;
-		});
+			/>
 
-		const maxPage = Math.ceil(players.length / ITEMS_PER_PAGE);
-		const page = Math.min(this.state.page, maxPage - 1);
-
-		players = players.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
-
-		return (
-			<Segment basic>
-
-				<Segment>
-					<Header>
-						<Icon name="filter" fitted /> Filter players
-					</Header>
-
-					<Form>
-						<Form.Group widths="equal">
-							<Form.Input
-								id="name" label="Name"
-								value={this.props.filter.name} onChange={this.filterChange}
-							/>
-
-							<Form.Field name="world" label="World" control={Dropdown} placeholder="World"
-								fluid selection search multiple onChange={this.filterChange}
-								options={_.map(this.props.worlds, w => 
-									({ value: w.uuid, text: w.name + " (" + w.dimensionType.name + ")" })
-								)}
-							/>
-						</Form.Group>
-					</Form>
-				</Segment>
-
-				<Header>
-					<Icon name="users" fitted /> Players
-				</Header>
-
-				<Table striped={true} stackable>
-					<Table.Header>
-						<Table.Row>
-							<Table.HeaderCell>Name / UUID</Table.HeaderCell>
-							<Table.HeaderCell>Location</Table.HeaderCell>
-							<Table.HeaderCell>Health & Food</Table.HeaderCell>
-							<Table.HeaderCell>Info</Table.HeaderCell>
-							<Table.HeaderCell>Actions</Table.HeaderCell>
-						</Table.Row>
-					</Table.Header>
-					<Table.Body>
-						{_.map(players, player =>
-							<Table.Row key={player.uuid}>
-								<Table.Cell collapsing>
-									{player.name}<br />
-									{player.uuid}<br />
-									{player.address}
-								</Table.Cell>
-								<Table.Cell collapsing>
-									{player.location ?
-										<Button color="blue">
-											<Icon name="globe" />
-											{player.location.world.name}&nbsp; &nbsp;
-											{player.location.position.x.toFixed(0)} |&nbsp;
-											{player.location.position.y.toFixed(0)} |&nbsp;
-											{player.location.position.z.toFixed(0)}
-										</Button>
-									: null}
-								</Table.Cell>
-								<Table.Cell>
-									{player.health ?
-										<div>
-											<Progress
-												progress
-												color="red"
-												style={{marginBottom: "1em"}}
-												percent={formatRange(player.health.current, player.health.max)}
-											/>
-											<Progress
-												progress
-												color="green"
-												percent={formatRange(player.food.foodLevel, 20)}
-											/>
-										</div>
-									: null}
-								</Table.Cell>
-								<Table.Cell>
-									{player.gameMode &&
-										<Label>
-											{player.gameMode.name}
-										</Label>}
-									{player.experience &&
-										<Label>
-											Level
-											<Label.Detail>{player.experience.level}</Label.Detail>
-										</Label>}
-								</Table.Cell>
-								<Table.Cell collapsing>
-									<Button
-										color="blue" loading={player.updating} disabled={player.updating}
-										onClick={() => this.showInventory(player)}
-									>
-										Inventory
-									</Button>{" "}
-									<Button
-										color="yellow" loading={player.updating} disabled={player.updating}
-										onClick={() => this.kick(player)}
-									>
-										Kick
-									</Button>{" "}
-									<Button
-										color="red" loading={player.updating} disabled={player.updating}
-										onClick={() => this.ban(player)}
-									>
-										Ban
-									</Button>
-								</Table.Cell>
-							</Table.Row>
-						)}
-					</Table.Body>
-				</Table>
-				{ maxPage > 1 ?
-					<Menu pagination>
-						{ page > 4 ?
-							<Menu.Item onClick={e => this.changePage(e, 0)}>
-								1
-							</Menu.Item>
-						: null }
-						{ page > 5 ?
-							<Menu.Item onClick={e => this.changePage(e, page - 5)}>
-								...
-							</Menu.Item>
-						: null }
-						{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
-							<Menu.Item key={p} onClick={e => this.changePage(e, p)} active={p === page}>
-								{p + 1}
-							</Menu.Item>
-						))}
-						{ page < maxPage - 6 ?
-							<Menu.Item onClick={e => this.changePage(e, page + 5)}>
-								...
-							</Menu.Item>
-						: null }
-						{ page < maxPage - 5 ?
-							<Menu.Item onClick={e => this.changePage(e, maxPage - 1)}>
-								{maxPage}
-							</Menu.Item>
-						: null }
-					</Menu>
-				: null }
-
-				{this.state.inventory ?
-					<Modal open={this.state.modal} onClose={this.toggleModal}>
-						<Modal.Header>
-							{this.state.player.name}'s Inventory
-						</Modal.Header>
-						<Modal.Content>
-							<Inventory
-								items={this.state.inventory.items}
-								dontCollapse={true}
-							/>
-						</Modal.Content>
-					</Modal>
-				: null}
-
-			</Segment>
-		)
+			{this.state.inventory ?
+				<Modal open={this.state.modal} onClose={this.toggleModal}>
+					<Modal.Header>
+						{this.state.player.name}'s Inventory
+					</Modal.Header>
+					<Modal.Content>
+						<Inventory
+							items={this.state.inventory.items}
+							dontCollapse={true}
+						/>
+					</Modal.Content>
+				</Modal>
+			: null}
+		</div>
 	}
 }
 
 const mapStateToProps = (_state) => {
-	const state = _state.player
-
 	return {
-		players: state.players,
 		worlds: _state.world.worlds,
-		filter: state.filter,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestPlayers: () => dispatch(requestPlayers(true)),
 		requestKickPlayer: (uuid) => dispatch(requestKickPlayer(uuid)),
 		requestBanPlayer: (name) => dispatch(requestBanPlayer(name)),
 		requestWorlds: () => dispatch(requestWorlds(true)),
-		setFilter: (filter, value) => dispatch(setFilter(filter, value)),
 	}
 }
 
