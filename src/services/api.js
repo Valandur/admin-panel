@@ -19,13 +19,6 @@ import {
 } from "../actions/dashboard"
 
 import {
-	WORLDS_REQUEST, WORLDS_RESPONSE,
-	WORLD_CREATE_REQUEST, WORLD_CREATE_RESPONSE,
-	WORLD_CHANGE_REQUEST, WORLD_CHANGE_RESPONSE,
-	WORLD_DELETE_REQUEST, WORLD_DELETE_RESPONSE,
-} from "../actions/world"
-
-import {
 	PLAYER_KICK_REQUEST, PLAYER_KICK_RESPONSE,
 	PLAYER_BAN_REQUEST, PLAYER_BAN_RESPONSE,
 } from "../actions/player"
@@ -172,47 +165,6 @@ const api = ({ getState, dispatch }) => next => action => {
 					ok: data.ok,
 					class: action.class,
 					types: data.types,
-				})
-			})
-			break;
-
-		case WORLDS_REQUEST:
-			get("world" + (action.details ? "?details" : ""), data => {
-				next({
-					type: WORLDS_RESPONSE,
-					ok: data.ok,
-					worlds: data.worlds,
-				})
-			})
-			break;
-
-		case WORLD_CHANGE_REQUEST:
-			put("world/" + action.uuid, data => {
-				next({
-					type: WORLD_CHANGE_RESPONSE,
-					ok: data.ok,
-					world: data.world,
-					op: action.op,
-				})
-			}, action.data)
-			break;
-
-		case WORLD_CREATE_REQUEST:
-			post("world", data => {
-				next({
-					type: WORLD_CREATE_RESPONSE,
-					ok: data.ok,
-					world: data.world,
-				})
-			}, action.data)
-			break;
-
-		case WORLD_DELETE_REQUEST:
-			del("world/" + action.uuid, data => {
-				next({
-					type: WORLD_DELETE_RESPONSE,
-					ok: data.ok,
-					world: data.world,
 				})
 			})
 			break;
