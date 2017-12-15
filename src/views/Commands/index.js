@@ -1,35 +1,25 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
 import _ from 'lodash'
-import { Segment, Form, Grid, Table, Menu, Header, Button, Message, Icon } from "semantic-ui-react"
+import { Form } from "semantic-ui-react"
 import Autosuggest from "../../components/Autosuggest"
 import moment from "moment"
 
-import {
-	requestCommands,
-	requestCommandHistory,
-	setFilter,
-	requestExecute
-} from "../../actions/command"
+import { requestList } from "../../actions/dataview"
+import { requestExecute } from "../../actions/command"
 
-const ITEMS_PER_PAGE = 20
+import DataViewFunc from "../../components/DataView"
+const DataView = DataViewFunc("history/cmd", "timestamp")
+
 
 class Commands extends Component {
 
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			page: 0,
-		};
-
-		this.handleChange = this.handleChange.bind(this);
-		this.changePage = this.changePage.bind(this);
-		this.filterChange = this.filterChange.bind(this);
-		this.execute = this.execute.bind(this);
+		this.state = {};
 
 		this.getSuggestions = this.getSuggestions.bind(this);
-		this.handleKeyPress = this.handleKeyPress.bind(this);
 	}
 
 	getSuggestions(newValue) {
@@ -85,212 +75,86 @@ class Commands extends Component {
 
 	componentDidMount() {
 		this.props.requestCommands();
-		this.props.requestCommandHistory();
-
-		this.interval = setInterval(this.props.requestCommandHistory, 5000);
-	}
-
-	componentWillUnmount() {
-		clearInterval(this.interval);
-	}
-
-	filterChange(event, data) {
-		const name = data.name ? data.name : data.id;
-		this.props.setFilter(name, data.value);
-	}
-
-	handleChange(event, data) {
-		let value = null;
-		let name = null;
-
-		if (data) {
-			name = data.name ? data.name : data.id;
-			value = data.value;
-		} else {
-			const target = event.target;
-			value = target.type === 'checkbox' ? target.checked : target.value;
-			name = target.name ? target.name : target.id;
-		}
-
-		this.setState({
-			[name]: value
-		});
-	}
-
-	handleKeyPress(event) {
-    if (event.key === "Enter") {
-    	this.execute();
-    }
-  }
-
-	changePage(event, page) {
-		event.preventDefault();
-
-		this.setState({
-			page: page,
-		})
-	}
-
-	execute() {
-		this.props.requestExecute(this.state.execCmd, this.state.waitLines, this.state.waitTime);
 	}
 
 	render() {
-		let reg = new RegExp();
-		let regValid = false;
+		return <DataView
+			title="Commands"
+			icon="terminal"
+			createTitle="Execute a command"
+			createButton="Execute"
+			filterTitle="Filter commands"
+			fields={{
+				timestamp: {
+					label: "Timestamp",
+					view: cmd => moment.unix(cmd.timestamp).calendar(),
+				},
+				source: {
+					label: "Source",
+					filter: true,
+					filterValue: cmd => cmd.cause.source && cmd.cause.source.name ? 
+						cmd.cause.source.name : cmd.cause.source,
+					view: cmd => cmd.cause.source && cmd.cause.source.name ? 
+						cmd.cause.source.name : cmd.cause.source,
+				},
+				command: {
+					label: "Command",
+					filter: true,
+					filterValue: cmd => cmd.command + " " + cmd.args,
+					wide: true,
+					view: cmd => cmd.command + " " + cmd.args,
+				},
+				create: {
+					view: false,
+					isGroup: true,
+					create: (view) => 
+						<div>
+							<Form.Field
+								control={Autosuggest}
+								name="execCmd"
+								placeholder="Execute a command"
+								getSuggestions={this.getSuggestions}
+								onChange={view.handleChange}
+							/>
 
-		try {
-			if (this.props.filter.command && this.props.filter.command.length) {
-				reg = new RegExp(this.props.filter.command, "i");
-			}
-			regValid = true;
-		} catch (e) {}
-
-		let history = _.filter(this.props.history, cmd => {
-			if (!regValid) return true;
-			const src = cmd.cause.source && cmd.cause.source.name ? cmd.cause.source.name : cmd.cause.source;
-			return reg.test(cmd.command + " " + cmd.args + " " + src);
-		});
-		
-		const maxPage = Math.ceil(history.length / ITEMS_PER_PAGE);
-		const page = Math.min(this.state.page, maxPage - 1);
-
-		history = history.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
-
-		return (
-			<Segment basic>
-
-				<Grid columns={2} stackable doubling>
-					<Grid.Column>
-						<Segment>
-							<Header>
-								<Icon name="terminal" fitted /> Execute a command
-							</Header>
-
-							<Form loading={this.props.executing}>
-								<Form.Field
-									control={Autosuggest} name="execCmd"
-									placeholder="Execute a command" getSuggestions={this.getSuggestions}
-									onChange={this.handleChange} onKeyPress={this.handleKeyPress}
+							<Form.Group widths="equal">
+								<Form.Input
+									name="waitLines"
+									placeholder="# of response lines to wait for"
+									label="Wait lines"
+									type="number"
+									onChange={view.handleChange}
 								/>
 
-								<Form.Group widths="equal">
-									<Form.Input
-										name="waitLines" placeholder="# of response lines to wait for"
-										label="Wait lines" type="number" onChange={this.handleChange}
-									/>
-
-									<Form.Input
-										name="waitTime" placeholder="Milliseconds to wait for a response"
-										label="Wait time" type="number" onChange={this.handleChange}
-									/>
-								</Form.Group>
-
-								<Button
-										color="blue" onClick={this.execute}
-										loading={this.props.executing} disabled={this.props.executing}>
-									<Icon name="play" /> Execute
-								</Button>
-							</Form>
-						</Segment>
-					</Grid.Column>
-
-					<Grid.Column>
-						<Segment>
-							<Header>
-								<Icon name="filter" fitted /> Filter command history
-							</Header>
-
-							<Form>
 								<Form.Input
-									id="command"
-									placeholder="Command"
-									onChange={this.filterChange}
-									error={!regValid} />
-								<Message
-									error visible={!regValid}
-									content="Search term must be a valid regex" />
-							</Form>
-						</Segment>
-					</Grid.Column>
-				</Grid>
-
-				<Header>
-					<Icon name="list" fitted /> Command History
-				</Header>
-
-				<Table striped={true}>
-					<Table.Header>
-						<Table.Row>
-							<Table.HeaderCell>Timestamp</Table.HeaderCell>
-							<Table.HeaderCell>Command</Table.HeaderCell>
-							<Table.HeaderCell>Source</Table.HeaderCell>
-						</Table.Row>
-					</Table.Header>
-					<Table.Body>
-						{_.map(history, cmd =>
-							<Table.Row key={cmd.timestamp}>
-								<Table.Cell>{moment.unix(cmd.timestamp).calendar()}</Table.Cell>
-								<Table.Cell>{cmd.command} {cmd.args}</Table.Cell>
-								<Table.Cell>
-									{cmd.cause.source && cmd.cause.source.name ? cmd.cause.source.name : cmd.cause.source}
-								</Table.Cell>
-							</Table.Row>
-						)}
-					</Table.Body>
-				</Table>
-				{ maxPage > 1 ?
-					<Menu pagination>
-						{ page > 4 ?
-							<Menu.Item onClick={e => this.changePage(e, 0)}>
-								1
-							</Menu.Item>
-						: null }
-						{ page > 5 ?
-							<Menu.Item onClick={e => this.changePage(e, page - 5)}>
-								...
-							</Menu.Item>
-						: null }
-						{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
-							<Menu.Item key={p} onClick={e => this.changePage(e, p)} active={p === page}>
-								{p + 1}
-							</Menu.Item>
-						))}
-						{ page < maxPage - 6 ?
-							<Menu.Item onClick={e => this.changePage(e, page + 5)}>
-								...
-							</Menu.Item>
-						: null }
-						{ page < maxPage - 5 ?
-							<Menu.Item onClick={e => this.changePage(e, maxPage - 1)}>
-								{maxPage}
-							</Menu.Item>
-						: null }
-					</Menu>
-				: null }
-
-			</Segment>
-		)
+									name="waitTime"
+									placeholder="Milliseconds to wait for a response"
+									label="Wait time"
+									type="number"
+									onChange={view.handleChange}
+								/>
+							</Form.Group>
+						</div>,
+				},
+			}}
+			onCreate={(obj, view) => 
+				this.props.requestExecute(obj.execCmd, obj.waitLines, obj.waitTime)
+			}
+		/>
 	}
 }
 
-const mapStateToProps = (_state) => {
-	const state = _state.command
-
+const mapStateToProps = (state) => {
 	return {
-		history: state.history,
-		filter: state.filter,
-		commands: state.commands,
-		executing: state.executing,
+		commands: state.cmd.list,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestCommands: () => dispatch(requestCommands()),
-		requestCommandHistory: () => dispatch(requestCommandHistory()),
-		setFilter: (filter, value) => dispatch(setFilter(filter, value)),
-		requestExecute: (cmd, waitLines, waitTime) => dispatch(requestExecute(cmd, waitLines, waitTime)),
+		requestCommands: () => dispatch(requestList("cmd", true)),
+		requestExecute: (cmd, waitLines, waitTime) => 
+			dispatch(requestExecute(cmd, waitLines, waitTime)),
 	}
 }
 
