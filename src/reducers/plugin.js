@@ -9,11 +9,10 @@ const plugin = (state = {}, action) => {
 				return state;
 
 			return _.assign({}, state, {
-				configs: action.configs,
+				configs: _.assign({}, action.configs),
 			});
 
 		case PLUGIN_CONFIG_SET:
-			console.log(action);
 			return _.assign({}, state, {
 				configs: _.assign({}, state.configs, {
 					[action.name]: action.conf,

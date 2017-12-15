@@ -5,7 +5,7 @@ import {
 	PLAYER_BAN_REQUEST, PLAYER_BAN_RESPONSE,
 } from "../actions/player"
 
-const player = (state = { players: [], filter: {}}, action) => {
+const player = (state = {}, action) => {
 	switch(action.type) {
 		case PLAYER_KICK_REQUEST:
 			return _.assign({}, state, {

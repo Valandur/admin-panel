@@ -1,30 +1,30 @@
-import { combineReducers } from "redux"
 import { routerReducer } from "react-router-redux"
 import _ from "lodash"
 
 import api from "./api"
 import dashboard from "./dashboard"
-import chat from "./chat"
-import command from "./command"
-import world from "./world"
+import cmd from "./command"
 import player from "./player"
 import plugin from "./plugin"
 import settings from "./settings"
 import dataview from "./dataview"
 
-let app = combineReducers({
-	api,
-	dashboard,
-	chat,
-	command,
-	world,
-	player,
-	settings,
-	dataview: (state = {}, action) =>
-		_.merge({}, dataview(state, action), {
-			plugin: plugin(state.plugin, action)
-		}),
-	router: routerReducer,
-})
+const app = (state = {}, action) => {
+	const data = dataview(state, action);
+
+	return {
+		...data,
+		api: api(data.api, action),
+		cmd: cmd(data.cmd, action),
+		dashboard: dashboard(data.dashboard, action),
+		entity: _.merge({}, data.entity),
+		player: player(data.player, action),
+		plugin: plugin(data.plugin, action),
+		world: _.merge({}, data.world),
+		settings: settings(data.settings, action),
+		"tile-entity": _.merge({}, data["tile-entity"]),
+		router: routerReducer,
+	}
+}
 
 export default app
