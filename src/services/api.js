@@ -40,12 +40,6 @@ import {
 } from "../actions/settings"
 
 import {
-	CHAT_HISTORY_REQUEST, CHAT_HISTORY_RESPONSE,
-} from "../actions/chat"
-
-import {
-	COMMANDS_REQUEST, COMMANDS_RESPONSE,
-	COMMAND_HISTORY_REQUEST, COMMAND_HISTORY_RESPONSE,
 	EXECUTE_REQUEST, EXECUTE_RESPONSE,
 } from "../actions/command"
 
@@ -178,36 +172,6 @@ const api = ({ getState, dispatch }) => next => action => {
 					ok: data.ok,
 					class: action.class,
 					types: data.types,
-				})
-			})
-			break;
-
-		case CHAT_HISTORY_REQUEST:
-			get("history/chat", data => {
-				next({
-					type: CHAT_HISTORY_RESPONSE,
-					ok: data.ok,
-					messages: _.orderBy(data.messages, "timestamp", "desc"),
-				})
-			})
-			break;
-
-		case COMMANDS_REQUEST:
-			get("cmd?details", data => {
-				next({
-					type: COMMANDS_RESPONSE,
-					ok: data.ok,
-					commands: _.orderBy(data.commands, "name", "asc"),
-				})
-			})
-			break;
-
-		case COMMAND_HISTORY_REQUEST:
-			get("history/cmd", data => {
-				next({
-					type: COMMAND_HISTORY_RESPONSE,
-					ok: data.ok,
-					history: _.orderBy(data.calls, "timestamp", "desc"),
 				})
 			})
 			break;
