@@ -6,7 +6,7 @@ import _ from "lodash"
 import Inventory from "../../components/Inventory"
 import { formatRange } from "../../components/Util"
 
-import { requestWorlds } from "../../actions/world"
+import { requestList } from "../../actions/dataview"
 import { requestKickPlayer, requestBanPlayer } from "../../actions/player"
 
 import DataViewFunc from "../../components/DataView"
@@ -173,7 +173,7 @@ class Players extends Component {
 
 const mapStateToProps = (_state) => {
 	return {
-		worlds: _state.world.worlds,
+		worlds: _state.world.list,
 	}
 }
 
@@ -181,7 +181,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		requestKickPlayer: (uuid) => dispatch(requestKickPlayer(uuid)),
 		requestBanPlayer: (name) => dispatch(requestBanPlayer(name)),
-		requestWorlds: () => dispatch(requestWorlds(true)),
+		requestWorlds: () => dispatch(requestList("world", true)),
 	}
 }
 

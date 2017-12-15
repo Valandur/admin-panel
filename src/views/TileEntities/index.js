@@ -6,10 +6,12 @@ import _ from "lodash"
 import Inventory from "../../components/Inventory"
 
 import { requestCatalog } from "../../actions"
-import { requestWorlds } from "../../actions/world"
+import { requestList } from "../../actions/dataview"
 
 import DataViewFunc from "../../components/DataView"
-const DataView = DataViewFunc("tile-entity", "uuid")
+const DataView = DataViewFunc("tile-entity", te => 
+	te.location.world.uuid + "/" + te.location.position.x + "/" + 
+	te.location.position.y + "/" + te.location.position.z)
 
 const TE_TYPES = "block.tileentity.TileEntityType"
 
@@ -23,7 +25,6 @@ class TileEntities extends Component {
 
 	render() {
 		return <DataView
-			canDelete
 			title="Tile Entities"
 			icon="puzzle"
 			filterTitle="Filter tile entities"
@@ -85,14 +86,14 @@ class TileEntities extends Component {
 
 const mapStateToProps = (_state) => {
 	return {
-		worlds: _state.world.worlds,
+		worlds: _state.world.list,
 		teTypes: _state.api.types[TE_TYPES],
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestWorlds: () => dispatch(requestWorlds(true)),
+		requestWorlds: () => dispatch(requestList("world", true)),
 		requestCatalog: type => dispatch(requestCatalog(type)),
 	}
 }

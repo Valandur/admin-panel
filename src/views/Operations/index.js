@@ -7,7 +7,7 @@ import _ from "lodash"
 import moment from "moment"
 
 import { requestCatalog } from "../../actions"
-import { requestWorlds } from "../../actions/world"
+import { requestList } from "../../actions/dataview"
 
 import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("block/op", "uuid", true)
@@ -197,7 +197,7 @@ class Operations extends Component {
 
 const mapStateToProps = (_state) => {
 	return {
-		worlds: _state.world.worlds,
+		worlds: _state.world.list,
 		blockTypes: _state.api.types[BLOCK_TYPES],
 		types: [{
 			text: "Get",
@@ -211,7 +211,7 @@ const mapStateToProps = (_state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestWorlds: () => dispatch(requestWorlds(true)),
+		requestWorlds: () => dispatch(requestList("world", true)),
 		requestCatalog: (type) => dispatch(requestCatalog(type)),
 	}
 }

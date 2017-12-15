@@ -5,7 +5,7 @@ import _ from "lodash"
 
 import { formatRange } from "../../components/Util"
 import { requestCatalog } from "../../actions"
-import { requestWorlds } from "../../actions/world"
+import { requestList } from "../../actions/dataview"
 
 import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("entity", "uuid")
@@ -161,14 +161,14 @@ class Entities extends Component {
 
 const mapStateToProps = (_state) => {
 	return {
-		worlds: _state.world.worlds,
+		worlds: _state.world.list,
 		entTypes: _state.api.types[ENT_TYPES],
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestWorlds: () => dispatch(requestWorlds(true)),
+		requestWorlds: () => dispatch(requestList("world", true)),
 		requestCatalog: type => dispatch(requestCatalog(type)),
 	}
 }

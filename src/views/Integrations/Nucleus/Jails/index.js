@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { Form, Button, Icon } from "semantic-ui-react"
 import _ from "lodash"
 
-import { requestWorlds } from "../../../../actions/world"
+import { requestList } from "../../../../actions/dataview"
 
 import DataViewFunc from "../../../../components/DataView"
 const DataView = DataViewFunc("nucleus/jail", "name")
@@ -89,13 +89,13 @@ class Jails extends Component {
 
 const mapStateToProps = (_state) => {
 	return {
-		worlds: _state.world.worlds,
+		worlds: _state.world.list,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestWorlds: () => dispatch(requestWorlds(true)),
+		requestWorlds: () => dispatch(requestList("world", true)),
 	}
 }
 

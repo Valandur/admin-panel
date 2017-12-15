@@ -127,7 +127,7 @@ class Plugins extends Component {
 
 const mapStateToProps = (_state) => {
 	return {
-		configs: _state.dataview.plugin.configs,
+		configs: _state.plugin.configs,
 	}
 }
 
