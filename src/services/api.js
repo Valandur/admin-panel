@@ -307,7 +307,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case DATA_DETAILS_REQUEST:
-			get(action.endpoint + "/" + _.get(action.data, action.id), data => {
+			get(action.endpoint + "/" + action.id(action.data), data => {
 				const obj = _.find(data, (__, key) => key !== "ok");
 
 				next({
@@ -334,7 +334,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case DATA_CHANGE_REQUEST:
-			put(action.endpoint + "/" + _.get(action.data, action.id), data => {
+			put(action.endpoint + "/" + action.id(action.data), data => {
 				const obj =  _.find(data, (__, key) => key !== "ok");
 
 				next({
@@ -348,7 +348,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case DATA_DELETE_REQUEST:
-			del(action.endpoint + "/" + _.get(action.data, action.id), data => {
+			del(action.endpoint + "/" + action.id(action.data), data => {
 				const obj = _.find(data, (__, key) => key !== "ok");
 
 				next({

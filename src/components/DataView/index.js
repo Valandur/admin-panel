@@ -108,7 +108,10 @@ class DataView extends Component {
 
 		try {
 			_.each(this.props.filter, (value, name) => {
-				if (_.isArray(value)) {
+				if (typeof filterFields[name].filterValue === "function") {
+					checks.push((dataVal) => (new RegExp(value, "i")).test(
+						filterFields[name].filterValue(dataVal)));
+				} else if (_.isArray(value)) {
 					if (value.length === 0) return;
 					checks.push({
 						name: name,
@@ -126,7 +129,8 @@ class DataView extends Component {
 
 		const list = _.filter(this.props.list, data => {
 			if (!regsValid) return true;
-			return _.every(checks, check => check.run(_.get(data, check.name)))
+			return _.every(checks, check => typeof check === "function" ?
+				check(data) : check.run(_.get(data, check.name)))
 		});
 
 		const cols = this.props.createTitle && this.props.filterTitle ? 2 : 1;
@@ -145,6 +149,7 @@ class DataView extends Component {
 						<Grid.Column>
 							<CreateForm
 								title={this.props.createTitle}
+								button={this.props.createButton}
 								fields={createFields}
 								creating={this.props.creating}
 								onCreate={(obj, view) =>
@@ -174,6 +179,7 @@ class DataView extends Component {
 					title={this.props.title}
 					icon={this.props.icon}
 					list={list}
+					idFunc={this.props.idFunc}
 					columns={columns}
 					onEdit={(obj, view) => 
 						this.props.onEdit ? 
@@ -204,34 +210,36 @@ class DataView extends Component {
 	}
 }
 
-const mapStateToProps = (endpoint, objId) => (_state) => {
-	const state = _.get(_state.dataview, endpoint.replace(/\//g, "."));
+const mapStateToProps = (endpoint, id) => (_state) => {
+	const state = _.get(_state, endpoint.replace(/\//g, "."));
 
 	return {
 		creating: state ? state.creating : false,
 		filter: state && state.filter ? state.filter : {},
 		list: state ? state.list : [],
 		types: _state.api.types,
+		idFunc: id,
 	}
 }
 
-const mapDispatchToProps = (endpoint, objId, noDetails) => (dispatch) => {
-	if (!objId) objId = "id";
-
+const mapDispatchToProps = (endpoint, id, noDetails) => (dispatch) => {
 	return {
 		requestList: () => dispatch(requestList(endpoint, !noDetails)),
-		requestDetails: (data) => dispatch(requestDetails(endpoint, objId, data)),
+		requestDetails: (data) => dispatch(requestDetails(endpoint, id, data)),
 		requestCreate: (data) => dispatch(requestCreate(endpoint, data)),
-		requestChange: (data, newData) => dispatch(requestChange(endpoint, objId, data, newData)),
-		requestDelete: (data) => dispatch(requestDelete(endpoint, objId, data)),
+		requestChange: (data, newData) => dispatch(requestChange(endpoint, id, data, newData)),
+		requestDelete: (data) => dispatch(requestDelete(endpoint, id, data)),
 		setFilter: (filter, value) => dispatch(setFilter(endpoint, filter, value)),
-		equals: (o1, o2) => o1 != null && o2 != null && _.get(o1, objId) === _.get(o2, objId),
+		equals: (o1, o2) => o1 != null && o2 != null && id(o1) === id(o2),
 	}
 }
 
 export default (endpoint, objId, noDetails) => {
+	if (!objId) objId = "id";
+	const id = typeof objId === "function" ? objId : data => _.get(data, objId);
+
 	return connect(
-		mapStateToProps(endpoint, objId), 
-		mapDispatchToProps(endpoint, objId, noDetails)
+		mapStateToProps(endpoint, id), 
+		mapDispatchToProps(endpoint, id, noDetails)
 	)(DataView);
 }

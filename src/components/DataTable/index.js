@@ -109,7 +109,7 @@ class DataTable extends Component {
 					{_.map(listPage, (obj, i) => {
 						const editing = this.props.isEditing(obj);
 
-						return <Table.Row key={i}>
+						return <Table.Row key={this.props.idFunc(obj)}>
 							{_.map(columns, (col, j) => 
 								<Table.Cell key={j} collapsing={!col.wide}>
 									{col.edit && editing ?
