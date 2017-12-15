@@ -42,9 +42,10 @@ class CreateForm extends Component {
 	}
 
 	canCreate() {
-		return _.every(this.props.fields, (field, name) =>
-			typeof field === "string" || !field.required || this.state.newData[name]
-		)
+		return _.every(this.props.fields, (field, name) => {
+			const key = field.createName ? field.createName : name;
+			return typeof field === "string" || !field.required || this.state.newData[key]
+		})
 	}
 
 	render() {
@@ -95,7 +96,7 @@ class CreateForm extends Component {
 				})}
 
 				<Button color="green" onClick={this.create} disabled={!this.canCreate()}>
-					Create
+					{this.props.button || "Create"}
 				</Button>
 			</Form>
 		</Segment>
