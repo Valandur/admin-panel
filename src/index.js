@@ -8,6 +8,8 @@ import { Route, Switch, Redirect } from "react-router-dom"
 import { routerMiddleware, ConnectedRouter } from "react-router-redux"
 import { createBrowserHistory } from "history"
 import NotificationSystem from "react-notification-system"
+
+import "./i18n";
 import pkg from "../package.json" 
 
 // CSS
@@ -75,8 +77,8 @@ class Main extends React.Component {
 			<Provider store={store}>
 				<ConnectedRouter history={history} basename="/admin">
 					<Switch>
-						<Route path="/login" name="Login" component={Login} />
-						<Route path="/" name="Home" render={props => {
+						<Route path="/login" component={Login} />
+						<Route path="/" render={props => {
 							if (store.getState().api.loggedIn)
 								return <Full {...props} />
 							else

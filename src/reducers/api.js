@@ -1,12 +1,14 @@
+import i18next from "i18next"
 import _ from "lodash"
 
 import {
 	SERVLETS_RESPONSE,
 	LOGIN_REQUEST, LOGIN_RESPONSE,
-	CHECK_USER_RESPONSE, LOGOUT_REQUEST, CATALOG_RESPONSE
+	CHECK_USER_RESPONSE, LOGOUT_REQUEST, CATALOG_RESPONSE,
+	CHANGE_LANGUAGE
 } from "../actions"
 
-const api = (state = { servlets: {}, types: {}}, action) => {
+const api = (state = { servlets: {}, types: {}, lang: "en" }, action) => {
 	switch(action.type) {
 		case SERVLETS_RESPONSE:
 			if (!action.ok)
@@ -14,6 +16,12 @@ const api = (state = { servlets: {}, types: {}}, action) => {
 
 			return _.assign({}, state, {
 				servlets: action.servlets,
+			})
+
+		case CHANGE_LANGUAGE:
+			i18next.changeLanguage(action.lang)
+			return _.assign({}, state, {
+				lang: action.lang,
 			})
 
 		case LOGIN_REQUEST:

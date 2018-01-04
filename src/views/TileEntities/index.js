@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Button, Icon, Label } from "semantic-ui-react"
+import { translate } from "react-i18next"
 import _ from "lodash"
 
 import Inventory from "../../components/Inventory"
@@ -24,13 +25,15 @@ class TileEntities extends Component {
 	}
 
 	render() {
+		const _t = this.props.t
+
 		return <DataView
-			title="Tile Entities"
 			icon="puzzle"
-			filterTitle="Filter tile entities"
+			title={_t("TileEntities")}
+			filterTitle={_t("FilterEntities")}
 			fields={{
 				"type.name": {
-					label: "Type",
+					label: _t("Type"),
 					filter: true,
 					filterName: "type.id",
 					options: _.map(this.props.teTypes, type => 
@@ -41,7 +44,7 @@ class TileEntities extends Component {
 					),
 				},
 				world: {
-					label: "World",
+					label: _t("World"),
 					view: false,
 					filter: true,
 					filterName: "location.world.uuid",
@@ -53,7 +56,7 @@ class TileEntities extends Component {
 					),
 				},
 				position: {
-					label: "Position",
+					label: _t("Position"),
 					view: (te) =>
 						<Button color="blue">
 							<Icon name="globe" />
@@ -64,13 +67,13 @@ class TileEntities extends Component {
 						</Button>,
 				},
 				info: {
-					label: "Info",
+					label: _t("Info"),
 					wide: true,
 					view: (te) =>
 						<div>
 							{te.mobSpawner &&
 								<Label>
-									Mob spawner
+									{_t("MobSpawner")}
 									<Label.Detail>
 										{te.mobSpawner.nextEntityToSpawn.type.name}
 									</Label.Detail>
@@ -98,4 +101,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TileEntities);
+export default connect(mapStateToProps, mapDispatchToProps)(translate("TileEntities")(TileEntities));

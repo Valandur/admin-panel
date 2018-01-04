@@ -8,7 +8,7 @@ class MMCTickets extends Component {
 	render() {
 		return (
 			<Switch>
-				<Route path="/mmctickets/tickets" name="Tickets" component={Tickets} />
+				<Route path="/mmctickets/tickets" component={Tickets} />
 			</Switch>
 		)
 	}

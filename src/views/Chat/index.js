@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
+import { translate } from "react-i18next"
 import moment from "moment"
 
 import DataViewFunc from "../../components/DataView"
@@ -9,21 +10,23 @@ const DataView = DataViewFunc("history/chat", "timestamp")
 class Chat extends Component {
 
 	render() {
+		const _t = this.props.t
+
 		return <DataView
-			title="Messages"
+			title={_t("Messages")}
 			icon="comments"
-			filterTitle="Filter messages"
+			filterTitle={_t("FilterMessages")}
 			fields={{
 				timestamp: {
-					label: "Timestamp",
+					label: _t("Timestamp"),
 					view: msg => moment.unix(msg.timestamp).calendar(),
 				},
 				sender: {
-					label: "Sender",
+					label: _t("Sender"),
 					filter: true,
 					view: msg => msg.sender.name,
 				},
-				message: "Message",
+				message: _t("Message"),
 			}}
 		/>
 	}
@@ -37,4 +40,4 @@ const mapDispatchToProps = (dispatch) => {
 	return {}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Chat);
+export default connect(mapStateToProps, mapDispatchToProps)(translate("Chat")(Chat));

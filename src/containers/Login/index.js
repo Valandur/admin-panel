@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Redirect } from "react-router-dom"
 import { Grid, Header, Form, Button, Segment } from "semantic-ui-react"
+import { translate } from "react-i18next"
 
 import { requestLogin } from "../../actions"
 
@@ -34,35 +35,45 @@ class Login extends Component {
 			return <Redirect to={{ pathname: "/", state: { from: this.props.location} }} />
 		}
 
-		return (
-			<Grid
-        textAlign="center"
-        style={{ height: "100vh" }}
-        verticalAlign="middle"
-      >
-        <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as="h2" color="blue" textAlign="center">
-            <span style={{color: "black"}}>Web-API</span> Admin Panel
-          </Header>
-          <Form size="large" loading={this.props.loggingIn}>
-            <Segment>
-              <Form.Input
-              	fluid icon="user" iconPosition="left" placeholder="Username"
-              	name="username" value={this.state.username} onChange={this.handleChange}
-              />
-              <Form.Input
-              	fluid icon="lock" iconPosition="left" placeholder="Password" type="password"
-              	name="password" value={this.state.password} onChange={this.handleChange}
-              />
+		const _t = this.props.t
 
-              <Button color="blue" fluid size="large" onClick={this.handleLogin}>
-              	Login
-              </Button>
-            </Segment>
-          </Form>
-        </Grid.Column>
-      </Grid>
-		);
+		return <Grid
+				textAlign="center"
+				style={{height: "100vh"}}
+				verticalAlign="middle">
+			<Grid.Column style={{ maxWidth: 450 }}>
+				<Header as="h2" color="blue" textAlign="center">
+					<span style={{color: "black"}}>Web-API</span> Admin Panel
+				</Header>
+				<Form size="large" loading={this.props.loggingIn}>
+					<Segment>
+						<Form.Input
+							fluid
+							name="username"
+							icon="user"
+							iconPosition="left"
+							placeholder={_t("Username")}
+							value={this.state.username}
+							onChange={this.handleChange}
+						/>
+						<Form.Input
+							fluid
+							name="password"
+							icon="lock"
+							iconPosition="left"
+							placeholder={_t("Password")}
+							type="password"
+							value={this.state.password}
+							onChange={this.handleChange}
+						/>
+
+						<Button color="blue" fluid size="large" onClick={this.handleLogin}>
+							{_t("Login")}
+						</Button>
+					</Segment>
+				</Form>
+			</Grid.Column>
+		</Grid>
 	}
 }
 
@@ -81,4 +92,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(translate("Login")(Login));

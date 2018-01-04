@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
-import {
-	Segment, Button, Modal,
-	Label, Tab, Message
-} from "semantic-ui-react"
-import _ from "lodash"
+import { Segment, Button, Modal, Label, Tab, Message } from "semantic-ui-react"
 import JsonEditor from "@dr-kobros/react-jsoneditor"
+import { translate } from "react-i18next"
+import _ from "lodash"
 
 import {
 	requestPluginConfig,
@@ -65,26 +63,28 @@ class Plugins extends Component {
 	}
 
 	render() {
+		const _t = this.props.t
+
 		return <div>
 			<Segment basic>
 				<Message warning>
-					<Message.Header>This section of the admin panel is not yet completed</Message.Header>
-					<p>Changing the config files of plugins does not do anything yet!</p>
+					<Message.Header>{_t("WIPTitle")}</Message.Header>
+					<p>{_t("WIPText")}</p>
 				</Message>
 			</Segment>
 			<DataView
-				title="Installed Plugins"
 				icon="plug"
+				title={_t("Plugins")}
 				fields={{
-					id: "Id",
-					name: "Name",
-					version: "Version",
+					id: _t("Id"),
+					name: _t("Name"),
+					version: _t("Version"),
 				}}
 				actions={(plugin, view) => <div>
 					<Button
 							color="blue"
 							onClick={e => this.showDetails(plugin, view)}>
-						Details
+						{_t("Details")}
 					</Button>
 				</div>}
 			/>
@@ -94,6 +94,8 @@ class Plugins extends Component {
 	}
 
 	renderModal() {
+		const _t = this.props.t
+
 		return <Modal
 				open={this.state.modal}
 				onClose={this.toggleModal}
@@ -118,8 +120,8 @@ class Plugins extends Component {
 				} />
 			</Modal.Content>
 			<Modal.Actions>
-				<Button primary content="Save" onClick={this.save} />
-				<Button content="Cancel" onClick={this.toggleModal} />
+				<Button primary content={_t("Save")} onClick={this.save} />
+				<Button content={_t("Cancel")} onClick={this.toggleModal} />
 			</Modal.Actions>
 		</Modal>
 	}
@@ -140,4 +142,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Plugins);
+export default connect(mapStateToProps, mapDispatchToProps)(translate("Plugins")(Plugins));

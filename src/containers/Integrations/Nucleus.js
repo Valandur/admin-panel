@@ -9,8 +9,8 @@ class Nucleus extends Component {
 	render() {
 		return (
 			<Switch>
-				<Route path="/nucleus/kits" name="Kits" component={Kits} />
-				<Route path="/nucleus/jails" name="Jails" component={Jails} />
+				<Route path="/nucleus/kits" component={Kits} />
+				<Route path="/nucleus/jails" component={Jails} />
 			</Switch>
 		)
 	}

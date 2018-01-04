@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Form, Label, Button, Progress, Icon } from "semantic-ui-react"
+import { translate } from "react-i18next"
 import _ from "lodash"
 
 import { formatRange } from "../../components/Util"
@@ -21,15 +22,17 @@ class Entities extends Component {
 	}
 
 	render() {
+		const _t = this.props.t
+
 		return <DataView
 			canDelete
-			title="Entities"
 			icon="paw"
-			filterTitle="Filter entities"
-			createTitle="Spawn an enttiy"
+			title={_t("Entities")}
+			filterTitle={_t("FilterEntities")}
+			createTitle={_t("SpawnEntity")}
 			fields={{
 				"type.name": {
-					label: "Type",
+					label: _t("Type"),
 					create: true,
 					filter: true,
 					filterName: "type.id",
@@ -42,7 +45,7 @@ class Entities extends Component {
 					),
 				},
 				world: {
-					label: "World",
+					label: _t("World"),
 					view: false,
 					create: true,
 					filter: true,
@@ -56,7 +59,7 @@ class Entities extends Component {
 					required: true,
 				},
 				position: {
-					label: "Location",
+					label: _t("Location"),
 					isGroup: true,
 					view: (entity) =>
 						<Button color="blue">
@@ -68,7 +71,7 @@ class Entities extends Component {
 						</Button>,
 					create: (view) =>
 						<Form.Group inline>
-							<label>Position</label>
+							<label>{_t("Position")}</label>
 							<Form.Input
 								type="number"
 								width={6}
@@ -96,7 +99,7 @@ class Entities extends Component {
 						</Form.Group>,
 				},
 				health: {
-					label: "Health",
+					label: _t("Health"),
 					wide: true,
 					view: (entity) => {
 						if (!entity.health) return;
@@ -108,49 +111,49 @@ class Entities extends Component {
 					}
 				},
 				info: {
-					label: "Info",
+					label: _t("Info"),
 					wide: true,
 					view: (entity) =>
 						<div>
 							{entity.aiEnabled &&
 								<Label>
-									AI
+									{_t("AI")}
 								</Label>}
 							{entity.age &&
 								<Label>
-									Age
+									{_t("Age")}
 									<Label.Detail>
-										{entity.age.adult ? "Adult" : entity.age.age}
+										{entity.age.adult ? _t("Adult") : entity.age.age}
 									</Label.Detail>
 								</Label>}
 							{entity.breedable &&
 								<Label>
-									Breedable
+									{_t("Breedable")}
 								</Label>}
 							{entity.career &&
 								<Label>
-									Career
+									{_t("Career")}
 									<Label.Detail>{entity.career.name}</Label.Detail>
 								</Label>}
 							{entity.flying &&
 								<Label>
-									Flying
+									{_t("Flying")}
 								</Label>}
 							{entity.glowing &&
 								<Label>
-									Glowing
+									{_t("Glowing")}
 								</Label>}
 							{entity.silent &&
 								<Label>
-									Silent
+									{_t("Silent")}
 								</Label>}
 							{entity.sneaking &&
 								<Label>
-									Sneaking
+									{_t("Sneaking")}
 								</Label>}
 							{entity.sprinting &&
 								<Label>
-									Sprinting
+									{_t("Sprinting")}
 								</Label>}
 						</div>,
 				},
@@ -173,4 +176,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Entities);
+export default connect(mapStateToProps, mapDispatchToProps)(translate("Entities")(Entities));

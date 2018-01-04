@@ -1,10 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 import { connect } from "react-redux"
-import _ from 'lodash'
 import { Form } from "semantic-ui-react"
-import Autosuggest from "../../components/Autosuggest"
+import { translate } from "react-i18next"
 import moment from "moment"
+import _ from "lodash"
 
+import Autosuggest from "../../components/Autosuggest"
 import { requestList } from "../../actions/dataview"
 import { requestExecute } from "../../actions/command"
 
@@ -78,19 +79,21 @@ class Commands extends Component {
 	}
 
 	render() {
+		const _t = this.props.t
+		
 		return <DataView
-			title="Commands"
+			title={_t("Commands")}
 			icon="terminal"
-			createTitle="Execute a command"
-			createButton="Execute"
-			filterTitle="Filter commands"
+			createTitle={_t("ExecuteCommand")}
+			createButton={_t("Execute")}
+			filterTitle={_t("FilterCommands")}
 			fields={{
 				timestamp: {
-					label: "Timestamp",
+					label: _t("Timestamp"),
 					view: cmd => moment.unix(cmd.timestamp).calendar(),
 				},
 				source: {
-					label: "Source",
+					label: _t("Source"),
 					filter: true,
 					filterValue: cmd => cmd.cause.source && cmd.cause.source.name ? 
 						cmd.cause.source.name : cmd.cause.source,
@@ -98,7 +101,7 @@ class Commands extends Component {
 						cmd.cause.source.name : cmd.cause.source,
 				},
 				command: {
-					label: "Command",
+					label: _t("Command"),
 					filter: true,
 					filterValue: cmd => cmd.command + " " + cmd.args,
 					wide: true,
@@ -112,7 +115,7 @@ class Commands extends Component {
 							<Form.Field
 								control={Autosuggest}
 								name="execCmd"
-								placeholder="Execute a command"
+								placeholder={_t("ExecuteCommand")}
 								getSuggestions={this.getSuggestions}
 								onChange={view.handleChange}
 							/>
@@ -120,16 +123,16 @@ class Commands extends Component {
 							<Form.Group widths="equal">
 								<Form.Input
 									name="waitLines"
-									placeholder="# of response lines to wait for"
-									label="Wait lines"
+									placeholder={_t("WaitLinesDescr")}
+									label={_t("WaitLines")}
 									type="number"
 									onChange={view.handleChange}
 								/>
 
 								<Form.Input
 									name="waitTime"
-									placeholder="Milliseconds to wait for a response"
-									label="Wait time"
+									placeholder={_t("WaitTimeDescr")}
+									label={_t("WaitTime")}
 									type="number"
 									onChange={view.handleChange}
 								/>
@@ -158,4 +161,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Commands);
+export default connect(mapStateToProps, mapDispatchToProps)(translate("Commands")(Commands));

@@ -1,5 +1,6 @@
 import React from "react"
 import { Accordion, Radio, Button } from "semantic-ui-react"
+import { translate } from "react-i18next"
 import _ from "lodash"
 
 import ItemStack from "../ItemStack"
@@ -29,9 +30,11 @@ class Inventory extends React.Component {
 	}
 
 	render() {
+		const _t = this.props.t
+
 		if (this.props.items.length === 0) {
 			return <Button color="blue" disabled>
-				Empty Inventory
+				{_t("EmptyInventory")}
 			</Button>
 		}
 
@@ -65,7 +68,7 @@ class Inventory extends React.Component {
 
 		return <Accordion>
 			<Accordion.Title as={Button} primary active={this.state.shown} onClick={this.toggle}>
-				{this.state.shown ? "Hide" : "Show"} Inventory
+				{this.state.shown ? _t("HideInventory") : _t("ShowInventory")}
 			</Accordion.Title>
 			<Accordion.Content active={this.state.shown}>
 				{content}
@@ -74,4 +77,4 @@ class Inventory extends React.Component {
 	}
 }
 
-export default Inventory
+export default translate("Inventory")(Inventory)

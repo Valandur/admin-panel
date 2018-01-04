@@ -1,10 +1,9 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import {
-	Modal, Icon, Button, Form, Label, Dropdown, Progress, 
-} from "semantic-ui-react"
-import _ from "lodash"
+import { Modal, Icon, Button, Form, Label, Dropdown, Progress } from "semantic-ui-react"
+import { translate, Trans } from "react-i18next"
 import moment from "moment"
+import _ from "lodash"
 
 import { requestCatalog } from "../../actions"
 import { requestList } from "../../actions/dataview"
@@ -14,7 +13,7 @@ const DataView = DataViewFunc("block/op", "uuid", true)
 
 const BLOCK_TYPES = "block.BlockType"
 
-class Operations extends Component {
+class BlockOperations extends Component {
 
 	constructor(props) {
 		super(props);
@@ -55,14 +54,16 @@ class Operations extends Component {
 	}
 
 	render() {
+		const _t = this.props.t
+
 		return <div>
 			<DataView
-				title="Block Operations"
 				icon="fa-th-large"
-				createTitle="Start an operation"
+				title={_t("BlockOperations")}
+				createTitle={_t("StartOperation")}
 				fields={{
-					type: "Type",
-					uuid: "UUID",
+					type: _t("Type"),
+					uuid: _t("UUID"),
 					create: {
 						isGroup: true,
 						view: false,
@@ -72,9 +73,9 @@ class Operations extends Component {
 									<Form.Field
 										required fluid selection search
 										name="type"
-										label="Type"
 										control={Dropdown}
-										placeholder="Type"
+										label={_t("Type")}
+										placeholder={_t("Type")}
 										onChange={view.handleChange}
 										value={view.state.type}
 										options={this.props.types}
@@ -82,9 +83,9 @@ class Operations extends Component {
 									<Form.Field
 										required fluid selection search
 										name="world"
-										label="World"
 										control={Dropdown}
-										placeholder="World"
+										label={_t("World")}
+										placeholder={_t("World")}
 										onChange={view.handleChange}
 										value={view.state.world}
 										options={_.map(this.props.worlds, w => 
@@ -94,9 +95,9 @@ class Operations extends Component {
 									<Form.Field
 										required fluid selection search
 										name="block"
-										label="Block"
 										control={Dropdown}
-										placeholder="Block"
+										label={_t("Block")}
+										placeholder={_t("Block")}
 										onChange={view.handleChange}
 										value={view.state.block}
 										options={_.map(this.props.blockTypes, block => 
@@ -107,14 +108,14 @@ class Operations extends Component {
 								</Form.Group>
 
 								<Form.Group width={1} inline>
-									<label>Min</label>
+									<label>{_t("Min")}</label>
 									<Form.Input width={6} name="minX" placeholder="X" onChange={view.handleChange} />
 									<Form.Input width={6} name="minY" placeholder="Y" onChange={view.handleChange} />
 									<Form.Input width={6} name="minZ" placeholder="Z" onChange={view.handleChange} />
 								</Form.Group>
 
 								<Form.Group width={1} inline>
-									<label>Max</label>
+									<label>{_t("Max")}</label>
 									<Form.Input width={6} name="maxX" placeholder="X" onChange={view.handleChange} />
 									<Form.Input width={6} name="maxY" placeholder="Y" onChange={view.handleChange} />
 									<Form.Input width={6} name="maxZ" placeholder="Z" onChange={view.handleChange} />
@@ -123,17 +124,19 @@ class Operations extends Component {
 						},
 					},
 					status: {
-						label: "Status",
+						label: _t("Status"),
 						view: (op) => {
 							return <Label color={this.getStatusColor(op)}>
-								{op.status}
+								{_t(op.status)}
 							</Label>
 						},
 					},
 					progress: {
-						label: "Progress",
+						label: _t("Progress"),
 						wide: true,
 						view: (op) => {
+							const time = moment().add(op.estimatedSecondsRemaining, "s").fromNow(true)
+
 							return <Progress
 									progress
 									color={this.getStatusColor(op)}
@@ -141,34 +144,54 @@ class Operations extends Component {
 									percent={(op.progress * 100).toFixed(1)}>
 
 								{op.status === "RUNNING" || op.status === "PAUSED" ? 
-									moment().add(op.estimatedSecondsRemaining, "s").fromNow(true) + 
-									" remaining"
+									time + " remaining"
 								: 
-									"Done"
+									_t("Done")
 								}
 							</Progress>
 						},
 					},
 				}}
 				actions={(op, view) => <div>
-					<Button color="blue" onClick={e => this.showDetails(op, view)}>Details</Button>
+					<Button color="blue" onClick={e => this.showDetails(op, view)}>
+						{_t("Details")}
+					</Button>
 					{" "}
 					{op.status === "RUNNING" || op.status === "PAUSED" ?
 						<Button
 								color={op.status === "RUNNING" ? "yellow" : "green"}
-								onClick={e => this.props.requestPause(op, op.status === "RUNNING")}>
+								onClick={e => view.save(op, { pause: op.status === "RUNNING" })}>
 							<Icon name={(op.status === "RUNNING" ? "pause" : "play")} />
 							{" "}
-							{op.status === "RUNNING" ? "Pause" : "Resume"}
+							{op.status === "RUNNING" ? _t("Pause") : _t("Resume")}
 						</Button>
 					: null}
 					{" "}
 					{op.status === "RUNNING" || op.status === "PAUSED" ? 
-						<Button color="red" onClick={e => this.props.requestStop(op)}>
-							<Icon name="stop" /> Stop
+						<Button color="red" onClick={e => view.delete(op)}>
+							<Icon name="stop" /> {_t("Stop")}
 						</Button>
 					: null}
 				</div>}
+				onCreate={(obj, view) =>
+					view.create({
+						type: obj.type,
+						world: obj.world,
+						block: {
+							type: obj.block,
+						},
+						min: {
+							x: parseFloat(obj.minX),
+							y: parseFloat(obj.minY),
+							z: parseFloat(obj.minZ),
+						},
+						max: {
+							x: parseFloat(obj.maxX),
+							y: parseFloat(obj.maxY),
+							z: parseFloat(obj.maxZ),
+						},
+					})
+				}
 			/>
 			{this.renderModal()}
 		</div>
@@ -177,7 +200,9 @@ class Operations extends Component {
 	renderModal() {
 		return <Modal open={this.state.modal} onClose={this.toggleModal}>
 			<Modal.Header>
-				Operation {this.state.operation.uuid}
+				<Trans i18nKey="OperationTitle" uuid={this.state.operation.uuid}>
+					Operation {this.state.operation.uuid}
+				</Trans>
 			</Modal.Header>
 			<Modal.Content>
 				<div><b>Status:</b> {this.state.operation.status}</div>
@@ -216,4 +241,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Operations);
+export default connect(mapStateToProps, mapDispatchToProps)(translate("BlockOperations")(BlockOperations))

@@ -1,10 +1,9 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import {
-	Grid, Modal, Label, Table, Button, Radio, Icon, Form
-} from "semantic-ui-react"
-import _ from "lodash"
+import { Grid, Modal, Label, Table, Button, Radio, Icon, Form } from "semantic-ui-react"
+import { translate, Trans } from "react-i18next"
 import moment from "moment"
+import _ from "lodash"
 
 import { requestCatalog } from "../../actions"
 
@@ -89,20 +88,22 @@ class Worlds extends Component {
 	}
 
 	render() {
+		const _t = this.props.t
+
 		return <div>
 			<DataView
-				title="Worlds"
-				icon="paw"
-				createTitle="Create a world"
+				icon="globe"
+				title={_t("Worlds")}
+				createTitle={_t("CreateWorld")}
 				fields={{
 					"name": {
-						label: "Name",
+						label: _t("Name"),
 						create: true,
 						required: true,
 						view: world => <div><b>{world.name}</b><br />{world.uuid}</div>,
 					},
 					"dimensionType.name": {
-						label: "Dimension",
+						label: _t("Dimension"),
 						create: true,
 						createName: "dimensionType.id",
 						required: true,
@@ -114,7 +115,7 @@ class Worlds extends Component {
 						),
 					},
 					"generatorType.name": {
-						label: "Generator",
+						label: _t("Generator"),
 						create: true,
 						view: false,
 						required: true,
@@ -126,7 +127,7 @@ class Worlds extends Component {
 						),
 					},
 					"difficulty.name": {
-						label: "Difficulty",
+						label: _t("Difficulty"),
 						create: true,
 						view: false,
 						required: true,
@@ -138,7 +139,7 @@ class Worlds extends Component {
 						),	
 					},
 					"gameMode.name": {
-						label: "Game Mode",
+						label: _t("GameMode"),
 						create: true,
 						view: false,
 						required: true,
@@ -154,41 +155,41 @@ class Worlds extends Component {
 						view: false,
 						create: (view) =>
 							<Form.Group inline>
-								<label>Features:</label>
+								<label>{_t("Features")}:</label>
 								<Form.Checkbox
 									name="loadOnStartup"
-									label="Load on startup"
+									label={_t("LoadOnStartup")}
 									checked={view.state.loadOnStartup}
 									onChange={view.handleChange}
 								/>
 								<Form.Checkbox
 									name="keepSpawnLoaded"
-									label="Keep spawn loaded"
+									label={_t("KeepSpawnLoaded")}
 									checked={view.state.keepSpawnLoaded}
 									onChange={view.handleChange}
 								/>
 								<Form.Checkbox
 									name="commandsAllowed"
-									label="Commands allowed"
+									label={_t("CommandsAllowed")}
 									checked={view.state.commandsAllowed}
 									onChange={view.handleChange}
 								/>
 								<Form.Checkbox
 									name="generateBonusChest"
-									label="Generate bonus chest"
+									label={_t("GenerateBonusChest")}
 									checked={view.state.generateBonusChest}
 									onChange={view.handleChange}
 								/>
 								<Form.Checkbox
 									name="usesMapFeatures"
-									label="Enable map features"
+									label={_t("EnableMapFeatures")}
 									checked={view.state.usesMapFeatures}
 									onChange={view.handleChange}
 								/>
 							</Form.Group>,
 					},
 					"info": {
-						label: "Info",
+						label: _t("Info"),
 						view: world =>
 							<div>
 								<div style={{display:"inline-block",marginRight:"1em"}}>
@@ -214,10 +215,10 @@ class Worlds extends Component {
 							</div>,
 					},
 					"status": {
-						label: "Status",
+						label: _t("Status"),
 						view: world =>
 							<Label color={world.loaded ? "green" : "yellow"}>
-								{world.loaded ? "Loaded" : "Unloaded"}
+								{world.loaded ? _t("Loaded") : _t("Unloaded")}
 							</Label>,
 					}
 				}}
@@ -229,7 +230,7 @@ class Worlds extends Component {
 							disabled={world.updating}
 							onClick={() => this.showGameRules(world, view)}
 						>
-							Game Rules
+							{_t("GameRules")}
 						</Button>{" "}
 						<Button
 							type="button"
@@ -237,7 +238,7 @@ class Worlds extends Component {
 							onClick={() => view.save(world, { loaded: !world.loaded })}
 							disabled={world.updating}
 						>
-							{world.loaded ? "Unload " : "Load "}
+							{world.loaded ? _t("Unload") : _t("Load")}&nbsp;
 						</Button>{" "}
 						{!world.loaded ?
 							<Button
@@ -246,7 +247,7 @@ class Worlds extends Component {
 								disabled={world.updating}
 								onClick={() => view.delete(world)}
 							>
-								Delete
+								{_t("Delete")}
 							</Button>
 						: null}
 						{" "}
@@ -260,7 +261,10 @@ class Worlds extends Component {
 			{this.state.rules ?
 				<Modal open={this.state.modal} onClose={this.toggleModal}>
 					<Modal.Header>
-						Game Rules for '{this.state.rulesWorld.name}'
+						<Trans i18nKey="GameRulesTitle" name={this.state.rulesWorld.name}>
+							Game Rules for '{this.state.rulesWorld.name}'
+						</Trans>
+						&nbsp;
 						({this.state.rulesWorld.dimensionType.name})
 					</Modal.Header>
 					<Modal.Content>
@@ -269,8 +273,8 @@ class Worlds extends Component {
 								<Table>
 									<Table.Header>
 										<Table.Row>
-											<Table.HeaderCell>Name</Table.HeaderCell>
-											<Table.HeaderCell>Value</Table.HeaderCell>
+											<Table.HeaderCell>{_t("Name")}</Table.HeaderCell>
+											<Table.HeaderCell>{_t("Value")}</Table.HeaderCell>
 										</Table.Row>
 									</Table.Header>
 									<Table.Body>
@@ -295,8 +299,8 @@ class Worlds extends Component {
 								<Table>
 									<Table.Header>
 										<Table.Row>
-											<Table.HeaderCell>Name</Table.HeaderCell>
-											<Table.HeaderCell>Value</Table.HeaderCell>
+											<Table.HeaderCell>{_t("Name")}</Table.HeaderCell>
+											<Table.HeaderCell>{_t("Value")}</Table.HeaderCell>
 										</Table.Row>
 									</Table.Header>
 									<Table.Body>
@@ -319,8 +323,8 @@ class Worlds extends Component {
 						</Grid>
 					</Modal.Content>
 					<Modal.Actions>
-						<Button color="blue" onClick={this.saveGameRules}>Save</Button>&nbsp;
-						<Button onClick={this.toggleModal}>Cancel</Button>
+						<Button color="blue" onClick={this.saveGameRules}>{_t("Save")}</Button>&nbsp;
+						<Button onClick={this.toggleModal}>{_t("Cancel")}</Button>
 					</Modal.Actions>
 				</Modal>
 			: null}
@@ -343,4 +347,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Worlds);
+export default connect(mapStateToProps, mapDispatchToProps)(translate("Worlds")(Worlds));

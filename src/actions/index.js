@@ -6,6 +6,14 @@ export function requestServlets() {
 	}
 }
 
+export const CHANGE_LANGUAGE = "CHANGE_LANG"
+export function changeLanguage(lang) {
+	return {
+		type: CHANGE_LANGUAGE,
+		lang: lang,
+	}
+}
+
 export const LOGIN_REQUEST = "LOGIN_REQUEST"
 export const LOGIN_RESPONSE = "LOGIN_RESPONSE"
 export function requestLogin(username, password) {

@@ -1,7 +1,6 @@
 import React, { Component } from "react"
-import {
-	Form, Dropdown, Header, Table, Menu, Icon, Button
-} from "semantic-ui-react"
+import { Form, Dropdown, Header, Table, Menu, Icon, Button } from "semantic-ui-react"
+import { translate } from "react-i18next"
 import _ from "lodash"
 
 import { handleChange } from "../Util"
@@ -87,6 +86,8 @@ class DataTable extends Component {
 			}),
 		}
 
+		const _t = this.props.t
+
 		return <div style={{marginTop: "2em"}}>
 			<Header>
 				<Icon fitted name={icon} /> {title}
@@ -101,7 +102,7 @@ class DataTable extends Component {
 							</Table.HeaderCell>
 						)}
 						{actions || canEdit || canDelete ? 
-							<Table.HeaderCell>Actions</Table.HeaderCell> 
+							<Table.HeaderCell>{_t("Actions")}</Table.HeaderCell> 
 						: null}
 					</Table.Row>
 				</Table.Header>
@@ -137,7 +138,7 @@ class DataTable extends Component {
 											loading={obj.updating}
 											onClick={() => this.props.onSave(obj, this.state.newData, thisRef)}
 										>
-											<Icon name="save" /> Save
+											<Icon name="save" /> {_t("Save")}
 										</Button>,
 										<Button
 											key="cancel"
@@ -146,7 +147,7 @@ class DataTable extends Component {
 											loading={obj.updating}
 											onClick={() => this.onEdit(null, thisRef)}
 										>
-											<Icon name="cancel" /> Cancel
+											<Icon name="cancel" /> {_t("Cancel")}
 										</Button>]
 									: canEdit ?
 										<Button
@@ -155,7 +156,7 @@ class DataTable extends Component {
 											loading={obj.updating}
 											onClick={() => this.onEdit(obj, thisRef)}
 										>
-											<Icon name="edit" /> Edit
+											<Icon name="edit" /> {_t("Edit")}
 										</Button>
 									: null}
 									{canDelete &&
@@ -165,7 +166,7 @@ class DataTable extends Component {
 											loading={obj.updating}
 											onClick={() => this.props.onDelete(obj, thisRef)}
 										>
-											<Icon name="trash" /> Remove
+											<Icon name="trash" /> {_t("Remove")}
 										</Button>
 									}
 									{actions && actions(obj, thisRef)}
@@ -230,4 +231,4 @@ class DataTable extends Component {
 	}
 }
 
-export default DataTable;
+export default translate("DataTable")(DataTable);

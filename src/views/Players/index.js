@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Icon, Label, Modal, Progress, Button } from "semantic-ui-react"
+import { translate, Trans } from "react-i18next"
 import _ from "lodash"
 
 import Inventory from "../../components/Inventory"
@@ -55,14 +56,16 @@ class Players extends Component {
 	}
 
 	render() {
+		const _t = this.props.t
+
 		return <div>
 			<DataView
-				title="Players"
-				filterTitle="Filter players"
 				icon="users"
+				title={_t("Players")}
+				filterTitle={_t("FilterPlayers")}
 				fields={{
 					name: {
-						label: "Name & UUID",
+						label: _t("NameUUID"),
 						filter: true,
 						view: player => 
 							<div>
@@ -72,7 +75,7 @@ class Players extends Component {
 							</div>,
 					},
 					world: {
-						label: "World",
+						label: _t("World"),
 						view: false,
 						filter: true,
 						filterName: "location.world.uuid",
@@ -85,7 +88,7 @@ class Players extends Component {
 						required: true,
 					},
 					location: {
-						label: "Location",
+						label: _t("Location"),
 						view: player =>
 							<Button color="blue">
 								<Icon name="globe" />
@@ -96,7 +99,7 @@ class Players extends Component {
 							</Button>,
 					},
 					health: {
-						label: "Health & Food",
+						label: _t("HealthFood"),
 						wide: true,
 						view: player => 
 							<div>
@@ -114,7 +117,7 @@ class Players extends Component {
 							</div>
 					},
 					info: {
-						label: "Info",
+						label: _t("Info"),
 						wide: true,
 						view: player =>
 							<div>
@@ -124,7 +127,7 @@ class Players extends Component {
 									</Label>}
 								{player.experience &&
 									<Label>
-										Level
+										{_t("Level")}
 										<Label.Detail>{player.experience.level}</Label.Detail>
 									</Label>}
 							</div>,
@@ -133,22 +136,28 @@ class Players extends Component {
 				actions={(player, view) =>
 					<div>
 						<Button
-							color="blue" loading={player.updating} disabled={player.updating}
+							color="blue"
+							loading={player.updating}
+							disabled={player.updating}
 							onClick={() => this.showInventory(player, view)}
 						>
-							Inventory
+							{_t("Inventory")}
 						</Button>{" "}
 						<Button
-							color="yellow" loading={player.updating} disabled={player.updating}
+							color="yellow"
+							loading={player.updating}
+							disabled={player.updating}
 							onClick={() => this.kick(player)}
 						>
-							Kick
+							{_t("Kick")}
 						</Button>{" "}
 						<Button
-							color="red" loading={player.updating} disabled={player.updating}
+							color="red"
+							loading={player.updating}
+							disabled={player.updating}
 							onClick={() => this.ban(player)}
 						>
-							Ban
+							{_t("Ban")}
 						</Button>
 					</div>
 				}
@@ -157,7 +166,9 @@ class Players extends Component {
 			{this.state.inventory ?
 				<Modal open={this.state.modal} onClose={this.toggleModal}>
 					<Modal.Header>
-						{this.state.player.name}'s Inventory
+						<Trans i18nKey="InventoryTitle" name={this.state.player.name}>
+							{this.state.player.name}'s Inventory
+						</Trans>
 					</Modal.Header>
 					<Modal.Content>
 						<Inventory
@@ -185,4 +196,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Players);
+export default connect(mapStateToProps, mapDispatchToProps)(translate("Players")(Players));
