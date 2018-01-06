@@ -120,8 +120,8 @@ export default {
 	},
 	Plugins: {
 		Plugins: "InstalledPlugins",
-		WIPTitle: "This section of the admin panel is not yet completed",
-		WIPText: "Changing the config files of plugins does not do anything yet!",
+		WarnTitle: "Be careful when editing configs!",
+		WarnText: "Web-API automatically makes a backup of your configs before saving them, but caution is still advised when changing config values. To apply your new configs use `sponge plugins reload`. Plugins are not required to implement the reload event, so this might not work for all plugins. Use a server restart if required.",
 		Id: "Id",
 		Name: "Name",
 		Version: "Version",

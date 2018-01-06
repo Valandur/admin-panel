@@ -68,8 +68,8 @@ class Plugins extends Component {
 		return <div>
 			<Segment basic>
 				<Message warning>
-					<Message.Header>{_t("WIPTitle")}</Message.Header>
-					<p>{_t("WIPText")}</p>
+					<Message.Header>{_t("WarnTitle")}</Message.Header>
+					<p>{_t("WarnText")}</p>
 				</Message>
 			</Segment>
 			<DataView
@@ -102,7 +102,7 @@ class Plugins extends Component {
 				size="fullscreen">
 			<Modal.Header>
 				{this.state.plugin.name}{" "}
-				<Label color="primary">{this.state.plugin.version}</Label>
+				<Label color="blue">{this.state.plugin.version}</Label>
 			</Modal.Header>
 			<Modal.Content>
 				<Tab panes={
