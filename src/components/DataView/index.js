@@ -53,20 +53,24 @@ class DataView extends Component {
 			nextState.data !== this.state.data;
 	}
 
+	// Create a new data entry
 	create(data) {
 		this.props.requestCreate(data)
 	}
 
+	// Get the details for a data entry
 	details(data) {
 		this.props.requestDetails(data)
 	}
 
+	// Select a data entry for editing
 	edit(data) {
 		this.setState({
 			data: data,
 		})
 	}
 
+	// Save/Update an existing data entry
 	save(data, newData) {
 		this.props.requestChange(data, newData)
 		this.setState({
@@ -74,6 +78,7 @@ class DataView extends Component {
 		})
 	}
 
+	// Delete a data entry
 	delete(data) {
 		this.props.requestDelete(data);
 	}
@@ -82,6 +87,7 @@ class DataView extends Component {
 		const checks = [];
 		let regsValid = false;
 
+		// Reference that we pass to our various functions
 		const thisRef = {
 			create: this.create,
 			details: this.details,
@@ -90,12 +96,16 @@ class DataView extends Component {
 			delete: this.delete,
 		};
 
+		// Get all the columns of the table
 		const columns = _.mapValues(this.props.fields, (value, name) => {
 			let newValue = null;
 
+			// If the column is a function, use that function to display the cell
 			if (typeof value === "function") {
 				newValue = (obj, tableRef) => value(obj, _.assign({}, tableRef, thisRef))
-			} else if (typeof value.view === "function") {
+			} 
+			// else if the column provides a view function then use that to display the cell
+			else if (typeof value.view === "function") {
 				newValue = _.assign({}, value, {
 					view: (obj, tableRef) => value.view(obj, _.assign({}, tableRef, thisRef)),
 				})
@@ -103,38 +113,49 @@ class DataView extends Component {
 
 			return newValue ? newValue : value;
 		});
+		// Get all the fields for the create form
 		const createFields = _.pickBy(this.props.fields, "create")
+		// Get all the fields for the filter form
 		const filterFields = _.pickBy(this.props.fields, "filter")
 
 		try {
 			_.each(this.props.filter, (value, name) => {
-				if (typeof filterFields[name].filterValue === "function") {
-					checks.push((dataVal) => (new RegExp(value, "i")).test(
-						filterFields[name].filterValue(dataVal)));
-				} else if (_.isArray(value)) {
+				// Get the filter field according to the filterName if specified,
+				// otherwise just the name
+				const ff = _.find(filterFields, { filterName: name }) || filterFields[name];
+
+				// If we have a filterValue function then use that as the value for the check
+				let val = dataVal => _.get(dataVal, name)
+				if (typeof ff.filterValue === "function") {
+					val = ff.filterValue
+				} 
+
+				// If it is an array then we need to check if the value is in the array
+				if (_.isArray(value)) {
 					if (value.length === 0) return;
-					checks.push({
-						name: name,
-						run: (dataVal) => value.indexOf(dataVal) >= 0
+					checks.push(dataVal => {
+						const v = val(dataVal);
+						return value.indexOf(v) >= 0
 					})
-				} else {
-					checks.push({
-						name: name,
-						run: (dataVal) => (new RegExp(value, "i")).test(dataVal)
-					});
+				}
+				// Otherwise just use a normal regex check 
+				else {
+					checks.push(dataVal => (new RegExp(value, "i")).test(val(dataVal)))
 				}
 			})
 			regsValid = true;
 		} catch (e) {}
 
+		// Filter out the values according to the filters
+		// If the regex isn't valid then we don't want to filter
 		const list = _.filter(this.props.list, data => {
-			if (!regsValid) return true;
-			return _.every(checks, check => typeof check === "function" ?
-				check(data) : check.run(_.get(data, check.name)))
+			return !regsValid || _.every(checks, check => check(data))
 		});
 
+		// Check how many columns we need for the create and filter form
 		const cols = this.props.createTitle && this.props.filterTitle ? 2 : 1;
 
+		// Wrap the provided actions if we have any
 		const origActions = this.props.actions
 		let actions = origActions;
 		if (typeof origActions === "function") {
