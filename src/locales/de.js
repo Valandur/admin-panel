@@ -92,9 +92,9 @@ export default {
 	},
 	TileEntities: {
 		TileEntities: "Tile Entities",
-		FilterEntities: "Filter tile entities",
-		Type: "Type",
-		World: "World",
+		FilterEntities: "Tile entities filtern",
+		Type: "Typ",
+		World: "Welt",
 		Position: "Position",
 		Info: "Info",
 		MobSpawner: "Mob Spawner",
