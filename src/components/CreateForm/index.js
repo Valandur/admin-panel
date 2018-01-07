@@ -10,11 +10,9 @@ class CreateForm extends Component {
 
 	constructor(props) {
 		super(props);
-
-		const newData = {};
-		_.each(props.fields, (field, name) => newData[name] = "")
+		
 		this.state = {
-			newData: newData,
+			newData: {},
 		};
 
 		this.doHandleChange = this.doHandleChange.bind(this)
