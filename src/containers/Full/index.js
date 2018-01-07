@@ -1,27 +1,43 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Switch, Route, Redirect, NavLink } from "react-router-dom"
-import { Sidebar, Menu, Image, Icon, Dropdown } from "semantic-ui-react"
+import { Sidebar, Menu, Image, Icon, Dropdown, Loader, Message } from "semantic-ui-react"
 import { translate } from "react-i18next"
-
-import Dashboard from "../../views/Dashboard"
-import Chat from "../../views/Chat"
-import Commands from "../../views/Commands"
-import Map from "../../views/Map"
-import Worlds from "../../views/Worlds"
-import Players from "../../views/Players"
-import Entities from "../../views/Entities"
-import TileEntities from "../../views/TileEntities"
-import BlockOperations from "../../views/BlockOperations"
-import Plugins from "../../views/Plugins"
-import ServerSettings from "../../views/ServerSettings"
-
-import Nucleus from "../Integrations/Nucleus"
-import HuskyCrates from "../Integrations/HuskyCrates"
-import WebBooks from "../Integrations/WebBooks"
-import MMCTickets from "../Integrations/MMCTickets"
+import Loadable from "react-loadable"
 
 import { requestServlets, requestLogout, changeLanguage } from "../../actions"
+
+const Loading = (props) => {
+	if (props.error) {
+		return <Message negative>
+			<Message.Header>Apologies, there was an error!</Message.Header>
+		</Message>
+	} else if (props.timedOut) {
+		return <Loader size="big">This is taking a while...</Loader>;
+	} else if (props.pastDelay) {
+		return <Loader size="big">Loading...</Loader>
+	} else {
+		return null;
+	}
+}
+
+const Dashboard = Loadable({ loader: () => import("../../views/Dashboard"), loading: Loading })
+const Chat = Loadable({ loader: () => import("../../views/Chat"), loading: Loading })
+const Commands = Loadable({ loader: () => import("../../views/Commands"), loading: Loading })
+const Map = Loadable({ loader: () => import("../../views/Map"), loading: Loading })
+const Worlds = Loadable({ loader: () => import("../../views/Worlds"), loading: Loading })
+const Players = Loadable({ loader: () => import("../../views/Players"), loading: Loading })
+const Entities = Loadable({ loader: () => import("../../views/Entities"), loading: Loading })
+const TileEntities = Loadable({ loader: () => import("../../views/TileEntities"), loading: Loading })
+const BlockOperations = Loadable({ loader: () => import("../../views/BlockOperations"), loading: Loading })
+const Plugins = Loadable({ loader: () => import("../../views/Plugins"), loading: Loading })
+const ServerSettings = Loadable({ loader: () => import("../../views/ServerSettings"), loading: Loading })
+
+const Nucleus = Loadable({ loader: () => import("../Integrations/Nucleus"), loading: Loading })
+const HuskyCrates = Loadable({ loader: () => import("../Integrations/HuskyCrates"), loading: Loading })
+const WebBooks = Loadable({ loader: () => import("../Integrations/WebBooks"), loading: Loading })
+const MMCTickets = Loadable({ loader: () => import("../Integrations/MMCTickets"), loading: Loading })
+
 
 class Full extends Component {
 	
