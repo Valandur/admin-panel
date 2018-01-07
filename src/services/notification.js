@@ -36,17 +36,18 @@ const persist = ({ dispatch, getState }) => next => action => {
 
 		case DATA_CREATE_RESPONSE:
 			if (!action.ok) break;
-			showNotif("success", _.upperFirst(action.endpoint), "Created " + _.get(action.data, action.id))
+			showNotif("success", _.upperFirst(action.endpoint), "Created " + action.id(action.data))
 			break;
 
 		case DATA_CHANGE_RESPONSE:
 			if (!action.ok) break;
-			showNotif("success", _.upperFirst(action.endpoint), "Changed " + _.get(action.data, action.id))
+			console.log(action);
+			showNotif("success", _.upperFirst(action.endpoint), "Changed " + action.id(action.data))
 			break;
 
 		case DATA_DELETE_RESPONSE:
 			if (!action.ok) break;
-			showNotif("success", _.upperFirst(action.endpoint), "Deleted " + _.get(action.data, action.id))
+			showNotif("success", _.upperFirst(action.endpoint), "Deleted " + action.id(action.data))
 			break;
 		
 		case PLAYER_KICK_RESPONSE:
