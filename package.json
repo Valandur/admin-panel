@@ -31,6 +31,7 @@
     "react-dom": "16.2.0",
     "react-i18next": "^7.3.0",
     "react-konva": "^1.6.4",
+    "react-loadable": "^5.3.1",
     "react-notification-system": "^0.2.16",
     "react-redux": "^5.0.6",
     "react-router-dom": "4.2.2",
@@ -39,6 +40,7 @@
     "redux": "^3.7.2",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.77.1",
+    "source-map-explorer": "^1.5.0",
     "styled-components": "^2.2.4",
     "superagent": "^3.8.2"
   },
@@ -46,6 +48,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer build/static/js/main.*"
   }
 }
