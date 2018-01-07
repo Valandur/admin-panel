@@ -39,22 +39,6 @@ class Worlds extends Component {
 		this.props.requestCatalog(GM_TYPES);
 	}
 
-	/*create() {
-		this.props.requestCreateWorld({
-			name: this.state.worldName,
-			dimension: this.state.dimension,
-			generator: this.state.generator,
-			difficulty: this.state.difficulty,
-			gameMode: this.state.gameMode,
-			seed: this.state.seed,
-			loadOnStartup: this.state.loadOnStartup,
-			keepSpawnLoaded: this.state.keepSpawnLoaded,
-			allowCommands: this.state.commandsAllowed,
-			generateBonusChest: this.state.generateBonusChest,
-			usesMapFeatures: this.state.usesMapFeatures,
-		})
-	}*/
-
 	showGameRules(world, view) {
 		this.setState({
 			modal: true,
@@ -105,7 +89,7 @@ class Worlds extends Component {
 					"dimensionType.name": {
 						label: _t("Dimension"),
 						create: true,
-						createName: "dimensionType.id",
+						createName: "dimension",
 						required: true,
 						options: _.map(this.props.dimTypes, dim =>
 							({
@@ -117,6 +101,7 @@ class Worlds extends Component {
 					"generatorType.name": {
 						label: _t("Generator"),
 						create: true,
+						createName: "generator",
 						view: false,
 						required: true,
 						options: _.map(this.props.genTypes, gen =>
@@ -129,6 +114,7 @@ class Worlds extends Component {
 					"difficulty.name": {
 						label: _t("Difficulty"),
 						create: true,
+						createName: "difficulty",
 						view: false,
 						required: true,
 						options: _.map(this.props.diffTypes, diff =>
@@ -141,6 +127,7 @@ class Worlds extends Component {
 					"gameMode.name": {
 						label: _t("GameMode"),
 						create: true,
+						createName: "gameMode",
 						view: false,
 						required: true,
 						options: _.map(this.props.gmTypes, gm =>
@@ -169,9 +156,9 @@ class Worlds extends Component {
 									onChange={view.handleChange}
 								/>
 								<Form.Checkbox
-									name="commandsAllowed"
+									name="allowCommands"
 									label={_t("CommandsAllowed")}
-									checked={view.state.commandsAllowed}
+									checked={view.state.allowCommands}
 									onChange={view.handleChange}
 								/>
 								<Form.Checkbox
