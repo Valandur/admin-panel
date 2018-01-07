@@ -1,11 +1,12 @@
 import { push } from "react-router-redux"
-import { LOGIN_RESPONSE, LOGOUT_REQUEST, CHECK_USER_RESPONSE } from "../actions"
+import { LOGIN_RESPONSE, LOGOUT_REQUEST, CHECK_USER_RESPONSE, CHANGE_LANGUAGE } from "../actions"
 
 const persist = ({ dispatch, getState }) => next => action => {
 	next(action)
 
 	switch (action.type) {
 		case LOGIN_RESPONSE:
+		case CHANGE_LANGUAGE:
 			if (window.localStorage) {
 				window.localStorage.setItem("api", JSON.stringify(getState().api));
 			}

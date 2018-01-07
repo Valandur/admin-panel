@@ -1,200 +1,104 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import { Segment, Table, Menu, Form, 
-	Dropdown, Button, Header, Icon, Label } from "semantic-ui-react"
+import { Button, Icon, Label } from "semantic-ui-react"
+import { translate } from "react-i18next"
 import _ from "lodash"
 
 import Inventory from "../../components/Inventory"
 
-import { setFilter, requestTileEntities } from "../../actions/tile-entity"
 import { requestCatalog } from "../../actions"
-import { requestWorlds } from "../../actions/world"
+import { requestList } from "../../actions/dataview"
+
+import DataViewFunc from "../../components/DataView"
+const DataView = DataViewFunc("tile-entity", te => 
+	te.location.world.uuid + "/" + te.location.position.x + "/" + 
+	te.location.position.y + "/" + te.location.position.z)
 
 const TE_TYPES = "block.tileentity.TileEntityType"
-const ITEMS_PER_PAGE = 20
+
 
 class TileEntities extends Component {
 
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			page: 0,
-		};
-
-		this.changePage = this.changePage.bind(this);
-		this.filterChange = this.filterChange.bind(this);
-	}
-
 	componentDidMount() {
-		this.props.requestTileEntities();
 		this.props.requestWorlds();
-		this.getCatalogValues();
-
-		this.interval = setInterval(this.props.requestTileEntities, 5000);
-	}
-
-	componentWillUnmount() {
-		clearInterval(this.interval);
-	}
-
-	getCatalogValues() {
 		this.props.requestCatalog(TE_TYPES);
 	}
 
-	filterChange(event, data) {
-		const name = data.name ? data.name : data.id;
-		this.props.setFilter(name, data.value);
-	}
-
-	changePage(event, page) {
-		event.preventDefault();
-
-		this.setState({
-			page: page,
-		})
-	}
-
 	render() {
-		let tileEntities = _.filter(this.props.tileEntities, te => {
-			if (this.props.filter.type && this.props.filter.type.length) {
-				if (!_.find(this.props.filter.type, t => t === te.type)) {
-					return false;
-				}
-			}
-			if (this.props.filter.world && this.props.filter.world.length) {
-				if (!_.find(this.props.filter.world, w => w === te.location.world.uuid)) {
-					return false;
-				}
-			}
-			return true;
-		});
+		const _t = this.props.t
 
-		const page = this.state.page;
-		const maxPage = Math.ceil(tileEntities.length / ITEMS_PER_PAGE);
-
-		tileEntities = tileEntities.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
-
-		return (
-			<Segment basic>
-
-				<Segment>
-					<Header>
-						<Icon name="filter" fitted /> Filter tile entities
-					</Header>
-
-					<Form>
-						<Form.Group widths="equal">
-							<Form.Field name="type" label="Type" control={Dropdown} placeholder="Type"
-								fluid selection search multiple onChange={this.filterChange}
-								options={_.map(this.props.teTypes, ent => 
-									({ value: ent.id, text: ent.name + " (" + ent.id + ")" })
-								)}
-							/>
-
-							<Form.Field name="world" label="World" control={Dropdown} placeholder="World"
-								fluid selection search multiple onChange={this.filterChange}
-								options={_.map(this.props.worlds, w => 
-									({ value: w.uuid, text: w.name + " (" + w.dimensionType.name + ")" })
-								)}
-							/>
-						</Form.Group>
-					</Form>
-				</Segment>
-
-				<Header>
-					<Icon name="puzzle" fitted /> Tile Entities
-				</Header>
-
-				<Table striped={true}>
-					<Table.Header>
-						<Table.Row>
-							<Table.HeaderCell>Type</Table.HeaderCell>
-							<Table.HeaderCell>Location</Table.HeaderCell>
-							<Table.HeaderCell>Info</Table.HeaderCell>
-						</Table.Row>
-					</Table.Header>
-					<Table.Body>
-						{_.map(tileEntities, te =>
-							<Table.Row key={te.link}>
-								<Table.Cell collapsing>{te.type}</Table.Cell>
-								<Table.Cell collapsing>
-									<Button color="blue">
-										<Icon name="globe" />
-										{te.location.world.name}&nbsp; &nbsp;
-										{te.location.position.x.toFixed(0)} |&nbsp;
-										{te.location.position.y.toFixed(0)} |&nbsp;
-										{te.location.position.z.toFixed(0)}
-									</Button>
-								</Table.Cell>
-								<Table.Cell>
-									{te.mobSpawner &&
-										<Label>
-											Mob spawner
-											<Label.Detail>
-												{te.mobSpawner.nextEntityToSpawn.type.name}
-											</Label.Detail>
-										</Label>}
-									{te.inventory &&
-										<Inventory items={te.inventory.items} />}
-								</Table.Cell>
-							</Table.Row>
-						)}
-					</Table.Body>
-				</Table>
-				{ maxPage > 1 ?
-					<Menu pagination>
-						{ page > 4 ?
-							<Menu.Item onClick={e => this.changePage(e, 0)}>
-								1
-							</Menu.Item>
-						: null }
-						{ page > 5 ?
-							<Menu.Item onClick={e => this.changePage(e, page - 5)}>
-								...
-							</Menu.Item>
-						: null }
-						{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
-							<Menu.Item key={p} onClick={e => this.changePage(e, p)} active={p === page}>
-								{p + 1}
-							</Menu.Item>
-						))}
-						{ page < maxPage - 6 ?
-							<Menu.Item onClick={e => this.changePage(e, page + 5)}>
-								...
-							</Menu.Item>
-						: null }
-						{ page < maxPage - 5 ?
-							<Menu.Item onClick={e => this.changePage(e, maxPage - 1)}>
-								{maxPage}
-							</Menu.Item>
-						: null }
-					</Menu>
-				: null }
-
-			</Segment>
-		)
+		return <DataView
+			icon="puzzle"
+			title={_t("TileEntities")}
+			filterTitle={_t("FilterEntities")}
+			fields={{
+				"type.name": {
+					label: _t("Type"),
+					filter: true,
+					filterName: "type.id",
+					options: _.map(this.props.teTypes, type => 
+						({
+							value: type.id,
+							text: type.name + " (" + type.id + ")"
+						})
+					),
+				},
+				world: {
+					label: _t("World"),
+					view: false,
+					filter: true,
+					filterName: "location.world.uuid",
+					options: _.map(this.props.worlds, world => 
+						({
+							value: world.uuid,
+							text: world.name + " (" + world.dimensionType.name + ")"
+						})
+					),
+				},
+				position: {
+					label: _t("Position"),
+					view: (te) =>
+						<Button color="blue">
+							<Icon name="globe" />
+							{te.location.world.name}&nbsp; &nbsp;
+							{te.location.position.x.toFixed(0)} |&nbsp;
+							{te.location.position.y.toFixed(0)} |&nbsp;
+							{te.location.position.z.toFixed(0)}
+						</Button>,
+				},
+				info: {
+					label: _t("Info"),
+					wide: true,
+					view: (te) =>
+						<div>
+							{te.mobSpawner &&
+								<Label>
+									{_t("MobSpawner")}
+									<Label.Detail>
+										{te.mobSpawner.nextEntityToSpawn.type.name}
+									</Label.Detail>
+								</Label>}
+							{te.inventory &&
+								<Inventory items={te.inventory.items} />}
+						</div>,
+				},
+			}}
+		/>
 	}
 }
 
 const mapStateToProps = (_state) => {
-	const state = _state.tileEntity
-
 	return {
-		tileEntities: state.tileEntities,
-		worlds: _state.world.worlds,
+		worlds: _state.world.list,
 		teTypes: _state.api.types[TE_TYPES],
-		filter: state.filter,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestTileEntities: () => dispatch(requestTileEntities(true)),
-		requestWorlds: () => dispatch(requestWorlds(true)),
+		requestWorlds: () => dispatch(requestList("world", true)),
 		requestCatalog: type => dispatch(requestCatalog(type)),
-		setFilter: (filter, value) => dispatch(setFilter(filter, value)),
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TileEntities);
+export default connect(mapStateToProps, mapDispatchToProps)(translate("TileEntities")(TileEntities));

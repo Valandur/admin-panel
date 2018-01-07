@@ -8,7 +8,7 @@ class HuskyCrates extends Component {
 	render() {
 		return (
 			<Switch>
-				<Route path="/husky/crates" name="Crates" component={Crates} />
+				<Route path="/husky/crates" component={Crates} />
 			</Switch>
 		)
 	}

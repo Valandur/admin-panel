@@ -1,7 +1,5 @@
 import React, { Component } from "react"
-import {
-	Segment, Header, Form, Icon, Dropdown, Message
-} from "semantic-ui-react"
+import { Segment, Header, Form, Icon, Dropdown, Message } from "semantic-ui-react"
 import _ from "lodash"
 
 import { handleChange } from "../Util"
@@ -17,7 +15,7 @@ class FilterForm extends Component {
 
 	render() {
 		const { title, fields, values, valid } = this.props;
-
+		
 		const fieldGroups = [];
 		_.each(fields, (field, name) => {
 			const newField = {

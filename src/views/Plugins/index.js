@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
+import { Segment, Button, Modal, Label, Tab, Message } from "semantic-ui-react"
+import JsonEditor from "@dr-kobros/react-jsoneditor"
+import { translate } from "react-i18next"
+import _ from "lodash"
+
 import {
-	Segment, Button, Modal,
-	Label, Tab, TextArea, Message
-} from "semantic-ui-react"
-import _ from 'lodash'
+	requestPluginConfig,
+	setPluginConfig,
+	requestPluginConfigSave
+} from "../../actions/plugin"
 
-import { requestPluginConfig } from "../../actions/plugin"
-
-import ConfigTree from "../../components/ConfigTree"
 import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("plugin", "id", true)
 
@@ -24,6 +26,8 @@ class Plugins extends Component {
 		};
 
 		this.toggleModal = this.toggleModal.bind(this);
+		this.save = this.save.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 	}
 
 	toggleModal() {
@@ -48,27 +52,39 @@ class Plugins extends Component {
 		}
 	}
 
+	handleChange(name, json) {
+		this.props.setPluginConfig(name, json)
+	}
+
+	save() {
+		const plugin = this.state.plugin;
+		this.props.requestPluginConfigSave(plugin.id, plugin, this.props.configs);
+		this.toggleModal();
+	}
+
 	render() {
+		const _t = this.props.t
+
 		return <div>
 			<Segment basic>
 				<Message warning>
-					<Message.Header>This section of the admin panel is not yet completed</Message.Header>
-					<p>Changing the config files of plugins does not do anything yet!</p>
+					<Message.Header>{_t("WarnTitle")}</Message.Header>
+					<p>{_t("WarnText")}</p>
 				</Message>
 			</Segment>
 			<DataView
-				title="Installed Plugins"
 				icon="plug"
+				title={_t("Plugins")}
 				fields={{
-					id: "Id",
-					name: "Name",
-					version: "Version",
+					id: _t("Id"),
+					name: _t("Name"),
+					version: _t("Version"),
 				}}
 				actions={(plugin, view) => <div>
 					<Button
 							color="blue"
 							onClick={e => this.showDetails(plugin, view)}>
-						Details
+						{_t("Details")}
 					</Button>
 				</div>}
 			/>
@@ -78,36 +94,52 @@ class Plugins extends Component {
 	}
 
 	renderModal() {
-		return <Modal open={this.state.modal} onClose={this.toggleModal}>
+		const _t = this.props.t
+
+		return <Modal
+				open={this.state.modal}
+				onClose={this.toggleModal}
+				size="fullscreen">
 			<Modal.Header>
 				{this.state.plugin.name}{" "}
-				<Label color="primary">{this.state.plugin.version}</Label>
+				<Label color="blue">{this.state.plugin.version}</Label>
 			</Modal.Header>
 			<Modal.Content>
 				<Tab panes={
 					_.map(this.props.configs, (conf, name) => ({
 						menuItem: name,
-						render: () => <ConfigTree conf={conf} />
+						render: () =>
+							<JsonEditor
+								key={name}
+								value={conf}
+								onChange={conf => this.handleChange(name, conf)}
+								width="100%"
+								height="calc(100vh - 20em)"
+							/>
 					}))
 				} />
 			</Modal.Content>
+			<Modal.Actions>
+				<Button primary content={_t("Save")} onClick={this.save} />
+				<Button content={_t("Cancel")} onClick={this.toggleModal} />
+			</Modal.Actions>
 		</Modal>
 	}
 }
 
 const mapStateToProps = (_state) => {
-	const state = _state.plugin
-
 	return {
-		plugins: state.plugins,
-		configs: state.configs,
+		configs: _state.plugin.configs,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		requestPluginConfig: (id) => dispatch(requestPluginConfig(id)),
+		setPluginConfig: (id, conf) => dispatch(setPluginConfig(id, conf)),
+		requestPluginConfigSave: (id, plugin, configs) => 
+			dispatch(requestPluginConfigSave(id, plugin, configs)),
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Plugins);
+export default connect(mapStateToProps, mapDispatchToProps)(translate("Plugins")(Plugins));

@@ -1,29 +1,12 @@
 import _ from "lodash"
 
 import {
-	SET_FILTER, PLAYERS_RESPONSE,
 	PLAYER_KICK_REQUEST, PLAYER_KICK_RESPONSE,
 	PLAYER_BAN_REQUEST, PLAYER_BAN_RESPONSE,
 } from "../actions/player"
 
-const player = (state = { players: [], filter: {}}, action) => {
+const player = (state = {}, action) => {
 	switch(action.type) {
-		case PLAYERS_RESPONSE:
-			if (!action.ok)
-				return state;
-			
-			return _.assign({}, state, {
-				players: _.sortBy(action.players, "name"),
-			});
-
-		case SET_FILTER:
-			return _.assign({}, state, {
-				filter: {
-					...state.filter,
-					[action.filter]: action.value,
-				}
-			});
-
 		case PLAYER_KICK_REQUEST:
 			return _.assign({}, state, {
 				players: _.map(state.players, p => {

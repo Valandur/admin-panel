@@ -8,7 +8,7 @@ class WebBooks extends Component {
 	render() {
 		return (
 			<Switch>
-				<Route path="/webbooks/books" name="Books" component={Books} />
+				<Route path="/webbooks/books" component={Books} />
 			</Switch>
 		)
 	}

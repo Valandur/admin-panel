@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Segment, Message } from "semantic-ui-react"
+import { translate } from "react-i18next"
 
 import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("info/properties", "key")
 
-class Settings extends Component {
+class ServerSettings extends Component {
 
 	handleEdit(prop) {
 		this.props.editProperty(prop);
@@ -20,24 +21,26 @@ class Settings extends Component {
 	}
 
 	render() {
+		const _t = this.props.t
+		
 		return <div>
 			<Segment basic>
 				<Message negative>
-					<Message.Header>This section of the admin panel is not yet completed</Message.Header>
-					<p>Changing any of these settings has no effect on the server!</p>
+					<Message.Header>{_t("WIPTitle")}</Message.Header>
+					<p>{_t("WIPText")}</p>
 				</Message>
 			</Segment>
 
 			<DataView
 				canEdit
-				title="Server Properties"
 				icon="cogs"
+				title={_t("ServerSettings")}
 				fields={{
 					key: {
-						label: "Key",
+						label: _t("Key"),
 					},
 					value: {
-						label: "Value",
+						label: _t("Value"),
 						edit: true,
 					}
 				}}
@@ -54,4 +57,4 @@ const mapDispatchToProps = (dispatch) => {
 	return {}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default connect(mapStateToProps, mapDispatchToProps)(translate("ServerSettings")(ServerSettings))

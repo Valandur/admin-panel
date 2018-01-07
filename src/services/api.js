@@ -19,44 +19,20 @@ import {
 } from "../actions/dashboard"
 
 import {
-	WORLDS_REQUEST, WORLDS_RESPONSE,
-	WORLD_CREATE_REQUEST, WORLD_CREATE_RESPONSE,
-	WORLD_CHANGE_REQUEST, WORLD_CHANGE_RESPONSE,
-	WORLD_DELETE_REQUEST, WORLD_DELETE_RESPONSE,
-} from "../actions/world"
-
-import {
-	ENTITIES_REQUEST, ENTITIES_RESPONSE,
-	ENTITY_CREATE_REQUEST, ENTITY_CREATE_RESPONSE,
-	ENTITY_DELETE_REQUEST, ENTITY_DELETE_RESPONSE,
-} from "../actions/entity"
-
-import {
-	PLAYERS_REQUEST, PLAYERS_RESPONSE,
 	PLAYER_KICK_REQUEST, PLAYER_KICK_RESPONSE,
 	PLAYER_BAN_REQUEST, PLAYER_BAN_RESPONSE,
 } from "../actions/player"
 
 import {
 	PLUGIN_CONFIG_REQUEST, PLUGIN_CONFIG_RESPONSE,
+	PLUGIN_CONFIG_SAVE_REQUEST, PLUGIN_CONFIG_SAVE_RESPONSE,
 } from "../actions/plugin"
 
 import {
-	TILE_ENTITIES_REQUEST, TILE_ENTITIES_RESPONSE,
-} from "../actions/tile-entity"
-
-import {
-	PROPERTIES_REQUEST, PROPERTIES_RESPONSE,
 	SAVE_PROPERTY_REQUEST, SAVE_PROPERTY_RESPONSE,
 } from "../actions/settings"
 
 import {
-	CHAT_HISTORY_REQUEST, CHAT_HISTORY_RESPONSE,
-} from "../actions/chat"
-
-import {
-	COMMANDS_REQUEST, COMMANDS_RESPONSE,
-	COMMAND_HISTORY_REQUEST, COMMAND_HISTORY_RESPONSE,
 	EXECUTE_REQUEST, EXECUTE_RESPONSE,
 } from "../actions/command"
 
@@ -193,119 +169,8 @@ const api = ({ getState, dispatch }) => next => action => {
 			})
 			break;
 
-		case CHAT_HISTORY_REQUEST:
-			get("history/chat", data => {
-				next({
-					type: CHAT_HISTORY_RESPONSE,
-					ok: data.ok,
-					messages: _.orderBy(data.messages, "timestamp", "desc"),
-				})
-			})
-			break;
-
-		case COMMANDS_REQUEST:
-			get("cmd?details", data => {
-				next({
-					type: COMMANDS_RESPONSE,
-					ok: data.ok,
-					commands: _.orderBy(data.commands, "name", "asc"),
-				})
-			})
-			break;
-
-		case COMMAND_HISTORY_REQUEST:
-			get("history/cmd", data => {
-				next({
-					type: COMMAND_HISTORY_RESPONSE,
-					ok: data.ok,
-					history: _.orderBy(data.calls, "timestamp", "desc"),
-				})
-			})
-			break;
-
-		case WORLDS_REQUEST:
-			get("world" + (action.details ? "?details" : ""), data => {
-				next({
-					type: WORLDS_RESPONSE,
-					ok: data.ok,
-					worlds: data.worlds,
-				})
-			})
-			break;
-
-		case WORLD_CHANGE_REQUEST:
-			put("world/" + action.uuid, data => {
-				next({
-					type: WORLD_CHANGE_RESPONSE,
-					ok: data.ok,
-					world: data.world,
-					op: action.op,
-				})
-			}, action.data)
-			break;
-
-		case WORLD_CREATE_REQUEST:
-			post("world", data => {
-				next({
-					type: WORLD_CREATE_RESPONSE,
-					ok: data.ok,
-					world: data.world,
-				})
-			}, action.data)
-			break;
-
-		case WORLD_DELETE_REQUEST:
-			del("world/" + action.uuid, data => {
-				next({
-					type: WORLD_DELETE_RESPONSE,
-					ok: data.ok,
-					world: data.world,
-				})
-			})
-			break;
-
-		case ENTITIES_REQUEST:
-			get("entity" + (action.details ? "?details" : ""), data => {
-				next({
-					type: ENTITIES_RESPONSE,
-					ok: data.ok,
-					entities: data.entities,
-				})
-			})
-			break;
-
-		case ENTITY_CREATE_REQUEST:
-			post("entity", data => {
-				next({
-					type: ENTITY_CREATE_RESPONSE,
-					ok: data.ok,
-					entity: data.entity,
-				})
-			}, action.data);
-			break;
-
-		case ENTITY_DELETE_REQUEST:
-			del("entity/" + action.uuid, data => {
-				next({
-					type: ENTITY_DELETE_RESPONSE,
-					ok: data.ok,
-					entity: data.entity,
-				})
-			})
-			break;
-
-		case PLAYERS_REQUEST:
-			get("player" + (action.details ? "?details" : ""), data => {
-				next({
-					type: PLAYERS_RESPONSE,
-					ok: data.ok,
-					players: data.players,
-				})
-			})
-			break;
-
 		case PLAYER_KICK_REQUEST:
-			post("player/" + action.uuid, (data) => {
+			post("player/" + action.uuid + "/method", (data) => {
 				next({
 					type: PLAYER_KICK_RESPONSE,
 					ok: data.ok,
@@ -344,24 +209,14 @@ const api = ({ getState, dispatch }) => next => action => {
 			})
 			break;
 
-		case TILE_ENTITIES_REQUEST:
-			get("tile-entity" + (action.details ? "?details" : ""), (data) => {
+		case PLUGIN_CONFIG_SAVE_REQUEST:
+			post("plugin/" + action.id + "/config", (data) => {
 				next({
-					type: TILE_ENTITIES_RESPONSE,
+					type: PLUGIN_CONFIG_SAVE_RESPONSE,
 					ok: data.ok,
-					tileEntities: data.tileEntities,
+					configs: data.configs,
 				})
-			});
-			break;
-
-		case PROPERTIES_REQUEST:
-			get("info/properties", data => {
-				next({
-					type: PROPERTIES_RESPONSE,
-					ok: data.ok,
-					properties: data.properties,
-				})
-			})
+			}, action.configs)
 			break;
 
 		case SAVE_PROPERTY_REQUEST:
@@ -404,7 +259,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case DATA_DETAILS_REQUEST:
-			get(action.endpoint + "/" + _.get(action.data, action.id), data => {
+			get(action.endpoint + "/" + action.id(action.data), data => {
 				const obj = _.find(data, (__, key) => key !== "ok");
 
 				next({
@@ -431,7 +286,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case DATA_CHANGE_REQUEST:
-			put(action.endpoint + "/" + _.get(action.data, action.id), data => {
+			put(action.endpoint + "/" + action.id(action.data), data => {
 				const obj =  _.find(data, (__, key) => key !== "ok");
 
 				next({
@@ -445,7 +300,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case DATA_DELETE_REQUEST:
-			del(action.endpoint + "/" + _.get(action.data, action.id), data => {
+			del(action.endpoint + "/" + action.id(action.data), data => {
 				const obj = _.find(data, (__, key) => key !== "ok");
 
 				next({

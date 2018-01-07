@@ -8,10 +8,7 @@ import _ from "lodash"
 import Inventory from "../../components/Inventory"
 import { formatRange } from "../../components/Util"
 
-import { requestWorlds } from "../../actions/world"
-import { requestEntities } from "../../actions/entity"
-import { requestPlayers } from "../../actions/player"
-import { requestTileEntities } from "../../actions/tile-entity"
+import { requestList } from "../../actions/dataview"
 
 const TILE_SIZE = 512;
 const HALF_TILE = TILE_SIZE / 2;
@@ -381,22 +378,22 @@ class Map extends Component {
 	}
 }
 
-const mapStateToProps = (_state) => {
+const mapStateToProps = (state) => {
 	return {
-		entities: _state.entity.entities,
-		worlds: _state.world.worlds,
-		players: _state.player.players,
-		tileEntities: _state.tileEntity.tileEntities,
-		apiKey: _state.api.key,
+		entities: state.entity.list,
+		worlds: state.world.list,
+		players: state.player.list,
+		tileEntities: state["tile-entity"].list,
+		apiKey: state.api.key,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestWorlds: () => dispatch(requestWorlds(true)),
-		requestEntities: () => dispatch(requestEntities(true)),
-		requestPlayers: () => dispatch(requestPlayers(true)),
-		requestTileEntities: () => dispatch(requestTileEntities(true)),
+		requestWorlds: () => dispatch(requestList("world", true)),
+		requestEntities: () => dispatch(requestList("entity", true)),
+		requestPlayers: () => dispatch(requestList("player", true)),
+		requestTileEntities: () => dispatch(requestList("tile-entity", true)),
 	}
 }
 

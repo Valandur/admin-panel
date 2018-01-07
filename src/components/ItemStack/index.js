@@ -49,7 +49,7 @@ class ItemStack extends Component {
 							size="small"
 							color="gray"
 							percent={formatRange(item.data.durability.durability, item.data.useLimit)}
-							style={{ margin: 0 }}
+							style={{ margin: "0 0 .5em 0" }}
 						/>)}
 				{item.quantity > 1 &&
 					<Label size="tiny" color="blue">

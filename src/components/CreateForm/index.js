@@ -1,7 +1,6 @@
 import React, { Component } from "react"
-import {
-	Segment, Header, Form, Icon, Dropdown, Button
-} from "semantic-ui-react"
+import { Segment, Header, Form, Icon, Dropdown, Button } from "semantic-ui-react"
+import { translate } from "react-i18next"
 import _ from "lodash"
 
 import { handleChange } from "../Util"
@@ -11,11 +10,9 @@ class CreateForm extends Component {
 
 	constructor(props) {
 		super(props);
-
-		const newData = {};
-		_.each(props.fields, (field, name) => newData[name] = "")
+		
 		this.state = {
-			newData: newData,
+			newData: {},
 		};
 
 		this.doHandleChange = this.doHandleChange.bind(this)
@@ -42,13 +39,16 @@ class CreateForm extends Component {
 	}
 
 	canCreate() {
-		return _.every(this.props.fields, (field, name) =>
-			typeof field === "string" || !field.required || this.state.newData[name]
-		)
+		return _.every(this.props.fields, (field, name) => {
+			const key = field.createName ? field.createName : name;
+			return typeof field === "string" || !field.required || this.state.newData[key]
+		})
 	}
 
 	render() {
 		const { title, creating, fields } = this.props;
+
+		const _t = this.props.t
 
 		const fieldGroups = [];
 		_.each(fields, (field, name) => {
@@ -95,7 +95,7 @@ class CreateForm extends Component {
 				})}
 
 				<Button color="green" onClick={this.create} disabled={!this.canCreate()}>
-					Create
+					{this.props.button || _t("Create")}
 				</Button>
 			</Form>
 		</Segment>
@@ -138,4 +138,4 @@ class CreateForm extends Component {
 	}
 }
 
-export default CreateForm;
+export default translate("CreateForm")(CreateForm)

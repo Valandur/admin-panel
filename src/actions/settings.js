@@ -1,11 +1,3 @@
-export const PROPERTIES_REQUEST = "PROPERTIES_REQUEST"
-export const PROPERTIES_RESPONSE = "PROPERTIES_RESPONSE"
-export function requestProperties() {
-	return {
-		type: PROPERTIES_REQUEST,
-	}
-}
-
 export const EDIT_PROPERTY = "EDIT_PROPERTY"
 export function editProperty(prop) {
 	return {

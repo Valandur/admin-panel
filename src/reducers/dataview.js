@@ -18,7 +18,7 @@ const dataview = (state = {}, action) => {
 		case DATA_LIST_RESPONSE:
 			if (!action.ok)
 				return state;
-
+			
 			return _.assign({}, state, {
 				[path]: {
 					...state[path],
@@ -31,7 +31,7 @@ const dataview = (state = {}, action) => {
 				[path]: {
 					...state[path],
 					list: _.map(state[path].list, obj => {
-						if (_.get(obj, action.id) !== _.get(action.data, action.id)) return obj;
+						if (action.id(obj) !== action.id(action.data)) return obj;
 						return _.assign({}, obj, { updating: true })
 					})
 				}
@@ -42,7 +42,7 @@ const dataview = (state = {}, action) => {
 				[path]: {
 					...state[path],
 					list: _.map(state[path].list, obj => {
-						if (_.get(obj, action.id) !== _.get(action.data, action.id)) return obj;
+						if (action.id(obj) !== action.id(action.data)) return obj;
 						return _.assign({}, obj, action.ok ? action.data : null, { updating: false })
 					})
 				}
@@ -90,7 +90,7 @@ const dataview = (state = {}, action) => {
 				[path]: {
 					...state[path],
 					list: _.map(state[path].list, obj => {
-						if (_.get(obj, action.id) !== _.get(action.data, action.id)) return obj;
+						if (action.id(obj) !== action.id(action.data)) return obj;
 						return _.assign({}, obj, { updating: true })
 					})
 				}
@@ -101,7 +101,7 @@ const dataview = (state = {}, action) => {
 				[path]: {
 					...state[path],
 					list: _.map(state[path].list, obj => {
-						if (_.get(obj, action.id) !== _.get(action.data, action.id)) return obj;
+						if (action.id(obj) !== action.id(action.data)) return obj;
 						return _.assign({}, obj, action.ok ? action.data : null, { updating: false })
 					})
 				}
@@ -112,7 +112,7 @@ const dataview = (state = {}, action) => {
 				[path]: {
 					...state[path],
 					list: _.map(state[path].list, obj => {
-						if (_.get(obj, action.id) !== _.get(action.data, action.id)) return obj;
+						if (action.id(obj) !== action.id(action.data)) return obj;
 						return _.assign({}, obj, { updating: true })
 					})
 				}
@@ -124,7 +124,7 @@ const dataview = (state = {}, action) => {
 					[path]: {
 						...state[path],
 						list: _.map(state[path].list, obj => {
-							if (_.get(obj, action.id) !== _.get(action.data, action.id)) return obj;
+							if (action.id(obj) !== action.id(action.data)) return obj;
 							return _.assign({}, obj, { updating: false })
 						})
 					}
@@ -135,7 +135,7 @@ const dataview = (state = {}, action) => {
 				[path]: {
 					...state[path],
 					list: _.filter(state[path].list, obj => 
-						_.get(obj, action.id) !== _.get(action.data, action.id))
+						action.id(obj) !== action.id(action.data))
 				}
 			})
 

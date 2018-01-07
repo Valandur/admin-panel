@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { Form, Button, Icon } from "semantic-ui-react"
 import _ from "lodash"
 
-import { requestWorlds } from "../../../../actions/world"
+import { requestList } from "../../../../actions/dataview"
 
 import DataViewFunc from "../../../../components/DataView"
 const DataView = DataViewFunc("nucleus/jail", "name")
@@ -42,20 +42,19 @@ class Jails extends Component {
 					required: true,
 				},
 				position: {
-					label: "Position",
+					label: "Location",
 					isGroup: true,
 					wide: true,
-					view: (jail) => {
-						return <Button color="blue">
+					view: (jail) =>
+						<Button color="blue">
 							<Icon name="globe" />
 							{jail.location.world.name}&nbsp; &nbsp;
 							{jail.location.position.x.toFixed(0)} |&nbsp;
 							{jail.location.position.y.toFixed(0)} |&nbsp;
 							{jail.location.position.z.toFixed(0)}
-						</Button>
-					},
-					create: (view) => {
-						return <Form.Group inline>
+						</Button>,
+					create: (view) =>
+						<Form.Group inline>
 							<label>Position</label>
 							<Form.Input
 								type="number"
@@ -81,8 +80,7 @@ class Jails extends Component {
 								value={view.state["position.z"]}
 								onChange={view.handleChange}
 							/>
-						</Form.Group>
-					}
+						</Form.Group>,
 				}
 			}}
 		/>
@@ -91,13 +89,13 @@ class Jails extends Component {
 
 const mapStateToProps = (_state) => {
 	return {
-		worlds: _state.world.worlds,
+		worlds: _state.world.list,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestWorlds: () => dispatch(requestWorlds(true)),
+		requestWorlds: () => dispatch(requestList("world", true)),
 	}
 }
 
