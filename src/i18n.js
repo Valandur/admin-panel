@@ -5,6 +5,7 @@ import { reactI18nextModule } from "react-i18next";
 import en from "./locales/en"
 import de from "./locales/de"
 import fr from "./locales/fr"
+import ru from "./locales/ru"
 
 i18n
 	.use(LanguageDetector)
@@ -16,7 +17,7 @@ i18n
 		ns: ["translations"],
 		defaultNS: "translations",
 
-		debug: true,
+		debug: process.env.NODE_ENV === "dev" || process.env.NODE_ENV === "development",
 
 		interpolation: {
 			escapeValue: false, // not needed for react!!
@@ -30,6 +31,7 @@ i18n
 			en: en,
 			de: de,
 			fr: fr,
+			ru: ru,
 		},
 	});
 
