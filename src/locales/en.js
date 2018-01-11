@@ -13,6 +13,10 @@ export default {
 		ServerSettings: "Server Settings",
 		Settings: "Settings",
 		Logout: "Logout",
+		APILink: "API",
+		SpongeLink: "Sponge",
+		DocsLink: "Docs",
+		IssuesLink: "Issues",
 
 		HuskyCrates: "Husky Crates",
 		Crates: "Crates",
