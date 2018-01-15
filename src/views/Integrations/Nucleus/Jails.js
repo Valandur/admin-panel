@@ -3,9 +3,9 @@ import { connect } from "react-redux"
 import { Form, Button, Icon } from "semantic-ui-react"
 import _ from "lodash"
 
-import { requestList } from "../../../../actions/dataview"
+import { requestList } from "../../../actions/dataview"
 
-import DataViewFunc from "../../../../components/DataView"
+import DataViewFunc from "../../../components/DataView"
 const DataView = DataViewFunc("nucleus/jail", "name")
 
 

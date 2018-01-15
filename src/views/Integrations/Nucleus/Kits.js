@@ -3,11 +3,11 @@ import { connect } from "react-redux"
 import { Label, Popup, Button, Input, Form, Dropdown } from "semantic-ui-react"
 import _ from "lodash"
 
-import ItemStack from "../../../../components/ItemStack"
-import { requestCatalog } from "../../../../actions"
+import ItemStack from "../../../components/ItemStack"
+import { requestCatalog } from "../../../actions"
 
-import { handleChange } from "../../../../components/Util"
-import DataViewFunc from "../../../../components/DataView"
+import { handleChange } from "../../../components/Util"
+import DataViewFunc from "../../../components/DataView"
 const DataView = DataViewFunc("nucleus/kit", "name")
 
 const ITEM_TYPES = "item.ItemType"

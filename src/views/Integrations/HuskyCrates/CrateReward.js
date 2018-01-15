@@ -4,8 +4,8 @@ import {
 } from "semantic-ui-react"
 import _ from "lodash"
 
-import { handleChange } from "../../../../components/Util"
-import ItemStack from "../../../../components/ItemStack"
+import { handleChange } from "../../../components/Util"
+import ItemStack from "../../../components/ItemStack"
 
 
 class CrateReward extends Component {

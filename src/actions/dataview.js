@@ -21,10 +21,11 @@ export function requestDetails(endpoint, id, data) {
 
 export const DATA_CREATE_REQUEST = "DATA_CREATE_REQUEST"
 export const DATA_CREATE_RESPONSE = "DATA_CREATE_RESPONSE"
-export function requestCreate(endpoint, data) {
+export function requestCreate(endpoint, id, data) {
 	return {
 		type: DATA_CREATE_REQUEST,
 		endpoint: endpoint,
+		id: id,
 		data: data,
 	}
 }

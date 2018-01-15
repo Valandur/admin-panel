@@ -34,6 +34,7 @@ class Entities extends Component {
 				"type.name": {
 					label: _t("Type"),
 					create: true,
+					createName: "type",
 					filter: true,
 					filterName: "type.id",
 					view: entity => entity.type.name,
