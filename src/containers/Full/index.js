@@ -125,7 +125,7 @@ class Full extends Component {
 				</Menu.Menu>
 			</Menu>
 
-			<Sidebar.Pushable style={{ height: "calc(100vh - 65px)" }}>
+			<Sidebar.Pushable style={{ height: "calc(100vh - 67px)" }}>
 				<Sidebar
 						vertical
 						as={Menu}
@@ -231,10 +231,11 @@ class Full extends Component {
 
 				<Sidebar.Pusher
 						style={{
-							width: this.state.show ? "calc(100% - 260px)" : "calc(100%)",
+							width: this.state.show ? "calc(100% - 260px)" : "100%",
 							transition: "width 0.5s",
 							height: "100%",
 							overflowY: "scroll",
+							float: "right"
 						}}>
 					<Switch>
 						<Route path="/dashboard" name="Dashboard" component={Dashboard} />
