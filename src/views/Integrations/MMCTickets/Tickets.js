@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import moment from "moment"
 
-import DataViewFunc from "../../../../components/DataView"
+import DataViewFunc from "../../../components/DataView"
 const DataView = DataViewFunc("mmctickets/ticket", "id")
 
 const ticketStates = [{

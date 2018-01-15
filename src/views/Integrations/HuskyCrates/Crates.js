@@ -8,11 +8,11 @@ import moment from "moment"
 import _ from "lodash"
 
 import CrateReward from "./CrateReward"
-import { requestCatalog } from "../../../../actions"
-import { handleChange } from "../../../../components/Util"
-import ItemStack from "../../../../components/ItemStack"
+import { requestCatalog } from "../../../actions"
+import { handleChange } from "../../../components/Util"
+import ItemStack from "../../../components/ItemStack"
 
-import DataViewFunc from "../../../../components/DataView"
+import DataViewFunc from "../../../components/DataView"
 const DataView = DataViewFunc("husky/crate", "id")
 
 const ITEM_TYPES = "item.ItemType"

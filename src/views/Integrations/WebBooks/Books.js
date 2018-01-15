@@ -4,7 +4,7 @@ import { List, Input, Button } from "semantic-ui-react"
 import _ from "lodash"
 import copy from "copy-to-clipboard";
 
-import DataViewFunc from "../../../../components/DataView"
+import DataViewFunc from "../../../components/DataView"
 const DataView = DataViewFunc("webbooks/book", "id")
 
 
