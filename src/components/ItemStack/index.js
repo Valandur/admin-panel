@@ -39,56 +39,57 @@ class ItemStack extends Component {
 				/>
 			}
 			<div style={{ color: "gray", marginBottom: "0.5em" }}>{item.type.id}</div>
-			<div>
-				{item.data.durability && 
-					(item.data.durability.unbreakable ?
-						<Label size="tiny">Unbreakable</Label>
-					:
-						<Progress
-							progress
-							size="small"
-							color="gray"
-							percent={formatRange(item.data.durability.durability, item.data.useLimit)}
-							style={{ margin: "0 0 .5em 0" }}
-						/>)}
-				{item.quantity > 1 &&
-					<Label size="tiny" color="blue">
-						x{item.quantity}
-					</Label>}
-				{item.data.enchantments && 
-					<div>
-						{_.map(item.data.enchantments, enchant =>
-							<Label color="purple" size="tiny" key={enchant.enchantment.id}>
-								{enchant.enchantment.name}
-								<Label.Detail>{enchant.level}</Label.Detail>
+			{item.data &&
+				<div>
+					{item.data.durability && 
+						(item.data.durability.unbreakable ?
+							<Label size="tiny">Unbreakable</Label>
+						:
+							<Progress
+								progress
+								size="small"
+								color="gray"
+								percent={formatRange(item.data.durability.durability, item.data.useLimit)}
+								style={{ margin: "0 0 .5em 0" }}
+							/>)}
+					{item.quantity > 1 &&
+						<Label size="tiny" color="blue">
+							x{item.quantity}
+						</Label>}
+					{item.data.enchantments && 
+						<div>
+							{_.map(item.data.enchantments, enchant =>
+								<Label color="purple" size="tiny" key={enchant.enchantment.id}>
+									{enchant.enchantment.name}
+									<Label.Detail>{enchant.level}</Label.Detail>
+								</Label>
+							)}
+						</div>}
+					{item.data.spawn &&
+						<Label size="tiny">
+							{item.data.spawn.name}
+						</Label>}
+					{item.data.potionEffects &&
+						_.map(item.data.potionEffects, effect =>
+							<Label size="tiny" color="brown" key={effect.id}>
+								{effect.name} {getAmplifier(effect)}
 							</Label>
 						)}
-					</div>}
-				{item.data.spawn &&
-					<Label size="tiny">
-						{item.data.spawn.name}
-					</Label>}
-				{item.data.potionEffects &&
-					_.map(item.data.potionEffects, effect =>
-						<Label size="tiny" color="brown" key={effect.id}>
-							{effect.name} {getAmplifier(effect)}
-						</Label>
-					)}
-				{item.data.foodRestoration &&
-					<Label
-						size="tiny"
-						color="green"
-						icon="food"
-						content={item.data.foodRestoration}
-					/>}
-				{item.data.burningFuel &&
-					<Label
-						size="tiny"
-						color="red"
-						icon="fire"
-						content={item.data.burningFuel}
-					/>}
-			</div>
+					{item.data.foodRestoration &&
+						<Label
+							size="tiny"
+							color="green"
+							icon="food"
+							content={item.data.foodRestoration}
+						/>}
+					{item.data.burningFuel &&
+						<Label
+							size="tiny"
+							color="red"
+							icon="fire"
+							content={item.data.burningFuel}
+						/>}
+				</div>}
 		</div>
 	}
 }
