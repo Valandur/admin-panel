@@ -1,6 +1,6 @@
 {
   "name": "webapi-admin-panel",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "private": true,
   "homepage": ".",
   "proxy": "http://localhost:8080/",
