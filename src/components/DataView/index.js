@@ -247,7 +247,7 @@ const mapDispatchToProps = (endpoint, id, noDetails) => (dispatch) => {
 	return {
 		requestList: () => dispatch(requestList(endpoint, !noDetails)),
 		requestDetails: (data) => dispatch(requestDetails(endpoint, id, data)),
-		requestCreate: (data) => dispatch(requestCreate(endpoint, data)),
+		requestCreate: (data) => dispatch(requestCreate(endpoint, id, data)),
 		requestChange: (data, newData) => dispatch(requestChange(endpoint, id, data, newData)),
 		requestDelete: (data) => dispatch(requestDelete(endpoint, id, data)),
 		setFilter: (filter, value) => dispatch(setFilter(endpoint, filter, value)),

@@ -279,6 +279,7 @@ const api = ({ getState, dispatch }) => next => action => {
 				next({
 					type: DATA_CREATE_RESPONSE,
 					endpoint: action.endpoint,
+					id: action.id,
 					ok: data.ok,
 					data: obj,
 				})
@@ -292,8 +293,8 @@ const api = ({ getState, dispatch }) => next => action => {
 				next({
 					type: DATA_CHANGE_RESPONSE,
 					endpoint: action.endpoint,
-					ok: data.ok,
 					id: action.id,
+					ok: data.ok,
 					data: data.ok ? obj : action.data,
 				})
 			}, action.newData)
@@ -306,8 +307,8 @@ const api = ({ getState, dispatch }) => next => action => {
 				next({
 					type: DATA_DELETE_RESPONSE,
 					endpoint: action.endpoint,
-					ok: data.ok,
 					id: action.id,
+					ok: data.ok,
 					data: data.ok ? obj : action.data,
 				})
 			})
