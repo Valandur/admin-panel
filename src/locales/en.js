@@ -1,5 +1,9 @@
 export default {
 	Main: {
+		CPU: "CPU",
+		Memory: "Memory",
+		Disk: "Disk",
+
 		Dashboard: "Dashboard",
 		Chat: "Chat",
 		Commands: "Commands",
@@ -30,6 +34,9 @@ export default {
 
 		WebBooks: "Web Books",
 		Books: "Books",
+
+		UniversalMarket: "UniversalMarket",
+		Items: "Items",
 	},
 	
 	Login: {
@@ -48,11 +55,16 @@ export default {
 		MinecraftVersion: "Minecraft Version",
 		APIVersion: "API Version",
 		SpongeVersion: "Sponge Version",
-		GraphTitle: "Online players & Average TPS",
+		GraphTitleInfo: "Online players & Average TPS",
+		GraphTitleStats: "Server stats",
 		AverageTPS: "Average TPS",
 		OnlinePlayers: "Online Players",
-		NumPlayers: "Players",
-		NumTPS: "TPS",
+		CPULoad: "CPU",
+		MemoryLoad: "Memory",
+		DiskUsage: "Disk",
+		NumPlayers: "Players [1]",
+		NumTPS: "TPS [ticks]",
+		Load: "Load [%]"
 	},
 	Chat: {
 		Messages: "Message",

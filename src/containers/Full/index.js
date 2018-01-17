@@ -1,11 +1,13 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Switch, Route, Redirect, NavLink } from "react-router-dom"
-import { Sidebar, Menu, Image, Icon, Dropdown, Loader, Message } from "semantic-ui-react"
+import { Sidebar, Menu, Image, Icon, Dropdown, Loader, Message, Progress } from "semantic-ui-react"
 import { translate } from "react-i18next"
 import Loadable from "react-loadable"
+import _ from "lodash"
 
 import { requestServlets, requestLogout, changeLanguage } from "../../actions"
+import { requestStats, } from "../../actions/dashboard"
 
 const Loading = (props) => {
 	if (props.error) {
@@ -58,6 +60,13 @@ class Full extends Component {
 	
 	componentDidMount() {
 		this.props.requestServlets();
+		this.props.requestStats();
+		
+		this.interval = setInterval(this.props.requestStats, 5000);
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.interval);
 	}
 
 	toggleSidebar() {
@@ -132,6 +141,35 @@ class Full extends Component {
 						as={Menu}
 						animation="push"
 						visible={this.state.show}>
+
+					{this.props.cpu.length ?
+						<Menu.Item name="load">
+							<Progress
+								percent={_.last(this.props.cpu).value * 100}
+								progress="percent"
+								precision={1}
+								label={_t("CPU")}
+								color="blue"
+								size="small"
+							/>
+							<Progress
+								percent={_.last(this.props.memory).value * 100}
+								progress="percent"
+								precision={1}
+								label={_t("Memory")}
+								color="red"
+								size="small"
+							/>
+							<Progress
+								percent={_.last(this.props.disk).value * 100}
+								progress="percent"
+								precision={1}
+								label={_t("Disk")}
+								color="green"
+								size="small"
+							/>
+						</Menu.Item>
+					: null}
 
 					<Menu.Item name="dashboard" as={NavLink} to="/dashboard">
 						<Icon name="dashboard" /> {_t("Dashboard")}
@@ -276,6 +314,9 @@ const mapStateToProps = (_state) => {
 	return {
 		servlets: _state.api.servlets,
 		lang: _state.api.lang,
+		cpu: _state.dashboard.cpu,
+		memory: _state.dashboard.memory,
+		disk: _state.dashboard.disk,
 	}
 }
 
@@ -283,6 +324,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		requestLogout: () => dispatch(requestLogout()),
 		requestServlets: () => dispatch(requestServlets()),
+		requestStats: () => dispatch(requestStats()),
 		changeLanguage: (lang) => dispatch(changeLanguage(lang)),
 	}
 }

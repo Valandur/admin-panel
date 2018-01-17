@@ -2,11 +2,10 @@ import _ from "lodash"
 
 import {
 	INFO_RESPONSE,
-	TPS_INFO_RESPONSE,
-	PLAYER_INFO_RESPONSE
+	STATS_RESPONSE,
 } from "../actions/dashboard"
 
-const dashboard = (state = { tps: [], players: []}, action) => {
+const dashboard = (state = { tps: [], players: [], cpu: [], memory: [], disk: []}, action) => {
 	if (!action.ok)
 		return state;
 
@@ -16,14 +15,13 @@ const dashboard = (state = { tps: [], players: []}, action) => {
 				data: action.data,
 			});
 
-		case TPS_INFO_RESPONSE:
+		case STATS_RESPONSE:
 			return _.assign({}, state, {
 				tps: action.tps,
-			})
-
-		case PLAYER_INFO_RESPONSE:			
-			return _.assign({}, state, {
 				players: action.players,
+				cpu: action.cpu,
+				memory: action.memory,
+				disk: action.disk,
 			})
 
 		default:

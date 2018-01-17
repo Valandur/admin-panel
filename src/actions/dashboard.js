@@ -6,18 +6,10 @@ export function requestInfo() {
 	}
 }
 
-export const TPS_INFO_REQUEST = "TPS_INFO_REQUEST"
-export const TPS_INFO_RESPONSE = "TPS_INFO_RESPONSE"
-export function requestTpsInfo() {
+export const STATS_REQUEST = "STATS_REQUEST"
+export const STATS_RESPONSE = "STATS_RESPONSE"
+export function requestStats() {
 	return {
-		type: TPS_INFO_REQUEST
-	}
-}
-
-export const PLAYER_INFO_REQUEST = "PLAYER_INFO_REQUEST"
-export const PLAYER_INFO_RESPONSE = "PLAYER_INFO_RESPONSE"
-export function requestPlayerInfo() {
-	return {
-		type: PLAYER_INFO_REQUEST
+		type: STATS_REQUEST
 	}
 }
