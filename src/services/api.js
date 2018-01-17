@@ -14,8 +14,7 @@ import {
 
 import {
 	INFO_REQUEST, INFO_RESPONSE,
-	TPS_INFO_REQUEST, TPS_INFO_RESPONSE,
-	PLAYER_INFO_REQUEST, PLAYER_INFO_RESPONSE,
+	STATS_REQUEST, STATS_RESPONSE,
 } from "../actions/dashboard"
 
 import {
@@ -135,22 +134,16 @@ const api = ({ getState, dispatch }) => next => action => {
 			})
 			break;
 
-		case TPS_INFO_REQUEST:
-			get("info/tps", data => {
+		case STATS_REQUEST:
+			get("info/stats", data => {
 				next({
-					type: TPS_INFO_RESPONSE,
+					type: STATS_RESPONSE,
 					ok: data.ok,
 					tps: data.tps,
-				})
-			})
-			break;
-
-		case PLAYER_INFO_REQUEST:
-			get("info/player", data => {
-				next({
-					type: PLAYER_INFO_RESPONSE,
-					ok: data.ok,
 					players: data.players,
+					cpu: data.cpu,
+					memory: data.memory,
+					disk: data.disk,
 				})
 			})
 			break;

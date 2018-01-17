@@ -5,7 +5,7 @@ import { Line } from "react-chartjs-2"
 import { translate, Trans } from "react-i18next";
 import _ from "lodash"
 
-import { requestInfo, requestTpsInfo, requestPlayerInfo } from "../../actions/dashboard"
+import { requestInfo, } from "../../actions/dashboard"
 
 
 class Dashboard extends Component {
@@ -13,17 +13,15 @@ class Dashboard extends Component {
 	constructor(props) {
 		super(props);
 
-		this.requestData = this.requestData.bind(this);
-
 		const _t = props.t
 
-		this.line = {
+		this.lineInfo = {
 			datasets: [
 				{
 					label: _t("AverageTPS"),
 					fill: false,
-					backgroundColor: 'rgb(255, 99, 132)',
-					borderColor: 'rgb(255, 99, 132)',
+					backgroundColor: "rgb(219, 40, 40)",
+					borderColor: "rgb(219, 40, 40)",
 					pointRadius: 0,
 					pointHitRadius: 10,
 					xAxisID: "time",
@@ -32,20 +30,19 @@ class Dashboard extends Component {
 				{
 					label: _t("OnlinePlayers"),
 					fill: false,
-					backgroundColor: 'rgb(54, 162, 235)',
-					borderColor: 'rgb(54, 162, 235)',
+					backgroundColor: "rgb(33, 133, 208)",
+					borderColor: "rgb(33, 133, 208)",
 					pointRadius: 0,
 					pointHitRadius: 10,
 					xAxisID: "time",
 					yAxisID: "players",
-				}
+				},
 			]
 		};
-
-		this.options = {
+		this.optionsInfo = {
 			maintainAspectRatio: false,
 			legend: {
-				display: false,
+				position: "bottom",
 			},
 			scales: {
 				xAxes: [{
@@ -81,6 +78,7 @@ class Dashboard extends Component {
 					},
 					ticks: {
 						beginAtZero: true,
+						stepSize: 1,
 						min: 0,
 					},
 					scaleLabel: {
@@ -91,18 +89,90 @@ class Dashboard extends Component {
 				}]
 			},
 		};
-	}
 
-	requestData() {
-		this.props.requestInfo();
-		this.props.requestTpsInfo();
-		this.props.requestPlayerInfo();
+		this.lineStats = {
+			datasets: [
+				{
+					label: _t("CPULoad"),
+					fill: false,
+					backgroundColor: "rgb(33, 133, 208)",
+					borderColor: "rgb(33, 133, 208)",
+					pointRadius: 0,
+					pointHitRadius: 10,
+					xAxisID: "time",
+					yAxisID: "load",
+				},
+				{
+					label: _t("MemoryLoad"),
+					fill: false,
+					backgroundColor: "rgb(219, 40, 40)",
+					borderColor: "rgb(219, 40, 40)",
+					pointRadius: 0,
+					pointHitRadius: 10,
+					xAxisID: "time",
+					yAxisID: "load",
+				},
+				{
+					label: _t("DiskUsage"),
+					fill: false,
+					backgroundColor: "rgb(33, 186, 69)",
+					borderColor: "rgb(33, 186, 69)",
+					pointRadius: 0,
+					pointHitRadius: 10,
+					xAxisID: "time",
+					yAxisID: "load",
+				},
+			]
+		};
+		this.optionsStats = {
+			maintainAspectRatio: false,
+			legend: {
+				position: "bottom",
+			},
+			tooltips: {
+				mode: "label",
+				callbacks: {
+					label: function(tooltipItem, data) {
+						return " " + data.datasets[tooltipItem.datasetIndex].label + ": " + 
+							tooltipItem.yLabel.toFixed(2) + "%";
+					}
+				}
+			},
+			scales: {
+				xAxes: [{
+					id: "time",
+					type: "time",
+					time: {
+						displayFormats: {
+								second: "HH:mm:ss",
+								minute: "HH:mm",
+								hour: "HH:mm",
+								day: "DD.MM.YYYY",
+						},
+						tooltipFormat: "DD.MM.YYYY HH:mm:ss"
+					}
+				}],
+				yAxes: [{
+					type: "linear",
+					id: "load",
+					ticks: {
+						beginAtZero: true,
+						max: 100,
+						min: 0,
+					},
+					scaleLabel: {
+						display: true,
+						labelString: _t("Load"),
+					},
+				}]
+			},
+		};
 	}
 
 	componentDidMount() {
-		this.requestData();
+		this.props.requestInfo();
 		
-		this.interval = setInterval(this.requestData, 5000);
+		this.interval = setInterval(this.props.requestInfo, 5000);
 	}
 
 	componentWillUnmount() {
@@ -115,13 +185,26 @@ class Dashboard extends Component {
 
 		const _t = this.props.t
 
-		this.line.datasets[0].data = _.map(this.props.tps, tps => ({
-			x: new Date(tps.timestamp * 1000),
-			y: tps.value,
+		this.lineInfo.datasets[0].data = _.map(this.props.tps, p => ({
+			x: new Date(p.timestamp * 1000),
+			y: p.value,
 		}))
-		this.line.datasets[1].data = _.map(this.props.players, pls => ({
-			x: new Date(pls.timestamp * 1000),
-			y: pls.value,
+		this.lineInfo.datasets[1].data = _.map(this.props.players, p => ({
+			x: new Date(p.timestamp * 1000),
+			y: p.value,
+		}))
+
+		this.lineStats.datasets[0].data = _.map(this.props.cpu, p => ({
+			x: new Date(p.timestamp * 1000),
+			y: p.value * 100,
+		}))
+		this.lineStats.datasets[1].data = _.map(this.props.memory, p => ({
+			x: new Date(p.timestamp * 1000),
+			y: p.value * 100,
+		}))
+		this.lineStats.datasets[2].data = _.map(this.props.disk, p => ({
+			x: new Date(p.timestamp * 1000),
+			y: p.value * 100,
 		}))
 
 		let playerState = "blue";
@@ -266,19 +349,32 @@ class Dashboard extends Component {
 					</Card>
 				</Grid.Column>
 
+				<Grid.Column width={8}>
+					<Card style={{ width: "100%", height: "50vh" }}>
+						<Card.Content>
+							<Card.Header>
+								{_t("GraphTitleInfo")}
+							</Card.Header>
+						</Card.Content>
+						<div style={{ width: "100%", height: "100%", padding: "1em" }}>
+							<Line data={this.lineInfo} options={this.optionsInfo} />
+						</div>
+					</Card>
+				</Grid.Column>
+
+				<Grid.Column width={8}>
+					<Card style={{ width: "100%", height: "50vh" }}>
+						<Card.Content>
+							<Card.Header>
+								{_t("GraphTitleStats")}
+							</Card.Header>
+						</Card.Content>
+						<div style={{ width: "100%", height: "100%", padding: "1em" }}>
+							<Line data={this.lineStats} options={this.optionsStats} />
+						</div>
+					</Card>
+				</Grid.Column>
 			</Grid>
-
-			<Card style={{ width: "100%", height: "50vh" }}>
-				<Card.Content>
-					<Card.Header>
-						{_t("GraphTitle")}
-					</Card.Header>
-				</Card.Content>
-				<div style={{ width: "100%", height: "100%", padding: "1em" }}>
-					<Line data={this.line} options={this.options} />
-				</div>
-			</Card>
-
 		</Segment>
 	}
 }
@@ -290,14 +386,15 @@ const mapStateToProps = (_state) => {
 		data: state.data,
 		tps: state.tps,
 		players: state.players,
+		cpu: state.cpu,
+		memory: state.memory,
+		disk: state.disk,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		requestInfo: () => dispatch(requestInfo()),
-		requestTpsInfo: () => dispatch(requestTpsInfo()),
-		requestPlayerInfo: () => dispatch(requestPlayerInfo()),
 	}
 }
 
