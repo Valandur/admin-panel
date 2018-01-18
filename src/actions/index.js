@@ -14,6 +14,14 @@ export function changeLanguage(lang) {
 	}
 }
 
+export const CHANGE_SERVER = "CHANGE_SERVER"
+export function changeServer(server) {
+	return {
+		type: CHANGE_SERVER,
+		server: server,
+	}
+}
+
 export const LOGIN_REQUEST = "LOGIN_REQUEST"
 export const LOGIN_RESPONSE = "LOGIN_RESPONSE"
 export function requestLogin(username, password) {

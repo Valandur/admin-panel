@@ -6,6 +6,7 @@ import {
 	LOGIN_REQUEST, LOGIN_RESPONSE, requestLogout,
 	CHECK_USER_REQUEST, CHECK_USER_RESPONSE,
 	CATALOG_REQUEST, CATALOG_RESPONSE,
+	requestServlets,
 } from "../actions"
 
 import {
@@ -43,17 +44,22 @@ import {
 	DATA_DELETE_REQUEST, DATA_DELETE_RESPONSE,
 } from "../actions/dataview"
 
-const apiUrl = "/api/"
-
-const call = (method, key, dispatch, path, callback, data, handleErrors = true) => {
-	const req = request(method, apiUrl + path + (path.indexOf("?") >= 0 ? "&" : "?") + 
-		(key ? "key=" + key : ""));
+const call = (state, dispatch, method, path, callback, data, handleErrors = true) => {
+	const url = state.api.server.apiUrl + "/api/" + path + (path.indexOf("?") >= 0 ? "&" : "?") + 
+		(state.api.key ? "key=" + state.api.key : "")
+	const req = request(method, url)
+		.timeout({ response: 3000 })
 
 	if (data) req.send(data);
 	req.end((err, res) => {
 		if (!res) {
-			dispatch(showNotification("error", "API Error", err))
-			return;
+			if (handleErrors) {
+				dispatch(showNotification("error", "API Error", err))
+				return;
+			} else {
+				callback({ ok: false, error: err });
+				return;
+			}
 		}
 
 		if (res.statusCode === 200 || res.statusCode === 201) {
@@ -70,7 +76,7 @@ const call = (method, key, dispatch, path, callback, data, handleErrors = true) 
 			dispatch(showNotification("error", "API Error", res.statusText))
 		}
 
-		callback({ ok: false, error: res.statusText });
+		callback({ ok: false, status: res.statusCode, error: res.statusText });
 	})
 }
 
@@ -78,11 +84,12 @@ const api = ({ getState, dispatch }) => next => action => {
 	next(action)
 
 	const state = getState()
-	const key = state.api.key
-	const get = call.bind(this, "GET", key, dispatch)
-	const post = call.bind(this, "POST", key, dispatch)
-	const put = call.bind(this, "PUT", key, dispatch)
-	const del = call.bind(this, "DELETE", key, dispatch)
+	const callTmp = call.bind(this, state, dispatch)
+
+	const get = callTmp.bind(this, "GET")
+	const post = callTmp.bind(this, "POST")
+	const put = callTmp.bind(this, "PUT")
+	const del = callTmp.bind(this, "DELETE")
 
 	switch (action.type) {
 		case SERVLETS_REQUEST:
@@ -98,9 +105,17 @@ const api = ({ getState, dispatch }) => next => action => {
 		case LOGIN_REQUEST:
 			post("user", data => {
 				if (!data.ok) {
-					next(showNotification("error", "Login error", "Invalid username or password"))
+					if (data.statusCode === 403) {
+						next(showNotification("error", "Login error", "Invalid username or password"))
+					} else {
+						next(showNotification("error", "Login error", data.error))
+					}
 				}
 
+				// Request a list of servlets we have access to
+				next(requestServlets())
+
+				// Tell our reducers that login was successfull
 				next({
 					type: LOGIN_RESPONSE,
 					ok: data.ok,

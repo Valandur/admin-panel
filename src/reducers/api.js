@@ -5,11 +5,23 @@ import {
 	SERVLETS_RESPONSE,
 	LOGIN_REQUEST, LOGIN_RESPONSE,
 	CHECK_USER_RESPONSE, LOGOUT_REQUEST, CATALOG_RESPONSE,
-	CHANGE_LANGUAGE
+	CHANGE_LANGUAGE, CHANGE_SERVER
 } from "../actions"
 
-const api = (state = { servlets: {}, types: {}, lang: "en" }, action) => {
+const defaultState = {
+	server: _.first(window.config.servers),
+	servlets: {},
+	types: {},
+	lang: "en"
+}
+
+const api = (state = defaultState, action) => {
 	switch(action.type) {
+		case CHANGE_SERVER:
+			return _.assign({}, state, {
+				server: action.server
+			})
+
 		case SERVLETS_RESPONSE:
 			if (!action.ok)
 				return state;

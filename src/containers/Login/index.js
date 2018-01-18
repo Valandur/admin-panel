@@ -1,10 +1,15 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Redirect } from "react-router-dom"
-import { Grid, Header, Form, Button, Segment } from "semantic-ui-react"
+import { Grid, Form, Button, Segment, Dropdown, Image } from "semantic-ui-react"
 import { translate } from "react-i18next"
+import _ from "lodash"
 
-import { requestLogin } from "../../actions"
+import { handleChange } from "../../components/Util"
+import { requestLogin, changeServer, changeLanguage } from "../../actions"
+
+const servers = window.config.servers
+const serverOptions = _.map(servers, s => ({ value: s.apiUrl, text: s.name }))
 
 class Login extends Component {
 	constructor(props) {
@@ -12,17 +17,20 @@ class Login extends Component {
 
 		this.state = {
 			username: "",
-			password: ""
+			password: "",
 		}
 
-		this.handleChange = this.handleChange.bind(this)
+		this.handleChangeServer = this.handleChangeServer.bind(this)
+		this.handleChange = handleChange.bind(this, this.handleChangeServer)
 		this.handleLogin = this.handleLogin.bind(this)
 	}
 
-	handleChange(event) {
-		this.setState({
-			[event.target.name]: event.target.value,
-		})
+	handleChangeServer(key, value) {
+		if (key === "server") {
+			this.props.changeServer(_.find(servers, { apiUrl: value }))
+		} else {
+			this.setState({ [key]: value })
+		}
 	}
 
 	handleLogin(event) {
@@ -39,14 +47,44 @@ class Login extends Component {
 
 		return <Grid
 				textAlign="center"
-				style={{height: "100vh"}}
+				style={ {height: "100vh" }}
 				verticalAlign="middle">
 			<Grid.Column style={{ maxWidth: 450 }}>
-				<Header as="h2" color="blue" textAlign="center">
-					<span style={{color: "black"}}>Web-API</span> Admin Panel
-				</Header>
+				
+				<Image size="medium" centered src="./img/logo.png" />
+
 				<Form size="large" loading={this.props.loggingIn}>
 					<Segment>
+						{serverOptions.length > 1 ?
+							<Form.Field
+								fluid selection
+								name="server"
+								control={Dropdown}
+								placeholder={_t("Server")}
+								value={this.props.server.apiUrl}
+								onChange={this.handleChange}
+								options={serverOptions}
+							/>
+						: null}
+
+						<Form.Field
+							selection
+							control={Dropdown}
+							placeholder="Change language"
+							options={[{
+								text: "English",
+								value: "en",
+							},{
+								text: "Deutsch",
+								value: "de",
+							},{
+								"text": "русский",
+								value: "ru",
+							}]}
+							value={this.props.lang}
+							onChange={(e, data) => this.props.changeLanguage(data.value)}
+						/>
+						
 						<Form.Input
 							fluid
 							name="username"
@@ -56,6 +94,7 @@ class Login extends Component {
 							value={this.state.username}
 							onChange={this.handleChange}
 						/>
+
 						<Form.Input
 							fluid
 							name="password"
@@ -80,15 +119,17 @@ class Login extends Component {
 const mapStateToProps = (_state) => {
 	return {
 		ok: _state.api.loggedIn,
+		lang: _state.api.lang,
 		loggingIn: _state.api.loggingIn,
+		server: _state.api.server,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onLoginClick: (username, password) => {
-			dispatch(requestLogin(username, password))
-		}
+		onLoginClick: (username, password) => dispatch(requestLogin(username, password)),
+		changeServer: (server) => dispatch(changeServer(server)),
+		changeLanguage: (lang) => dispatch(changeLanguage(lang)),
 	}
 }
 
