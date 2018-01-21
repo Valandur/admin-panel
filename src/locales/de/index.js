@@ -19,6 +19,10 @@ import WebBooks from "./integrations/webbooks"
 
 export default {
 	Main: {
+		CPU: "CPU",
+		Memory: "Arbeitsspeicher",
+		Disk: "Festplatte",
+
 		Dashboard: "Übersicht",
 		Chat: "Chat",
 		Commands: "Befehle",
@@ -38,17 +42,23 @@ export default {
 		IssuesLink: "Fehler",
 
 		HuskyCrates: "Husky Crates",
-		Crates: "Crates",
+		HuskyCratesCrates: "Crates",
+
+		MMCRestrict: "MMCRestrict",
+		MMCRestrictRestrictedItems: "Restricted Items",
 
 		MMCTickets: "MMCTickets",
-		Tickets: "Tickets",
+		MMCTicketsTickets: "Tickets",
 
 		Nucleus: "Nucleus",
-		Kits: "Kits",
-		Jails: "Jails",
+		NucleusKits: "Kits",
+		NucleusJails: "Jails",
 
 		WebBooks: "Web Books",
-		Books: "Books",
+		WebBooksBooks: "Books",
+
+		UniversalMarket: "UniversalMarket",
+		UniversalMarketItems: "Items",
 	},
 	DataTable: {
 		Actions: "Aktionen",
