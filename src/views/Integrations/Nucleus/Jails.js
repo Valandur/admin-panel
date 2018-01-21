@@ -34,6 +34,7 @@ class Jails extends Component {
 					label: "World",
 					view: false,
 					create: true,
+					createName: "location.world",
 					filter: true,
 					filterName: "location.world.uuid",
 					options: _.map(this.props.worlds, world => 
@@ -59,25 +60,25 @@ class Jails extends Component {
 							<Form.Input
 								type="number"
 								width={6}
-								name="position.x"
+								name="location.position.x"
 								placeholder="X"
-								value={view.state["position.x"]}
+								value={view.state["location.position.x"]}
 								onChange={view.handleChange}
 							/>
 							<Form.Input
 								type="number"
 								width={6}
-								name="position.y"
+								name="location.position.y"
 								placeholder="Y"
-								value={view.state["position.y"]}
+								value={view.state["location.position.y"]}
 								onChange={view.handleChange}
 							/>
 							<Form.Input
 								type="number"
 								width={6}
-								name="position.z"
+								name="location.position.z"
 								placeholder="Z"
-								value={view.state["position.z"]}
+								value={view.state["location.position.z"]}
 								onChange={view.handleChange}
 							/>
 						</Form.Group>,

@@ -38,6 +38,7 @@ const ServerSettings = Loadable({ loader: () => import("../../views/ServerSettin
 const Nucleus = Loadable({ loader: () => import("../Integrations/Nucleus"), loading: Loading })
 const HuskyCrates = Loadable({ loader: () => import("../Integrations/HuskyCrates"), loading: Loading })
 const WebBooks = Loadable({ loader: () => import("../Integrations/WebBooks"), loading: Loading })
+const MMCRestrict = Loadable({ loader: () => import("../Integrations/MMCRestrict"), loading: Loading })
 const MMCTickets = Loadable({ loader: () => import("../Integrations/MMCTickets"), loading: Loading })
 const UniversalMarket = Loadable({ loader: () => import("../Integrations/UniversalMarket"), loading: Loading })
 
@@ -226,6 +227,17 @@ class Full extends Component {
 							</Menu.Menu>
 						</Menu.Item>}
 
+					{ this.props.servlets.mmcrestrict &&
+						<Menu.Item>
+							<Menu.Header>{_t("MMCRestrict")}</Menu.Header>
+
+							<Menu.Menu>
+								<Menu.Item name="mmc-restrict" as={NavLink} to="/mmcrestrict/items">
+									<Icon name="ban" /> {_t("MMCRestrictRestrictedItems")}
+								</Menu.Item>
+							</Menu.Menu>
+						</Menu.Item>}
+
 					{ this.props.servlets.mmctickets &&
 						<Menu.Item>
 							<Menu.Header>{_t("MMCTickets")}</Menu.Header>
@@ -297,6 +309,7 @@ class Full extends Component {
 						<Route path="/server-settings" name="Server Settings" component={ServerSettings} />
 
 						<Route path="/husky" name="HuskyCrates" component={HuskyCrates} />
+						<Route path="/mmcrestrict" name="MMCRestrict" component={MMCRestrict} />
 						<Route path="/mmctickets" name="MMCTickets" component={MMCTickets} />
 						<Route path="/nucleus" name="Nucleus" component={Nucleus} />
 						<Route path="/webbooks" name="WebBooks" component={WebBooks} />

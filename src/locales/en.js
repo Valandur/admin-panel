@@ -207,4 +207,17 @@ export default {
 		ShowInventory: "Show Inventory",
 		HideInventory: "Hide Inventory",
 	},
+
+	"Integrations.MMCRestrict": {
+		RestrictedItems: "Restricted Items",
+		CreateRestrictedItem: "Restrict an Item",
+		Item: "Item",
+		Reason: "Reason",
+		Usage: "Usage",
+		Breaking: "Breaking",
+		Placing: "Placing",
+		Ownership: "Ownership",
+		Drop: "Drop",
+		World: "World",
+	}
 }
