@@ -10,6 +10,7 @@ import {
 
 const defaultState = {
 	server: _.first(window.config.servers),
+	servers: window.config.servers,
 	servlets: {},
 	types: {},
 	lang: "en"
