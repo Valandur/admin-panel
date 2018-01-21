@@ -35,24 +35,26 @@ class CrateReward extends Component {
 		const { reward, format, handleRewardChange, addRewardObject, 
 			removeRewardObject, removeReward, objectTypes } = this.props
 
+		const _t = this.props.t
+
 		return <Table.Row>
-			<Table.Cell width={2}>
+			<Table.Cell width={3}>
 				<Input
 					fluid
 					type="number"
 					name="chance"
-					placeholder="Chance"
+					placeholder={_t("Chance")}
 					onChange={e => handleRewardChange(reward, e)}
 					value={reward.chance}
 					labelPosition="right"
 					label={format(reward.chance)}
 				/>
 			</Table.Cell>
-			<Table.Cell>
+			<Table.Cell width={2}>
 				<Input 
 					type="text"
 					name="name"
-					placeholder="Name" 
+					placeholder={_t("Name")}
 					onChange={e => handleRewardChange(reward, e)}
 					value={reward.name}
 				/>
@@ -62,7 +64,7 @@ class CrateReward extends Component {
 					selection search
 					name="displayItem.type.id"
 					control={Dropdown}
-					placeholder="Item type"
+					placeholder={_t("ItemType")}
 					onChange={(e, val) => handleRewardChange(reward, e, val)}
 					value={reward.displayItem.type.id}
 					options={_.map(this.props.itemTypes, type => 
@@ -98,7 +100,7 @@ class CrateReward extends Component {
 							selection search
 							name="newObjectType"
 							control={Dropdown}
-							placeholder="Type"
+							placeholder={_t("Type")}
 							onChange={this.handleChange}
 							value={this.state.newObjectType}
 							options={objectTypes}
@@ -112,7 +114,7 @@ class CrateReward extends Component {
 								value={this.state.newObjectCommand}
 								action={{
 									color: "green",
-									content: "Add",
+									content: _t("Add"),
 									onClick: e => addRewardObject(reward, {
 										type: this.state.newObjectType,
 										command: _.startsWith(this.state.newObjectCommand, "/") ? 
@@ -127,7 +129,7 @@ class CrateReward extends Component {
 								key="type"
 								name="newObjectItemType"
 								control={Dropdown}
-								placeholder="Item type"
+								placeholder={_t("ItemType")}
 								onChange={this.handleChange}
 								value={this.state.newObjectItemType}
 								options={_.map(this.props.itemTypes, type => 
@@ -138,12 +140,12 @@ class CrateReward extends Component {
 								key="amount"
 								name="newObjectItemAmount"
 								type="number"
-								placeholder="Amount"
+								placeholder={_t("Amount")}
 								onChange={this.handleChange}
 								value={this.state.newObjectItemAmount}
 								action={{
 									color: "green",
-									content: "Add",
+									content: _t("Add"),
 									onClick: e => addRewardObject(reward, {
 										type: this.state.newObjectType,
 										item: {
@@ -166,7 +168,7 @@ class CrateReward extends Component {
 				<Button
 					color="red"
 					icon="delete" 
-					content="Delete"
+					content={_t("Delete")}
 					onClick={e => removeReward(reward)}
 				/>
 			</Table.Cell>

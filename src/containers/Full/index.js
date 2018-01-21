@@ -254,15 +254,26 @@ class Full extends Component {
 							<Menu.Header>{_t("Nucleus")}</Menu.Header>
 
 							<Menu.Menu>
-								<Menu.Item name="nucleus-kits" as={NavLink} to="/nucleus/kits">
-									<Icon name="wrench" /> {_t("NucleusKits")}
-								</Menu.Item>
-
 								<Menu.Item name="nucleus-jails" as={NavLink} to="/nucleus/jails">
 									<Icon name="bars" rotated="clockwise" /> {_t("NucleusJails")}
 								</Menu.Item>
+
+								<Menu.Item name="nucleus-kits" as={NavLink} to="/nucleus/kits">
+									<Icon name="wrench" /> {_t("NucleusKits")}
+								</Menu.Item>
 							</Menu.Menu>
 						</Menu.Item>}
+
+					{ this.props.servlets.universalmarket &&
+					<Menu.Item>
+						<Menu.Header>{_t("UniversalMarket")}</Menu.Header>
+
+						<Menu.Menu>
+							<Menu.Item name="um-items" as={NavLink} to="/universalmarket/items">
+								<Icon name="shopping cart" /> {_t("UniversalMarketItems")}
+							</Menu.Item>
+						</Menu.Menu>
+					</Menu.Item>}
 
 					{ this.props.servlets.webbooks &&
 						<Menu.Item>
@@ -271,17 +282,6 @@ class Full extends Component {
 							<Menu.Menu>
 								<Menu.Item name="web-books" as={NavLink} to="/webbooks/books">
 									<Icon name="book" /> {_t("WebBooksBooks")}
-								</Menu.Item>
-							</Menu.Menu>
-						</Menu.Item>}
-
-					{ this.props.servlets.universalmarket &&
-						<Menu.Item>
-							<Menu.Header>{_t("UniversalMarket")}</Menu.Header>
-
-							<Menu.Menu>
-								<Menu.Item name="um-items" as={NavLink} to="/universalmarket/items">
-									<Icon name="shopping cart" /> {_t("UniversalMarketItems")}
 								</Menu.Item>
 							</Menu.Menu>
 						</Menu.Item>}
@@ -312,8 +312,8 @@ class Full extends Component {
 						<Route path="/mmcrestrict" name="MMCRestrict" component={MMCRestrict} />
 						<Route path="/mmctickets" name="MMCTickets" component={MMCTickets} />
 						<Route path="/nucleus" name="Nucleus" component={Nucleus} />
-						<Route path="/webbooks" name="WebBooks" component={WebBooks} />
 						<Route path="/universalmarket" name="UniversalMarket" component={UniversalMarket} />
+						<Route path="/webbooks" name="WebBooks" component={WebBooks} />
 						
 						<Redirect from="/" to="/dashboard" />
 					</Switch>

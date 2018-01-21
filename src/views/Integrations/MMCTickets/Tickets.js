@@ -1,58 +1,68 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
+import { translate } from "react-i18next"
 import moment from "moment"
 
 import DataViewFunc from "../../../components/DataView"
 const DataView = DataViewFunc("mmctickets/ticket", "id")
 
-const ticketStates = [{
-	value: "Open",
-	text: "Open",
-}, {
-	value: "Claimed",
-	text: "Claimed",
-}, {
-	value: "Held",
-	text: "Held",
-}, {
-	value: "Closed",
-	text: "Closed"
-}];
 
 class Tickets extends Component {
 
+	constructor(props) {
+		super(props)
+
+		const _t = props.t
+
+		this.ticketStates = [{
+			value: "Open",
+			text: _t("Open"),
+		}, {
+			value: "Claimed",
+			text: _t("Claimed"),
+		}, {
+			value: "Held",
+			text: _t("Held"),
+		}, {
+			value: "Closed",
+			text: _t("Closed"),
+		}];
+	}
+
 	render() {
+		const _t = this.props.t
+
 		return <DataView
 			canEdit
-			title="Tickets"
 			icon="ticket"
-			filterTitle="Filter tickets"
+			title={_t("Tickets")}
+			filterTitle={_t("FilterTickets")}
 			fields={{
-				id: "Id",
+				id: _t("Id"),
 				timestamp: {
-					label: "Timestamp",
+					label: _t("Timestamp"),
 					view: (ticket) => moment.unix(ticket.timestamp).calendar(),
 				},
 				status: {
-					label: "Status",
+					label: _t("Status"),
 					edit: true,
-					options: ticketStates,
+					options: this.ticketStates,
 				},
 				"sender.name": {
-					label: "Sender",
+					label: _t("Sender"),
 					filter: true,
 				},
 				"staff.name": {
-					label: "Assigned",
+					label: _t("Assigned"),
 					filter: true,
 				},
 				message: {
-					label: "Message",
+					label: _t("Message"),
 					filter: true,
 					wide: true,
 				},
 				comment: {
-					label: "Comment",
+					label: _t("Comment"),
 					edit: true,
 					filter: true,
 					wide: true,
@@ -71,4 +81,6 @@ const mapDispatchToProps = (endpoint) => (dispatch) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tickets);
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Integrations.MMCTickets")(Tickets)
+);
