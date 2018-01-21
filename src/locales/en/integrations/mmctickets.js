@@ -1,0 +1,15 @@
+export default {
+	Tickets: "Tickets",
+	FilterTickets: "Filter tickets",
+	Id: "Id",
+	Timestamp: "Timestamp",
+	Status: "Status",
+	Sender: "Sender",
+	Assigned: "Assigned",
+	Message: "Message",
+	Comment: "Comment",
+	Open: "Open",
+	Claimed: "Claimed",
+	Held: "Held",
+	Closed: "Closed",
+}

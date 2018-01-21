@@ -10,7 +10,7 @@ import { Segment, Message } from "semantic-ui-react"
 import { createBrowserHistory } from "history"
 import NotificationSystem from "react-notification-system"
 
-import "./i18n";
+import "./locales/i18n";
 import pkg from "../package.json" 
 
 // CSS
