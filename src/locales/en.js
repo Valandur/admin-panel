@@ -23,20 +23,23 @@ export default {
 		IssuesLink: "Issues",
 
 		HuskyCrates: "Husky Crates",
-		Crates: "Crates",
+		HuskyCratesCrates: "Crates",
+
+		MMCRestrict: "MMCRestrict",
+		MMCRestrictRestrictedItems: "Restricted Items",
 
 		MMCTickets: "MMCTickets",
-		Tickets: "Tickets",
+		MMCTicketsTickets: "Tickets",
 
 		Nucleus: "Nucleus",
-		Kits: "Kits",
-		Jails: "Jails",
+		NucleusKits: "Kits",
+		NucleusJails: "Jails",
 
 		WebBooks: "Web Books",
-		Books: "Books",
+		WebBooksBooks: "Books",
 
 		UniversalMarket: "UniversalMarket",
-		Items: "Items",
+		UniversalMarketItems: "Items",
 	},
 	
 	Login: {

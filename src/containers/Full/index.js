@@ -222,7 +222,7 @@ class Full extends Component {
 
 							<Menu.Menu>
 								<Menu.Item name="husky-crates" as={NavLink} to="/husky/crates">
-									<Icon name="archive" /> {_t("Crates")}
+									<Icon name="archive" /> {_t("HuskyCratesCrates")}
 								</Menu.Item>
 							</Menu.Menu>
 						</Menu.Item>}
@@ -244,7 +244,7 @@ class Full extends Component {
 
 							<Menu.Menu>
 								<Menu.Item name="mmc-tickets" as={NavLink} to="/mmctickets/tickets">
-									<Icon name="ticket" /> {_t("Tickets")}
+									<Icon name="ticket" /> {_t("MMCTicketsTickets")}
 								</Menu.Item>
 							</Menu.Menu>
 						</Menu.Item>}
@@ -255,11 +255,11 @@ class Full extends Component {
 
 							<Menu.Menu>
 								<Menu.Item name="nucleus-kits" as={NavLink} to="/nucleus/kits">
-									<Icon name="wrench" /> {_t("Kits")}
+									<Icon name="wrench" /> {_t("NucleusKits")}
 								</Menu.Item>
 
 								<Menu.Item name="nucleus-jails" as={NavLink} to="/nucleus/jails">
-									<Icon name="bars" rotated="clockwise" /> {_t("Jails")}
+									<Icon name="bars" rotated="clockwise" /> {_t("NucleusJails")}
 								</Menu.Item>
 							</Menu.Menu>
 						</Menu.Item>}
@@ -270,7 +270,7 @@ class Full extends Component {
 
 							<Menu.Menu>
 								<Menu.Item name="web-books" as={NavLink} to="/webbooks/books">
-									<Icon name="book" /> {_t("Books")}
+									<Icon name="book" /> {_t("WebBooksBooks")}
 								</Menu.Item>
 							</Menu.Menu>
 						</Menu.Item>}
@@ -281,7 +281,7 @@ class Full extends Component {
 
 							<Menu.Menu>
 								<Menu.Item name="um-items" as={NavLink} to="/universalmarket/items">
-									<Icon name="shopping cart" /> {_t("Items")}
+									<Icon name="shopping cart" /> {_t("UniversalMarketItems")}
 								</Menu.Item>
 							</Menu.Menu>
 						</Menu.Item>}
