@@ -7,6 +7,8 @@ import {
 	CHANGE_SERVER,
 } from "../actions"
 
+const formatApi = api => JSON.stringify(api)
+
 const persist = ({ dispatch, getState }) => next => action => {
 	next(action)
 
@@ -15,7 +17,7 @@ const persist = ({ dispatch, getState }) => next => action => {
 		case CHANGE_LANGUAGE:
 		case CHANGE_SERVER:
 			if (window.localStorage) {
-				window.localStorage.setItem("api", JSON.stringify(getState().api));
+				window.localStorage.setItem("api", formatApi(getState().api));
 			}
 			break;
 

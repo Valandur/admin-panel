@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Form, Button, Icon } from "semantic-ui-react"
+import { translate } from "react-i18next"
 import _ from "lodash"
 
 import { requestList } from "../../../actions/dataview"
@@ -16,24 +17,27 @@ class Jails extends Component {
 	}
 
 	render() {
+		const _t = this.props.t
+
 		return <DataView
 			canDelete
-			title="Jails"
 			icon="wrench"
-			filterTitle="Filter jails"
-			createTitle="Create a jail"
+			title={_t("Jails")}
+			filterTitle={_t("FilterJails")}
+			createTitle={_t("CreateJail")}
 			fields={{
 				name: {
-					label: "Name",
+					label: _t("Name"),
 					create: true,
 					filter: true,
 					required: true,
 					wide: true,
 				},
 				world: {
-					label: "World",
+					label: _t("World"),
 					view: false,
 					create: true,
+					createName: "location.world",
 					filter: true,
 					filterName: "location.world.uuid",
 					options: _.map(this.props.worlds, world => 
@@ -42,7 +46,7 @@ class Jails extends Component {
 					required: true,
 				},
 				position: {
-					label: "Location",
+					label: _t("Location"),
 					isGroup: true,
 					wide: true,
 					view: (jail) =>
@@ -59,25 +63,25 @@ class Jails extends Component {
 							<Form.Input
 								type="number"
 								width={6}
-								name="position.x"
+								name="location.position.x"
 								placeholder="X"
-								value={view.state["position.x"]}
+								value={view.state["location.position.x"]}
 								onChange={view.handleChange}
 							/>
 							<Form.Input
 								type="number"
 								width={6}
-								name="position.y"
+								name="location.position.y"
 								placeholder="Y"
-								value={view.state["position.y"]}
+								value={view.state["location.position.y"]}
 								onChange={view.handleChange}
 							/>
 							<Form.Input
 								type="number"
 								width={6}
-								name="position.z"
+								name="location.position.z"
 								placeholder="Z"
-								value={view.state["position.z"]}
+								value={view.state["location.position.z"]}
 								onChange={view.handleChange}
 							/>
 						</Form.Group>,
@@ -99,4 +103,6 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Jails);
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Integrations.Nucleus")(Jails)
+);

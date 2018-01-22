@@ -1,8 +1,9 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { List, Input, Button } from "semantic-ui-react"
-import _ from "lodash"
+import { translate } from "react-i18next"
 import copy from "copy-to-clipboard";
+import _ from "lodash"
 
 import DataViewFunc from "../../../components/DataView"
 const DataView = DataViewFunc("webbooks/book", "id")
@@ -51,21 +52,23 @@ class Books extends Component {
 	}
 
 	render() {
+		const _t = this.props.t
+
 		return <DataView
 			canEdit canDelete
-			title="Web Books"
 			icon="book"
-			filterTitle="Filter web books"
-			createTitle="Create a web book"
+			title={_t("WebBooks")}
+			filterTitle={_t("FilterBooks")}
+			createTitle={_t("CreateBook")}
 			fields={{
 				id: {
-					label: "Id",
+					label: _t("Id"),
 					create: true,
 					filter: true,
 					required: true,
 				},
 				title: {
-					label: "Title",
+					label: _t("Title"),
 					edit: true,
 					create: true,
 					required: true,
@@ -76,13 +79,13 @@ class Books extends Component {
 					edit: true,
 				},
 				content: {
-					label: "Content",
+					label: _t("Content"),
 					wide: true,
 					view: (book) => <div dangerouslySetInnerHTML={{ __html: book.html }} />,
 					edit: this.renderEditContent,
 				},
 				link: {
-					label: "Link",
+					label: _t("Link"),
 					wide: true,
 					view: (book) =>
 						<Input
@@ -97,6 +100,8 @@ class Books extends Component {
 	}
 
 	renderEditContent(book, view) {
+		const _t = this.props.t
+
 		return <div>
 			<List size="large">
 				{_.map(view.state.lines, (line, index) => 
@@ -132,7 +137,7 @@ class Books extends Component {
 			</List>
 			<Input
 				name="newItem"
-				placeholder="New line"
+				placeholder={_t("NewLine")}
 				onChange={view.handleChange}
 				value={view.state.newItem ? view.state.newItem : ""}
 				action={{ color: "green", icon: "plus", onClick: e => this.addLine(view) }}
@@ -149,4 +154,6 @@ const mapDispatchToProps = (dispatch) => {
 	return {}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Books);
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Integrations.WebBooks")(Books)
+);

@@ -8,9 +8,6 @@ import _ from "lodash"
 import { handleChange } from "../../components/Util"
 import { requestLogin, changeServer, changeLanguage } from "../../actions"
 
-const servers = window.config.servers
-const serverOptions = _.map(servers, s => ({ value: s.apiUrl, text: s.name }))
-
 class Login extends Component {
 	constructor(props) {
 		super(props)
@@ -27,7 +24,7 @@ class Login extends Component {
 
 	handleChangeServer(key, value) {
 		if (key === "server") {
-			this.props.changeServer(_.find(servers, { apiUrl: value }))
+			this.props.changeServer(_.find(this.props.servers, { apiUrl: value }))
 		} else {
 			this.setState({ [key]: value })
 		}
@@ -55,7 +52,7 @@ class Login extends Component {
 
 				<Form size="large" loading={this.props.loggingIn}>
 					<Segment>
-						{serverOptions.length > 1 ?
+						{this.props.servers.length > 1 ?
 							<Form.Field
 								fluid selection
 								name="server"
@@ -63,7 +60,7 @@ class Login extends Component {
 								placeholder={_t("Server")}
 								value={this.props.server.apiUrl}
 								onChange={this.handleChange}
-								options={serverOptions}
+								options={_.map(this.props.servers, s => ({ value: s.apiUrl, text: s.name }))}
 							/>
 						: null}
 
@@ -122,6 +119,7 @@ const mapStateToProps = (_state) => {
 		lang: _state.api.lang,
 		loggingIn: _state.api.loggingIn,
 		server: _state.api.server,
+		servers: _state.api.servers,
 	}
 }
 

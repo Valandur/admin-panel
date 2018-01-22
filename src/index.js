@@ -6,10 +6,11 @@ import { Provider } from "react-redux"
 import { createStore, applyMiddleware, compose } from "redux"
 import { Route, Switch, Redirect } from "react-router-dom"
 import { routerMiddleware, ConnectedRouter } from "react-router-redux"
+import { Segment, Message } from "semantic-ui-react"
 import { createBrowserHistory } from "history"
 import NotificationSystem from "react-notification-system"
 
-import "./i18n";
+import "./locales/i18n";
 import pkg from "../package.json" 
 
 // CSS
@@ -48,9 +49,11 @@ const history = createBrowserHistory({
 // Try and reconstruct state
 let initialState = undefined;
 if (window.localStorage) {
-	const prevApi = window.localStorage.getItem("api");
+	const str = window.localStorage.getItem("api");
+	const prevApi = str ? JSON.parse(str) : undefined;
+
 	initialState = {
-		api: prevApi ? JSON.parse(prevApi) : undefined,
+		api: prevApi && prevApi.loggedIn ? prevApi : undefined,
 	};
 }
 
@@ -58,7 +61,7 @@ if (window.localStorage) {
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 let store = createStore(
 	App, 
-	initialState, 
+	initialState,
 	composeEnhancers(
 		applyMiddleware(
 			api,
@@ -77,6 +80,15 @@ if (store.getState().api.loggedIn) {
 
 class Main extends React.Component {
 	render() {
+		if (store.getState().api.servers.length === 0) {
+			return <Segment basic>
+				<Message negative>
+					<Message.Header>No servers found</Message.Header>
+					<p>You have not configured any servers to connect to! Check your config.js file.</p>
+				</Message>
+			</Segment>
+		}
+
 		return <div>
 			<Provider store={store}>
 				<ConnectedRouter history={history} basename="/admin">

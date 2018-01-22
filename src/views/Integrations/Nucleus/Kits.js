@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Label, Popup, Button, Input, Form, Dropdown } from "semantic-ui-react"
+import { translate } from "react-i18next"
 import _ from "lodash"
 
 import ItemStack from "../../../components/ItemStack"
@@ -63,40 +64,42 @@ class Kits extends Component {
 	}
 
 	render() {
+		const _t = this.props.t
+
 		return <DataView
 			canEdit canDelete
-			title="Kits"
 			icon="wrench"
-			filterTitle="Filter kits"
-			createTitle="Create a kit"
+			title={_t("Kits")}
+			filterTitle={_t("FilterKits")}
+			createTitle={_t("CreateKit")}
 			fields={{
 				name: {
-					label: "Name",
+					label: _t("Name"),
 					create: true,
 					filter: true,
 					required: true,
 				},
 				cost: {
-					label: "Cost",
+					label: _t("Cost"),
 					type: "number",
 					edit: true,
 					create: true,
 					required: true,
 				},
 				cooldown: {
-					label: "Cooldown",
+					label: _t("Cooldown"),
 					type: "number",
 					edit: true,
 					create: true,
 					required: true,
 				},
 				commands: {
-					label: "Commands",
+					label: _t("Commands"),
 					wide: true,
 					view: this.renderCommands,
 				},
 				stacks: {
-					label: "Stacks",
+					label: _t("Stacks"),
 					wide: true,
 					view: this.renderStacks,
 				}
@@ -105,6 +108,8 @@ class Kits extends Component {
 	}
 
 	renderCommands(kit, view) {
+		const _t = this.props.t
+
 		return <div>
 			{_.map(kit.commands, (cmd, i) =>
 				<Label
@@ -123,7 +128,7 @@ class Kits extends Component {
 						name="newKitCmd"
 						action={{
 							color: "green",
-							content: "Add",
+							content: _t("Add"),
 							onClick: e => this.addCmd(view, kit),
 						}}
 						placeholder="/say Hi"
@@ -136,6 +141,8 @@ class Kits extends Component {
 	}
 
 	renderStacks(kit, view) {
+		const _t = this.props.t
+
 		return <div>
 			{_.map(kit.stacks, (item, i) =>
 				<ItemStack
@@ -153,7 +160,7 @@ class Kits extends Component {
 						required fluid selection search
 						name="newItemType"
 						control={Dropdown}
-						placeholder="Type"
+						placeholder={_t("Type")}
 						onChange={this.handleChange}
 						options={_.map(this.props.itemTypes, type => 
 							({ value: type.id, text: type.name + " (" + type.id + ")" })
@@ -162,11 +169,11 @@ class Kits extends Component {
 					<Form.Input
 						name="newItemAmount"
 						type="number"
-						placeholder="Amount"
+						placeholder={_t("Amount")}
 						onChange={this.handleChange}
 						action={{
 							color: "green",
-							content: "Add",
+							content: _t("Add"),
 							onClick: e => this.addStack(view, kit),
 						}}
 					/>
@@ -188,4 +195,6 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Kits);
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Integrations.Nucleus")(Kits)
+);

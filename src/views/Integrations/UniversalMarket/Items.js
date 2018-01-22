@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
+import { translate } from "react-i18next"
 import moment from "moment"
 
 import ItemStack from "../../../components/ItemStack"
@@ -11,13 +12,15 @@ const DataView = DataViewFunc("universalmarket/item", "id")
 class Items extends Component {
 
 	render() {
+		const _t = this.props.t
+
 		return <DataView
-			title="Items"
 			icon="shopping cart"
-			filterTitle="Filter items"
+			title={_t("Items")}
+			filterTitle={_t("FilterItems")}
 			fields={{
 				item: {
-					label: "Item",
+					label: _t("Item"),
 					filter: true,
 					filterValue: mi => mi.item.type.name + " (" + mi.item.type.id + ")",
 					view: (mi) =>
@@ -25,13 +28,13 @@ class Items extends Component {
 							item={mi.item}
 						/>
 				},
-				price: "Price",
+				price: _t("Price"),
 				expires: {
-					label: "Expires",
+					label: _t("Expires"),
 					view: (mi) =>
 						moment.unix(mi.expires).calendar()
 				},
-				"owner.name": "Seller",
+				"owner.name": _t("Seller"),
 			}}
 		/>
 	}
@@ -45,4 +48,6 @@ const mapDispatchToProps = (dispatch) => {
 	return {}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Items);
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Integrations.UniversalMarket")(Items)
+);

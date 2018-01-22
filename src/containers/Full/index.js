@@ -38,6 +38,7 @@ const ServerSettings = Loadable({ loader: () => import("../../views/ServerSettin
 const Nucleus = Loadable({ loader: () => import("../Integrations/Nucleus"), loading: Loading })
 const HuskyCrates = Loadable({ loader: () => import("../Integrations/HuskyCrates"), loading: Loading })
 const WebBooks = Loadable({ loader: () => import("../Integrations/WebBooks"), loading: Loading })
+const MMCRestrict = Loadable({ loader: () => import("../Integrations/MMCRestrict"), loading: Loading })
 const MMCTickets = Loadable({ loader: () => import("../Integrations/MMCTickets"), loading: Loading })
 const UniversalMarket = Loadable({ loader: () => import("../Integrations/UniversalMarket"), loading: Loading })
 
@@ -221,7 +222,18 @@ class Full extends Component {
 
 							<Menu.Menu>
 								<Menu.Item name="husky-crates" as={NavLink} to="/husky/crates">
-									<Icon name="archive" /> {_t("Crates")}
+									<Icon name="archive" /> {_t("HuskyCratesCrates")}
+								</Menu.Item>
+							</Menu.Menu>
+						</Menu.Item>}
+
+					{ this.props.servlets.mmcrestrict &&
+						<Menu.Item>
+							<Menu.Header>{_t("MMCRestrict")}</Menu.Header>
+
+							<Menu.Menu>
+								<Menu.Item name="mmc-restrict" as={NavLink} to="/mmcrestrict/items">
+									<Icon name="ban" /> {_t("MMCRestrictRestrictedItems")}
 								</Menu.Item>
 							</Menu.Menu>
 						</Menu.Item>}
@@ -232,7 +244,7 @@ class Full extends Component {
 
 							<Menu.Menu>
 								<Menu.Item name="mmc-tickets" as={NavLink} to="/mmctickets/tickets">
-									<Icon name="ticket" /> {_t("Tickets")}
+									<Icon name="ticket" /> {_t("MMCTicketsTickets")}
 								</Menu.Item>
 							</Menu.Menu>
 						</Menu.Item>}
@@ -242,15 +254,26 @@ class Full extends Component {
 							<Menu.Header>{_t("Nucleus")}</Menu.Header>
 
 							<Menu.Menu>
-								<Menu.Item name="nucleus-kits" as={NavLink} to="/nucleus/kits">
-									<Icon name="wrench" /> {_t("Kits")}
+								<Menu.Item name="nucleus-jails" as={NavLink} to="/nucleus/jails">
+									<Icon name="bars" rotated="clockwise" /> {_t("NucleusJails")}
 								</Menu.Item>
 
-								<Menu.Item name="nucleus-jails" as={NavLink} to="/nucleus/jails">
-									<Icon name="bars" rotated="clockwise" /> {_t("Jails")}
+								<Menu.Item name="nucleus-kits" as={NavLink} to="/nucleus/kits">
+									<Icon name="wrench" /> {_t("NucleusKits")}
 								</Menu.Item>
 							</Menu.Menu>
 						</Menu.Item>}
+
+					{ this.props.servlets.universalmarket &&
+					<Menu.Item>
+						<Menu.Header>{_t("UniversalMarket")}</Menu.Header>
+
+						<Menu.Menu>
+							<Menu.Item name="um-items" as={NavLink} to="/universalmarket/items">
+								<Icon name="shopping cart" /> {_t("UniversalMarketItems")}
+							</Menu.Item>
+						</Menu.Menu>
+					</Menu.Item>}
 
 					{ this.props.servlets.webbooks &&
 						<Menu.Item>
@@ -258,18 +281,7 @@ class Full extends Component {
 
 							<Menu.Menu>
 								<Menu.Item name="web-books" as={NavLink} to="/webbooks/books">
-									<Icon name="book" /> {_t("Books")}
-								</Menu.Item>
-							</Menu.Menu>
-						</Menu.Item>}
-
-					{ this.props.servlets.universalmarket &&
-						<Menu.Item>
-							<Menu.Header>{_t("UniversalMarket")}</Menu.Header>
-
-							<Menu.Menu>
-								<Menu.Item name="um-items" as={NavLink} to="/universalmarket/items">
-									<Icon name="shopping cart" /> {_t("Items")}
+									<Icon name="book" /> {_t("WebBooksBooks")}
 								</Menu.Item>
 							</Menu.Menu>
 						</Menu.Item>}
@@ -297,10 +309,11 @@ class Full extends Component {
 						<Route path="/server-settings" name="Server Settings" component={ServerSettings} />
 
 						<Route path="/husky" name="HuskyCrates" component={HuskyCrates} />
+						<Route path="/mmcrestrict" name="MMCRestrict" component={MMCRestrict} />
 						<Route path="/mmctickets" name="MMCTickets" component={MMCTickets} />
 						<Route path="/nucleus" name="Nucleus" component={Nucleus} />
-						<Route path="/webbooks" name="WebBooks" component={WebBooks} />
 						<Route path="/universalmarket" name="UniversalMarket" component={UniversalMarket} />
+						<Route path="/webbooks" name="WebBooks" component={WebBooks} />
 						
 						<Redirect from="/" to="/dashboard" />
 					</Switch>

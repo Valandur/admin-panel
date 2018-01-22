@@ -4,6 +4,7 @@ import {
 	Header, Table, Label, Radio, Modal,
 	Form, Button, Icon, Dropdown,
 } from "semantic-ui-react"
+import { translate, Trans } from "react-i18next"
 import moment from "moment"
 import _ from "lodash"
 
@@ -130,29 +131,31 @@ class Crates extends Component {
 	}
 
 	render() {
+		const _t = this.props.t
+
 		return <div>
 			<DataView
 				canEdit canDelete
-				title="Husky Crates"
 				icon="archive"
-				filterTitle="Filter crates"
-				createTitle="Create a crate"
+				title={_t("HuskyCrates")}
+				filterTitle={_t("FilterCrates")}
+				createTitle={_t("CreateCrate")}
 				fields={{
 					id: {
-						label: "Id",
+						label: _t("Id"),
 						create: true,
 						filter: true,
 						required: true,
 					},
 					name: {
-						label: "Name",
+						label: _t("Name"),
 						create: true,
 						edit: true,
 						filter: true,
 						required: true,
 					},
 					type: {
-						label: "Type",
+						label: _t("Type"),
 						create: true,
 						edit: true,
 						filter: true,
@@ -160,7 +163,7 @@ class Crates extends Component {
 						options: this.props.crateTypes
 					},
 					free: {
-						label: "Free",
+						label: _t("Free"),
 						view: (crate) => <div>
 							<Icon
 								color={crate.free ? "green" : "red"}
@@ -175,7 +178,7 @@ class Crates extends Component {
 						</div>,
 					},
 					rewards: {
-						label: "Rewards",
+						label: _t("Rewards"),
 						wide: true,
 						view: this.renderRewards,
 					},
@@ -219,14 +222,18 @@ class Crates extends Component {
 		let totalChance = _.sum(_.map(this.state.rewards, r => r.chance ? r.chance : 0));
 		const format = chance => ((chance / totalChance) * 100).toFixed(3) + "%";
 
+		const _t = this.props.t
+
 		return <Modal open={this.state.modal} onClose={this.toggleModal} size="fullscreen">
 			<Modal.Header>
-				Edit '{this.state.name}' crate
+				<Trans i18nKey="RewardsTitle" name={this.state.name}>
+					Edit '{this.state.name}' crate
+				</Trans>
 			</Modal.Header>
 			<Modal.Content>
 				<Form>
 					<Header>
-						<Icon fitted name="info" /> General
+						<Icon fitted name="info" /> {_t("General")}
 					</Header>
 
 					<Form.Group widths="equal">
@@ -235,8 +242,8 @@ class Crates extends Component {
 							required fluid
 							type="text"
 							name="name"
-							label="Name"
-							placeholder="Name"
+							label={_t("Name")}
+							placeholder={_t("Name")}
 							onChange={this.handleChange}
 							value={this.state.name}
 						/>
@@ -245,8 +252,8 @@ class Crates extends Component {
 							required fluid selection
 							control={Dropdown}
 							name="type"
-							label="Type"
-							placeholder="Type"
+							label={_t("Type")}
+							placeholder={_t("Type")}
 							onChange={this.handleChange}
 							options={this.props.crateTypes}
 							value={this.state.type}
@@ -259,7 +266,7 @@ class Crates extends Component {
 						<Form.Field
 							toggle required 
 							control={Radio}
-							label="Is Free"
+							label={_t("IsFree")}
 							checked={this.state.free}
 							onClick={e => this.setState({ free: !this.state.free })}
 						/>
@@ -269,8 +276,8 @@ class Crates extends Component {
 							type="number"
 							name="freeDelay"
 							labelPosition="right"
-							label="Free Delay (in seconds)"
-							placeholder="Delay (in seconds)"
+							label={_t("FreeDelay")}
+							placeholder={_t("FreeDelay")}
 							onChange={this.handleChange}
 							value={this.state.freeDelay}
 							disabled={!this.state.free}
@@ -282,17 +289,17 @@ class Crates extends Component {
 					</Form.Group>
 
 					<Header>
-						<Icon fitted name="trophy" /> Rewards
+						<Icon fitted name="trophy" /> {_t("Rewards")}
 					</Header>
 
 					<Table size="small">
 						<Table.Header>
 							<Table.Row>
-								<Table.HeaderCell>Chance</Table.HeaderCell>
-								<Table.HeaderCell>Name</Table.HeaderCell>
-								<Table.HeaderCell>Display Item</Table.HeaderCell>
-								<Table.HeaderCell>Objects</Table.HeaderCell>
-								<Table.HeaderCell>Actions</Table.HeaderCell>
+								<Table.HeaderCell>{_t("Chance")}</Table.HeaderCell>
+								<Table.HeaderCell>{_t("Name")}</Table.HeaderCell>
+								<Table.HeaderCell>{_t("DisplayItem")}</Table.HeaderCell>
+								<Table.HeaderCell>{_t("Objects")}</Table.HeaderCell>
+								<Table.HeaderCell>{_t("Actions")}</Table.HeaderCell>
 							</Table.Row>
 						</Table.Header>
 						<Table.Body>
@@ -307,6 +314,7 @@ class Crates extends Component {
 									removeReward={this.removeReward}
 									objectTypes={this.props.objectTypes}
 									itemTypes={this.props.itemTypes}
+									t={_t}
 								/>
 							)}
 							<Table.Row>
@@ -314,7 +322,7 @@ class Crates extends Component {
 									<Button
 										color="green"
 										icon="plus" 
-										content="Add"
+										content={_t("Add")}
 										onClick={this.addReward}
 									/>
 								</Table.Cell>
@@ -324,8 +332,8 @@ class Crates extends Component {
 				</Form>
 			</Modal.Content>
 			<Modal.Actions>
-				<Button color="blue" onClick={this.save}>Save</Button>&nbsp;
-				<Button onClick={this.toggleModal}>Cancel</Button>
+				<Button color="blue" onClick={this.save}>{_t("Save")}</Button>&nbsp;
+				<Button onClick={this.toggleModal}>{_t("Cancel")}</Button>
 			</Modal.Actions>
 		</Modal>
 	}
@@ -363,4 +371,6 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Crates);
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Integrations.HuskyCrates")(Crates)
+);
