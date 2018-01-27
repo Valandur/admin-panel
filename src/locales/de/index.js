@@ -1,3 +1,4 @@
+import Menu from "./menu"
 import Login from "./login"
 import Dashboard from "./dashboard"
 import Chat from "./chat"
@@ -19,62 +20,12 @@ import WebBooks from "./integrations/webbooks"
 
 export default {
 	Main: {
-		CPU: "CPU",
-		Memory: "Arbeitsspeicher",
-		Disk: "Festplatte",
-
-		Dashboard: "Übersicht",
-		Chat: "Chat",
-		Commands: "Befehle",
-		Map: "Karte",
-		Worlds: "Welten",
-		Players: "Spieler",
-		Entities: "Entities",
-		TileEntities: "Tile Entities",
-		BlockOperations: "Block Operationen",
-		Plugins: "Plugins",
-		ServerSettings: "Server Einstellungen",
-		Settings: "Einstellungen",
-		Logout: "Ausloggen",
-		APILink: "API",
-		SpongeLink: "Sponge",
-		DocsLink: "Docs",
-		IssuesLink: "Fehler",
-
-		HuskyCrates: "Husky Crates",
-		HuskyCratesCrates: "Crates",
-
-		MMCRestrict: "MMCRestrict",
-		MMCRestrictRestrictedItems: "Restricted Items",
-
-		MMCTickets: "MMCTickets",
-		MMCTicketsTickets: "Tickets",
-
-		Nucleus: "Nucleus",
-		NucleusKits: "Kits",
-		NucleusJails: "Jails",
-
-		WebBooks: "Web Books",
-		WebBooksBooks: "Books",
-
-		UniversalMarket: "UniversalMarket",
-		UniversalMarketItems: "Items",
+		ErrorHeader: "Entschuldigung, es ist ein Fehler aufgetreten!",
+		FixHeader: "Helfe diesen Fehler zu beheben!",
+		FixText: "Es wäre unglaublich hilfreich, wenn du über den Button unten diesen Fehler melden könntest.",
+		SubmitIssue: "Fehler melden",
 	},
-	DataTable: {
-		Actions: "Aktionen",
-		Save: "Speichern",
-		Cancel: "Abbrechen",
-		Edit: "Bearbeiten",
-		Remove: "Entfernen",
-	},
-	CreateForm: {
-		Create: "Erstellen",
-	},
-	Inventory: {
-		EmptyInventory: "Leeres Inventory",
-		ShowInventory: "Inventory anzeigen",
-		HideInventory: "Inventory verbergen",
-	},
+	Menu: Menu,
 	
 	Login: Login,
 	Dashboard: Dashboard,
@@ -94,4 +45,20 @@ export default {
 	"Integrations.Nucleus": Nucleus,
 	"Integrations.UniversalMarket": UniversalMarket,
 	"Integrations.WebBooks": WebBooks,
+
+	DataTable: {
+		Actions: "Aktionen",
+		Save: "Speichern",
+		Cancel: "Abbrechen",
+		Edit: "Bearbeiten",
+		Remove: "Entfernen",
+	},
+	CreateForm: {
+		Create: "Erstellen",
+	},
+	Inventory: {
+		EmptyInventory: "Leeres Inventory",
+		ShowInventory: "Inventory anzeigen",
+		HideInventory: "Inventory verbergen",
+	},
 }

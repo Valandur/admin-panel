@@ -1,3 +1,4 @@
+import Menu from "./menu"
 import Login from "./login"
 import Dashboard from "./dashboard"
 import Chat from "./chat"
@@ -19,62 +20,12 @@ import WebBooks from "./integrations/webbooks"
 
 export default {
 	Main: {
-		CPU: "CPU",
-		Memory: "Memory",
-		Disk: "Disk",
-
-		Dashboard: "Dashboard",
-		Chat: "Chat",
-		Commands: "Commands",
-		Map: "Map",
-		Worlds: "Worlds",
-		Players: "Players",
-		Entities: "Entities",
-		TileEntities: "Tile Entities",
-		BlockOperations: "Block Operations",
-		Plugins: "Plugins",
-		ServerSettings: "Server Settings",
-		Settings: "Settings",
-		Logout: "Logout",
-		APILink: "API",
-		SpongeLink: "Sponge",
-		DocsLink: "Docs",
-		IssuesLink: "Issues",
-
-		HuskyCrates: "Husky Crates",
-		HuskyCratesCrates: "Crates",
-
-		MMCRestrict: "MMCRestrict",
-		MMCRestrictRestrictedItems: "Restricted Items",
-
-		MMCTickets: "MMCTickets",
-		MMCTicketsTickets: "Tickets",
-
-		Nucleus: "Nucleus",
-		NucleusKits: "Kits",
-		NucleusJails: "Jails",
-
-		WebBooks: "Web Books",
-		WebBooksBooks: "Books",
-
-		UniversalMarket: "UniversalMarket",
-		UniversalMarketItems: "Items",
+		ErrorHeader: "Apologies, there was an error!",
+		FixHeader: "Help fix this error!",
+		FixText: "It would be amazing if you could help fix this error by clicking the button down below and saying a little bit about what happend.",
+		SubmitIssue: "Submit Issue",
 	},
-	DataTable: {
-		Actions: "Actions",
-		Save: "Save",
-		Cancel: "Cancel",
-		Edit: "Edit",
-		Remove: "Remove",
-	},
-	CreateForm: {
-		Create: "Create",
-	},
-	Inventory: {
-		EmptyInventory: "Empty Inventory",
-		ShowInventory: "Show Inventory",
-		HideInventory: "Hide Inventory",
-	},
+	Menu: Menu,
 	
 	Login: Login,
 	Dashboard: Dashboard,
@@ -94,4 +45,20 @@ export default {
 	"Integrations.Nucleus": Nucleus,
 	"Integrations.UniversalMarket": UniversalMarket,
 	"Integrations.WebBooks": WebBooks,
+
+	DataTable: {
+		Actions: "Actions",
+		Save: "Save",
+		Cancel: "Cancel",
+		Edit: "Edit",
+		Remove: "Remove",
+	},
+	CreateForm: {
+		Create: "Create",
+	},
+	Inventory: {
+		EmptyInventory: "Empty Inventory",
+		ShowInventory: "Show Inventory",
+		HideInventory: "Hide Inventory",
+	},
 }

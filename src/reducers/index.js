@@ -23,7 +23,7 @@ const app = (state = {}, action) => {
 		world: _.merge({}, data.world),
 		settings: settings(data.settings, action),
 		"tile-entity": _.merge({}, data["tile-entity"]),
-		router: routerReducer,
+		router: routerReducer(data.router, action),
 	}
 }
 
