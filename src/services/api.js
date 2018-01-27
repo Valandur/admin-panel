@@ -48,7 +48,7 @@ const call = (state, dispatch, method, path, callback, data, handleErrors = true
 	const url = state.api.server.apiUrl + "/api/" + path + (path.indexOf("?") >= 0 ? "&" : "?") + 
 		(state.api.key ? "key=" + state.api.key : "")
 	const req = request(method, url)
-		.timeout({ response: 3000 })
+		.timeout({ response: 3000, deadline: 10000 })
 
 	if (data) req.send(data);
 	req.end((err, res) => {
