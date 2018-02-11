@@ -13,7 +13,7 @@ const defaultState = {
 	servers: window.config.servers,
 	servlets: {},
 	types: {},
-	lang: "en"
+	lang: "en",
 }
 
 const api = (state = defaultState, action) => {
@@ -43,18 +43,29 @@ const api = (state = defaultState, action) => {
 			})
 
 		case LOGIN_RESPONSE:
+			if (action.error) {
+				return _.assign({}, state, {
+					loggingIn: false,
+					loggedIn: false,
+					key: null,
+					permissions: null,
+					rateLimit: null,
+				})
+			}
 			return _.assign({}, state, {
 				loggingIn: false,
-				loggedIn: action.ok,
-				key: action.ok ? action.key : null,
-				user: action.ok ? action.user : null,
+				loggedIn: true,
+				key: action.data.key,
+				permissions: action.data.permissions,
+				rateLimit: action.data.rateLimit,
 			})
 
 		case LOGOUT_REQUEST:
 			return _.assign({}, state, {
 				loggedIn: false,
 				key: null,
-				user: null,
+				permissions: null,
+				rateLimit: null,
 			})
 
 		case CHECK_USER_RESPONSE:
@@ -62,13 +73,11 @@ const api = (state = defaultState, action) => {
 				return state;
 
 			return _.assign({}, state, {
-				user: action.user,
+				permissions: action.data.permissions,
+				rateLimit: action.data.rateLimit,
 			})
 
 		case CATALOG_RESPONSE:
-			if (!action.ok)
-				return state;
-
 			return _.assign({}, state, {
 				types: {
 					...state.types,

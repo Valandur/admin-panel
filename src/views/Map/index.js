@@ -143,7 +143,8 @@ class Map extends Component {
 
 	getBiome(x, z) {
 		const image = new window.Image();
-		image.src = "/api/map/" + this.state.worldId + "/" + (x / TILE_SIZE) + "/" + (z / TILE_SIZE) + "?key=" + this.props.apiKey;
+		image.src = this.props.apiUrl + "/api/v5/map/" + this.state.worldId + 
+			"/" + (x / TILE_SIZE) + "/" + (z / TILE_SIZE) + "?key=" + this.props.apiKey;
 		image.onload = () => {
 			this.setState({
 				biomes: _.concat(this.state.biomes, {
@@ -207,7 +208,7 @@ class Map extends Component {
 
 	handleMouseMove(event) {
 		if (!this.state.dragging) return;
-
+		
 		this.setState({
 			center: {
 				x: this.state.center.x + event.evt.movementX / this.state.zoom,
@@ -385,6 +386,7 @@ const mapStateToProps = (state) => {
 		players: state.player.list,
 		tileEntities: state["tile-entity"].list,
 		apiKey: state.api.key,
+		apiUrl: state.api.server.apiUrl,
 	}
 }
 

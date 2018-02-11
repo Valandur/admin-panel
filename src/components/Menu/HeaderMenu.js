@@ -8,7 +8,7 @@ import { requestLogout, changeLanguage } from "../../actions"
 const apiLink = "/docs"
 const spongeLink = "https://forums.spongepowered.org/t/web-api-provides-an-admin-panel-and-api-for-your-minecraft-server/15709"
 const docsLink = "https://github.com/Valandur/Web-API/blob/master/docs/INDEX.md"
-const issuesLink = "https://github.com/Valandur/Web-API/issues"
+const issuesLink = "https://github.com/Valandur/admin-panel/issues"
 
 class HeaderMenu extends Component {
 

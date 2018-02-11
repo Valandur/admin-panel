@@ -8,6 +8,7 @@ import _ from "lodash"
 import DataTable from "../DataTable"
 import FilterForm from "../FilterForm"
 import CreateForm from "../CreateForm"
+import { checkPermissions } from "../Util"
 
 import {
 	setFilter,
@@ -37,13 +38,14 @@ class DataView extends Component {
 	}
 
 	componentDidMount() {
-		this.props.requestList()
-
-		this.interval = setInterval(this.props.requestList, 10000);
+		if (!this.props.static) {
+			this.props.requestList()
+			this.interval = setInterval(this.props.requestList, 10000);
+		}
 	}
 
 	componentWillUnmount() {
-		clearInterval(this.interval);
+		if (this.interval) clearInterval(this.interval);
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
@@ -167,6 +169,8 @@ class DataView extends Component {
 
 				<Grid stackable doubling columns={cols}>
 					{this.props.createTitle && 
+						checkPermissions(this.props.perms, [ this.props.perm, "create" ]) &&
+
 						<Grid.Column>
 							<CreateForm
 								title={this.props.createTitle}
@@ -220,8 +224,10 @@ class DataView extends Component {
 						:
 							this.delete(obj)
 					}
-					canEdit={this.props.canEdit}
-					canDelete={this.props.canDelete}
+					canEdit={checkPermissions(this.props.perms, [ this.props.perm, "change" ])
+						&& this.props.canEdit}
+					canDelete={checkPermissions(this.props.perms, [ this.props.perm, "delete" ])
+						&& this.props.canDelete}
 					actions={actions}
 					isEditing={obj => this.props.equals(obj, this.state.data)}
 				/>
@@ -240,6 +246,8 @@ const mapStateToProps = (endpoint, id) => (_state) => {
 		list: state ? state.list : [],
 		types: _state.api.types,
 		idFunc: id,
+		perm: endpoint.split("/"),
+		perms: _state.api.permissions,
 	}
 }
 

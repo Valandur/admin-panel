@@ -1,5 +1,4 @@
 import request from "superagent"
-import _ from "lodash"
 
 import {
 	SERVLETS_REQUEST, SERVLETS_RESPONSE, 
@@ -45,21 +44,20 @@ import {
 } from "../actions/dataview"
 
 const call = (state, dispatch, method, path, callback, data, handleErrors = true) => {
-	const url = state.api.server.apiUrl + "/api/" + path + (path.indexOf("?") >= 0 ? "&" : "?") + 
-		(state.api.key ? "key=" + state.api.key : "")
+	const url = state.api.server.apiUrl + "/api/v5/" + path + 
+		(path.indexOf("?") >= 0 ? "&" : "?") + (state.api.key ? "key=" + state.api.key : "")
 	const req = request(method, url)
-		.timeout({ response: 3000, deadline: 10000 })
+		.timeout({ response: 3000, deadline: 30000 })
 
 	if (data) req.send(data);
 	req.end((err, res) => {
 		if (!res) {
 			if (handleErrors) {
 				dispatch(showNotification("error", "API Error", err))
-				return;
 			} else {
-				callback({ ok: false, error: err });
-				return;
+				callback(null, { status: res.statusCode, error: err });
 			}
+			return;
 		}
 
 		if (res.statusCode === 200 || res.statusCode === 201) {
@@ -68,15 +66,11 @@ const call = (state, dispatch, method, path, callback, data, handleErrors = true
 		}
 
 		if (handleErrors) {
-			if (res.statusCode === 403) {
-				dispatch(requestLogout());
-				return;
-			}
-
 			dispatch(showNotification("error", "API Error", res.statusText))
+			return;
 		}
 
-		callback({ ok: false, status: res.statusCode, error: res.statusText });
+		callback(null, { status: res.statusCode, error: res.body ? res.body.error : res.statusText });
 	})
 }
 
@@ -93,35 +87,35 @@ const api = ({ getState, dispatch }) => next => action => {
 
 	switch (action.type) {
 		case SERVLETS_REQUEST:
-			get("servlet", data => {
-				next({
-					type: SERVLETS_RESPONSE,
-					ok: data.ok,
-					servlets: data.servlets,
-				})
-			})
-			break;
-
-		case LOGIN_REQUEST:
-			post("user", data => {
-				if (!data.ok) {
-					if (data.statusCode === 403) {
-						next(showNotification("error", "Login error", "Invalid username or password"))
+			get("servlet", (data, err) => {
+				if (err) {
+					if (err.status === 401 || err.status === 403) {
+						next(requestLogout())
 					} else {
-						next(showNotification("error", "Login error", data.error))
+						next(showNotification("error", "Servlet error", err.error))
 					}
 				}
 
-				// Request a list of servlets we have access to
-				next(requestServlets())
+				next({
+					type: SERVLETS_RESPONSE,
+					ok: !err,
+					servlets: data ? data.servlets : null,
+				})
+			}, null, false)
+			break;
 
-				// Tell our reducers that login was successfull
+		case LOGIN_REQUEST:
+			post("user", (data, err) => {
+				// Request a list of servlets we have access to if we are logged in
+				if (!err) {
+					next(requestServlets())
+				}
+
+				// Tell our reducers that login was successfull (or not)
 				next({
 					type: LOGIN_RESPONSE,
-					ok: data.ok,
-					key: data.key,
-					user: data.user,
-					error: data.error,
+					data: data,
+					error: err,
 				})
 			}, {
 				username: action.username,
@@ -130,20 +124,27 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case CHECK_USER_REQUEST:
-			get("user", data => {
+			get("user", (data, err) => {
+				if (err) {
+					if (err.status === 401 || err.status === 403) {
+						next(requestLogout())
+					} else {
+						next(showNotification("error", "User error", err.error))
+					}
+				}
+
 				next({
 					type: CHECK_USER_RESPONSE,
-					ok: data.ok,
-					user: data.user,
+					ok: !err,
+					data: data,
 				})
-			})
+			}, null, false)
 			break;
 
 		case INFO_REQUEST:
 			get("info", data => {
 				next({
 					type: INFO_RESPONSE,
-					ok: data.ok,
 					data: data,
 				})
 			})
@@ -153,7 +154,6 @@ const api = ({ getState, dispatch }) => next => action => {
 			get("info/stats", data => {
 				next({
 					type: STATS_RESPONSE,
-					ok: data.ok,
 					tps: data.tps,
 					players: data.players,
 					cpu: data.cpu,
@@ -170,49 +170,63 @@ const api = ({ getState, dispatch }) => next => action => {
 			get("registry/org.spongepowered.api." + action.class, data => {
 				next({
 					type: CATALOG_RESPONSE,
-					ok: data.ok,
 					class: action.class,
-					types: data.types,
+					types: data,
 				})
 			})
 			break;
 
 		case PLAYER_KICK_REQUEST:
-			post("player/" + action.uuid + "/method", (data) => {
+			post("player/" + action.player.uuid + "/method", (data, err) => {
+				if (err) {
+					return next({
+						type: PLAYER_KICK_RESPONSE,
+						ok: false,
+						player: action.player,
+					})
+				}
+
 				next({
 					type: PLAYER_KICK_RESPONSE,
-					ok: data.ok,
-					player: data.player,
+					ok: true,
+					player: action.player,
 				})
 			}, {
 				"method": "kick",
-				"params": [{
-					"type": "text",
+				"parameters": [{
+					"type": "TEXT",
 					"value": "Bye",
 				}],
-			});
+			}, false);
 			break;
 
 		case PLAYER_BAN_REQUEST:
-			post("cmd", (data) => {
+			post("cmd", (data, err) => {
+				if (err) {
+					next({
+						type: PLAYER_BAN_RESPONSE,
+						ok: false,
+						player: action.player,
+						error: err,
+					})
+				}
+
 				next({
 					type: PLAYER_BAN_RESPONSE,
-					data: data.ok,
-					player: {
-						name: action.name,
-					},
+					ok: true,
+					player: action.player,
+					response: data[0][0],
 				})
-			}, {
-				"command": "ban " + action.name,
-			});
+			}, [{
+				"command": "ban " + action.player.name,
+			}], false);
 			break;
 
 		case PLUGIN_CONFIG_REQUEST:
 			get("plugin/" + action.id + "/config", (data) => {
 				next({
 					type: PLUGIN_CONFIG_RESPONSE,
-					ok: data.ok,
-					configs: data.configs,
+					configs: data,
 				})
 			})
 			break;
@@ -221,8 +235,7 @@ const api = ({ getState, dispatch }) => next => action => {
 			post("plugin/" + action.id + "/config", (data) => {
 				next({
 					type: PLUGIN_CONFIG_SAVE_RESPONSE,
-					ok: data.ok,
-					configs: data.configs,
+					configs: data,
 				})
 			}, action.configs)
 			break;
@@ -231,7 +244,6 @@ const api = ({ getState, dispatch }) => next => action => {
 			post("info/properties", data => {
 				next({
 					type: SAVE_PROPERTY_RESPONSE,
-					ok: data.ok,
 					key: action.prop.key,
 					properties: data.properties,
 				})
@@ -239,87 +251,118 @@ const api = ({ getState, dispatch }) => next => action => {
 			break;
 
 		case EXECUTE_REQUEST:
-			post("cmd", data => {
+			post("cmd", (data, err) => {
+				if (err) {
+					next({
+						type: EXECUTE_RESPONSE,
+						command: action.command,
+						ok: false,
+						error: err,
+					})
+					return;
+				}
+
 				next({
 					type: EXECUTE_RESPONSE,
-					ok: data.ok,
-					result: data.result,
 					command: action.command,
+					ok: true,
+					result: data,
 				})
-			}, {
+			}, [{
 				command: action.command,
 				waitLines: action.waitLines,
 				waitTime: action.waitTime,
-			})
+			}], false)
 			break;
 		
 		case DATA_LIST_REQUEST:
 			get(action.endpoint + (action.details ? "?details" : ""), data => {
-				const obj = _.find(data, (__, key) => key !== "ok");
-
 				next({
 					type: DATA_LIST_RESPONSE,
 					endpoint: action.endpoint,
-					ok: data.ok,
-					data: obj,
+					data: data,
 				})
 			})
 			break;
 
 		case DATA_DETAILS_REQUEST:
 			get(action.endpoint + "/" + action.id(action.data), data => {
-				const obj = _.find(data, (__, key) => key !== "ok");
-
 				next({
 					type: DATA_DETAILS_RESPONSE,
 					endpoint: action.endpoint,
 					id: action.id,
-					ok: data.ok,
-					data: obj,
+					data: data,
 				})
 			})
 			break;
 
 		case DATA_CREATE_REQUEST:
-			post(action.endpoint, data => {
-				const obj = _.find(data, (__, key) => key !== "ok");
+			post(action.endpoint, (data, err) => {
+				if (err) {
+					next({
+						type: DATA_CREATE_RESPONSE,
+						endpoint: action.endpoint,
+						id: action.id,
+						ok: false,
+						error: err,
+					})
+					return;
+				}
 
 				next({
 					type: DATA_CREATE_RESPONSE,
 					endpoint: action.endpoint,
 					id: action.id,
-					ok: data.ok,
-					data: obj,
+					ok: true,
+					data: data,
 				})
-			}, action.data)
+			}, action.data, false)
 			break;
 
 		case DATA_CHANGE_REQUEST:
-			put(action.endpoint + "/" + action.id(action.data), data => {
-				const obj =  _.find(data, (__, key) => key !== "ok");
+			put(action.endpoint + "/" + action.id(action.data), (data, err) => {
+				if (err) {
+					next({
+						type: DATA_CHANGE_RESPONSE,
+						endpoint: action.endpoint,
+						id: action.id,
+						ok: false,
+						error: err,
+					})
+					return;
+				}
 
 				next({
 					type: DATA_CHANGE_RESPONSE,
 					endpoint: action.endpoint,
 					id: action.id,
-					ok: data.ok,
-					data: data.ok ? obj : action.data,
+					ok: true,
+					data: data,
 				})
-			}, action.newData)
+			}, action.newData, false)
 			break;
 
 		case DATA_DELETE_REQUEST:
-			del(action.endpoint + "/" + action.id(action.data), data => {
-				const obj = _.find(data, (__, key) => key !== "ok");
+			del(action.endpoint + "/" + action.id(action.data), (data, err) => {
+				if (err) {
+					next({
+						type: DATA_DELETE_RESPONSE,
+						endpoint: action.endpoint,
+						id: action.id,
+						ok: false,
+						error: err,
+					})
+					return;
+				}
 
 				next({
 					type: DATA_DELETE_RESPONSE,
 					endpoint: action.endpoint,
 					id: action.id,
-					ok: data.ok,
-					data: data.ok ? obj : action.data,
+					ok: true,
+					data: data,
 				})
-			})
+			}, null, false)
 			break;
 
 		default:

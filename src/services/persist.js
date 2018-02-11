@@ -25,12 +25,12 @@ const persist = ({ dispatch, getState }) => next => action => {
 			if (window.localStorage) {
 				window.localStorage.removeItem("api");
 			}
-			dispatch(push("login"))
+			dispatch(push("/login"))
 			break;
 
 		case CHECK_USER_RESPONSE:
-			if (!action.user) {
-				dispatch(push("login"))
+			if (!action.ok) {
+				dispatch(push("/login"))
 			}
 			break;
 

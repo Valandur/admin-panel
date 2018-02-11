@@ -14,7 +14,7 @@ import { handleChange } from "../../../components/Util"
 import ItemStack from "../../../components/ItemStack"
 
 import DataViewFunc from "../../../components/DataView"
-const DataView = DataViewFunc("husky/crate", "id")
+const DataView = DataViewFunc("husky-crates/crate", "id")
 
 const ITEM_TYPES = "item.ItemType"
 

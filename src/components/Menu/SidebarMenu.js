@@ -7,7 +7,15 @@ import _ from "lodash"
 
 import { requestServlets } from "../../actions"
 
+import { checkPermissions } from "../../components/Util"
+
 class SidebarMenu extends Component {
+
+	constructor(props) {
+		super(props)
+
+		this.renderMenuItem = this.renderMenuItem.bind(this)
+	}
 
 	componentDidMount() {
 		this.props.requestServlets();
@@ -15,6 +23,7 @@ class SidebarMenu extends Component {
 
 	render() {
 		const _t = this.props.t
+		const views = this.props.views
 
 		return <Sidebar
 				vertical
@@ -22,7 +31,7 @@ class SidebarMenu extends Component {
 				animation="push"
 				visible={this.props.show}>
 
-			{this.props.cpu.length ?
+			{this.props.cpu.length > 0 &&
 				<Menu.Item name="load">
 					<Progress
 						percent={_.last(this.props.cpu).value * 100}
@@ -48,123 +57,31 @@ class SidebarMenu extends Component {
 						color="green"
 						size="small"
 					/>
-				</Menu.Item>
-			: null}
-
-			<Menu.Item name="dashboard" as={NavLink} to="/dashboard">
-				<Icon name="dashboard" /> {_t("Dashboard")}
-			</Menu.Item>
-
-			<Menu.Item name="chat" as={NavLink} to="/chat">
-				<Icon name="comments" /> {_t("Chat")}
-			</Menu.Item>
-
-			<Menu.Item name="commands" as={NavLink} to="/commands">
-				<Icon name="terminal" /> {_t("Commands")}
-			</Menu.Item>
-
-			<Menu.Item name="map" as={NavLink} to="/map">
-				<Icon name="map" /> {_t("Map")}
-			</Menu.Item>
-
-			<Menu.Item name="worlds" as={NavLink} to="/worlds">
-				<Icon name="globe" /> {_t("Worlds")}
-			</Menu.Item>
-
-			<Menu.Item name="players" as={NavLink} to="/players">
-				<Icon name="users" /> {_t("Players")}
-			</Menu.Item>
-
-			<Menu.Item name="entities" as={NavLink} to="/entities">
-				<Icon name="paw" /> {_t("Entities")}
-			</Menu.Item>
-
-			<Menu.Item name="tile-entities" as={NavLink} to="/tile-entities">
-				<Icon name="puzzle" /> {_t("TileEntities")}
-			</Menu.Item>
-
-			<Menu.Item name="block-operations" as={NavLink} to="/block-operations">
-				<Icon className="fa-th-large" /> {_t("BlockOperations")}
-			</Menu.Item>
-
-			<Menu.Item name="plugins" as={NavLink} to="/plugins">
-				<Icon name="plug" /> {_t("Plugins")}
-			</Menu.Item>
-
-			<Menu.Item name="server-settings" as={NavLink} to="/server-settings">
-				<Icon name="cogs" /> {_t("ServerSettings")}
-			</Menu.Item>
-
-			{ this.props.servlets.husky &&
-				<Menu.Item>
-					<Menu.Header>{_t("HuskyCrates")}</Menu.Header>
-
-					<Menu.Menu>
-						<Menu.Item name="husky-crates" as={NavLink} to="/husky/crates">
-							<Icon name="archive" /> {_t("HuskyCratesCrates")}
-						</Menu.Item>
-					</Menu.Menu>
 				</Menu.Item>}
 
-			{ this.props.servlets.mmcrestrict &&
-				<Menu.Item>
-					<Menu.Header>{_t("MMCRestrict")}</Menu.Header>
-
-					<Menu.Menu>
-						<Menu.Item name="mmc-restrict" as={NavLink} to="/mmcrestrict/items">
-							<Icon name="ban" /> {_t("MMCRestrictRestrictedItems")}
-						</Menu.Item>
-					</Menu.Menu>
-				</Menu.Item>}
-
-			{ this.props.servlets.mmctickets &&
-				<Menu.Item>
-					<Menu.Header>{_t("MMCTickets")}</Menu.Header>
-
-					<Menu.Menu>
-						<Menu.Item name="mmc-tickets" as={NavLink} to="/mmctickets/tickets">
-							<Icon name="ticket" /> {_t("MMCTicketsTickets")}
-						</Menu.Item>
-					</Menu.Menu>
-				</Menu.Item>}
-
-			{ this.props.servlets.nucleus &&
-				<Menu.Item>
-					<Menu.Header>{_t("Nucleus")}</Menu.Header>
-
-					<Menu.Menu>
-						<Menu.Item name="nucleus-jails" as={NavLink} to="/nucleus/jails">
-							<Icon name="bars" rotated="clockwise" /> {_t("NucleusJails")}
-						</Menu.Item>
-
-						<Menu.Item name="nucleus-kits" as={NavLink} to="/nucleus/kits">
-							<Icon name="wrench" /> {_t("NucleusKits")}
-						</Menu.Item>
-					</Menu.Menu>
-				</Menu.Item>}
-
-			{ this.props.servlets.universalmarket &&
-			<Menu.Item>
-				<Menu.Header>{_t("UniversalMarket")}</Menu.Header>
-
-				<Menu.Menu>
-					<Menu.Item name="um-items" as={NavLink} to="/universalmarket/items">
-						<Icon name="shopping cart" /> {_t("UniversalMarketItems")}
-					</Menu.Item>
-				</Menu.Menu>
-			</Menu.Item>}
-
-			{ this.props.servlets.webbooks &&
-				<Menu.Item>
-					<Menu.Header>{_t("WebBooks")}</Menu.Header>
-
-					<Menu.Menu>
-						<Menu.Item name="web-books" as={NavLink} to="/webbooks/books">
-							<Icon name="book" /> {_t("WebBooksBooks")}
-						</Menu.Item>
-					</Menu.Menu>
-				</Menu.Item>}
+			{views.map(this.renderMenuItem)}
 		</Sidebar>
+	}
+
+	renderMenuItem(view) {
+		if (view.perms && !checkPermissions(this.props.perms, view.perms))
+			return null;
+
+		if (!view.views) {
+			return <Menu.Item
+					as={NavLink}
+					key={view.path}
+					to={view.path}>
+				<Icon name={view.icon} /> {this.props.t(view.title)}
+			</Menu.Item>
+		}
+
+		return <Menu.Item key={view.path}>
+			<Menu.Header>{this.props.t(view.title)}</Menu.Header>
+			<Menu.Menu>
+				{view.views.map(this.renderMenuItem)}
+			</Menu.Menu>
+		</Menu.Item>
 	}
 }
 
@@ -174,6 +91,7 @@ const mapStateToProps = (state) => {
 		memory: state.dashboard.memory,
 		disk: state.dashboard.disk,
 		servlets: state.api.servlets,
+		perms: state.api.permissions,
 
 		// We include the pathname so this component updates when the path changes
 		path: state.router.location.pathname,

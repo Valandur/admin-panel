@@ -5,10 +5,15 @@ import {
 	STATS_RESPONSE,
 } from "../actions/dashboard"
 
-const dashboard = (state = { tps: [], players: [], cpu: [], memory: [], disk: []}, action) => {
-	if (!action.ok)
-		return state;
+const defaultState = {
+	tps: [],
+	players: [],
+	cpu: [],
+	memory: [],
+	disk: [],
+}
 
+const dashboard = (state = defaultState, action) => {
 	switch(action.type) {
 		case INFO_RESPONSE:
 			return _.merge({}, state, {

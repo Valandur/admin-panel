@@ -7,7 +7,7 @@ import _ from "lodash"
 import { requestCatalog } from "../../../actions"
 
 import DataViewFunc from "../../../components/DataView"
-const DataView = DataViewFunc("mmcrestrict/item", "item.id")
+const DataView = DataViewFunc("mmc-restrict/item", "item.id")
 
 const ITEM_TYPES = "item.ItemType"
 const getIcon = ban => <Icon

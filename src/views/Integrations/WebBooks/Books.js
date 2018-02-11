@@ -6,7 +6,7 @@ import copy from "copy-to-clipboard";
 import _ from "lodash"
 
 import DataViewFunc from "../../../components/DataView"
-const DataView = DataViewFunc("webbooks/book", "id")
+const DataView = DataViewFunc("web-books/book", "id")
 
 
 class Books extends Component {

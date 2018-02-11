@@ -32,11 +32,11 @@ class Players extends Component {
 	}
 
 	kick(player) {
-		this.props.requestKickPlayer(player.uuid);
+		this.props.requestKickPlayer(player);
 	}
 
 	ban(player) {
-		this.props.requestBanPlayer(player.name);
+		this.props.requestBanPlayer(player);
 	}
 
 	showInventory(player, view) {
@@ -182,16 +182,16 @@ class Players extends Component {
 	}
 }
 
-const mapStateToProps = (_state) => {
+const mapStateToProps = (state) => {
 	return {
-		worlds: _state.world.list,
+		worlds: state.world.list,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		requestKickPlayer: (uuid) => dispatch(requestKickPlayer(uuid)),
-		requestBanPlayer: (name) => dispatch(requestBanPlayer(name)),
+		requestKickPlayer: (player) => dispatch(requestKickPlayer(player)),
+		requestBanPlayer: (player) => dispatch(requestBanPlayer(player)),
 		requestWorlds: () => dispatch(requestList("world", true)),
 	}
 }

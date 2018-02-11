@@ -18,5 +18,6 @@ export default {
 	DiskUsage: "Disk",
 	NumPlayers: "Players [1]",
 	NumTPS: "TPS [ticks]",
-	Load: "Load [%]"
+	Load: "Load [%]",
+	"NoData": "No data to show!",
 }

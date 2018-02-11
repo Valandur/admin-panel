@@ -89,9 +89,11 @@ class DataTable extends Component {
 		const _t = this.props.t
 
 		return <div style={{marginTop: "2em"}}>
-			<Header>
-				<Icon fitted name={icon} /> {title}
-			</Header>
+			{title &&
+				<Header>
+					<Icon fitted name={icon} /> {title}
+				</Header>
+			}
 
 			<Table striped={true} stackable>
 				<Table.Header>

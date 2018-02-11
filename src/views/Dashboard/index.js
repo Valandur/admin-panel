@@ -5,185 +5,45 @@ import { Line } from "react-chartjs-2"
 import { translate, Trans } from "react-i18next";
 import _ from "lodash"
 
-import { requestInfo, } from "../../actions/dashboard"
+import { requestInfo } from "../../actions/dashboard"
 
+import graphConfig from "./chart"
+import { checkPermissions } from "../../components/Util"
 
 class Dashboard extends Component {
 
 	constructor(props) {
 		super(props);
 
-		const _t = props.t
+		const config = graphConfig(props.t)
 
-		this.lineInfo = {
-			datasets: [
-				{
-					label: _t("AverageTPS"),
-					fill: false,
-					backgroundColor: "rgb(219, 40, 40)",
-					borderColor: "rgb(219, 40, 40)",
-					pointRadius: 0,
-					pointHitRadius: 10,
-					xAxisID: "time",
-					yAxisID: "tps",
-				},
-				{
-					label: _t("OnlinePlayers"),
-					fill: false,
-					backgroundColor: "rgb(33, 133, 208)",
-					borderColor: "rgb(33, 133, 208)",
-					pointRadius: 0,
-					pointHitRadius: 10,
-					xAxisID: "time",
-					yAxisID: "players",
-				},
-			]
-		};
-		this.optionsInfo = {
-			maintainAspectRatio: false,
-			legend: {
-				position: "bottom",
-			},
-			scales: {
-				xAxes: [{
-					id: "time",
-					type: "time",
-					time: {
-						displayFormats: {
-								second: "HH:mm:ss",
-								minute: "HH:mm",
-								hour: "HH:mm",
-								day: "DD.MM.YYYY",
-						},
-						tooltipFormat: "DD.MM.YYYY HH:mm:ss"
-					}
-				}],
-				yAxes: [{
-					type: "linear",
-					id: "tps",
-					ticks: {
-						beginAtZero: true,
-						max: 20,
-						min: 0,
-					},
-					scaleLabel: {
-						display: true,
-						labelString: _t("NumTPS"),
-					},
-				},{
-					type: "linear",
-					id: "players",
-					gridLines: {
-						drawOnChartArea: false,
-					},
-					ticks: {
-						beginAtZero: true,
-						stepSize: 1,
-						min: 0,
-					},
-					scaleLabel: {
-						display: true,
-						labelString: _t("NumPlayers"),
-					},
-					position: "right",
-				}]
-			},
-		};
+		this.lineInfo = config.lineInfo
+		this.optionsInfo = config.optionsInfo
 
-		this.lineStats = {
-			datasets: [
-				{
-					label: _t("CPULoad"),
-					fill: false,
-					backgroundColor: "rgb(33, 133, 208)",
-					borderColor: "rgb(33, 133, 208)",
-					pointRadius: 0,
-					pointHitRadius: 10,
-					xAxisID: "time",
-					yAxisID: "load",
-				},
-				{
-					label: _t("MemoryLoad"),
-					fill: false,
-					backgroundColor: "rgb(219, 40, 40)",
-					borderColor: "rgb(219, 40, 40)",
-					pointRadius: 0,
-					pointHitRadius: 10,
-					xAxisID: "time",
-					yAxisID: "load",
-				},
-				{
-					label: _t("DiskUsage"),
-					fill: false,
-					backgroundColor: "rgb(33, 186, 69)",
-					borderColor: "rgb(33, 186, 69)",
-					pointRadius: 0,
-					pointHitRadius: 10,
-					xAxisID: "time",
-					yAxisID: "load",
-				},
-			]
-		};
-		this.optionsStats = {
-			maintainAspectRatio: false,
-			legend: {
-				position: "bottom",
-			},
-			tooltips: {
-				mode: "label",
-				callbacks: {
-					label: function(tooltipItem, data) {
-						return " " + data.datasets[tooltipItem.datasetIndex].label + ": " + 
-							tooltipItem.yLabel.toFixed(2) + "%";
-					}
-				}
-			},
-			scales: {
-				xAxes: [{
-					id: "time",
-					type: "time",
-					time: {
-						displayFormats: {
-								second: "HH:mm:ss",
-								minute: "HH:mm",
-								hour: "HH:mm",
-								day: "DD.MM.YYYY",
-						},
-						tooltipFormat: "DD.MM.YYYY HH:mm:ss"
-					}
-				}],
-				yAxes: [{
-					type: "linear",
-					id: "load",
-					ticks: {
-						beginAtZero: true,
-						max: 100,
-						min: 0,
-					},
-					scaleLabel: {
-						display: true,
-						labelString: _t("Load"),
-					},
-				}]
-			},
-		};
+		this.lineStats = config.lineStats
+		this.optionsStats = config.optionsStats
 	}
 
 	componentDidMount() {
-		this.props.requestInfo();
-		
-		this.interval = setInterval(this.props.requestInfo, 5000);
+		if (checkPermissions(this.props.perms, ["info", "get"])) {
+			this.props.requestInfo();
+			this.interval = setInterval(this.props.requestInfo, 5000);
+		}
 	}
 
 	componentWillUnmount() {
-		clearInterval(this.interval);
+		if (this.interval) clearInterval(this.interval);
 	}
 
 	render() {
-		if (!this.props.data)
-			return null;
-
 		const _t = this.props.t
+
+		// Exit early if we have no data. No permissions?
+		if (!this.props.data) {
+			return <Segment basic>
+				<Message negative size="large" content={_t("NoData")} />
+			</Segment>
+		}
 
 		this.lineInfo.datasets[0].data = _.map(this.props.tps, p => ({
 			x: new Date(p.timestamp * 1000),
@@ -349,31 +209,33 @@ class Dashboard extends Component {
 					</Card>
 				</Grid.Column>
 
-				<Grid.Column width={8}>
-					<Card style={{ width: "100%", height: "50vh" }}>
-						<Card.Content>
-							<Card.Header>
-								{_t("GraphTitleInfo")}
-							</Card.Header>
-						</Card.Content>
-						<div style={{ width: "100%", height: "100%", padding: "1em" }}>
-							<Line data={this.lineInfo} options={this.optionsInfo} />
-						</div>
-					</Card>
-				</Grid.Column>
+				{checkPermissions(this.props.perms, ["info", "stats"]) &&
+					<Grid.Column width={8}>
+						<Card style={{ width: "100%", height: "50vh" }}>
+							<Card.Content>
+								<Card.Header>
+									{_t("GraphTitleInfo")}
+								</Card.Header>
+							</Card.Content>
+							<div style={{ width: "100%", height: "100%", padding: "1em" }}>
+								<Line data={this.lineInfo} options={this.optionsInfo} />
+							</div>
+						</Card>
+					</Grid.Column>}
 
-				<Grid.Column width={8}>
-					<Card style={{ width: "100%", height: "50vh" }}>
-						<Card.Content>
-							<Card.Header>
-								{_t("GraphTitleStats")}
-							</Card.Header>
-						</Card.Content>
-						<div style={{ width: "100%", height: "100%", padding: "1em" }}>
-							<Line data={this.lineStats} options={this.optionsStats} />
-						</div>
-					</Card>
-				</Grid.Column>
+				{checkPermissions(this.props.perms, ["info", "stats"]) &&
+					<Grid.Column width={8}>
+						<Card style={{ width: "100%", height: "50vh" }}>
+							<Card.Content>
+								<Card.Header>
+									{_t("GraphTitleStats")}
+								</Card.Header>
+							</Card.Content>
+							<div style={{ width: "100%", height: "100%", padding: "1em" }}>
+								<Line data={this.lineStats} options={this.optionsStats} />
+							</div>
+						</Card>
+					</Grid.Column>}
 			</Grid>
 		</Segment>
 	}
@@ -389,6 +251,8 @@ const mapStateToProps = (_state) => {
 		cpu: state.cpu,
 		memory: state.memory,
 		disk: state.disk,
+
+		perms: _state.api.permissions,
 	}
 }
 

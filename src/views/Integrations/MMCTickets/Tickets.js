@@ -4,7 +4,7 @@ import { translate } from "react-i18next"
 import moment from "moment"
 
 import DataViewFunc from "../../../components/DataView"
-const DataView = DataViewFunc("mmctickets/ticket", "id")
+const DataView = DataViewFunc("mmc-tickets/ticket", "id")
 
 
 class Tickets extends Component {

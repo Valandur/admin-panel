@@ -9,8 +9,8 @@ const player = (state = {}, action) => {
 	switch(action.type) {
 		case PLAYER_KICK_REQUEST:
 			return _.assign({}, state, {
-				players: _.map(state.players, p => {
-					if (p.uuid !== action.uuid) return p;
+				list: _.map(state.list, p => {
+					if (p.uuid !== action.player.uuid) return p;
 					return _.assign({}, p, { updating: true })
 				})
 			})
@@ -18,20 +18,20 @@ const player = (state = {}, action) => {
 		case PLAYER_KICK_RESPONSE:
 			if (!action.ok) {
 				return _.assign({}, state, {
-					players: _.map(state.players, p => {
+					list: _.map(state.list, p => {
 						if (p.uuid !== action.player.uuid) return p;
 						return _.assign({}, p, { updating: false })
 					})
 				})
 			}
 			return _.assign({}, state, {
-				players: _.filter(state.players, p => p.uuid !== action.player.uuid)
+				list: _.filter(state.list, p => p.uuid !== action.player.uuid)
 			})
 
 		case PLAYER_BAN_REQUEST:
 			return _.assign({}, state, {
-				players: _.map(state.players, p => {
-					if (p.name !== action.name) return p;
+				list: _.map(state.list, p => {
+					if (p.uuid !== action.player.uuid) return p;
 					return _.assign({}, p, { updating: true })
 				})
 			})
@@ -39,14 +39,14 @@ const player = (state = {}, action) => {
 		case PLAYER_BAN_RESPONSE:
 			if (!action.ok) {
 				return _.assign({}, state, {
-					players: _.map(state.players, p => {
-						if (p.name !== action.player.name) return p;
+					list: _.map(state.list, p => {
+						if (p.uuid !== action.player.uuid) return p;
 						return _.assign({}, p, { updating: false })
 					})
 				})
 			}
 			return _.assign({}, state, {
-				players: _.filter(state.players, p => p.name !== action.player.name)
+				list: _.filter(state.list, p => p.uuid !== action.player.uuid)
 			})
 
 		default:

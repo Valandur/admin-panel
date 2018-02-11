@@ -6,7 +6,7 @@ import moment from "moment"
 import ItemStack from "../../../components/ItemStack"
 
 import DataViewFunc from "../../../components/DataView"
-const DataView = DataViewFunc("universalmarket/item", "id")
+const DataView = DataViewFunc("universal-market/item", "id")
 
 
 class Items extends Component {

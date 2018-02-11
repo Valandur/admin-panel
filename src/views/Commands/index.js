@@ -95,10 +95,12 @@ class Commands extends Component {
 				source: {
 					label: _t("Source"),
 					filter: true,
-					filterValue: cmd => cmd.cause.source && cmd.cause.source.name ? 
-						cmd.cause.source.name : cmd.cause.source,
-					view: cmd => cmd.cause.source && cmd.cause.source.name ? 
-						cmd.cause.source.name : cmd.cause.source,
+					filterValue: cmd => cmd.cause.causes ? (cmd.cause.causes[0]) : 
+					  (cmd.cause.source && cmd.cause.source.name ? 
+							cmd.cause.source.name : cmd.cause.source),
+					view: cmd => cmd.cause.causes ? (cmd.cause.causes[0]) : 
+						(cmd.cause.source && cmd.cause.source.name ? 
+							cmd.cause.source.name : cmd.cause.source),
 				},
 				command: {
 					label: _t("Command"),

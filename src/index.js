@@ -43,7 +43,7 @@ if (process.env.NODE_ENV !== "dev" && process.env.NODE_ENV !== "development") {
 
 // Construct history with basename
 const history = createBrowserHistory({
-	basename: "/admin",
+	basename: window.config.basePath,
 });
 
 // Try and reconstruct state
@@ -91,14 +91,15 @@ class Main extends React.Component {
 
 		return <div>
 			<Provider store={store}>
-				<ConnectedRouter history={history} basename="/admin">
+				<ConnectedRouter history={history} basename={window.config.basePath}>
 					<Switch>
 						<Route path="/login" component={Login} />
 						<Route path="/" render={props => {
 							if (store.getState().api.loggedIn)
 								return <Full {...props} />
-							else
+							else {
 								return <Redirect to={{ pathname: "/login", state: { from: props.location }}} />
+							}
 						}} />
 					</Switch>
 				</ConnectedRouter>
