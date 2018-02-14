@@ -1,21 +1,22 @@
 import * as React from "react"
-import { connect, Dispatch } from "react-redux"
+import { connect } from "react-redux"
 import { Menu, Icon, Image, Dropdown, MenuItemProps } from "semantic-ui-react"
 import { translate } from "react-i18next"
-import { Action, Store } from "redux"
 
-import { requestLogout, changeLanguage } from "../../actions"
+import { requestLogout, changeLanguage, ChangeLanguageAction } from "../../actions"
+import { AppStore } from "../../types"
+import { Action, Dispatch } from "redux"
 
 const apiLink = "/docs"
-const spongeLink = "https://forums.spongepowered.org/t/" + 
+const spongeLink = "https://forums.spongepowered.org/t/" +
 	"web-api-provides-an-admin-panel-and-api-for-your-minecraft-server/15709"
 const docsLink = "https://github.com/Valandur/Web-API/blob/master/docs/INDEX.md"
 const issuesLink = "https://github.com/Valandur/admin-panel/issues"
 
 export interface AppProps extends reactI18Next.InjectedTranslateProps {
 	lang: string
-	changeLanguage: (lang: string) => Dispatch<Action>
-	requestLogout: () => Dispatch<Action>
+	changeLanguage: (lang: string) => ChangeLanguageAction
+	requestLogout: () => Action
 	toggleSidebar?: (event: React.MouseEvent<HTMLElement>, data: MenuItemProps) => void
 }
 
@@ -84,7 +85,7 @@ class HeaderMenu extends React.Component<AppProps> {
 	}
 }
 
-const mapStateToProps = (state: Store<object>) => {
+const mapStateToProps = (state: AppStore) => {
 	return {
 		lang: state.api.lang,
 	}

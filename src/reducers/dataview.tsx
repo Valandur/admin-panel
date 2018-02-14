@@ -1,5 +1,6 @@
 import { Action } from "redux"
 import * as _ from "lodash"
+import { DataViewStore } from "../types"
 
 import {
 	DATA_SET_FILTER, DATA_LIST_RESPONSE,
@@ -9,7 +10,7 @@ import {
 	DATA_DELETE_REQUEST, DATA_DELETE_RESPONSE,
 } from "../actions/dataview"
 
-const dataview = (state = {}, action: Action) => {
+const dataview = (state: DataViewStore = {}, action: Action) => {
 	let path = null
 	if (action.endpoint) {
 		path = action.endpoint.replace(/\//g, ".")
@@ -144,7 +145,7 @@ const dataview = (state = {}, action: Action) => {
 			return _.assign({}, state, {
 				[path]: {
 					...state[path],
-					list: _.filter(state[path].list, obj => 
+					list: _.filter(state[path].list, obj =>
 						action.id(obj) !== action.id(action.data))
 				}
 			})

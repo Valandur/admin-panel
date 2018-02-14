@@ -1,9 +1,45 @@
 import * as Loadable from "react-loadable"
 import { SemanticICONS } from "semantic-ui-react"
-import { HandleChangeFunc } from "./components/Util"
+import { HandleChangeFunc, PermissionTree } from "./components/Util"
+
+// Reducers
+export interface AppStore {
+	api: ApiStore
+	dashboard: DashboardStore
+}
+
+export interface ApiStore {
+	server: Server
+	servers: Server[]
+	servlets: {}
+	types: {}
+	lang: string
+	permissions: PermissionTree
+}
+
+export interface Server {
+	name: string
+	apiUrl: string
+}
+
+export interface DataViewStore<T> {
+	creating: boolean
+	filter: {
+		[x: string]: string | string[]
+	}
+	list: T[]
+}
+
+export interface DashboardStore {
+	tps: ServerStat[]
+	players: ServerStat[]
+	cpu: ServerStat[]
+	memory: ServerStat[]
+	disk: ServerStat[]
+}
 
 // Data table
-export type IdFunction = (obj: object) => string
+export type IdFunction<T> = (obj: T) => string
 
 export interface DataObject {
 	updating?: boolean
@@ -61,12 +97,6 @@ export interface ViewDefinition {
 	perms: string[] | null,
 	component?: Loadable.LoadableComponent,
 	views?: ViewDefinition[],
-}
-
-// Server
-export interface Server {
-	name: string
-	apiUrl: string
 }
 
 // Dashboard

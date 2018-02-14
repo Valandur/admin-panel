@@ -1,14 +1,15 @@
 import * as React from "react"
 import { connect } from "react-redux"
-import { Segment, Grid, SemanticICONS } from "semantic-ui-react"
-import { Dispatch, Action, Store } from "redux"
+import { Segment, Grid } from "semantic-ui-react"
+import { Dispatch, Action } from "redux"
 import * as _ from "lodash"
 
 import DataTable, { DataTableProps } from "../DataTable"
 import FilterForm from "../FilterForm"
 import CreateForm from "../CreateForm"
-import { checkPermissions, PermissionTree } from "../Util"
-import { IdFunction, DataViewRef, DataField, DataObject, DataFieldRaw, DataFieldViewFunc } from "../../types"
+import { checkPermissions } from "../Util"
+import { IdFunction, DataViewRef, DataObject, DataFieldRaw, AppStore, DataViewStore } from "../../types"
+import { FullProps, OwnState, OwnProps, StateProps, DispatchProps } from "./types"
 
 import {
 	setFilter,
@@ -19,52 +20,11 @@ import {
 	requestDelete,
 } from "../../actions/dataview"
 
-export interface AppProps<T extends DataObject> extends reactI18Next.InjectedTranslateProps {
-	title: string
-	icon: SemanticICONS
-	canEdit: boolean
-	canDelete: boolean
-	createTitle?: string
-	createButton?: string
-	filterTitle?: string
-	filterButton?: string
-	static: boolean
-	creating: boolean
-	filter: {
-		[x: string]: string | string[]
-	}
-	list: T[]
-	fields: {
-		[key: string]: DataField<T> | DataFieldViewFunc<T> | string
-	}
-	perm: string
-	perms: PermissionTree
-	actions: (data: T, view: DataViewRef<T>) => JSX.Element
-	requestList: () => Dispatch<Action>
-	requestCreate: (data: T) => Dispatch<Action>
-	requestDetails: (data: T) => Dispatch<Action>
-	requestSave: (data: T) => Dispatch<Action>
-	requestChange: (data: T, newData: T | {}) => Dispatch<Action>
-	requestDelete: (data: T) => Dispatch<Action>
-	setFilter: (filter: string, value: string) => Dispatch<Action>
-	onCreate: (data: T, view: DataViewRef<T>) => void
-	onEdit: (data: T | null, view: DataViewRef<T>) => void
-	onSave: (data: T, newData: T | {}, view: DataViewRef<T>) => void
-	onDelete: (data: T, view: DataViewRef<T>) => void
-	idFunc: (data: T) => string
-	equals:  (o1: T | null, o2: T | null) => boolean
-}
-
-interface AppState<T> {
-	page: 0
-	data: T | null
-}
-
-class DataView<T extends DataObject> extends React.Component<AppProps<T>, AppState<T>> {
+class DataView<T extends DataObject> extends React.Component<FullProps<T>, OwnState<T>> {
 
 	interval: NodeJS.Timer
 
-	constructor(props: AppProps<T>) {
+	constructor(props: FullProps<T>) {
 		super(props)
 
 		this.state = {
@@ -94,7 +54,7 @@ class DataView<T extends DataObject> extends React.Component<AppProps<T>, AppSta
 		}
 	}
 
-	shouldComponentUpdate(nextProps: AppProps<T>, nextState: AppState<T>) {
+	shouldComponentUpdate(nextProps: FullProps<T>, nextState: OwnState<T>) {
 		return nextProps.creating !== this.props.creating ||
 			nextProps.filter !== this.props.filter ||
 			nextProps.list !== this.props.list ||
@@ -233,7 +193,7 @@ class DataView<T extends DataObject> extends React.Component<AppProps<T>, AppSta
 
 				<Grid stackable doubling columns={cols}>
 					{this.props.createTitle &&
-						checkPermissions(this.props.perms, [ this.props.perm, "create" ]) &&
+						checkPermissions(this.props.perms, this.props.perm.concat("create")) &&
 
 						<Grid.Column>
 							<CreateForm
@@ -289,9 +249,9 @@ class DataView<T extends DataObject> extends React.Component<AppProps<T>, AppSta
 						:
 							this.delete(obj)
 					}
-					canEdit={checkPermissions(this.props.perms, [ this.props.perm, "change" ])
+					canEdit={checkPermissions(this.props.perms, this.props.perm.concat("change"))
 						&& this.props.canEdit}
-					canDelete={checkPermissions(this.props.perms, [ this.props.perm, "delete" ])
+					canDelete={checkPermissions(this.props.perms, this.props.perm.concat("delete"))
 						&& this.props.canDelete}
 					actions={actions}
 					isEditing={obj => this.props.equals(obj, this.state.data)}
@@ -301,41 +261,44 @@ class DataView<T extends DataObject> extends React.Component<AppProps<T>, AppSta
 	}
 }
 
-const mapStateToProps = (endpoint: string, id: IdFunction) => (_state: Store<object>) => {
-	const state: Store<object> = _.get(_state, endpoint.replace(/\//g, "."))
+function mapStateToProps<T>(endpoint: string, id: IdFunction<T>) {
+	return (_state: AppStore, ownProps: OwnProps<T>) => {
+		const state: DataViewStore<T> = _.get(_state, endpoint.replace(/\//g, "."))
 
-	return {
-		creating: state ? state.creating : false,
-		filter: state && state.filter ? state.filter : {},
-		list: state ? state.list : [],
-		types: _state.api.types,
-		idFunc: id,
-		perm: endpoint.split("/"),
-		perms: _state.api.permissions,
+		return {
+			creating: state ? state.creating : false,
+			filter: state && state.filter ? state.filter : {},
+			list: state ? state.list : [],
+			types: _state.api.types,
+			idFunc: id,
+			perm: endpoint.split("/"),
+			perms: _state.api.permissions,
+		}
 	}
 }
 
-const mapDispatchToProps = (endpoint: string, id: IdFunction, noDetails: boolean) =>
-	(dispatch: Dispatch<Action>) => {
+function mapDispatchToProps<T>(endpoint: string, id: IdFunction<T>, noDetails: boolean) {
+	return (dispatch: Dispatch<Action>) => {
 		return {
 			requestList: () => dispatch(requestList(endpoint, !noDetails)),
-			requestDetails: (data: object) => dispatch(requestDetails(endpoint, id, data)),
-			requestCreate: (data: object) => dispatch(requestCreate(endpoint, id, data)),
-			requestChange: (data: object, newData: object) => dispatch(requestChange(endpoint, id, data, newData)),
-			requestDelete: (data: object) => dispatch(requestDelete(endpoint, id, data)),
+			requestDetails: (data: T) => dispatch(requestDetails(endpoint, id, data)),
+			requestCreate: (data: T) => dispatch(requestCreate(endpoint, id, data)),
+			requestChange: (data: T, newData: object) => dispatch(requestChange(endpoint, id, data, newData)),
+			requestDelete: (data: T) => dispatch(requestDelete(endpoint, id, data)),
 			setFilter: (filter: string, value: string) => dispatch(setFilter(endpoint, filter, value)),
-			equals: (o1: object, o2: object) => o1 != null && o2 != null && id(o1) === id(o2),
+			equals: (o1: T, o2: T) => o1 != null && o2 != null && id(o1) === id(o2),
 		}
 	}
+}
 
-export default (endpoint: string, objId: string | IdFunction, noDetails: boolean) => {
+export default function createDataView<T>(endpoint: string, objId: string | IdFunction<T>, noDetails: boolean) {
 	if (!objId) {
 		objId = "id"
 	}
-	const id = typeof objId === "function" ? objId : (data: object) => _.get(data, objId)
+	const id = typeof objId === "function" ? objId : (data: T) => _.get(data, objId as string)
 
-	return connect(
-		mapStateToProps(endpoint, id),
-		mapDispatchToProps(endpoint, id, noDetails)
+	return connect<StateProps<T>, DispatchProps<T>, OwnProps<T>, AppStore>(
+		mapStateToProps<T>(endpoint, id),
+		mapDispatchToProps<T>(endpoint, id, noDetails)
 	)(DataView)
 }

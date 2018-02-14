@@ -1,12 +1,13 @@
 import * as _ from "lodash"
 import { Action } from "redux"
+import { DashboardStore } from "../types"
 
 import {
 	INFO_RESPONSE,
 	STATS_RESPONSE,
 } from "../actions/dashboard"
 
-const defaultState = {
+const defaultState: DashboardStore = {
 	tps: [],
 	players: [],
 	cpu: [],
@@ -14,7 +15,7 @@ const defaultState = {
 	disk: [],
 }
 
-const dashboard = (state = defaultState, action: Action) => {
+const dashboard = (state: DashboardStore = defaultState, action: Action) => {
 	switch (action.type) {
 		case INFO_RESPONSE:
 			return _.merge({}, state, {

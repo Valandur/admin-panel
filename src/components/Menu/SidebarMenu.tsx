@@ -3,13 +3,13 @@ import { connect } from "react-redux"
 import { NavLink } from "react-router-dom"
 import { Sidebar, Menu, Icon, Progress } from "semantic-ui-react"
 import { translate } from "react-i18next"
-import { Store, Dispatch, Action } from "redux"
+import { Dispatch, Action } from "redux"
 import * as _ from "lodash"
 
 import { requestServlets } from "../../actions"
 
 import { checkPermissions } from "../../components/Util"
-import { ViewDefinition, ServerStat } from "../../types"
+import { ViewDefinition, ServerStat, AppStore } from "../../types"
 
 export interface AppProps extends reactI18Next.InjectedTranslateProps {
 	show: boolean
@@ -17,7 +17,7 @@ export interface AppProps extends reactI18Next.InjectedTranslateProps {
 	cpu: ServerStat[]
 	memory: ServerStat[]
 	disk: ServerStat[]
-	requestServlets: () => Dispatch<Action>
+	requestServlets: () => Action
 }
 
 class SidebarMenu extends React.Component<AppProps> {
@@ -105,7 +105,7 @@ class SidebarMenu extends React.Component<AppProps> {
 	}
 }
 
-const mapStateToProps = (state: Store<object>) => {
+const mapStateToProps = (state: AppStore) => {
 	return {
 		cpu: state.dashboard.cpu,
 		memory: state.dashboard.memory,

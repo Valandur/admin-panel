@@ -12,7 +12,7 @@ export function requestList(endpoint: string, details: boolean = false) {
 
 export const DATA_DETAILS_REQUEST = "DATA_DETAILS_REQUEST"
 export const DATA_DETAILS_RESPONSE = "DATA_DETAILS_RESPONSE"
-export function requestDetails(endpoint: string, id: IdFunction, data: object) {
+export function requestDetails<T>(endpoint: string, id: IdFunction<T>, data: T) {
 	return {
 		type: DATA_DETAILS_REQUEST,
 		endpoint: endpoint,
@@ -23,7 +23,7 @@ export function requestDetails(endpoint: string, id: IdFunction, data: object) {
 
 export const DATA_CREATE_REQUEST = "DATA_CREATE_REQUEST"
 export const DATA_CREATE_RESPONSE = "DATA_CREATE_RESPONSE"
-export function requestCreate(endpoint: string, id: IdFunction, data: object) {
+export function requestCreate<T>(endpoint: string, id: IdFunction<T>, data: T) {
 	return {
 		type: DATA_CREATE_REQUEST,
 		endpoint: endpoint,
@@ -34,7 +34,7 @@ export function requestCreate(endpoint: string, id: IdFunction, data: object) {
 
 export const DATA_CHANGE_REQUEST = "DATA_CHANGE_REQUEST"
 export const DATA_CHANGE_RESPONSE = "DATA_CHANGE_RESPONSE"
-export function requestChange(endpoint: string, id: IdFunction, data: object, newData: object) {
+export function requestChange<T>(endpoint: string, id: IdFunction<T>, data: T, newData: object) {
 	return {
 		type: DATA_CHANGE_REQUEST,
 		endpoint: endpoint,
@@ -46,7 +46,7 @@ export function requestChange(endpoint: string, id: IdFunction, data: object, ne
 
 export const DATA_DELETE_REQUEST = "DATA_DELETE_REQUEST"
 export const DATA_DELETE_RESPONSE = "DATA_DELETE_RESPONSE"
-export function requestDelete(endpoint: string, id: IdFunction, data: object) {
+export function requestDelete<T>(endpoint: string, id: IdFunction<T>, data: T) {
 	return {
 		type: DATA_DELETE_REQUEST,
 		endpoint: endpoint,

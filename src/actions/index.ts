@@ -1,4 +1,5 @@
 import { Server } from "../types"
+import { Action } from "redux"
 
 export const SERVLETS_REQUEST = "SERVLETS_REQUEST"
 export const SERVLETS_RESPONSE = "SERVLETS_RESPONSE"
@@ -9,11 +10,14 @@ export function requestServlets() {
 }
 
 export const CHANGE_LANGUAGE = "CHANGE_LANG"
-export function changeLanguage(lang: string) {
+export function changeLanguage(lang: string): ChangeLanguageAction {
 	return {
 		type: CHANGE_LANGUAGE,
 		lang: lang,
 	}
+}
+export interface ChangeLanguageAction extends Action {
+	lang: string
 }
 
 export const CHANGE_SERVER = "CHANGE_SERVER"
