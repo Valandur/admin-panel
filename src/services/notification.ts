@@ -5,10 +5,13 @@ import { SAVE_NOTIF_REF, SHOW_NOTIFICATION } from "../actions/notification"
 import { EXECUTE_RESPONSE } from "../actions/command"
 import { DATA_CREATE_RESPONSE, DATA_CHANGE_RESPONSE, DATA_DELETE_RESPONSE } from "../actions/dataview"
 import { PLAYER_KICK_RESPONSE, PLAYER_BAN_RESPONSE } from "../actions/player"
+import { Middleware, MiddlewareAPI } from "redux"
+import { AppState } from "../types"
+import { System } from "react-notification-system"
 
-let notifRef: object
+let notifRef: System
 
-const showNotif = (level: string, title: string, message: string) =>
+const showNotif = (level: "error" | "warning" | "info" | "success", title: string, message: string) =>
 	notifRef.addNotification({
 		level: level,
 		title: title,
@@ -16,7 +19,7 @@ const showNotif = (level: string, title: string, message: string) =>
 		position: "br",
 	})
 
-const persist = ({ dispatch, getState }) => next => action => {
+const persist: Middleware = ({ dispatch, getState }: MiddlewareAPI<AppState>) => next => action => {
 	next(action)
 
 	switch (action.type) {
@@ -36,13 +39,13 @@ const persist = ({ dispatch, getState }) => next => action => {
 			if (action.error) {
 				if (action.error.status === 401 || action.error.status === 403) {
 					showNotif(
-						"error", 
-						"Login error", 
+						"error",
+						"Login error",
 						"Invalid username or password")
 				} else {
 					showNotif(
-						"error", 
-						"Login error", 
+						"error",
+						"Login error",
 						action.error.error)
 				}
 			}
@@ -51,13 +54,13 @@ const persist = ({ dispatch, getState }) => next => action => {
 		case EXECUTE_RESPONSE:
 			if (!action.ok) {
 				showNotif(
-					"error", 
-					"Could not run command: " + action.command, 
+					"error",
+					"Could not run command: " + action.command,
 					action.error.error)
 			} else {
 				showNotif(
-					"success", 
-					"Execute Command: " + action.command, 
+					"success",
+					"Execute Command: " + action.command,
 					action.result[0])
 			}
 			break
@@ -65,13 +68,13 @@ const persist = ({ dispatch, getState }) => next => action => {
 		case DATA_CREATE_RESPONSE:
 			if (!action.ok) {
 				showNotif(
-					"error", 
-					_.upperFirst(action.endpoint), 
+					"error",
+					_.upperFirst(action.endpoint),
 					action.error.error)
 			} else {
 				showNotif(
-					"success", 
-					_.upperFirst(action.endpoint), 
+					"success",
+					_.upperFirst(action.endpoint),
 					"Created " + action.id(action.data))
 			}
 			break
@@ -79,13 +82,13 @@ const persist = ({ dispatch, getState }) => next => action => {
 		case DATA_CHANGE_RESPONSE:
 			if (!action.ok) {
 					showNotif(
-						"error", 
-						_.upperFirst(action.endpoint), 
+						"error",
+						_.upperFirst(action.endpoint),
 						action.error.error)
 			} else {
 				showNotif(
-					"success", 
-					_.upperFirst(action.endpoint), 
+					"success",
+					_.upperFirst(action.endpoint),
 					"Changed " + action.id(action.data))
 			}
 			break
@@ -93,28 +96,28 @@ const persist = ({ dispatch, getState }) => next => action => {
 		case DATA_DELETE_RESPONSE:
 			if (!action.ok) {
 					showNotif(
-						"error", 
-						_.upperFirst(action.endpoint), 
+						"error",
+						_.upperFirst(action.endpoint),
 						action.error.error)
 			} else {
 				showNotif(
-					"success", 
-					_.upperFirst(action.endpoint), 
+					"success",
+					_.upperFirst(action.endpoint),
 					"Deleted " + action.id(action.data))
 			}
 			break
-		
+
 		case PLAYER_KICK_RESPONSE:
 			showNotif(
-				"success", 
-				"Kick " + action.player.name, 
+				"success",
+				"Kick " + action.player.name,
 				"Player has been kicked from the server")
 			break
 
 		case PLAYER_BAN_RESPONSE:
 			showNotif(
-				"success", 
-				"Ban " + action.player.name, 
+				"success",
+				"Ban " + action.player.name,
 				action.response)
 			break
 

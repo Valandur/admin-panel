@@ -1,8 +1,9 @@
 import * as request from "superagent"
-import { Dispatch, Action } from "redux"
+import { Dispatch, Action, MiddlewareAPI, Middleware } from "redux"
+import { AppState } from "../types"
 
 import {
-	SERVLETS_REQUEST, SERVLETS_RESPONSE, 
+	SERVLETS_REQUEST, SERVLETS_RESPONSE,
 	LOGIN_REQUEST, LOGIN_RESPONSE, requestLogout,
 	CHECK_USER_REQUEST, CHECK_USER_RESPONSE,
 	CATALOG_REQUEST, CATALOG_RESPONSE,
@@ -44,16 +45,18 @@ import {
 	DATA_DELETE_REQUEST, DATA_DELETE_RESPONSE,
 } from "../actions/dataview"
 
-const call = function(
-	state: object, 
-	dispatch: Dispatch<Action>, 
-	method: string, 
-	path: string, 
-	callback: (body: object | null, error?: object) => void, 
-	data: string, 
-	handleErrors: boolean = true) {
-	
-	const url = state.api.server.apiUrl + "/api/v5/" + path + 
+interface Error {
+	status: number
+	error: string
+}
+
+const call = (state: AppState, dispatch: Dispatch<Action>) => (method: string) => (
+	path: string,
+	callback: (body: any | null, error?: Error) => void,
+	data?: object | null,
+	handleErrors: boolean = true) => {
+
+	const url = state.api.server.apiUrl + "/api/v5/" + path +
 		(path.indexOf("?") >= 0 ? "&" : "?") + (state.api.key ? "key=" + state.api.key : "")
 	const req = request(method, url)
 		.timeout({ response: 3000, deadline: 30000 })
@@ -67,7 +70,7 @@ const call = function(
 			if (handleErrors) {
 				dispatch(showNotification("error", "API Error", err.text))
 			} else {
-				callback(null, { status: err.status, error: err })
+				callback(null, { status: err.status, error: err.text })
 			}
 			return
 		}
@@ -82,20 +85,26 @@ const call = function(
 			return
 		}
 
-		callback(null, { status: res.status, error: res.body ? res.body.error : res.status })
+		callback(null, { status: res.status, error: res.body ? res.body.error : res.text })
 	})
 }
 
-const api = ({ getState, dispatch }) => next => action => {
-	next(action)
+export interface ExtendedMiddleware<StateType> extends Middleware {
+	<S extends StateType>(api: MiddlewareAPI<S>): (next: Dispatch<S>) => Dispatch<S>
+}
 
-	const state = getState()
-	const callTmp = call.bind(this, state, dispatch)
+const api: ExtendedMiddleware<AppState> = ({ getState, dispatch }: MiddlewareAPI<AppState>) =>
+		(next: Dispatch<void>) => <A extends Action>(action: A): A => {
+	const res = next(action)
 
-	const get = callTmp.bind(this, "GET")
-	const post = callTmp.bind(this, "POST")
-	const put = callTmp.bind(this, "PUT")
-	const del = callTmp.bind(this, "DELETE")
+	const state = getState() as AppState
+	// const callTmp = call.bind(null, state, dispatch)
+	const callTemp = call(state, dispatch)
+
+	const get = callTemp("GET")
+	const post = callTemp("POST")
+	const put = callTemp("PUT")
+	const del = callTemp("DELETE")
 
 	switch (action.type) {
 		case SERVLETS_REQUEST:
@@ -114,7 +123,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					servlets: data ? data.servlets : null,
 				})
 			}, null, false)
-			break;
+			break
 
 		case LOGIN_REQUEST:
 			post("user", (data, err) => {
@@ -133,7 +142,7 @@ const api = ({ getState, dispatch }) => next => action => {
 				username: action.username,
 				password: action.password,
 			}, false)
-			break;
+			break
 
 		case CHECK_USER_REQUEST:
 			get("user", (data, err) => {
@@ -151,7 +160,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					data: data,
 				})
 			}, null, false)
-			break;
+			break
 
 		case INFO_REQUEST:
 			get("info", data => {
@@ -160,7 +169,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					data: data,
 				})
 			})
-			break;
+			break
 
 		case STATS_REQUEST:
 			get("info/stats", data => {
@@ -173,11 +182,12 @@ const api = ({ getState, dispatch }) => next => action => {
 					disk: data.disk,
 				})
 			})
-			break;
+			break
 
 		case CATALOG_REQUEST:
-			if (state.api.types[action.class])
-				break;
+			if (state.api.types[action.class]) {
+				break
+			}
 
 			get("registry/org.spongepowered.api." + action.class, data => {
 				next({
@@ -186,7 +196,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					types: data,
 				})
 			})
-			break;
+			break
 
 		case PLAYER_KICK_REQUEST:
 			post("player/" + action.player.uuid + "/method", (data, err) => {
@@ -209,8 +219,8 @@ const api = ({ getState, dispatch }) => next => action => {
 					"type": "TEXT",
 					"value": "Bye",
 				}],
-			}, false);
-			break;
+			}, false)
+			break
 
 		case PLAYER_BAN_REQUEST:
 			post("cmd", (data, err) => {
@@ -231,8 +241,8 @@ const api = ({ getState, dispatch }) => next => action => {
 				})
 			}, [{
 				"command": "ban " + action.player.name,
-			}], false);
-			break;
+			}], false)
+			break
 
 		case PLUGIN_CONFIG_REQUEST:
 			get("plugin/" + action.id + "/config", (data) => {
@@ -241,7 +251,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					configs: data,
 				})
 			})
-			break;
+			break
 
 		case PLUGIN_CONFIG_SAVE_REQUEST:
 			post("plugin/" + action.id + "/config", (data) => {
@@ -250,7 +260,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					configs: data,
 				})
 			}, action.configs)
-			break;
+			break
 
 		case SAVE_PROPERTY_REQUEST:
 			post("info/properties", data => {
@@ -260,7 +270,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					properties: data.properties,
 				})
 			}, { properties: { [action.prop.key]: action.prop.value }})
-			break;
+			break
 
 		case EXECUTE_REQUEST:
 			post("cmd", (data, err) => {
@@ -271,7 +281,7 @@ const api = ({ getState, dispatch }) => next => action => {
 						ok: false,
 						error: err,
 					})
-					return;
+					return
 				}
 
 				next({
@@ -285,8 +295,8 @@ const api = ({ getState, dispatch }) => next => action => {
 				waitLines: action.waitLines,
 				waitTime: action.waitTime,
 			}], false)
-			break;
-		
+			break
+
 		case DATA_LIST_REQUEST:
 			get(action.endpoint + (action.details ? "?details" : ""), data => {
 				next({
@@ -295,7 +305,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					data: data,
 				})
 			})
-			break;
+			break
 
 		case DATA_DETAILS_REQUEST:
 			get(action.endpoint + "/" + action.id(action.data), data => {
@@ -306,7 +316,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					data: data,
 				})
 			})
-			break;
+			break
 
 		case DATA_CREATE_REQUEST:
 			post(action.endpoint, (data, err) => {
@@ -318,7 +328,7 @@ const api = ({ getState, dispatch }) => next => action => {
 						ok: false,
 						error: err,
 					})
-					return;
+					return
 				}
 
 				next({
@@ -329,7 +339,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					data: data,
 				})
 			}, action.data, false)
-			break;
+			break
 
 		case DATA_CHANGE_REQUEST:
 			put(action.endpoint + "/" + action.id(action.data), (data, err) => {
@@ -341,7 +351,7 @@ const api = ({ getState, dispatch }) => next => action => {
 						ok: false,
 						error: err,
 					})
-					return;
+					return
 				}
 
 				next({
@@ -352,7 +362,7 @@ const api = ({ getState, dispatch }) => next => action => {
 					data: data,
 				})
 			}, action.newData, false)
-			break;
+			break
 
 		case DATA_DELETE_REQUEST:
 			del(action.endpoint + "/" + action.id(action.data), (data, err) => {
@@ -364,7 +374,7 @@ const api = ({ getState, dispatch }) => next => action => {
 						ok: false,
 						error: err,
 					})
-					return;
+					return
 				}
 
 				next({
@@ -375,11 +385,13 @@ const api = ({ getState, dispatch }) => next => action => {
 					data: data,
 				})
 			}, null, false)
-			break;
+			break
 
 		default:
-			break;
+			break
 	}
+
+	return res
 }
 
 export default api

@@ -1,6 +1,6 @@
 import { Action } from "redux"
 import * as _ from "lodash"
-import { DataViewStore } from "../types"
+import { DataViewState } from "../types"
 
 import {
 	DATA_SET_FILTER, DATA_LIST_RESPONSE,
@@ -10,7 +10,7 @@ import {
 	DATA_DELETE_REQUEST, DATA_DELETE_RESPONSE,
 } from "../actions/dataview"
 
-const dataview = (state: DataViewStore = {}, action: Action) => {
+const dataview = (state: DataViewState<T> = {}, action: Action): DataViewState<T> => {
 	let path = null
 	if (action.endpoint) {
 		path = action.endpoint.replace(/\//g, ".")

@@ -6,7 +6,8 @@ import {
 	SERVLETS_RESPONSE,
 	LOGIN_REQUEST, LOGIN_RESPONSE,
 	CHECK_USER_RESPONSE, LOGOUT_REQUEST, CATALOG_RESPONSE,
-	CHANGE_LANGUAGE, CHANGE_SERVER
+	CHANGE_LANGUAGE, CHANGE_SERVER, ChangeServerAction, ChangeLanguageAction, CheckUserResponseAction,
+	LoginResponseAction, CatalogResponseAction, ServletsResponseAction
 } from "../actions"
 
 const defaultState = {
@@ -17,8 +18,12 @@ const defaultState = {
 	lang: "en",
 }
 
-const api = (state = defaultState, action: Action) => {
-	switch(action.type) {
+const api = (
+	state = defaultState,
+	action: ChangeServerAction & ChangeLanguageAction & LoginResponseAction & CheckUserResponseAction &
+		CatalogResponseAction & ServletsResponseAction) => {
+
+	switch (action.type) {
 		case CHANGE_SERVER:
 			return _.assign({}, state, {
 				server: action.server

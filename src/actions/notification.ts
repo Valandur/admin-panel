@@ -1,5 +1,7 @@
+import { System } from "react-notification-system"
+
 export const SAVE_NOTIF_REF = "@@__WEBAPI/SAVE_NOTIF_REF__@@"
-export function saveNotifRef(ref: HTMLElement) {
+export function saveNotifRef(ref: System) {
 	return {
 		type: SAVE_NOTIF_REF,
 		ref: ref,

@@ -11,11 +11,10 @@ import { createBrowserHistory } from "history"
 import * as NotificationSystem from "react-notification-system"
 
 import "./locales/i18n"
-import * as pkg from "../package.json" 
 
 // CSS
-//import "semantic-ui-css/semantic.min.css"
-//import "react-select/dist/react-select.css"
+import "semantic-ui-css/semantic.min.css"
+import "react-select/dist/react-select.css"
 import "rc-slider/assets/index.css"
 
 // Redux
@@ -31,6 +30,21 @@ import Login from "./containers/Login"
 // Actions
 import { requestCheckUser } from "./actions"
 import { saveNotifRef } from "./actions/notification"
+import { Server, AppState } from "./types"
+
+const pkg = require("../package.json")
+
+declare global {
+	interface Config {
+		basePath: string
+		servers: Server[]
+	}
+
+	interface Window {
+		config: Config
+		__REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: <R>(a: R) => R
+	}
+}
 
 // Sentry
 if (process.env.NODE_ENV !== "dev" && process.env.NODE_ENV !== "development") {
@@ -38,7 +52,7 @@ if (process.env.NODE_ENV !== "dev" && process.env.NODE_ENV !== "development") {
 		release: pkg.version,
 	}).install()
 } else {
-	console.log("Sentry disabled due to dev environment");
+	console.log("Sentry disabled due to dev environment")
 }
 
 // Construct history with basename
@@ -47,21 +61,22 @@ const history = createBrowserHistory({
 })
 
 // Try and reconstruct state
-let initialState = undefined
-if (window.localStorage) {
-	const str = window.localStorage.getItem("api")
-	const prevApi = str ? JSON.parse(str) : undefined
+// let initialState = {}
 
-	initialState = {
-		api: prevApi && prevApi.loggedIn ? prevApi : undefined,
-	}
-}
+// if (window.localStorage) {
+// 	const str = window.localStorage.getItem("api")
+// 	const prevApi = str ? JSON.parse(str) : undefined
+
+// 	initialState = {
+// 		api: prevApi && prevApi.loggedIn ? prevApi : undefined,
+// 	}
+// }
 
 // Setup redux store
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-let store = createStore(
-	App, 
-	initialState,
+let store = createStore<AppState>(
+	App,
+	// initialState,
 	composeEnhancers(
 		applyMiddleware(
 			api,
@@ -74,7 +89,8 @@ let store = createStore(
 )
 
 // Check if the possibly saved state/key is still valid
-if (store.getState().api.loggedIn) {
+const state = store.getState()
+if (state && state.api.loggedIn) {
 	store.dispatch(requestCheckUser())
 }
 
@@ -116,7 +132,7 @@ class Main extends React.Component {
 						</Switch>
 					</ConnectedRouter>
 				</Provider>
-				<NotificationSystem ref={ref => store.dispatch(saveNotifRef(ref))} />
+				<NotificationSystem ref={(ref: NotificationSystem.System) => store.dispatch(saveNotifRef(ref))} />
 			</div>
 		)
 	}

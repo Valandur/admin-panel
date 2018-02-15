@@ -4,25 +4,32 @@ import { NavLink } from "react-router-dom"
 import { Sidebar, Menu, Icon, Progress } from "semantic-ui-react"
 import { translate } from "react-i18next"
 import { Dispatch, Action } from "redux"
-import * as _ from "lodash"
 
 import { requestServlets } from "../../actions"
 
-import { checkPermissions } from "../../components/Util"
-import { ViewDefinition, ServerStat, AppStore } from "../../types"
+import { checkPermissions, PermissionTree } from "../../components/Util"
+import { ViewDefinition, AppState, ServerStat } from "../../types"
 
-export interface AppProps extends reactI18Next.InjectedTranslateProps {
+export interface Props extends reactI18Next.InjectedTranslateProps {
+	// State
+	cpu: ServerStat[],
+	memory: ServerStat[],
+	disk: ServerStat[],
+	servlets: {},
+	perms: PermissionTree,
+	path: string
+
+	// Own
 	show: boolean
 	views: ViewDefinition[]
-	cpu: ServerStat[]
-	memory: ServerStat[]
-	disk: ServerStat[]
+
+	// Dispatch
 	requestServlets: () => Action
 }
 
-class SidebarMenu extends React.Component<AppProps> {
+class SidebarMenu extends React.Component<Props> {
 
-	constructor(props: AppProps) {
+	constructor(props: Props) {
 		super(props)
 
 		this.renderMenuItem = this.renderMenuItem.bind(this)
@@ -44,10 +51,10 @@ class SidebarMenu extends React.Component<AppProps> {
 				visible={this.props.show}
 			>
 
-				{this.props.cpu.length > 0 &&
+				{this.props.cpu.length > 0 ?
 					<Menu.Item name="load">
 						<Progress
-							percent={_.last(this.props.cpu).value * 100}
+							percent={this.props.cpu[this.props.cpu.length - 1].value * 100}
 							progress="percent"
 							precision={1}
 							label={_t("CPU")}
@@ -55,7 +62,7 @@ class SidebarMenu extends React.Component<AppProps> {
 							size="small"
 						/>
 						<Progress
-							percent={_.last(this.props.memory).value * 100}
+							percent={this.props.memory[this.props.memory.length - 1].value * 100}
 							progress="percent"
 							precision={1}
 							label={_t("Memory")}
@@ -63,14 +70,15 @@ class SidebarMenu extends React.Component<AppProps> {
 							size="small"
 						/>
 						<Progress
-							percent={_.last(this.props.disk).value * 100}
+							percent={this.props.disk[this.props.disk.length - 1].value * 100}
 							progress="percent"
 							precision={1}
 							label={_t("Disk")}
 							color="green"
 							size="small"
 						/>
-					</Menu.Item>}
+					</Menu.Item>
+				: null}
 
 				{views.map(this.renderMenuItem)}
 			</Sidebar>
@@ -105,7 +113,7 @@ class SidebarMenu extends React.Component<AppProps> {
 	}
 }
 
-const mapStateToProps = (state: AppStore) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		cpu: state.dashboard.cpu,
 		memory: state.dashboard.memory,
@@ -114,7 +122,7 @@ const mapStateToProps = (state: AppStore) => {
 		perms: state.api.permissions,
 
 		// We include the pathname so this component updates when the path changes
-		path: state.router.location.pathname,
+		path: state.router.location ? state.router.location.pathname : "",
 	}
 }
 

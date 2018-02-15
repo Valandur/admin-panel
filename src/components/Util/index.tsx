@@ -1,5 +1,5 @@
 import * as _ from "lodash"
-import { InputProps, InputOnChangeData } from "semantic-ui-react"
+import { InputProps } from "semantic-ui-react"
 
 // Format a number to a certain accuracy as a ratio
 export function formatRange(current: number, max: number, a: number = 1): number {
@@ -8,8 +8,11 @@ export function formatRange(current: number, max: number, a: number = 1): number
 }
 
 // Handle input change of various components
-export type HandleChangeFunc = (event: React.SyntheticEvent<HTMLElement>, data?: InputProps) => void
+export type HandleChangeFunc = (
+	event: React.SyntheticEvent<HTMLElement>,
+	data?: InputProps) => void
 export function handleChange(
+	this: { setState: (o: object) => void },
 	setState: (key: string, value: string) => void,
 	event: React.SyntheticEvent<HTMLElement>,
 	data: InputProps): void {
@@ -25,10 +28,10 @@ export function handleChange(
 			value = isNaN(floatVal) ? "" : floatVal
 		}
 	} else {
-		const target = event.target
+		const target = event.target as HTMLInputElement
 		value = target.type === "checkbox" ? target.checked : target.value
 		if (target.type === "number") {
-			const floatVal = parseFloat(value)
+			const floatVal = parseFloat(value as string)
 			value = isNaN(floatVal) ? "" : floatVal
 		}
 		name = target.name ? target.name : target.id

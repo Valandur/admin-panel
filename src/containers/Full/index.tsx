@@ -5,32 +5,35 @@ import { Button, Sidebar, Segment, Message } from "semantic-ui-react"
 import { translate } from "react-i18next"
 import * as Raven from "raven-js"
 import { Action } from "redux"
+import * as _ from "lodash"
 
+import { AppState, ViewDefinition } from "../../types"
 import { requestStats } from "../../actions/dashboard"
 
 import SidebarMenu from "../../components/Menu/SidebarMenu"
 import HeaderMenu from "../../components/Menu/HeaderMenu"
-import { checkPermissions } from "../../components/Util"
-import views, { ViewDefinition } from "./Views"
+import { checkPermissions, PermissionTree } from "../../components/Util"
+import views from "./Views"
 
 const baseIssueUrl = "https://github.com/Valandur/admin-panel/issues/new?"
 
-export interface AppProps extends reactI18Next.InjectedTranslateProps {
-	requestStats: () => void
+export interface Props extends reactI18Next.InjectedTranslateProps {
+	perms?: PermissionTree
+	requestStats: () => Action
 }
 
-interface AppState {
+interface OwnState {
 	show: boolean
 	hasError: boolean
 	error?: string
 	stack?: string
 }
 
-class Full extends React.Component<AppProps, AppState> {
+class Full extends React.Component<Props, OwnState> {
 
 	interval: NodeJS.Timer
 
-	constructor(props: AppProps) {
+	constructor(props: Props) {
 		super(props)
 
 		this.state = {
@@ -41,7 +44,7 @@ class Full extends React.Component<AppProps, AppState> {
 		this.toggleSidebar = this.toggleSidebar.bind(this)
 		this.renderRoute = this.renderRoute.bind(this)
 	}
-	
+
 	componentDidMount() {
 		if (checkPermissions(this.props.perms, ["info", "stats"])) {
 			this.props.requestStats()
@@ -67,10 +70,10 @@ class Full extends React.Component<AppProps, AppState> {
 	}
 
 	getIssueUrl() {
-		return baseIssueUrl + "labels=bug" + 
-			"&title=" + encodeURIComponent("[Issue] <Add a short description>") + 
-			"&body=" + encodeURIComponent("<Say a little about what happend>\n\n" + 
-				this.state.error + "\n\nStacktrace:" + this.state.stack) + 
+		return baseIssueUrl + "labels=bug" +
+			"&title=" + encodeURIComponent("[Issue] <Add a short description>") +
+			"&body=" + encodeURIComponent("<Say a little about what happend>\n\n" +
+				this.state.error + "\n\nStacktrace:" + this.state.stack) +
 			"&assignee=Valandur"
 	}
 
@@ -130,14 +133,14 @@ class Full extends React.Component<AppProps, AppState> {
 		)
 	}
 
-	renderRoute(view: ViewDefinition): any {
+	renderRoute(view: ViewDefinition): JSX.Element | JSX.Element[] {
 		if (view.perms && !checkPermissions(this.props.perms, view.perms)) {
 			return <Redirect key={view.path} from={view.path} to="/dashboard" />
 		}
 		if (view.component) {
 			return <Route key={view.path} path={view.path} component={view.component} />
 		}
-		return view.views.map(this.renderRoute)
+		return _.flatMap(view.views, this.renderRoute)
 	}
 }
 

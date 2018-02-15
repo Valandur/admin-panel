@@ -3,8 +3,8 @@
     "rules": {
         "align": [
             true,
+            //"arguments",
             "parameters",
-            "arguments",
             "statements"
         ],
         "ban": false,
@@ -30,7 +30,8 @@
             "static-before-instance",
             "variables-before-functions"
         ],
-        "no-any": true,
+        //"no-any": true,
+        "no-unsafe-any": true,
         "no-arg": true,
         "no-bitwise": true,
         "no-console": [

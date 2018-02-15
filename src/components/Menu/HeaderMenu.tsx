@@ -4,7 +4,7 @@ import { Menu, Icon, Image, Dropdown, MenuItemProps } from "semantic-ui-react"
 import { translate } from "react-i18next"
 
 import { requestLogout, changeLanguage, ChangeLanguageAction } from "../../actions"
-import { AppStore } from "../../types"
+import { AppState } from "../../types"
 import { Action, Dispatch } from "redux"
 
 const apiLink = "/docs"
@@ -85,7 +85,7 @@ class HeaderMenu extends React.Component<AppProps> {
 	}
 }
 
-const mapStateToProps = (state: AppStore) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		lang: state.api.lang,
 	}

@@ -1,39 +1,41 @@
 import * as React from "react"
 import { connect, Dispatch } from "react-redux"
 import { Redirect } from "react-router-dom"
-import { Grid, Form, Button, Segment, Dropdown, Image } from "semantic-ui-react"
+import { Grid, Form, Button, Segment, Dropdown, Image, DropdownProps } from "semantic-ui-react"
 import { translate } from "react-i18next"
 import { Action } from "redux"
 import * as _ from "lodash"
 
 import { handleChange, HandleChangeFunc } from "../../components/Util"
-import { requestLogin, changeServer, changeLanguage } from "../../actions"
-import { Server } from "../../types"
+import { requestLogin, changeServer, changeLanguage,
+	LoginRequestAction, ChangeServerAction, ChangeLanguageAction } from "../../actions"
+import { Server, AppState } from "../../types"
 
-export interface AppProps extends reactI18Next.InjectedTranslateProps {
+export interface Props extends reactI18Next.InjectedTranslateProps {
 	loggingIn: boolean
 	server: Server
 	servers: Server[]
 	lang: string
-	location: string
+	path: string
 	ok: boolean
-	changeServer: (server: Server) => Dispatch<Action>
-	onLoginClick: (username: string, password: string) => Dispatch<Action>
-	changeLanguage: (lang: string) => Dispatch<Action>
+
+	changeServer: (server: Server) => ChangeServerAction
+	onLoginClick: (username: string, password: string) => LoginRequestAction
+	changeLanguage: (lang: string) => ChangeLanguageAction
 }
 
-interface AppState {
+interface OwnState {
 	[key: string]: string
 
 	username: string
 	password: string
 }
 
-class Login extends React.Component<AppProps, AppState> {
+class Login extends React.Component<Props, OwnState> {
 
 	handleChange: HandleChangeFunc
 
-	constructor(props: AppProps) {
+	constructor(props: Props) {
 		super(props)
 
 		this.state = {
@@ -65,7 +67,7 @@ class Login extends React.Component<AppProps, AppState> {
 
 	render() {
 		if (this.props.ok) {
-			return <Redirect to={{ pathname: "/", state: { from: this.props.location }}} />
+			return <Redirect to={{ pathname: "/", state: { from: this.props.path }}} />
 		}
 
 		const _t = this.props.t
@@ -77,7 +79,7 @@ class Login extends React.Component<AppProps, AppState> {
 				verticalAlign="middle"
 			>
 				<Grid.Column style={{ maxWidth: 450 }}>
-					
+
 					<Image size="medium" centered src="./img/logo.png" />
 
 					<Form size="large" loading={this.props.loggingIn}>
@@ -110,9 +112,9 @@ class Login extends React.Component<AppProps, AppState> {
 									value: "ru",
 								}]}
 								value={this.props.lang}
-								onChange={(e: Event, data: object) => this.props.changeLanguage(data.value)}
+								onChange={(e: Event, data: DropdownProps) => this.props.changeLanguage(data.value as string)}
 							/>
-							
+
 							<Form.Input
 								fluid
 								name="username"
@@ -145,13 +147,15 @@ class Login extends React.Component<AppProps, AppState> {
 	}
 }
 
-const mapStateToProps = (state: object) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		ok: state.api.loggedIn,
 		lang: state.api.lang,
 		loggingIn: state.api.loggingIn,
 		server: state.api.server,
 		servers: state.api.servers,
+
+		path: state.router.location ? state.router.location.pathname : "",
 	}
 }
 
@@ -163,4 +167,4 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate("Login")(Login));
+export default connect(mapStateToProps, mapDispatchToProps)(translate("Login")(Login))

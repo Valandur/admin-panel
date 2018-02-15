@@ -8,7 +8,7 @@ import DataTable, { DataTableProps } from "../DataTable"
 import FilterForm from "../FilterForm"
 import CreateForm from "../CreateForm"
 import { checkPermissions } from "../Util"
-import { IdFunction, DataViewRef, DataObject, DataFieldRaw, AppStore, DataViewStore } from "../../types"
+import { IdFunction, DataViewRef, DataObject, DataFieldRaw, AppState, DataViewState } from "../../types"
 import { FullProps, OwnState, OwnProps, StateProps, DispatchProps } from "./types"
 
 import {
@@ -262,8 +262,8 @@ class DataView<T extends DataObject> extends React.Component<FullProps<T>, OwnSt
 }
 
 function mapStateToProps<T>(endpoint: string, id: IdFunction<T>) {
-	return (_state: AppStore, ownProps: OwnProps<T>) => {
-		const state: DataViewStore<T> = _.get(_state, endpoint.replace(/\//g, "."))
+	return (_state: AppState, ownProps: OwnProps<T>) => {
+		const state: DataViewState<T> = _.get(_state, endpoint.replace(/\//g, "."))
 
 		return {
 			creating: state ? state.creating : false,
@@ -297,7 +297,7 @@ export default function createDataView<T>(endpoint: string, objId: string | IdFu
 	}
 	const id = typeof objId === "function" ? objId : (data: T) => _.get(data, objId as string)
 
-	return connect<StateProps<T>, DispatchProps<T>, OwnProps<T>, AppStore>(
+	return connect<StateProps<T>, DispatchProps<T>, OwnProps<T>, AppState>(
 		mapStateToProps<T>(endpoint, id),
 		mapDispatchToProps<T>(endpoint, id, noDetails)
 	)(DataView)

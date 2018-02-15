@@ -1,14 +1,18 @@
-import * as Loadable from "react-loadable"
 import { SemanticICONS } from "semantic-ui-react"
 import { HandleChangeFunc, PermissionTree } from "./components/Util"
+import { RouterState } from "react-router-redux"
 
 // Reducers
-export interface AppStore {
-	api: ApiStore
-	dashboard: DashboardStore
+export interface AppState {
+	api: ApiState
+	dashboard: DashboardState
+	router: RouterState
 }
 
-export interface ApiStore {
+export interface ApiState {
+	key: string
+	loggedIn: boolean
+	loggingIn: boolean
 	server: Server
 	servers: Server[]
 	servlets: {}
@@ -22,7 +26,7 @@ export interface Server {
 	apiUrl: string
 }
 
-export interface DataViewStore<T> {
+export interface DataViewState<T> {
 	creating: boolean
 	filter: {
 		[x: string]: string | string[]
@@ -30,7 +34,7 @@ export interface DataViewStore<T> {
 	list: T[]
 }
 
-export interface DashboardStore {
+export interface DashboardState {
 	tps: ServerStat[]
 	players: ServerStat[]
 	cpu: ServerStat[]
@@ -95,7 +99,7 @@ export interface ViewDefinition {
 	path: string,
 	icon?: SemanticICONS,
 	perms: string[] | null,
-	component?: Loadable.LoadableComponent,
+	component?: React.ComponentType,
 	views?: ViewDefinition[],
 }
 
@@ -118,6 +122,12 @@ export interface AutosuggestChangeData {
 }
 
 // Models
+export interface UserPermissions {
+	key: string
+	permissions: PermissionTree
+	rateLimit: number
+}
+
 export interface CatalogType {
 	id: string
 	name: string

@@ -3,7 +3,7 @@ import * as Loadable from "react-loadable"
 import { Loader, Message } from "semantic-ui-react"
 import { ViewDefinition } from "../../types"
 
-function load(func: () => Promise<React.ComponentType | { default: React.ComponentType }>): Loadable.LoadableComponent {
+function load(func: () => Promise<React.ComponentType | { default: React.ComponentType }>): React.ComponentType {
 	return Loadable({
 		loader: func,
 		loading: (props) => {
@@ -102,7 +102,7 @@ const views: Array<ViewDefinition> = [{
 }, {
 	title: "BlockOperations",
 	path: "/block-operations",
-	icon: "fa-th-large",
+	icon: "block layout",
 	perms: ["block", "op", "list"],
 	component: BlockOperations,
 }, {
@@ -137,7 +137,7 @@ const views: Array<ViewDefinition> = [{
 	views: [{
 		title: "MMCRestrictItems",
 		path: "/mmc-restrict/items",
-		icon: "ban", 
+		icon: "ban",
 		perms: ["mmc-restrict", "item"],
 		component: MMCRestrictItems,
 	}]
@@ -148,7 +148,7 @@ const views: Array<ViewDefinition> = [{
 	views: [{
 		title: "MMCTicketsTickets",
 		path: "/mmc-tickets/tickets",
-		icon: "ticket", 
+		icon: "ticket",
 		perms: ["mmc-tickets", "ticket"],
 		component: MMCTicketsTickets,
 	}]

@@ -6,10 +6,12 @@ import {
 	CHANGE_LANGUAGE,
 	CHANGE_SERVER,
 } from "../actions"
+import { Middleware, MiddlewareAPI } from "redux"
+import { AppState, ApiState } from "../types"
 
-const formatApi = api => JSON.stringify(api)
+const formatApi = (api: ApiState) => JSON.stringify(api)
 
-const persist = ({ dispatch, getState }) => next => action => {
+const persist: Middleware = ({ dispatch, getState }: MiddlewareAPI<AppState>) => next => action => {
 	next(action)
 
 	switch (action.type) {
@@ -17,25 +19,25 @@ const persist = ({ dispatch, getState }) => next => action => {
 		case CHANGE_LANGUAGE:
 		case CHANGE_SERVER:
 			if (window.localStorage) {
-				window.localStorage.setItem("api", formatApi(getState().api));
+				window.localStorage.setItem("api", formatApi(getState().api))
 			}
-			break;
+			break
 
 		case LOGOUT_REQUEST:
 			if (window.localStorage) {
-				window.localStorage.removeItem("api");
+				window.localStorage.removeItem("api")
 			}
 			dispatch(push("/login"))
-			break;
+			break
 
 		case CHECK_USER_RESPONSE:
 			if (!action.ok) {
 				dispatch(push("/login"))
 			}
-			break;
+			break
 
 		default:
-			break;
+			break
 	}
 }
 
