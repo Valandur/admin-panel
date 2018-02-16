@@ -1,68 +1,49 @@
-import { Action } from "redux"
 import * as _ from "lodash"
-import { DataViewState } from "../types"
 
-import {
-	DATA_SET_FILTER, DATA_LIST_RESPONSE,
-	DATA_DETAILS_REQUEST, DATA_DETAILS_RESPONSE,
-	DATA_CREATE_REQUEST, DATA_CREATE_RESPONSE,
-	DATA_CHANGE_REQUEST, DATA_CHANGE_RESPONSE,
-	DATA_DELETE_REQUEST, DATA_DELETE_RESPONSE,
-} from "../actions/dataview"
+import { TypeKeys, DataViewAction } from "../actions/dataview"
+import { AppState, DataObject, IdFunction } from "../types"
 
-const dataview = (state: DataViewState<T> = {}, action: Action): DataViewState<T> => {
-	let path = null
-	if (action.endpoint) {
+export interface DataViewState<T> {
+	creating: boolean
+	filter: {
+		[x: string]: string | string[]
+	}
+	list: T[]
+}
+
+export default (state: AppState, action: DataViewAction<DataObject>) => {
+	let path: string = ""
+	if (_.has(action, "endpoint")) {
 		path = action.endpoint.replace(/\//g, ".")
 	}
 
-	switch(action.type) {
-		case DATA_LIST_RESPONSE:
+	const changeObjectStatus = (id: IdFunction<DataObject>, data: DataObject, updating: boolean) =>
+		_.assign({}, state, {
+			[path]: {
+				...state[path],
+				list: _.map(state[path].list, obj => {
+					if (id(obj) !== id(data)) {
+						return obj
+					}
+					return _.assign({}, obj, data, { updating })
+				})
+			}
+		})
+
+	switch (action.type) {
+		case TypeKeys.LIST_RESPONSE:
+			if (action.err) {
+				return state
+			}
+
 			return _.assign({}, state, {
 				[path]: {
 					...state[path],
-					list: action.data,
+					list: action.list,
 				}
 			})
 
-		case DATA_DETAILS_REQUEST:
-			return _.assign({}, state, {
-				[path]: {
-					...state[path],
-					list: _.map(state[path].list, obj => {
-						if (action.id(obj) !== action.id(action.data)) {
-							return obj
-						}
-						return _.assign({}, obj, { updating: true })
-					})
-				}
-			})
-
-		case DATA_DETAILS_RESPONSE:
-			return _.assign({}, state, {
-				[path]: {
-					...state[path],
-					list: _.map(state[path].list, obj => {
-						if (action.id(obj) !== action.id(action.data)) {
-							return obj
-						}
-						return _.assign({}, obj, action.ok ? action.data : null, { updating: false })
-					})
-				}
-			})
-
-		case DATA_SET_FILTER:
-			return _.assign({}, state, {
-				[path]: {
-					...state[path],
-					filter: {
-						...state[path].filter,
-						[action.filter]: action.value,
-					},
-				}
-			});
-
-		case DATA_CREATE_REQUEST:
+		case TypeKeys.CREATE_REQUEST:
 			return _.assign({}, state, {
 				[path]: {
 					...state[path],
@@ -70,8 +51,8 @@ const dataview = (state: DataViewState<T> = {}, action: Action): DataViewState<T
 				},
 			})
 
-		case DATA_CREATE_RESPONSE:
-			if (!action.ok) {
+		case TypeKeys.CREATE_RESPONSE:
+			if (action.err) {
 				return _.assign({}, state, {
 					[path]: {
 						...state[path],
@@ -86,60 +67,26 @@ const dataview = (state: DataViewState<T> = {}, action: Action): DataViewState<T
 					creating: false,
 					list: [...state[path].list, action.data],
 				}
-			});
-
-		case DATA_CHANGE_REQUEST:
-			return _.assign({}, state, {
-				[path]: {
-					...state[path],
-					list: _.map(state[path].list, obj => {
-						if (action.id(obj) !== action.id(action.data)) {
-							return obj
-						}
-						return _.assign({}, obj, { updating: true })
-					})
-				}
 			})
 
-		case DATA_CHANGE_RESPONSE:
-			return _.assign({}, state, {
-				[path]: {
-					...state[path],
-					list: _.map(state[path].list, obj => {
-						if (action.id(obj) !== action.id(action.data)) {
-							return obj
-						}
-						return _.assign({}, obj, action.ok ? action.data : null, { updating: false })
-					})
-				}
-			})
+		case TypeKeys.DETAILS_REQUEST:
+			return changeObjectStatus(action.id, action.data, true)
 
-		case DATA_DELETE_REQUEST:
-			return _.assign({}, state, {
-				[path]: {
-					...state[path],
-					list: _.map(state[path].list, obj => {
-						if (action.id(obj) !== action.id(action.data)) {
-							return obj
-						}
-						return _.assign({}, obj, { updating: true })
-					})
-				}
-			})
+		case TypeKeys.DETAILS_RESPONSE:
+			return changeObjectStatus(action.id, action.data, !action.err)
 
-		case DATA_DELETE_RESPONSE:
-			if (!action.ok) {
-				return _.assign({}, state, {
-					[path]: {
-						...state[path],
-						list: _.map(state[path].list, obj => {
-							if (action.id(obj) !== action.id(action.data)) {
-								return obj
-							}
-							return _.assign({}, obj, { updating: false })
-						})
-					}
-				})
+		case TypeKeys.CHANGE_REQUEST:
+			return changeObjectStatus(action.id, action.data, true)
+
+		case TypeKeys.CHANGE_RESPONSE:
+			return changeObjectStatus(action.id, action.data, !action.err)
+
+		case TypeKeys.DELETE_REQUEST:
+			return changeObjectStatus(action.id, action.data, true)
+
+		case TypeKeys.DELETE_RESPONSE:
+			if (action.err) {
+				changeObjectStatus(action.id, action.data, false)
 			}
 
 			return _.assign({}, state, {
@@ -150,9 +97,18 @@ const dataview = (state: DataViewState<T> = {}, action: Action): DataViewState<T
 				}
 			})
 
+		case TypeKeys.SET_FILTER:
+			return _.assign({}, state, {
+				[path]: {
+					...state[path],
+					filter: {
+						...state[path].filter,
+						[action.filter]: action.value,
+					},
+				}
+			})
+
 		default:
 			return state
 	}
 }
-
-export default dataview

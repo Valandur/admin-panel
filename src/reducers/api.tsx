@@ -1,35 +1,52 @@
 import * as i18next from "i18next"
-import { Action } from "redux"
 import * as _ from "lodash"
 
-import {
-	SERVLETS_RESPONSE,
-	LOGIN_REQUEST, LOGIN_RESPONSE,
-	CHECK_USER_RESPONSE, LOGOUT_REQUEST, CATALOG_RESPONSE,
-	CHANGE_LANGUAGE, CHANGE_SERVER, ChangeServerAction, ChangeLanguageAction, CheckUserResponseAction,
-	LoginResponseAction, CatalogResponseAction, ServletsResponseAction
-} from "../actions"
+import { TypeKeys, AppAction } from "../actions"
+import { Server, CatalogType, Lang } from "../types"
+import { PermissionTree } from "../components/Util"
 
-const defaultState = {
-	server: _.first(window.config.servers),
+export interface ApiState {
+	key?: string
+	loggedIn: boolean
+	loggingIn: boolean
+	server: Server
+	servers: Server[]
+	servlets: {
+		[x: string]: string
+	}
+	types: {
+		[x: string]: CatalogType[]
+	}
+	lang: Lang
+	permissions?: PermissionTree
+}
+
+let initialState: ApiState = {
+	loggedIn: false,
+	loggingIn: false,
+	server: window.config.servers[0],
 	servers: window.config.servers,
 	servlets: {},
 	types: {},
 	lang: "en",
 }
+if (window.localStorage) {
+	const str = window.localStorage.getItem("api")
+	const prevApi: ApiState | undefined = str ? JSON.parse(str) : undefined
+	if (prevApi && prevApi.loggedIn) {
+		initialState = prevApi
+	}
+}
 
-const api = (
-	state = defaultState,
-	action: ChangeServerAction & ChangeLanguageAction & LoginResponseAction & CheckUserResponseAction &
-		CatalogResponseAction & ServletsResponseAction) => {
+export default (state = initialState, action: AppAction) => {
 
 	switch (action.type) {
-		case CHANGE_SERVER:
+		case TypeKeys.CHANGE_SERVER:
 			return _.assign({}, state, {
 				server: action.server
 			})
 
-		case SERVLETS_RESPONSE:
+		case TypeKeys.SERVLETS_RESPONSE:
 			if (!action.ok) {
 				return state
 			}
@@ -38,18 +55,18 @@ const api = (
 				servlets: action.servlets,
 			})
 
-		case CHANGE_LANGUAGE:
+		case TypeKeys.CHANGE_LANGUAGE:
 			i18next.changeLanguage(action.lang)
 			return _.assign({}, state, {
 				lang: action.lang,
 			})
 
-		case LOGIN_REQUEST:
+		case TypeKeys.LOGIN_REQUEST:
 			return _.assign({}, state, {
 				loggingIn: true,
 			})
 
-		case LOGIN_RESPONSE:
+		case TypeKeys.LOGIN_RESPONSE:
 			if (action.error) {
 				return _.assign({}, state, {
 					loggingIn: false,
@@ -67,7 +84,7 @@ const api = (
 				rateLimit: action.data.rateLimit,
 			})
 
-		case LOGOUT_REQUEST:
+		case TypeKeys.LOGOUT_REQUEST:
 			return _.assign({}, state, {
 				loggedIn: false,
 				key: null,
@@ -75,7 +92,7 @@ const api = (
 				rateLimit: null,
 			})
 
-		case CHECK_USER_RESPONSE:
+		case TypeKeys.CHECK_USER_RESPONSE:
 			if (!action.ok) {
 				return state
 			}
@@ -85,7 +102,7 @@ const api = (
 				rateLimit: action.data.rateLimit,
 			})
 
-		case CATALOG_RESPONSE:
+		case TypeKeys.CATALOG_RESPONSE:
 			return _.assign({}, state, {
 				types: {
 					...state.types,
@@ -97,5 +114,3 @@ const api = (
 			return state
 	}
 }
-
-export default api

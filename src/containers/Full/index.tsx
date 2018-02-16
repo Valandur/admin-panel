@@ -1,5 +1,6 @@
 import * as React from "react"
 import { connect, Dispatch } from "react-redux"
+import { RouteComponentProps } from "react-router"
 import { Switch, Route, Redirect } from "react-router-dom"
 import { Button, Sidebar, Segment, Message } from "semantic-ui-react"
 import { translate } from "react-i18next"
@@ -7,7 +8,7 @@ import * as Raven from "raven-js"
 import { Action } from "redux"
 import * as _ from "lodash"
 
-import { AppState, ViewDefinition } from "../../types"
+import { ViewDefinition, AppState } from "../../types"
 import { requestStats } from "../../actions/dashboard"
 
 import SidebarMenu from "../../components/Menu/SidebarMenu"
@@ -17,8 +18,8 @@ import views from "./Views"
 
 const baseIssueUrl = "https://github.com/Valandur/admin-panel/issues/new?"
 
-export interface Props extends reactI18Next.InjectedTranslateProps {
-	perms?: PermissionTree
+export interface Props extends reactI18Next.InjectedTranslateProps, RouteComponentProps<any> {
+	perms: PermissionTree
 	requestStats: () => Action
 }
 
@@ -72,7 +73,7 @@ class Full extends React.Component<Props, OwnState> {
 	getIssueUrl() {
 		return baseIssueUrl + "labels=bug" +
 			"&title=" + encodeURIComponent("[Issue] <Add a short description>") +
-			"&body=" + encodeURIComponent("<Say a little about what happend>\n\n" +
+			"&body=" + encodeURIComponent("<Say a little about what happened>\n\n" +
 				this.state.error + "\n\nStacktrace:" + this.state.stack) +
 			"&assignee=Valandur"
 	}
@@ -146,7 +147,7 @@ class Full extends React.Component<Props, OwnState> {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		perms: state.api.permissions,
+		perms: state.api.permissions
 	}
 }
 

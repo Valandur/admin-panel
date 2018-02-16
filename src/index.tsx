@@ -13,7 +13,7 @@ import * as NotificationSystem from "react-notification-system"
 import "./locales/i18n"
 
 // CSS
-import "semantic-ui-css/semantic.min.css"
+// import "semantic-ui-css/semantic.min.css"
 import "react-select/dist/react-select.css"
 import "rc-slider/assets/index.css"
 
@@ -60,23 +60,10 @@ const history = createBrowserHistory({
 	basename: window.config.basePath,
 })
 
-// Try and reconstruct state
-// let initialState = {}
-
-// if (window.localStorage) {
-// 	const str = window.localStorage.getItem("api")
-// 	const prevApi = str ? JSON.parse(str) : undefined
-
-// 	initialState = {
-// 		api: prevApi && prevApi.loggedIn ? prevApi : undefined,
-// 	}
-// }
-
 // Setup redux store
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 let store = createStore<AppState>(
 	App,
-	// initialState,
 	composeEnhancers(
 		applyMiddleware(
 			api,

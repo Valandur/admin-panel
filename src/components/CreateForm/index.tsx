@@ -4,12 +4,12 @@ import { translate } from "react-i18next"
 import * as _ from "lodash"
 
 import { handleChange, HandleChangeFunc } from "../Util"
-import { DataFieldGroup, DataFieldRaw, DataObject } from "../../types"
+import { DataFieldGroup, DataFieldRaw, DataObject, DataTableRef } from "../../types"
 
 export interface AppProps<T extends DataObject> extends reactI18Next.InjectedTranslateProps {
 	title: string
 	creating: boolean
-	onCreate: Function
+	onCreate: (data: any, view: DataTableRef) => void
 	button?: string
 	fields: {
 		[x: string]: DataFieldRaw<T>
@@ -49,8 +49,9 @@ class CreateForm<T extends DataObject> extends React.Component<AppProps<T>, AppS
 		_.each(this.state.newData, (value, name) => _.set(data, name, value))
 
 		this.props.onCreate(data, {
-			handleChange: this.handleChange,
 			state: this.state.newData,
+			setState: this.setState,
+			handleChange: this.handleChange,
 		})
 	}
 
@@ -119,8 +120,9 @@ class CreateForm<T extends DataObject> extends React.Component<AppProps<T>, AppS
 
 		if (typeof field.create === "function") {
 			return field.create({
-				handleChange: this.handleChange,
 				state: state,
+				setState: this.setState,
+				handleChange: this.handleChange,
 				value: state[field.name],
 			})
 		}

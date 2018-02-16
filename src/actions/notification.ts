@@ -1,19 +1,39 @@
 import { System } from "react-notification-system"
+import { Action } from "redux"
 
-export const SAVE_NOTIF_REF = "@@__WEBAPI/SAVE_NOTIF_REF__@@"
-export function saveNotifRef(ref: System) {
+export enum TypeKeys {
+	SAVE_NOTIF_REF = "@@__WEBAPI/SAVE_NOTIF_REF__@@",
+	SHOW_NOTIFICATION = "SHOW_NOTIFICATION",
+}
+
+export interface SaveNotifRefAction extends Action {
+	type: TypeKeys.SAVE_NOTIF_REF
+	ref: System
+}
+export function saveNotifRef(ref: System): SaveNotifRefAction {
 	return {
-		type: SAVE_NOTIF_REF,
+		type: TypeKeys.SAVE_NOTIF_REF,
 		ref: ref,
 	}
 }
 
-export const SHOW_NOTIFICATION = "SHOW_NOTIFICATION"
-export function showNotification(level: string, title: string, message: string) {
+export interface ShowNotificationAction extends Action {
+	type: TypeKeys.SHOW_NOTIFICATION
+	level: "error" | "warning" | "info" | "success"
+	title: string
+	message: string
+}
+export function showNotification(
+		level: "error" | "warning" | "info" | "success",
+		title: string,
+		message: string): ShowNotificationAction {
+
 	return {
-		type: SHOW_NOTIFICATION,
+		type: TypeKeys.SHOW_NOTIFICATION,
 		level: level,
 		title: title,
 		message: message,
 	}
 }
+
+export type NotificationAction = SaveNotifRefAction | ShowNotificationAction

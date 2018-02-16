@@ -12,25 +12,25 @@ export interface DataTableProps<T extends DataObject> extends reactI18Next.Injec
 	title: string
 	icon: SemanticICONS
 	list: T[]
-	canEdit: boolean
-	canDelete: boolean
+	canEdit?: boolean
+	canDelete?: boolean
 	fields: {
 		[key: string]: DataFieldRaw<T>
 	}
-	actions: (data: T, view: DataTableRef<T>) => JSX.Element
-	onEdit: (data: T | null, view: DataTableRef<T>) => void
-	onSave: (data: T, newData: T | {}, view: DataTableRef<T>) => void
-	onDelete: (data: T, view: DataTableRef<T>) => void
+	actions?: (data: T, view: DataTableRef) => JSX.Element
+	onEdit: (data: T | null, view: DataTableRef) => void
+	onSave: (data: T, newData: any, view: DataTableRef) => void
+	onDelete: (data: T, view: DataTableRef) => void
 	idFunc: (data: T) => string
 	isEditing: (data: T) => boolean
 }
 
-interface DataTableState<T> {
+interface DataTableState {
 	page: number
-	newData: T | {}
+	newData: any
 }
 
-class DataTable<T extends DataObject> extends React.Component<DataTableProps<T>, DataTableState<T>> {
+class DataTable<T extends DataObject> extends React.Component<DataTableProps<T>, DataTableState> {
 
 	handleChange: HandleChangeFunc
 
@@ -63,7 +63,7 @@ class DataTable<T extends DataObject> extends React.Component<DataTableProps<T>,
 		})
 	}
 
-	onEdit(obj: T | null, view: DataTableRef<T>) {
+	onEdit(obj: T | null, view: DataTableRef) {
 		const newData = {}
 		if (obj) {
 			_.each(this.props.fields, (field, name) => {
@@ -90,7 +90,7 @@ class DataTable<T extends DataObject> extends React.Component<DataTableProps<T>,
 
 		const listPage = list.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE)
 
-		const thisRef: DataTableRef<T> = {
+		const thisRef: DataTableRef = {
 			handleChange: this.handleChange,
 			state: this.state.newData,
 			setState: (changes: object) => this.setState({

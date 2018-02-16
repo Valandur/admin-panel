@@ -9,16 +9,18 @@ import * as _ from "lodash"
 import { handleChange, HandleChangeFunc } from "../../components/Util"
 import { requestLogin, changeServer, changeLanguage,
 	LoginRequestAction, ChangeServerAction, ChangeLanguageAction } from "../../actions"
-import { Server, AppState } from "../../types"
+import { Server, Lang, AppState } from "../../types"
 
-export interface Props extends reactI18Next.InjectedTranslateProps {
+interface StateProps {
 	loggingIn: boolean
-	server: Server
+	server?: Server
 	servers: Server[]
-	lang: string
+	lang: Lang
 	path: string
 	ok: boolean
+}
 
+interface Props extends StateProps, reactI18Next.InjectedTranslateProps {
 	changeServer: (server: Server) => ChangeServerAction
 	onLoginClick: (username: string, password: string) => LoginRequestAction
 	changeLanguage: (lang: string) => ChangeLanguageAction
@@ -91,7 +93,7 @@ class Login extends React.Component<Props, OwnState> {
 									name="server"
 									control={Dropdown}
 									placeholder={_t("Server")}
-									value={this.props.server.apiUrl}
+									value={this.props.server ? this.props.server.apiUrl : null}
 									onChange={this.handleChange}
 									options={_.map(this.props.servers, s => ({ value: s.apiUrl, text: s.name }))}
 								/>
@@ -147,7 +149,7 @@ class Login extends React.Component<Props, OwnState> {
 	}
 }
 
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: AppState): StateProps => {
 	return {
 		ok: state.api.loggedIn,
 		lang: state.api.lang,

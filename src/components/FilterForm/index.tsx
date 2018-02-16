@@ -80,8 +80,9 @@ class FilterForm<T extends DataObject> extends React.Component<AppProps<T>> {
 	renderField(field: DataFieldRaw<T>, value: string | string[], error: boolean) {
 		if (typeof field.filter === "function") {
 			return field.filter({
-				handleChange: this.handleChange,
 				state: this.props.values,
+				setState: this.setState,
+				handleChange: this.handleChange,
 				value: value,
 			})
 		}

@@ -1,12 +1,12 @@
 import * as _ from "lodash"
 
-import { LOGIN_RESPONSE } from "../actions"
-import { SAVE_NOTIF_REF, SHOW_NOTIFICATION } from "../actions/notification"
-import { EXECUTE_RESPONSE } from "../actions/command"
-import { DATA_CREATE_RESPONSE, DATA_CHANGE_RESPONSE, DATA_DELETE_RESPONSE } from "../actions/dataview"
-import { PLAYER_KICK_RESPONSE, PLAYER_BAN_RESPONSE } from "../actions/player"
-import { Middleware, MiddlewareAPI } from "redux"
-import { AppState } from "../types"
+import { TypeKeys, AppAction } from "../actions"
+import { TypeKeys as NotifTypeKeys } from "../actions/notification"
+import { TypeKeys as CmdTypeKeys } from "../actions/command"
+import { TypeKeys as DataTypeKeys } from "../actions/dataview"
+import { TypeKeys as PlayerTypeKeys } from "../actions/player"
+import { MiddlewareAPI, Dispatch, Action } from "redux"
+import { AppState, ExtendedMiddleware } from "../types"
 import { System } from "react-notification-system"
 
 let notifRef: System
@@ -16,26 +16,24 @@ const showNotif = (level: "error" | "warning" | "info" | "success", title: strin
 		level: level,
 		title: title,
 		message: message,
-		position: "br",
+		position: "tr",
 	})
 
-const persist: Middleware = ({ dispatch, getState }: MiddlewareAPI<AppState>) => next => action => {
+const persist: ExtendedMiddleware<AppState> = ({ dispatch, getState }: MiddlewareAPI<AppState>) =>
+		(next: Dispatch<Action>) => (action: AppAction): any => {
 	next(action)
 
 	switch (action.type) {
-		case SAVE_NOTIF_REF:
+		case NotifTypeKeys.SAVE_NOTIF_REF:
 			notifRef = action.ref
 			break
 
-		case SHOW_NOTIFICATION:
+		case NotifTypeKeys.SHOW_NOTIFICATION:
 			let msg = action.message
-			if (_.isObject(msg)) {
-				msg = msg.message
-			}
 			showNotif(action.level, action.title, msg)
 			break
 
-		case LOGIN_RESPONSE:
+		case TypeKeys.LOGIN_RESPONSE:
 			if (action.error) {
 				if (action.error.status === 401 || action.error.status === 403) {
 					showNotif(
@@ -51,12 +49,12 @@ const persist: Middleware = ({ dispatch, getState }: MiddlewareAPI<AppState>) =>
 			}
 			break
 
-		case EXECUTE_RESPONSE:
+		case CmdTypeKeys.EXECUTE_RESPONSE:
 			if (!action.ok) {
 				showNotif(
 					"error",
 					"Could not run command: " + action.command,
-					action.error.error)
+					action.error ? action.error.error : "General error")
 			} else {
 				showNotif(
 					"success",
@@ -65,12 +63,12 @@ const persist: Middleware = ({ dispatch, getState }: MiddlewareAPI<AppState>) =>
 			}
 			break
 
-		case DATA_CREATE_RESPONSE:
-			if (!action.ok) {
+		case DataTypeKeys.CREATE_RESPONSE:
+			if (action.err || !action.data) {
 				showNotif(
 					"error",
 					_.upperFirst(action.endpoint),
-					action.error.error)
+					action.err ? action.err.error : "No response data")
 			} else {
 				showNotif(
 					"success",
@@ -79,12 +77,12 @@ const persist: Middleware = ({ dispatch, getState }: MiddlewareAPI<AppState>) =>
 			}
 			break
 
-		case DATA_CHANGE_RESPONSE:
-			if (!action.ok) {
+		case DataTypeKeys.CHANGE_RESPONSE:
+			if (action.err) {
 					showNotif(
 						"error",
 						_.upperFirst(action.endpoint),
-						action.error.error)
+						action.err.error)
 			} else {
 				showNotif(
 					"success",
@@ -93,12 +91,12 @@ const persist: Middleware = ({ dispatch, getState }: MiddlewareAPI<AppState>) =>
 			}
 			break
 
-		case DATA_DELETE_RESPONSE:
-			if (!action.ok) {
+		case DataTypeKeys.DELETE_RESPONSE:
+			if (action.err) {
 					showNotif(
 						"error",
 						_.upperFirst(action.endpoint),
-						action.error.error)
+						action.err.error)
 			} else {
 				showNotif(
 					"success",
@@ -107,14 +105,14 @@ const persist: Middleware = ({ dispatch, getState }: MiddlewareAPI<AppState>) =>
 			}
 			break
 
-		case PLAYER_KICK_RESPONSE:
+		case PlayerTypeKeys.KICK_RESPONSE:
 			showNotif(
 				"success",
 				"Kick " + action.player.name,
 				"Player has been kicked from the server")
 			break
 
-		case PLAYER_BAN_RESPONSE:
+		case PlayerTypeKeys.BAN_RESPONSE:
 			showNotif(
 				"success",
 				"Ban " + action.player.name,

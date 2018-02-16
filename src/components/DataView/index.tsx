@@ -1,14 +1,14 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { Segment, Grid } from "semantic-ui-react"
-import { Dispatch, Action } from "redux"
+import { Dispatch } from "redux"
 import * as _ from "lodash"
 
 import DataTable, { DataTableProps } from "../DataTable"
 import FilterForm from "../FilterForm"
 import CreateForm from "../CreateForm"
 import { checkPermissions } from "../Util"
-import { IdFunction, DataViewRef, DataObject, DataFieldRaw, AppState, DataViewState } from "../../types"
+import { IdFunction, DataViewRef, DataObject, DataFieldRaw, AppState, DataTableRef } from "../../types"
 import { FullProps, OwnState, OwnProps, StateProps, DispatchProps } from "./types"
 
 import {
@@ -19,6 +19,8 @@ import {
 	requestChange,
 	requestDelete,
 } from "../../actions/dataview"
+import { DataViewState } from "../../reducers/dataview"
+import { AppAction } from "../../actions";
 
 class DataView<T extends DataObject> extends React.Component<FullProps<T>, OwnState<T>> {
 
@@ -96,13 +98,14 @@ class DataView<T extends DataObject> extends React.Component<FullProps<T>, OwnSt
 		let regsValid = false
 
 		// Reference that we pass to our various functions
-		const thisRef: DataViewRef<T> = {
-			create: this.create,
-			details: this.details,
-			save: this.save,
-			edit: this.edit,
-			delete: this.delete,
-		}
+		const expandRef = (tableRef: DataTableRef): DataViewRef<T> =>
+			_.assign({}, tableRef, {
+				create: this.create,
+				details: this.details,
+				save: this.save,
+				edit: this.edit,
+				delete: this.delete,
+			})
 
 		// Get all the fields of the table
 		const fields: { [x: string]:  DataFieldRaw<T> } = _.mapValues(this.props.fields, (value, name) => {
@@ -117,12 +120,12 @@ class DataView<T extends DataObject> extends React.Component<FullProps<T>, OwnSt
 			if (typeof value === "string") {
 				val.label = value
 			} else if (typeof value === "function") {
-				val.view = (obj: T, tableRef: DataViewRef<T>) => value(obj, _.assign({}, tableRef, thisRef))
+				val.view = (obj: T, tableRef: DataTableRef) => value(obj, expandRef(tableRef))
 			} else if (typeof value === "object") {
 				_.assign(val, value)
 				if (typeof value.view === "function") {
 					const func = value.view
-					val.view = (obj: T, tableRef: DataViewRef<T>) => func(obj, _.assign({}, tableRef, thisRef))
+					val.view = (obj: T, tableRef: DataTableRef) => func(obj, expandRef(tableRef))
 				}
 			}
 
@@ -183,7 +186,7 @@ class DataView<T extends DataObject> extends React.Component<FullProps<T>, OwnSt
 		const origActions = this.props.actions
 		let actions = origActions
 		if (typeof origActions === "function") {
-			actions = (obj, tableRef) => origActions(obj, _.assign({}, tableRef, thisRef))
+			actions = (obj, tableRef) => origActions(obj, expandRef(tableRef))
 		}
 
 		const DT = this.createTable()
@@ -201,9 +204,9 @@ class DataView<T extends DataObject> extends React.Component<FullProps<T>, OwnSt
 								button={this.props.createButton}
 								creating={this.props.creating}
 								fields={createFields}
-								onCreate={(obj: T, view: DataViewRef<T>) =>
+								onCreate={(obj: T, tableRef: DataTableRef) =>
 									this.props.onCreate ?
-										this.props.onCreate(obj, _.assign({}, thisRef, view))
+										this.props.onCreate(obj, expandRef(tableRef))
 									:
 										this.create(obj)
 								}
@@ -231,21 +234,21 @@ class DataView<T extends DataObject> extends React.Component<FullProps<T>, OwnSt
 					t={this.props.t}
 					idFunc={this.props.idFunc}
 					fields={fields}
-					onEdit={(obj, view) =>
+					onEdit={(obj, tableRef) =>
 						this.props.onEdit ?
-							this.props.onEdit(obj, _.assign({}, thisRef, view))
+							this.props.onEdit(obj, expandRef(tableRef))
 						:
 							this.edit(obj)
 					}
-					onSave={(obj, newObj, view) =>
+					onSave={(obj, newObj, tableRef) =>
 						this.props.onSave ?
-							this.props.onSave(obj, newObj, _.assign({}, thisRef, view))
+							this.props.onSave(obj, newObj, expandRef(tableRef))
 						:
 							this.save(obj, newObj)
 					}
-					onDelete={(obj, view) =>
+					onDelete={(obj, tableRef) =>
 						this.props.onDelete ?
-							this.props.onDelete(obj, _.assign({}, thisRef, view))
+							this.props.onDelete(obj, expandRef(tableRef))
 						:
 							this.delete(obj)
 					}
@@ -278,7 +281,7 @@ function mapStateToProps<T>(endpoint: string, id: IdFunction<T>) {
 }
 
 function mapDispatchToProps<T>(endpoint: string, id: IdFunction<T>, noDetails: boolean) {
-	return (dispatch: Dispatch<Action>) => {
+	return (dispatch: Dispatch<AppAction>) => {
 		return {
 			requestList: () => dispatch(requestList(endpoint, !noDetails)),
 			requestDetails: (data: T) => dispatch(requestDetails(endpoint, id, data)),
@@ -291,7 +294,7 @@ function mapDispatchToProps<T>(endpoint: string, id: IdFunction<T>, noDetails: b
 	}
 }
 
-export default function createDataView<T>(endpoint: string, objId: string | IdFunction<T>, noDetails: boolean) {
+export default function createDataView<T>(endpoint: string, objId: string | IdFunction<T>, noDetails?: boolean) {
 	if (!objId) {
 		objId = "id"
 	}
@@ -299,6 +302,6 @@ export default function createDataView<T>(endpoint: string, objId: string | IdFu
 
 	return connect<StateProps<T>, DispatchProps<T>, OwnProps<T>, AppState>(
 		mapStateToProps<T>(endpoint, id),
-		mapDispatchToProps<T>(endpoint, id, noDetails)
+		mapDispatchToProps<T>(endpoint, id, noDetails ? true : false)
 	)(DataView)
 }

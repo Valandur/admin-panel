@@ -3,12 +3,12 @@ import { connect } from "react-redux"
 import { NavLink } from "react-router-dom"
 import { Sidebar, Menu, Icon, Progress } from "semantic-ui-react"
 import { translate } from "react-i18next"
-import { Dispatch, Action } from "redux"
+import { Dispatch } from "redux"
 
-import { requestServlets } from "../../actions"
+import { requestServlets, ServletsRequestAction, AppAction } from "../../actions"
 
 import { checkPermissions, PermissionTree } from "../../components/Util"
-import { ViewDefinition, AppState, ServerStat } from "../../types"
+import { ViewDefinition, ServerStat, AppState } from "../../types"
 
 export interface Props extends reactI18Next.InjectedTranslateProps {
 	// State
@@ -24,7 +24,7 @@ export interface Props extends reactI18Next.InjectedTranslateProps {
 	views: ViewDefinition[]
 
 	// Dispatch
-	requestServlets: () => Action
+	requestServlets: () => ServletsRequestAction
 }
 
 class SidebarMenu extends React.Component<Props> {
@@ -126,7 +126,7 @@ const mapStateToProps = (state: AppState) => {
 	}
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
+const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		requestServlets: () => dispatch(requestServlets()),
 	}

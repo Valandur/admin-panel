@@ -1,28 +1,73 @@
-export const PLUGIN_CONFIG_REQUEST = "PLUGIN_CONFIG_REQUEST"
-export const PLUGIN_CONFIG_RESPONSE = "PLUGIN_CONFIG_RESPONSE"
-export function requestPluginConfig(id: string) {
+import { Action } from "redux"
+
+export enum TypeKeys {
+	CONFIG_REQUEST = "PLUGIN_CONFIG_REQUEST",
+	CONFIG_RESPONSE = "PLUGIN_CONFIG_RESPONSE",
+	CONFIG_SET = "PLUGIN_CONFIG_SET",
+	CONFIG_SAVE_REQUEST = "PLUGIN_CONFIG_SAVE_REQUEST",
+	CONFIG_SAVE_RESPONSE = "PLUGIN_CONFIG_SAVE_RESPONSE",
+}
+
+export interface PluginConfigRequestAction extends Action {
+	type: TypeKeys.CONFIG_REQUEST
+	id: string
+}
+export function requestPluginConfig(id: string): PluginConfigRequestAction {
 	return {
-		type: PLUGIN_CONFIG_REQUEST,
+		type: TypeKeys.CONFIG_REQUEST,
 		id: id,
 	}
 }
 
-export const PLUGIN_CONFIG_SET = "PLUGIN_CONFIG_SET"
-export function setPluginConfig(name: string, conf: object) {
+export interface PluginConfigResponseAction extends Action {
+	type: TypeKeys.CONFIG_RESPONSE
+	configs: object[]
+}
+export function respondPluginConfig(configs: object[]): PluginConfigResponseAction {
 	return {
-		type: PLUGIN_CONFIG_SET,
+		type: TypeKeys.CONFIG_RESPONSE,
+		configs,
+	}
+}
+
+export interface SetPluginConfigAction extends Action {
+	type: TypeKeys.CONFIG_SET
+	name: string
+	conf: object
+}
+export function setPluginConfig(name: string, conf: object): SetPluginConfigAction {
+	return {
+		type: TypeKeys.CONFIG_SET,
 		name: name,
 		conf: conf,
 	}
 }
 
-export const PLUGIN_CONFIG_SAVE_REQUEST = "PLUGIN_CONFIG_SAVE_REQUEST"
-export const PLUGIN_CONFIG_SAVE_RESPONSE = "PLUGIN_CONFIG_SAVE_RESPONSE"
-export function requestPluginConfigSave(id: string, plugin: string, configs: Array<string>) {
+export interface PluginConfigSaveRequestAction extends Action {
+	type: TypeKeys.CONFIG_SAVE_REQUEST
+	id: string
+	plugin: string
+	configs: object[]
+}
+export function requestPluginConfigSave(id: string, plugin: string, configs: object[]): PluginConfigSaveRequestAction {
 	return {
-		type: PLUGIN_CONFIG_SAVE_REQUEST,
+		type: TypeKeys.CONFIG_SAVE_REQUEST,
 		id: id,
 		plugin: plugin,
 		configs: configs,
 	}
 }
+
+export interface PluginConfigSaveResponseAction extends Action {
+	type: TypeKeys.CONFIG_SAVE_RESPONSE
+	configs: object[]
+}
+export function respondPluginConfigSave(configs: object[]): PluginConfigSaveResponseAction {
+	return {
+		type: TypeKeys.CONFIG_SAVE_RESPONSE,
+		configs,
+	}
+}
+
+export type PluginAction = PluginConfigRequestAction | PluginConfigResponseAction | SetPluginConfigAction |
+	PluginConfigSaveRequestAction | PluginConfigSaveResponseAction

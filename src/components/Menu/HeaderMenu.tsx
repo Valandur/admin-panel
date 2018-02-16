@@ -3,9 +3,9 @@ import { connect } from "react-redux"
 import { Menu, Icon, Image, Dropdown, MenuItemProps } from "semantic-ui-react"
 import { translate } from "react-i18next"
 
-import { requestLogout, changeLanguage, ChangeLanguageAction } from "../../actions"
-import { AppState } from "../../types"
-import { Action, Dispatch } from "redux"
+import { requestLogout, changeLanguage, ChangeLanguageAction, LogoutRequestAction, AppAction } from "../../actions"
+import { Dispatch } from "redux"
+import { Lang, AppState } from "../../types"
 
 const apiLink = "/docs"
 const spongeLink = "https://forums.spongepowered.org/t/" +
@@ -14,9 +14,9 @@ const docsLink = "https://github.com/Valandur/Web-API/blob/master/docs/INDEX.md"
 const issuesLink = "https://github.com/Valandur/admin-panel/issues"
 
 export interface AppProps extends reactI18Next.InjectedTranslateProps {
-	lang: string
+	lang: Lang
 	changeLanguage: (lang: string) => ChangeLanguageAction
-	requestLogout: () => Action
+	requestLogout: () => LogoutRequestAction
 	toggleSidebar?: (event: React.MouseEvent<HTMLElement>, data: MenuItemProps) => void
 }
 
@@ -91,7 +91,7 @@ const mapStateToProps = (state: AppState) => {
 	}
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
+const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		requestLogout: () => dispatch(requestLogout()),
 		changeLanguage: (lang: string) => dispatch(changeLanguage(lang)),

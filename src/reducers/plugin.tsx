@@ -1,16 +1,26 @@
 import * as _ from "lodash"
-import { Action } from "redux"
 
-import { PLUGIN_CONFIG_RESPONSE, PLUGIN_CONFIG_SET } from "../actions/plugin"
+import { TypeKeys } from "../actions/plugin"
+import { AppAction } from "../actions"
 
-const plugin = (state = {}, action: Action) => {
+export interface PluginState {
+	configs: {
+		[x: string]: object
+	}
+}
+
+const initialState: PluginState = {
+	configs: {}
+}
+
+export default (state = initialState, action: AppAction) => {
 	switch (action.type) {
-		case PLUGIN_CONFIG_RESPONSE:
+		case TypeKeys.CONFIG_RESPONSE:
 			return _.assign({}, state, {
 				configs: _.assign({}, action.configs),
 			})
 
-		case PLUGIN_CONFIG_SET:
+		case TypeKeys.CONFIG_SET:
 			return _.assign({}, state, {
 				configs: _.assign({}, state.configs, {
 					[action.name]: action.conf,
@@ -21,5 +31,3 @@ const plugin = (state = {}, action: Action) => {
 			return state
 	}
 }
-
-export default plugin

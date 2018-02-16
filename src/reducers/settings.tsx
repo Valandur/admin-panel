@@ -1,14 +1,22 @@
 import * as _ from "lodash"
-import { Action } from "redux"
 
-import { EDIT_PROPERTY, SET_PROPERTY } from "../actions/settings"
-import { SAVE_PROPERTY_REQUEST, SAVE_PROPERTY_RESPONSE } from "../actions/settings"
+import { TypeKeys } from "../actions/settings"
+import { AppAction } from "../actions"
+import { ServerProp } from "../types"
 
-const toPropItem = (value: string, key: string) => ({ key, value })
+export interface SettingsState {
+	properties: ServerProp[]
+}
 
-const settings = (state = { properties: []}, action: Action) => {
-	switch(action.type) {
-		case EDIT_PROPERTY:
+const initialState: SettingsState = {
+	properties: []
+}
+
+const toPropItem = (value: string, key: string): ServerProp => ({ key, value })
+
+export default (state = initialState, action: AppAction) => {
+	switch (action.type) {
+		case TypeKeys.EDIT_PROPERTY:
 			return _.assign({}, state, {
 				properties: _.map(state.properties, prop => {
 					if (prop.key !== action.prop.key) {
@@ -20,7 +28,7 @@ const settings = (state = { properties: []}, action: Action) => {
 				})
 			})
 
-		case SET_PROPERTY:
+		case TypeKeys.SET_PROPERTY:
 			return _.assign({}, state, {
 				properties: _.map(state.properties, prop => {
 					if (prop.key !== action.prop.key) {
@@ -32,7 +40,7 @@ const settings = (state = { properties: []}, action: Action) => {
 				})
 			})
 
-		case SAVE_PROPERTY_REQUEST:
+		case TypeKeys.SAVE_PROPERTY_REQUEST:
 			return _.assign({}, state, {
 				properties: _.map(state.properties, prop => {
 					if (prop.key !== action.prop.key) {
@@ -44,7 +52,7 @@ const settings = (state = { properties: []}, action: Action) => {
 				})
 			})
 
-		case SAVE_PROPERTY_RESPONSE:
+		case TypeKeys.SAVE_PROPERTY_RESPONSE:
 			return _.assign({}, state, {
 				properties: _.map(action.properties, (value, key) => {
 					const prop = toPropItem(value, key)
@@ -64,5 +72,3 @@ const settings = (state = { properties: []}, action: Action) => {
 			return state
 	}
 }
-
-export default settings

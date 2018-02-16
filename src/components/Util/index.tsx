@@ -51,7 +51,7 @@ export interface PermissionTree {
 	[x: string]: boolean | string | PermissionTree
 }
 
-export function checkPermissions(_perms: PermissionTree | boolean, path: Array<string>): boolean {
+export function checkPermissions(_perms: PermissionTree | boolean | undefined, path: Array<string>): boolean {
 	if (!path || path.length === 0) {
 		return true
 	}

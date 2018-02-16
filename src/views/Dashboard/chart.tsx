@@ -1,4 +1,6 @@
-export default _t => ({
+import { TranslationFunction } from "react-i18next"
+
+export default (_t: TranslationFunction) => ({
 	// Line for the info chart
 	lineInfo: {
 		datasets: [{
@@ -54,7 +56,7 @@ export default _t => ({
 					display: true,
 					labelString: _t("NumTPS"),
 				},
-			},{
+			}, {
 				type: "linear",
 				id: "players",
 				gridLines: {
@@ -115,9 +117,9 @@ export default _t => ({
 		tooltips: {
 			mode: "label",
 			callbacks: {
-				label: function(tooltipItem, data) {
-					return " " + data.datasets[tooltipItem.datasetIndex].label + ": " + 
-						tooltipItem.yLabel.toFixed(2) + "%";
+				label: function(tooltipItem: { datasetIndex: number, yLabel: number }, data: any) {
+					return " " + data.datasets[tooltipItem.datasetIndex].label + ": " +
+						tooltipItem.yLabel.toFixed(2) + "%"
 				}
 			}
 		},

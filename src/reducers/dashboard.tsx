@@ -1,13 +1,19 @@
 import * as _ from "lodash"
-import { Action } from "redux"
-import { DashboardStore } from "../types"
 
-import {
-	INFO_RESPONSE,
-	STATS_RESPONSE,
-} from "../actions/dashboard"
+import { TypeKeys } from "../actions/dashboard"
+import { AppAction } from "../actions"
+import { ServerStat, InfoData } from "../types"
 
-const defaultState: DashboardStore = {
+export interface DashboardState {
+	tps: ServerStat[]
+	players: ServerStat[]
+	cpu: ServerStat[]
+	memory: ServerStat[]
+	disk: ServerStat[]
+	data?: InfoData
+}
+
+const defaultState: DashboardState = {
 	tps: [],
 	players: [],
 	cpu: [],
@@ -15,14 +21,14 @@ const defaultState: DashboardStore = {
 	disk: [],
 }
 
-const dashboard = (state: DashboardStore = defaultState, action: Action) => {
+export default (state = defaultState, action: AppAction) => {
 	switch (action.type) {
-		case INFO_RESPONSE:
+		case TypeKeys.INFO_RESPONSE:
 			return _.merge({}, state, {
 				data: action.data,
 			})
 
-		case STATS_RESPONSE:
+		case TypeKeys.STATS_RESPONSE:
 			return _.assign({}, state, {
 				tps: action.tps,
 				players: action.players,
@@ -35,5 +41,3 @@ const dashboard = (state: DashboardStore = defaultState, action: Action) => {
 			return state
 	}
 }
-
-export default dashboard

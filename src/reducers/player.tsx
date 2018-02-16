@@ -1,14 +1,19 @@
 import * as _ from "lodash"
-import { Action } from "redux"
 
-import {
-	PLAYER_KICK_REQUEST, PLAYER_KICK_RESPONSE,
-	PLAYER_BAN_REQUEST, PLAYER_BAN_RESPONSE,
-} from "../actions/player"
+import { TypeKeys } from "../actions/player"
+import { AppAction } from "../actions"
+import { Player } from "../types"
+import { DataViewState } from "./dataview"
 
-const player = (state = {}, action: Action) => {
-	switch(action.type) {
-		case PLAYER_KICK_REQUEST:
+const initialState: DataViewState<Player> = {
+	creating: false,
+	filter: {},
+	list: [],
+}
+
+export default (state = initialState, action: AppAction) => {
+	switch (action.type) {
+		case TypeKeys.KICK_REQUEST:
 			return _.assign({}, state, {
 				list: _.map(state.list, p => {
 					if (p.uuid !== action.player.uuid) {
@@ -18,7 +23,7 @@ const player = (state = {}, action: Action) => {
 				})
 			})
 
-		case PLAYER_KICK_RESPONSE:
+		case TypeKeys.KICK_RESPONSE:
 			if (!action.ok) {
 				return _.assign({}, state, {
 					list: _.map(state.list, p => {
@@ -33,7 +38,7 @@ const player = (state = {}, action: Action) => {
 				list: _.filter(state.list, p => p.uuid !== action.player.uuid)
 			})
 
-		case PLAYER_BAN_REQUEST:
+		case TypeKeys.BAN_REQUEST:
 			return _.assign({}, state, {
 				list: _.map(state.list, p => {
 					if (p.uuid !== action.player.uuid) {
@@ -43,7 +48,7 @@ const player = (state = {}, action: Action) => {
 				})
 			})
 
-		case PLAYER_BAN_RESPONSE:
+		case TypeKeys.BAN_RESPONSE:
 			if (!action.ok) {
 				return _.assign({}, state, {
 					list: _.map(state.list, p => {
@@ -62,5 +67,3 @@ const player = (state = {}, action: Action) => {
 			return state
 	}
 }
-
-export default player

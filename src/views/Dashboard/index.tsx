@@ -1,19 +1,46 @@
-import React, { Component } from 'react'
+import * as React from "react"
 import { connect } from "react-redux"
-import { Grid, Segment, Card, Message } from "semantic-ui-react"
+import { Grid, Segment, Card, Message, SemanticCOLORS } from "semantic-ui-react"
 import { Line } from "react-chartjs-2"
-import { translate, Trans } from "react-i18next";
-import _ from "lodash"
+import { translate, Trans } from "react-i18next"
+import * as _ from "lodash"
 
-import { requestInfo } from "../../actions/dashboard"
+import { requestInfo, InfoRequestAction } from "../../actions/dashboard"
 
 import graphConfig from "./chart"
-import { checkPermissions } from "../../components/Util"
+import { checkPermissions, PermissionTree } from "../../components/Util"
+import { AppState, ServerStat, InfoData } from "../../types"
+import { Dispatch } from "redux"
+import { AppAction } from "../../actions"
 
-class Dashboard extends Component {
+interface StateProps {
+	tps: ServerStat[]
+	players: ServerStat[]
+	cpu: ServerStat[]
+	memory: ServerStat[]
+	disk: ServerStat[]
+	data?: InfoData
+	perms?: PermissionTree
+}
 
-	constructor(props) {
-		super(props);
+interface DispatchProps {
+	requestInfo: () => InfoRequestAction
+}
+
+interface Props extends StateProps, DispatchProps, reactI18Next.InjectedTranslateProps {}
+
+class Dashboard extends React.Component<Props, {}> {
+
+	interval: NodeJS.Timer
+
+	lineInfo: any
+	optionsInfo: any
+
+	lineStats: any
+	optionsStats: any
+
+	constructor(props: Props) {
+		super(props)
 
 		const config = graphConfig(props.t)
 
@@ -26,13 +53,15 @@ class Dashboard extends Component {
 
 	componentDidMount() {
 		if (checkPermissions(this.props.perms, ["info", "get"])) {
-			this.props.requestInfo();
-			this.interval = setInterval(this.props.requestInfo, 5000);
+			this.props.requestInfo()
+			this.interval = setInterval(this.props.requestInfo, 5000)
 		}
 	}
 
 	componentWillUnmount() {
-		if (this.interval) clearInterval(this.interval);
+		if (this.interval) {
+			clearInterval(this.interval)
+		}
 	}
 
 	render() {
@@ -40,9 +69,11 @@ class Dashboard extends Component {
 
 		// Exit early if we have no data. No permissions?
 		if (!this.props.data) {
-			return <Segment basic>
-				<Message negative size="large" content={_t("NoData")} />
-			</Segment>
+			return (
+				<Segment basic>
+					<Message negative size="large" content={_t("NoData")} />
+				</Segment>
+			)
 		}
 
 		this.lineInfo.datasets[0].data = _.map(this.props.tps, p => ({
@@ -67,199 +98,209 @@ class Dashboard extends Component {
 			y: p.value * 100,
 		}))
 
-		let playerState = "blue";
+		let playerState: SemanticCOLORS = "blue"
 		if (this.props.data) {
-			const ratio = this.props.data.players / this.props.data.maxPlayers;
-			if (ratio > 0.95)
-				playerState = "red";
-			else if (ratio > 0.8)
-				playerState = "yellow";
-			else
-				playerState = "green";
+			const ratio = this.props.data.players / this.props.data.maxPlayers
+			if (ratio > 0.95) {
+				playerState = "red"
+			} else if (ratio > 0.8) {
+				playerState = "yellow"
+			} else {
+				playerState = "green"
+			}
 		}
 
-		let tpsState = "blue";
+		let tpsState: SemanticCOLORS = "blue"
 		if (this.props.data) {
-			if (this.props.data.tps >= 19.5)
-				tpsState = "green";
-			else if (this.props.data.tps >= 15)
-				tpsState = "yellow";
-			else
-				tpsState = "red";
+			if (this.props.data.tps >= 19.5) {
+				tpsState = "green"
+			} else if (this.props.data.tps >= 15) {
+				tpsState = "yellow"
+			} else {
+				tpsState = "red"
+			}
 		}
 
-		return <Segment basic>
-			<Message info>
-				<Message.Header>{_t("WIPTitle")}</Message.Header>
-				<p>
-					<Trans i18nKey="WIPText">
-						The Web-API AdminPanel is still a work in progress, and not all of it's functionality 
-						has been fully implemented yet. This means there may be bugs and other issues when 
-						using the AdminPanel!
-						<br />
-						Please report any bugs you find <a href='https://github.com/Valandur/Web-API/issues' target='_blank' rel='noopener noreferrer'>over on GitHub</a>
-					</Trans>
-					
-				</p>
-			</Message>
+		return (
+			<Segment basic>
+				<Message info>
+					<Message.Header>{_t("WIPTitle")}</Message.Header>
+					<p>
+						<Trans i18nKey="WIPText">
+							The Web-API AdminPanel is still a work in progress, and not all of it's functionality
+							has been fully implemented yet. This means there may be bugs and other issues when
+							using the AdminPanel!
+							<br />
+							Please report any bugs you find
+							<a
+								href="https://github.com/Valandur/Web-API/issues"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								over on GitHub
+							</a>
+						</Trans>
+					</p>
+				</Message>
 
-			<Grid columns={4} stackable doubling>
-				
-				<Grid.Column>
-					<Card color={playerState}>
-						<Card.Content>
-							<Card.Header>
-								{this.props.data.players}/{this.props.data.maxPlayers}
-							</Card.Header>
-							<Card.Description>
-								{_t("PlayersOnline")}
-							</Card.Description>
-						</Card.Content>
-					</Card>
-				</Grid.Column>
+				<Grid columns={4} stackable doubling>
 
-				<Grid.Column>
-					<Card color={tpsState}>
-						<Card.Content>
-							<Card.Header>
-								{this.props.data.tps}
-							</Card.Header>
-							<Card.Description>
-								{_t("CurrentTPS")}
-							</Card.Description>
-						</Card.Content>
-					</Card>
-				</Grid.Column>
-
-				<Grid.Column>
-					<Card color="blue">
-						<Card.Content>
-							<Card.Header>
-								{this.props.data.address}
-							</Card.Header>
-							<Card.Description>
-								{_t("ServerAddress")}
-							</Card.Description>
-						</Card.Content>
-					</Card>
-				</Grid.Column>
-
-				<Grid.Column>
-					<Card color="blue">
-						<Card.Content>
-							<Card.Header>
-								{this.props.data.onlineMode ? "Yes" : "No"}
-							</Card.Header>
-							<Card.Description>
-								{_t("OnlineMode")}
-							</Card.Description>
-						</Card.Content>
-					</Card>
-				</Grid.Column>
-
-				<Grid.Column>
-					<Card color="blue">
-						<Card.Content>
-							<Card.Header>
-								{this.props.data.uptimeTicks}
-							</Card.Header>
-							<Card.Description>
-								{_t("UptimeTicks")}
-							</Card.Description>
-						</Card.Content>
-					</Card>
-				</Grid.Column>
-
-				<Grid.Column>
-					<Card color="blue">
-						<Card.Content>
-							<Card.Header>
-								{this.props.data.game.version}
-							</Card.Header>
-							<Card.Description>
-								{_t("MinecraftVersion")}
-							</Card.Description>
-						</Card.Content>
-					</Card>
-				</Grid.Column>
-
-				<Grid.Column>
-					<Card color="blue">
-						<Card.Content>
-							<Card.Header>
-								{this.props.data.api.version}
-							</Card.Header>
-							<Card.Description>
-								{_t("APIVersion")}
-							</Card.Description>
-						</Card.Content>
-					</Card>
-				</Grid.Column>
-
-				<Grid.Column>
-					<Card color="blue">
-						<Card.Content>
-							<Card.Header>
-								{this.props.data.implementation.version}
-							</Card.Header>
-							<Card.Description>
-								{_t("SpongeVersion")}
-							</Card.Description>
-						</Card.Content>
-					</Card>
-				</Grid.Column>
-
-				{checkPermissions(this.props.perms, ["info", "stats"]) &&
-					<Grid.Column width={8}>
-						<Card style={{ width: "100%", height: "50vh" }}>
+					<Grid.Column>
+						<Card color={playerState}>
 							<Card.Content>
 								<Card.Header>
-									{_t("GraphTitleInfo")}
+									{this.props.data.players}/{this.props.data.maxPlayers}
 								</Card.Header>
+								<Card.Description>
+									{_t("PlayersOnline")}
+								</Card.Description>
 							</Card.Content>
-							<div style={{ width: "100%", height: "100%", padding: "1em" }}>
-								<Line data={this.lineInfo} options={this.optionsInfo} />
-							</div>
 						</Card>
-					</Grid.Column>}
+					</Grid.Column>
 
-				{checkPermissions(this.props.perms, ["info", "stats"]) &&
-					<Grid.Column width={8}>
-						<Card style={{ width: "100%", height: "50vh" }}>
+					<Grid.Column>
+						<Card color={tpsState}>
 							<Card.Content>
 								<Card.Header>
-									{_t("GraphTitleStats")}
+									{this.props.data.tps}
 								</Card.Header>
+								<Card.Description>
+									{_t("CurrentTPS")}
+								</Card.Description>
 							</Card.Content>
-							<div style={{ width: "100%", height: "100%", padding: "1em" }}>
-								<Line data={this.lineStats} options={this.optionsStats} />
-							</div>
 						</Card>
-					</Grid.Column>}
-			</Grid>
-		</Segment>
+					</Grid.Column>
+
+					<Grid.Column>
+						<Card color="blue">
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.address}
+								</Card.Header>
+								<Card.Description>
+									{_t("ServerAddress")}
+								</Card.Description>
+							</Card.Content>
+						</Card>
+					</Grid.Column>
+
+					<Grid.Column>
+						<Card color="blue">
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.onlineMode ? "Yes" : "No"}
+								</Card.Header>
+								<Card.Description>
+									{_t("OnlineMode")}
+								</Card.Description>
+							</Card.Content>
+						</Card>
+					</Grid.Column>
+
+					<Grid.Column>
+						<Card color="blue">
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.uptimeTicks}
+								</Card.Header>
+								<Card.Description>
+									{_t("UptimeTicks")}
+								</Card.Description>
+							</Card.Content>
+						</Card>
+					</Grid.Column>
+
+					<Grid.Column>
+						<Card color="blue">
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.game.version}
+								</Card.Header>
+								<Card.Description>
+									{_t("MinecraftVersion")}
+								</Card.Description>
+							</Card.Content>
+						</Card>
+					</Grid.Column>
+
+					<Grid.Column>
+						<Card color="blue">
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.api.version}
+								</Card.Header>
+								<Card.Description>
+									{_t("APIVersion")}
+								</Card.Description>
+							</Card.Content>
+						</Card>
+					</Grid.Column>
+
+					<Grid.Column>
+						<Card color="blue">
+							<Card.Content>
+								<Card.Header>
+									{this.props.data.implementation.version}
+								</Card.Header>
+								<Card.Description>
+									{_t("SpongeVersion")}
+								</Card.Description>
+							</Card.Content>
+						</Card>
+					</Grid.Column>
+
+					{checkPermissions(this.props.perms, ["info", "stats"]) &&
+						<Grid.Column width={8}>
+							<Card style={{ width: "100%", height: "50vh" }}>
+								<Card.Content>
+									<Card.Header>
+										{_t("GraphTitleInfo")}
+									</Card.Header>
+								</Card.Content>
+								<div style={{ width: "100%", height: "100%", padding: "1em" }}>
+									<Line data={this.lineInfo} options={this.optionsInfo} />
+								</div>
+							</Card>
+						</Grid.Column>}
+
+					{checkPermissions(this.props.perms, ["info", "stats"]) &&
+						<Grid.Column width={8}>
+							<Card style={{ width: "100%", height: "50vh" }}>
+								<Card.Content>
+									<Card.Header>
+										{_t("GraphTitleStats")}
+									</Card.Header>
+								</Card.Content>
+								<div style={{ width: "100%", height: "100%", padding: "1em" }}>
+									<Line data={this.lineStats} options={this.optionsStats} />
+								</div>
+							</Card>
+						</Grid.Column>}
+				</Grid>
+			</Segment>
+		)
 	}
 }
 
-const mapStateToProps = (_state) => {
+const mapStateToProps = (_state: AppState): StateProps => {
 	const state = _state.dashboard
 
 	return {
-		data: state.data,
 		tps: state.tps,
 		players: state.players,
 		cpu: state.cpu,
 		memory: state.memory,
 		disk: state.disk,
+		data: state.data,
 
 		perms: _state.api.permissions,
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		requestInfo: () => dispatch(requestInfo()),
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate("Dashboard")(Dashboard));
+export default connect(mapStateToProps, mapDispatchToProps)(translate("Dashboard")(Dashboard))
