@@ -1,25 +1,20 @@
-import * as React from "react"
-import { connect } from "react-redux"
-import { Grid, Segment, Card, Message, SemanticCOLORS } from "semantic-ui-react"
-import { Line } from "react-chartjs-2"
-import { translate, Trans } from "react-i18next"
 import * as _ from "lodash"
+import * as React from "react"
+import { Line } from "react-chartjs-2"
+import { Trans, translate } from "react-i18next"
+import { connect, Dispatch } from "react-redux"
+import { Card, Grid, Message, Segment, SemanticCOLORS } from "semantic-ui-react"
 
-import { requestInfo, InfoRequestAction } from "../../actions/dashboard"
+import { AppAction } from "../../actions"
+import { InfoRequestAction, requestInfo } from "../../actions/dashboard"
+import { checkPermissions, PermissionTree } from "../../components/Util"
+import { ServerInfo, ServerStats } from "../../fetch"
+import { AppState } from "../../types"
 
 import graphConfig from "./chart"
-import { checkPermissions, PermissionTree } from "../../components/Util"
-import { AppState, ServerStat, InfoData } from "../../types"
-import { Dispatch } from "redux"
-import { AppAction } from "../../actions"
 
-interface StateProps {
-	tps: ServerStat[]
-	players: ServerStat[]
-	cpu: ServerStat[]
-	memory: ServerStat[]
-	disk: ServerStat[]
-	data?: InfoData
+interface StateProps extends ServerStats {
+	data?: ServerInfo
 	perms?: PermissionTree
 }
 

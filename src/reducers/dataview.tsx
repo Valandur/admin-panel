@@ -1,7 +1,7 @@
 import * as _ from "lodash"
 
-import { TypeKeys, DataViewAction } from "../actions/dataview"
-import { AppState, DataObject, IdFunction } from "../types"
+import { DataViewAction, TypeKeys } from "../actions/dataview"
+import { AppState, IdFunction } from "../types"
 
 export interface DataViewState<T> {
 	creating: boolean
@@ -11,13 +11,13 @@ export interface DataViewState<T> {
 	list: T[]
 }
 
-export default (state: AppState, action: DataViewAction<DataObject>) => {
+export default (state: AppState, action: DataViewAction<any>) => {
 	let path: string = ""
 	if (_.has(action, "endpoint")) {
 		path = action.endpoint.replace(/\//g, ".")
 	}
 
-	const changeObjectStatus = (id: IdFunction<DataObject>, data: DataObject, updating: boolean) =>
+	const changeObjectStatus = (id: IdFunction<any>, data: any, updating: boolean) =>
 		_.assign({}, state, {
 			[path]: {
 				...state[path],

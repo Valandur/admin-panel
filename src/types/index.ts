@@ -1,13 +1,15 @@
+import { RouterState } from "react-router-redux"
+import { Dispatch, Middleware, MiddlewareAPI } from "redux"
 import { SemanticICONS } from "semantic-ui-react"
-import { HandleChangeFunc, PermissionTree } from "../components/Util"
-import { MiddlewareAPI, Dispatch, Middleware } from "redux"
+
+import { HandleChangeFunc } from "../components/Util"
+import { Entity, PlayerFull, ServerProperty, WorldFull } from "../fetch"
 import { ApiState } from "../reducers/api"
 import { CommandState } from "../reducers/command"
-import { DataViewState } from "../reducers/dataview"
 import { DashboardState } from "../reducers/dashboard"
+import { DataViewState } from "../reducers/dataview"
 import { PluginState } from "../reducers/plugin"
 import { SettingsState } from "../reducers/settings"
-import { RouterState } from "react-router-redux"
 
 // Lang
 export type Lang = "en" | "de" | "fr" | "ru"
@@ -18,9 +20,9 @@ export interface AppState {
 	cmd: CommandState
 	dashboard: DashboardState
 	entity: DataViewState<Entity>
-	player: DataViewState<Player>
+	player: DataViewState<PlayerFull>
 	plugin: PluginState
-	world: DataViewState<World>
+	world: DataViewState<WorldFull>
 	settings: SettingsState
 	"tile-entity": DataViewState<any>
 	router: RouterState
@@ -34,17 +36,13 @@ export interface ExtendedMiddleware<StateType> extends Middleware {
 // Data table
 export type IdFunction<T> = (obj: T) => string
 
-export interface DataObject {
-	updating?: boolean
-}
-
 export interface DataTableRef {
 	state: any
 	setState: (changes: any) => void
 	handleChange: HandleChangeFunc
 	value?: string | string[]
 }
-export interface DataViewRef<T extends DataObject> extends DataTableRef {
+export interface DataViewRef<T> extends DataTableRef {
 	create: (data: any) => void
 	details: (data: T) => void
 	save: (data: T, newData: any) => void
@@ -52,11 +50,11 @@ export interface DataViewRef<T extends DataObject> extends DataTableRef {
 	delete: (data: T) => void
 }
 
-export type DataFieldViewFunc<T extends DataObject> = (obj: T, view: DataTableRef) => JSX.Element | string | undefined
+export type DataFieldViewFunc<T> = (obj: T, view: DataTableRef) => JSX.Element | string | undefined
 export type DataFieldFilterFunc = (view: DataTableRef) => JSX.Element
 export type DataFieldCreateFunc = (view: DataTableRef) => JSX.Element
-export type DataFieldEditFunc<T extends DataObject> = (obj: T, view: DataTableRef) => void
-export interface DataField<T extends DataObject> {
+export type DataFieldEditFunc<T> = (obj: T, view: DataTableRef) => void
+export interface DataField<T> {
 	label?: string
 	type?: string
 	view?: DataFieldViewFunc<T> | boolean
@@ -72,11 +70,11 @@ export interface DataField<T extends DataObject> {
 	wide?: boolean
 }
 
-export interface DataFieldRaw<T extends DataObject> extends DataField<T> {
+export interface DataFieldRaw<T> extends DataField<T> {
 	name: string
 }
 
-export interface DataFieldGroup<T extends DataObject> {
+export interface DataFieldGroup<T> {
 	first?: DataFieldRaw<T>
 	second?: DataFieldRaw<T>
 	only?: DataFieldRaw<T>
@@ -90,12 +88,6 @@ export interface ViewDefinition {
 	perms: string[] | null,
 	component?: React.ComponentType,
 	views?: ViewDefinition[],
-}
-
-// Dashboard
-export interface ServerStat {
-	timestamp: number
-	value: number
 }
 
 // Autosuggest
@@ -121,28 +113,15 @@ export class Error {
 	error: string
 }
 
-export interface InfoData {
-	tps: number
-	players: number
-	maxPlayers: number
-	onlineMode: boolean
-	address: string
-	uptimeTicks: number
-	game: PluginContainer
-	api: PluginContainer
-	implementation: PluginContainer
+export interface EServerProperty extends ServerProperty {
+	edit?: boolean
 }
 
+/*
 export interface PluginContainer {
 	id: string
 	name: string
 	version: string
-}
-
-export interface UserPermissions {
-	key: string
-	permissions: PermissionTree
-	rateLimit: number
 }
 
 export interface CatalogType {
@@ -210,6 +189,7 @@ export enum BlockOpStatus {
 	ERRORED,
 	RUNNING,
 }
+
 export interface BlockOp extends DataObject {
 	uuid: string
 	type: BlockOpType
@@ -276,3 +256,4 @@ export interface Location {
 	world: World
 	position: Vector3
 }
+*/

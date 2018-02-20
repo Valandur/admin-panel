@@ -10,6 +10,7 @@
     "@types/lodash": "^4.14.102",
     "@types/node": "^9.4.5",
     "@types/raven-for-redux": "^1.1.0",
+    "@types/rc-slider": "^8.2.3",
     "@types/react": "^16.0.36",
     "@types/react-click-outside": "^3.0.0",
     "@types/react-dom": "^16.0.3",
@@ -27,7 +28,6 @@
     "typescript": "^2.7.1"
   },
   "dependencies": {
-    "@dr-kobros/react-jsoneditor": "^3.0.1",
     "chart.js": "2.7.1",
     "copy-to-clipboard": "^3.0.8",
     "history": "^4.7.2",
@@ -37,6 +37,7 @@
     "konva": "^1.7.6",
     "lodash": "^4.17.4",
     "moment": "^2.20.1",
+    "portable-fetch": "^3.0.0",
     "raven-for-redux": "^1.2.0",
     "raven-js": "^3.22.1",
     "rc-slider": "^8.6.0",
@@ -47,7 +48,6 @@
     "react-click-outside": "^3.0.0",
     "react-dom": "16.2.0",
     "react-i18next": "^7.3.1",
-    "react-jsoneditor": "^0.2.22",
     "react-konva": "^1.6.5",
     "react-loadable": "^5.3.1",
     "react-notification-system": "^0.2.16",

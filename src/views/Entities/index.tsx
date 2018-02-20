@@ -1,21 +1,22 @@
-import * as React from "react"
-import { connect, Dispatch } from "react-redux"
-import { Form, Label, Button, Progress, Icon } from "semantic-ui-react"
-import { translate } from "react-i18next"
 import * as _ from "lodash"
+import * as React from "react"
+import { translate } from "react-i18next"
+import { connect, Dispatch } from "react-redux"
+import { Button, Form, Icon, Label, Progress } from "semantic-ui-react"
 
+import { AppAction, CatalogRequestAction, requestCatalog } from "../../actions"
+import { ListRequestAction, requestList } from "../../actions/dataview"
 import { formatRange } from "../../components/Util"
-import { requestCatalog, AppAction, CatalogRequestAction } from "../../actions"
-import { requestList, ListRequestAction } from "../../actions/dataview"
+import { CatalogType, Entity, WorldFull } from "../../fetch"
+import { AppState } from "../../types"
 
 import DataViewFunc from "../../components/DataView"
-import { Entity, AppState, CatalogType, World } from "../../types"
 const DataView = DataViewFunc("entity", "uuid")
 
 const ENT_TYPES = "entity.EntityType"
 
 interface Props extends reactI18Next.InjectedTranslateProps {
-	worlds: World[],
+	worlds: WorldFull[],
 	entTypes: CatalogType[],
 	requestWorlds: () => ListRequestAction,
 	requestCatalog: (type: string) => CatalogRequestAction,

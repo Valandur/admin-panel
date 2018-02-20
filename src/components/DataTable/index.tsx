@@ -1,16 +1,16 @@
-import * as React from "react"
-import { Form, Dropdown, Header, Table, Menu, Icon, Button, SemanticICONS } from "semantic-ui-react"
-import { translate } from "react-i18next"
 import * as _ from "lodash"
+import * as React from "react"
+import { translate } from "react-i18next"
+import { Button, Dropdown, Form, Header, Icon, Menu, SemanticICONS, Table } from "semantic-ui-react"
 
+import { DataFieldRaw, DataTableRef } from "../../types"
 import { handleChange, HandleChangeFunc } from "../Util"
-import { DataFieldRaw, DataObject, DataTableRef } from "../../types"
 
 const ITEMS_PER_PAGE = 20
 
-export interface DataTableProps<T extends DataObject> extends reactI18Next.InjectedTranslateProps {
-	title: string
-	icon: SemanticICONS
+export interface DataTableProps<T> extends reactI18Next.InjectedTranslateProps {
+	title?: string
+	icon?: SemanticICONS
 	list: T[]
 	canEdit?: boolean
 	canDelete?: boolean
@@ -30,7 +30,7 @@ interface DataTableState {
 	newData: any
 }
 
-class DataTable<T extends DataObject> extends React.Component<DataTableProps<T>, DataTableState> {
+class DataTable<T> extends React.Component<DataTableProps<T>, DataTableState> {
 
 	handleChange: HandleChangeFunc
 
@@ -149,8 +149,8 @@ class DataTable<T extends DataObject> extends React.Component<DataTableProps<T>,
 											[<Button
 												key="save"
 												color="green"
-												disabled={obj.updating}
-												loading={obj.updating}
+												disabled={(obj as any).updating}
+												loading={(obj as any).updating}
 												onClick={() => this.props.onSave(obj, this.state.newData, thisRef)}
 											>
 												<Icon name="save" /> {_t("Save")}
@@ -158,8 +158,8 @@ class DataTable<T extends DataObject> extends React.Component<DataTableProps<T>,
 											<Button
 												key="cancel"
 												color="yellow"
-												disabled={obj.updating}
-												loading={obj.updating}
+												disabled={(obj as any).updating}
+												loading={(obj as any).updating}
 												onClick={() => this.onEdit(null, thisRef)}
 											>
 												<Icon name="cancel" /> {_t("Cancel")}
@@ -167,8 +167,8 @@ class DataTable<T extends DataObject> extends React.Component<DataTableProps<T>,
 										: canEdit ?
 											<Button
 												color="blue"
-												disabled={obj.updating}
-												loading={obj.updating}
+												disabled={(obj as any).updating}
+												loading={(obj as any).updating}
 												onClick={() => this.onEdit(obj, thisRef)}
 											>
 												<Icon name="edit" /> {_t("Edit")}
@@ -177,8 +177,8 @@ class DataTable<T extends DataObject> extends React.Component<DataTableProps<T>,
 										{canDelete &&
 											<Button
 												color="red"
-												disabled={obj.updating}
-												loading={obj.updating}
+												disabled={(obj as any).updating}
+												loading={(obj as any).updating}
 												onClick={() => this.props.onDelete(obj, thisRef)}
 											>
 												<Icon name="trash" /> {_t("Remove")}

@@ -1,4 +1,5 @@
 import { Action } from "redux"
+import { PluginContainer } from "../fetch"
 
 export enum TypeKeys {
 	CONFIG_REQUEST = "PLUGIN_CONFIG_REQUEST",
@@ -46,10 +47,11 @@ export function setPluginConfig(name: string, conf: object): SetPluginConfigActi
 export interface PluginConfigSaveRequestAction extends Action {
 	type: TypeKeys.CONFIG_SAVE_REQUEST
 	id: string
-	plugin: string
+	plugin: PluginContainer
 	configs: object[]
 }
-export function requestPluginConfigSave(id: string, plugin: string, configs: object[]): PluginConfigSaveRequestAction {
+export function requestPluginConfigSave(id: string, plugin: PluginContainer, configs: object[]):
+		PluginConfigSaveRequestAction {
 	return {
 		type: TypeKeys.CONFIG_SAVE_REQUEST,
 		id: id,

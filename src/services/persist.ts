@@ -1,10 +1,10 @@
-import { push } from "react-router-redux"
-import { MiddlewareAPI, Action } from "redux"
 import { Dispatch } from "react-redux"
+import { push } from "react-router-redux"
+import { Action, MiddlewareAPI } from "redux"
 
-import { AppState, ExtendedMiddleware } from "../types"
-import { ApiState } from "../reducers/api"
 import { AppAction, TypeKeys } from "../actions"
+import { ApiState } from "../reducers/api"
+import { AppState, ExtendedMiddleware } from "../types"
 
 const formatApi = (api: ApiState) => JSON.stringify(api)
 

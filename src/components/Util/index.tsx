@@ -1,8 +1,12 @@
 import * as _ from "lodash"
-import { InputProps } from "semantic-ui-react"
+import { CheckboxProps, InputProps } from "semantic-ui-react"
 
 // Format a number to a certain accuracy as a ratio
 export function formatRange(current: number, max: number, a: number = 1): number {
+	if (max === 0) {
+		return 0
+	}
+
 	const acc = Math.pow(10, a)
 	return Math.round((current / max) * 100 * acc) / acc
 }
@@ -10,12 +14,12 @@ export function formatRange(current: number, max: number, a: number = 1): number
 // Handle input change of various components
 export type HandleChangeFunc = (
 	event: React.SyntheticEvent<HTMLElement>,
-	data?: InputProps) => void
+	data?: InputProps | CheckboxProps) => void
 export function handleChange(
 	this: { setState: (o: object) => void },
 	setState: (key: string, value: string) => void,
 	event: React.SyntheticEvent<HTMLElement>,
-	data: InputProps): void {
+	data?: InputProps | CheckboxProps): void {
 
 	let value = null
 	let name = null

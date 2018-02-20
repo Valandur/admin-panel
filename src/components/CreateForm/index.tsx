@@ -1,12 +1,12 @@
-import * as React from "react"
-import { Segment, Header, Form, Icon, Dropdown, Button } from "semantic-ui-react"
-import { translate } from "react-i18next"
 import * as _ from "lodash"
+import * as React from "react"
+import { translate } from "react-i18next"
+import { Button, Dropdown, Form, Header, Icon, Segment } from "semantic-ui-react"
 
+import { DataFieldGroup, DataFieldRaw, DataTableRef } from "../../types"
 import { handleChange, HandleChangeFunc } from "../Util"
-import { DataFieldGroup, DataFieldRaw, DataObject, DataTableRef } from "../../types"
 
-export interface AppProps<T extends DataObject> extends reactI18Next.InjectedTranslateProps {
+export interface AppProps<T> extends reactI18Next.InjectedTranslateProps {
 	title: string
 	creating: boolean
 	onCreate: (data: any, view: DataTableRef) => void
@@ -20,7 +20,7 @@ interface AppState {
 	newData: object
 }
 
-class CreateForm<T extends DataObject> extends React.Component<AppProps<T>, AppState> {
+class CreateForm<T> extends React.Component<AppProps<T>, AppState> {
 
 	handleChange: HandleChangeFunc
 

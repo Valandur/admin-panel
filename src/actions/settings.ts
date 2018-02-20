@@ -1,5 +1,5 @@
 import { Action } from "redux"
-import { ServerProp } from "../types"
+import { EServerProperty } from "../types"
 
 export enum TypeKeys {
 	EDIT_PROPERTY = "EDIT_PROPERTY",
@@ -10,9 +10,9 @@ export enum TypeKeys {
 
 export interface EditPropertyAction extends Action {
 	type: TypeKeys.EDIT_PROPERTY
-	prop: ServerProp
+	prop: EServerProperty
 }
-export function editProperty(prop: ServerProp): EditPropertyAction {
+export function editProperty(prop: EServerProperty): EditPropertyAction {
 	return {
 		type: TypeKeys.EDIT_PROPERTY,
 		prop,
@@ -21,10 +21,10 @@ export function editProperty(prop: ServerProp): EditPropertyAction {
 
 export interface SetPropertyAction extends Action {
 	type: TypeKeys.SET_PROPERTY
-	prop: ServerProp
+	prop: EServerProperty
 	value: string
 }
-export function setProperty(prop: ServerProp, value: string): SetPropertyAction {
+export function setProperty(prop: EServerProperty, value: string): SetPropertyAction {
 	return {
 		type: TypeKeys.SET_PROPERTY,
 		prop,
@@ -34,9 +34,9 @@ export function setProperty(prop: ServerProp, value: string): SetPropertyAction 
 
 export interface SavePropertyRequestAction extends Action {
 	type: TypeKeys.SAVE_PROPERTY_REQUEST
-	prop: ServerProp
+	prop: EServerProperty
 }
-export function requestSaveProperty(prop: ServerProp): SavePropertyRequestAction {
+export function requestSaveProperty(prop: EServerProperty): SavePropertyRequestAction {
 	return {
 		type: TypeKeys.SAVE_PROPERTY_REQUEST,
 		prop,

@@ -1,11 +1,11 @@
-import * as React from "react"
-import { Dispatch } from "redux"
-import { connect } from "react-redux"
-import { translate } from "react-i18next"
 import * as moment from "moment"
+import * as React from "react"
+import { translate } from "react-i18next"
+import { connect, Dispatch } from "react-redux"
 
-import { AppState, ChatMessage } from "../../types"
 import { AppAction } from "../../actions"
+import { ChatMessage } from "../../fetch"
+import { AppState } from "../../types"
 
 import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("history/chat", "timestamp")

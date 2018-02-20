@@ -1,15 +1,14 @@
+import * as _ from "lodash"
 import * as React from "react"
+import { translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
 import { Redirect } from "react-router-dom"
-import { Grid, Form, Button, Segment, Dropdown, Image, DropdownProps } from "semantic-ui-react"
-import { translate } from "react-i18next"
-import { Action } from "redux"
-import * as _ from "lodash"
+import { Button, Dropdown, DropdownProps, Form, Grid, Image, Segment } from "semantic-ui-react"
 
+import { AppAction, changeLanguage, ChangeLanguageAction, changeServer, ChangeServerAction,
+	LoginRequestAction, requestLogin } from "../../actions"
 import { handleChange, HandleChangeFunc } from "../../components/Util"
-import { requestLogin, changeServer, changeLanguage,
-	LoginRequestAction, ChangeServerAction, ChangeLanguageAction } from "../../actions"
-import { Server, Lang, AppState } from "../../types"
+import { AppState, Lang, Server } from "../../types"
 
 interface StateProps {
 	loggingIn: boolean
@@ -161,7 +160,7 @@ const mapStateToProps = (state: AppState): StateProps => {
 	}
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
+const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		onLoginClick: (username: string, password: string) => dispatch(requestLogin(username, password)),
 		changeServer: (server: Server) => dispatch(changeServer(server)),

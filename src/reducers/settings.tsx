@@ -1,18 +1,19 @@
 import * as _ from "lodash"
 
-import { TypeKeys } from "../actions/settings"
 import { AppAction } from "../actions"
-import { ServerProp } from "../types"
+import { TypeKeys } from "../actions/settings"
+
+import { EServerProperty } from "../types"
 
 export interface SettingsState {
-	properties: ServerProp[]
+	properties: EServerProperty[]
 }
 
 const initialState: SettingsState = {
 	properties: []
 }
 
-const toPropItem = (value: string, key: string): ServerProp => ({ key, value })
+const toPropItem = (value: string, key: string): EServerProperty => ({ key, value })
 
 export default (state = initialState, action: AppAction) => {
 	switch (action.type) {

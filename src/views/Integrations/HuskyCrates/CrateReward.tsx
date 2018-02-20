@@ -1,20 +1,24 @@
-import * as React from "react"
-import {
-	Table, Label, Form, Button, Input, Dropdown, Popup,
-} from "semantic-ui-react"
 import * as _ from "lodash"
+import * as React from "react"
+import { Button, Dropdown, DropdownProps, Form, Input, Label, Popup, Table } from "semantic-ui-react"
 
-import { handleChange, HandleChangeFunc } from "../../../components/Util"
 import ItemStack from "../../../components/ItemStack"
+import { handleChange, HandleChangeFunc } from "../../../components/Util"
+import { CatalogType, HuskyCratesCommandReward, HuskyCratesCrateReward,
+	HuskyCratesCrateRewardObject, HuskyCratesItemReward } from "../../../fetch"
 
 interface Props extends reactI18Next.InjectedTranslateProps {
-	reward: object
-	format
-	handleRewardChange: Function
-	addRewardObject: Function
-	removeRewardObject: Function
-	removeReward: Function
-	objectTypes
+	reward: HuskyCratesCrateReward
+	format: any
+	handleRewardChange: (
+		reward: HuskyCratesCrateReward,
+		e: React.SyntheticEvent<HTMLElement>,
+		data?: DropdownProps) => void
+	addRewardObject: (reward: HuskyCratesCrateReward, object: any) => void
+	removeRewardObject: (reward: HuskyCratesCrateReward, index: number) => void
+	removeReward: (reward: HuskyCratesCrateReward) => void
+	objectTypes: { value: string, text: string }[]
+	itemTypes: CatalogType[]
 }
 
 interface State {
@@ -46,7 +50,7 @@ class CrateReward extends React.Component<Props, State> {
 			nextState.newObjectType !== this.state.newObjectType ||
 			nextState.newObjectCommand !== this.state.newObjectCommand ||
 			nextState.newObjectItemType !== this.state.newObjectItemType ||
-			nextState.newObjectItemAmount !== this.state.newObjectItemAmount;
+			nextState.newObjectItemAmount !== this.state.newObjectItemAmount
 	}
 
 	render() {
@@ -80,11 +84,12 @@ class CrateReward extends React.Component<Props, State> {
 				</Table.Cell>
 				<Table.Cell collapsing>
 					<Form.Field
-						selection search
+						selection
+						search
 						name="displayItem.type.id"
 						control={Dropdown}
 						placeholder={_t("ItemType")}
-						onChange={(e, val) => handleRewardChange(reward, e, val)}
+						onChange={(e: React.SyntheticEvent<HTMLElement>, val: DropdownProps) => handleRewardChange(reward, e, val)}
 						value={reward.displayItem.type.id}
 						options={_.map(this.props.itemTypes, type =>
 							({ value: type.id, text: type.name + " (" + type.id + ")" })
@@ -93,22 +98,22 @@ class CrateReward extends React.Component<Props, State> {
 				</Table.Cell>
 				<Table.Cell>
 					{_.map(reward.objects, (obj, i) => {
-						if (obj.type === "COMMAND") {
+						if (obj.type === HuskyCratesCrateRewardObject.TypeEnum.COMMAND) {
 							return [<Label
 								key={i}
 								color="blue"
-								content={"/" + obj.command}
+								content={"/" + (obj as HuskyCratesCommandReward).command}
 								onRemove={e => removeRewardObject(reward, i)}
 							/>]
 						}
-						if (obj.type === "ITEM") {
+						if (obj.type === HuskyCratesCrateRewardObject.TypeEnum.ITEM) {
 							return [<ItemStack
 								key={i}
-								item={obj.item}
+								item={(obj as HuskyCratesItemReward).item}
 								onRemove={e => removeRewardObject(reward, i)}
 							/>]
 						}
-						return null;
+						return null
 					})}
 					<Popup
 						on="click"
@@ -116,7 +121,8 @@ class CrateReward extends React.Component<Props, State> {
 						trigger={<Button color="green" icon="plus" size="small" />}
 						content={<Form>
 							<Form.Field
-								selection search
+								selection
+								search
 								name="newObjectType"
 								control={Dropdown}
 								placeholder={_t("Type")}
@@ -134,7 +140,7 @@ class CrateReward extends React.Component<Props, State> {
 									action={{
 										color: "green",
 										content: _t("Add"),
-										onClick: e => addRewardObject(reward, {
+										onClick: () => addRewardObject(reward, {
 											type: this.state.newObjectType,
 											command: _.startsWith(this.state.newObjectCommand, "/") ?
 												this.state.newObjectCommand.substring(1) : this.state.newObjectCommand,
@@ -144,7 +150,8 @@ class CrateReward extends React.Component<Props, State> {
 							}
 							{this.state.newObjectType === "ITEM" &&
 								[<Form.Field
-									selection search
+									selection
+									search
 									key="type"
 									name="newObjectItemType"
 									control={Dropdown}
@@ -165,13 +172,12 @@ class CrateReward extends React.Component<Props, State> {
 									action={{
 										color: "green",
 										content: _t("Add"),
-										onClick: e => addRewardObject(reward, {
+										onClick: () => addRewardObject(reward, {
 											type: this.state.newObjectType,
 											item: {
 												type: {
 													id: this.state.newObjectItemType,
-													name: _.find(this.props.itemTypes,
-														{ id: this.state.newObjectItemType }).name,
+													name: (_.find(this.props.itemTypes, { id: this.state.newObjectItemType }) as CatalogType).name,
 												},
 												quantity: this.state.newObjectItemAmount,
 												data: {},

@@ -1,5 +1,6 @@
-import { IdFunction, Error, DataObject } from "../types"
 import { Action } from "redux"
+
+import { Error, IdFunction } from "../types"
 
 export enum TypeKeys {
 	LIST_REQUEST = "DATA_LIST_REQUEST",
@@ -15,7 +16,7 @@ export enum TypeKeys {
 	SET_FILTER = "DATA_SET_FILTER",
 }
 
-export interface BaseAction<T extends DataObject> extends Action {
+export interface BaseAction<T> extends Action {
 	endpoint: string
 	id: IdFunction<T>
 }
@@ -34,13 +35,13 @@ export function requestList(
 	}
 }
 
-export interface ListResponseAction<T extends DataObject> extends Action {
+export interface ListResponseAction<T> extends Action {
 	type: TypeKeys.LIST_RESPONSE
 	endpoint: string
 	list?: T[]
 	err?: Error
 }
-export function respondList<T extends DataObject>(
+export function respondList<T>(
 		endpoint: string, list?: T[], err?: Error): ListResponseAction<T> {
 	return {
 		type: TypeKeys.LIST_RESPONSE,
@@ -50,11 +51,11 @@ export function respondList<T extends DataObject>(
 	}
 }
 
-export interface DetailsRequestAction<T extends DataObject> extends BaseAction<T> {
+export interface DetailsRequestAction<T> extends BaseAction<T> {
 	type: TypeKeys.DETAILS_REQUEST
 	data: T
 }
-export function requestDetails<T extends DataObject>(
+export function requestDetails<T>(
 		endpoint: string, id: IdFunction<T>, data: T): DetailsRequestAction<T> {
 	return {
 		type: TypeKeys.DETAILS_REQUEST,
@@ -64,11 +65,11 @@ export function requestDetails<T extends DataObject>(
 	}
 }
 
-export interface CreateRequestAction<T extends DataObject> extends BaseAction<T> {
+export interface CreateRequestAction<T> extends BaseAction<T> {
 	type: TypeKeys.CREATE_REQUEST
 	data: T
 }
-export function requestCreate<T extends DataObject>(
+export function requestCreate<T>(
 		endpoint: string, id: IdFunction<T>, data: T): CreateRequestAction<T> {
 	return {
 		type: TypeKeys.CREATE_REQUEST,
@@ -78,12 +79,12 @@ export function requestCreate<T extends DataObject>(
 	}
 }
 
-export interface CreateResponseAction<T extends DataObject> extends BaseAction<T> {
+export interface CreateResponseAction<T> extends BaseAction<T> {
 	type: TypeKeys.CREATE_RESPONSE
 	data?: T
 	err?: Error
 }
-export function respondCreate<T extends DataObject>(
+export function respondCreate<T>(
 		endpoint: string, id: IdFunction<T>, data?: T, err?: Error): CreateResponseAction<T> {
 	return {
 		type: TypeKeys.CREATE_RESPONSE,
@@ -94,12 +95,12 @@ export function respondCreate<T extends DataObject>(
 	}
 }
 
-export interface DetailsResponseAction<T extends DataObject> extends BaseAction<T> {
+export interface DetailsResponseAction<T> extends BaseAction<T> {
 	type: TypeKeys.DETAILS_RESPONSE
 	data: T
 	err?: Error
 }
-export function respondDetails<T extends DataObject>(
+export function respondDetails<T>(
 		endpoint: string, id: IdFunction<T>, data: T, err?: Error): DetailsResponseAction<T> {
 	return {
 		type: TypeKeys.DETAILS_RESPONSE,
@@ -110,12 +111,12 @@ export function respondDetails<T extends DataObject>(
 	}
 }
 
-export interface ChangeRequestAction<T extends DataObject> extends BaseAction<T> {
+export interface ChangeRequestAction<T> extends BaseAction<T> {
 	type: TypeKeys.CHANGE_REQUEST
 	data: T
 	newData: any
 }
-export function requestChange<T extends DataObject>(
+export function requestChange<T>(
 		endpoint: string, id: IdFunction<T>, data: T, newData: any): ChangeRequestAction<T> {
 	return {
 		type: TypeKeys.CHANGE_REQUEST,
@@ -126,12 +127,12 @@ export function requestChange<T extends DataObject>(
 	}
 }
 
-export interface ChangeResponseAction<T extends DataObject> extends BaseAction<T> {
+export interface ChangeResponseAction<T> extends BaseAction<T> {
 	type: TypeKeys.CHANGE_RESPONSE
 	data: T
 	err?: Error
 }
-export function respondChange<T extends DataObject>(
+export function respondChange<T>(
 		endpoint: string, id: IdFunction<T>, data: T, err?: Error): ChangeResponseAction<T> {
 	return {
 		type: TypeKeys.CHANGE_RESPONSE,
@@ -142,11 +143,11 @@ export function respondChange<T extends DataObject>(
 	}
 }
 
-export interface DeleteRequestAction<T extends DataObject> extends BaseAction<T> {
+export interface DeleteRequestAction<T> extends BaseAction<T> {
 	type: TypeKeys.DELETE_REQUEST
 	data: T
 }
-export function requestDelete<T extends DataObject>(
+export function requestDelete<T>(
 		endpoint: string, id: IdFunction<T>, data: T): DeleteRequestAction<T> {
 	return {
 		type: TypeKeys.DELETE_REQUEST,
@@ -156,12 +157,12 @@ export function requestDelete<T extends DataObject>(
 	}
 }
 
-export interface DeleteResponseAction<T extends DataObject> extends BaseAction<T> {
+export interface DeleteResponseAction<T> extends BaseAction<T> {
 	type: TypeKeys.DELETE_RESPONSE
 	data: T
 	err?: Error
 }
-export function respondDelete<T extends DataObject>(
+export function respondDelete<T>(
 		endpoint: string, id: IdFunction<T>, data: T, err?: Error): DeleteResponseAction<T> {
 	return {
 		type: TypeKeys.DELETE_RESPONSE,
@@ -187,6 +188,6 @@ export function setFilter(endpoint: string, filter: string, value: string): SetF
 	}
 }
 
-export type DataViewAction<T extends DataObject> = ListRequestAction | ListResponseAction<T> |
+export type DataViewAction<T> = ListRequestAction | ListResponseAction<T> |
 	DetailsRequestAction<T> | DetailsResponseAction<T> | CreateRequestAction<T> | CreateResponseAction<T> |
 	ChangeRequestAction<T> | ChangeResponseAction<T> | DeleteRequestAction<T> | DeleteResponseAction<T> | SetFilterAction

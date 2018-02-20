@@ -1,16 +1,16 @@
-import * as React from "react"
-import { connect } from "react-redux"
-import { Modal, Icon, Button, Form, Label, Dropdown, Progress } from "semantic-ui-react"
-import { translate, Trans } from "react-i18next"
-import * as moment from "moment"
 import * as _ from "lodash"
+import * as moment from "moment"
+import * as React from "react"
+import { Trans, translate } from "react-i18next"
+import { connect, Dispatch } from "react-redux"
+import { Button, Dropdown, Form, Icon, Label, Modal, Progress } from "semantic-ui-react"
 
-import { requestCatalog, AppAction, CatalogRequestAction } from "../../actions"
-import { requestList, ListRequestAction } from "../../actions/dataview"
+import { AppAction, CatalogRequestAction, requestCatalog } from "../../actions"
+import { ListRequestAction, requestList } from "../../actions/dataview"
+import { BlockOperation, CatalogType, WorldFull } from "../../fetch"
+import { AppState, DataViewRef } from "../../types"
 
 import DataViewFunc from "../../components/DataView"
-import { AppState, World, CatalogType, BlockOpType, BlockOp, DataViewRef, BlockOpStatus } from "../../types"
-import { Dispatch } from "redux"
 const DataView = DataViewFunc("block/op", "uuid", true)
 
 const BLOCK_TYPES = "block.BlockType"
@@ -20,11 +20,11 @@ interface OwnProps {
 }
 
 interface StateProps {
-	worlds: World[],
+	worlds: WorldFull[],
 	blockTypes: CatalogType[],
 	types: {
 		text: string
-		value: BlockOpType
+		value: BlockOperation.TypeEnum
 	}[]
 }
 
@@ -39,7 +39,7 @@ interface FullProps extends Props, DispatchProps {}
 
 interface OwnState {
 	modal: boolean
-	operation?: BlockOp
+	operation?: BlockOperation
 }
 
 class BlockOperations extends React.Component<FullProps, OwnState> {
@@ -60,7 +60,7 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 		this.props.requestCatalog(BLOCK_TYPES)
 	}
 
-	showDetails(operation: BlockOp, view: DataViewRef<BlockOp>) {
+	showDetails(operation: BlockOperation, view: DataViewRef<BlockOperation>) {
 		view.details(operation)
 		this.setState({
 			modal: true,
@@ -74,11 +74,11 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 		})
 	}
 
-	getStatusColor(op: BlockOp) {
-		return op.status === BlockOpStatus.DONE ? "blue" :
-			op.status === BlockOpStatus.PAUSED ? "yellow" :
-			op.status === BlockOpStatus.ERRORED ? "red" :
-			op.status === BlockOpStatus.RUNNING ? "green" : "grey"
+	getStatusColor(op: BlockOperation) {
+		return op.status === BlockOperation.StatusEnum.DONE ? "blue" :
+			op.status === BlockOperation.StatusEnum.PAUSED ? "yellow" :
+			op.status === BlockOperation.StatusEnum.ERRORED ? "red" :
+			op.status === BlockOperation.StatusEnum.RUNNING ? "green" : "grey"
 	}
 
 	render() {
@@ -96,7 +96,7 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 						create: {
 							isGroup: true,
 							view: false,
-							create: (view: DataViewRef<BlockOp>) => {
+							create: (view: DataViewRef<BlockOperation>) => {
 								return <div>
 									<Form.Group widths="equal">
 										<Form.Field
@@ -163,7 +163,7 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 						},
 						status: {
 							label: _t("Status"),
-							view: (op: BlockOp) => {
+							view: (op: BlockOperation) => {
 								return <Label color={this.getStatusColor(op)}>
 									{_t(op.status.toString())}
 								</Label>
@@ -172,17 +172,17 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 						progress: {
 							label: _t("Progress"),
 							wide: true,
-							view: (op: BlockOp) => {
+							view: (op: BlockOperation) => {
 								const time = moment().add(op.estimatedSecondsRemaining, "s").fromNow(true)
 
 								return <Progress
 									progress
 									color={this.getStatusColor(op)}
-									active={op.status === BlockOpStatus.RUNNING}
+									active={op.status === BlockOperation.StatusEnum.RUNNING}
 									percent={(op.progress * 100).toFixed(1)}
 								>
 
-									{op.status === BlockOpStatus.RUNNING || op.status === BlockOpStatus.PAUSED ?
+									{op.status === BlockOperation.StatusEnum.RUNNING || op.status === BlockOperation.StatusEnum.PAUSED ?
 										time + " remaining"
 									:
 										_t("Done")
@@ -191,29 +191,29 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 							},
 						},
 					}}
-					actions={(op: BlockOp, view: DataViewRef<BlockOp>) => <div>
+					actions={(op: BlockOperation, view: DataViewRef<BlockOperation>) => <div>
 						<Button color="blue" onClick={e => this.showDetails(op, view)}>
 							{_t("Details")}
 						</Button>
 						{" "}
-						{op.status === BlockOpStatus.RUNNING || op.status === BlockOpStatus.PAUSED ?
+						{op.status === BlockOperation.StatusEnum.RUNNING || op.status === BlockOperation.StatusEnum.PAUSED ?
 							<Button
-								color={op.status === BlockOpStatus.RUNNING ? "yellow" : "green"}
-								onClick={e => view.save(op, { pause: op.status === BlockOpStatus.RUNNING })}
+								color={op.status === BlockOperation.StatusEnum.RUNNING ? "yellow" : "green"}
+								onClick={e => view.save(op, { pause: op.status === BlockOperation.StatusEnum.RUNNING })}
 							>
-								<Icon name={(op.status === BlockOpStatus.RUNNING ? "pause" : "play")} />
+								<Icon name={(op.status === BlockOperation.StatusEnum.RUNNING ? "pause" : "play")} />
 								{" "}
-								{op.status === BlockOpStatus.RUNNING ? _t("Pause") : _t("Resume")}
+								{op.status === BlockOperation.StatusEnum.RUNNING ? _t("Pause") : _t("Resume")}
 							</Button>
 						: null}
 						{" "}
-						{op.status === BlockOpStatus.RUNNING || op.status === BlockOpStatus.PAUSED ?
+						{op.status === BlockOperation.StatusEnum.RUNNING || op.status === BlockOperation.StatusEnum.PAUSED ?
 							<Button color="red" onClick={e => view.delete(op)}>
 								<Icon name="stop" /> {_t("Stop")}
 							</Button>
 						: null}
 					</div>}
-					onCreate={(obj: any, view: DataViewRef<BlockOp>) =>
+					onCreate={(obj: any, view: DataViewRef<BlockOperation>) =>
 						view.create({
 							type: obj.type,
 							world: obj.world,
@@ -255,10 +255,10 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 					{this.state.operation.error &&
 						<div><b>Error:</b> {this.state.operation.error}</div>
 					}
-					{this.state.operation.blocks &&
+					{(this.state.operation as any).blocks &&
 						<div>
 							<b>Blocks:</b><br />
-							{JSON.stringify(this.state.operation.blocks)}
+							{JSON.stringify((this.state.operation as any).blocks)}
 						</div>
 					}
 				</Modal.Content>
@@ -273,10 +273,10 @@ const mapStateToProps = (state: AppState) => {
 		blockTypes: state.api.types[BLOCK_TYPES],
 		types: [{
 			text: "Get",
-			value: BlockOpType.GET,
+			value: BlockOperation.TypeEnum.GET,
 		}, {
 			text: "Change",
-			value: BlockOpType.CHANGE,
+			value: BlockOperation.TypeEnum.CHANGE,
 		}]
 	}
 }

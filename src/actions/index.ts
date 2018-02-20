@@ -1,12 +1,15 @@
-import { Server, UserPermissions, CatalogType, DataObject, Error } from "../types"
 import { Action } from "redux"
-import { DashboardAction } from "./dashboard"
+
 import { CommandAction } from "./command"
+import { DashboardAction } from "./dashboard"
 import { DataViewAction } from "./dataview"
 import { NotificationAction } from "./notification"
 import { PlayerAction } from "./player"
 import { PluginAction } from "./plugin"
 import { SettingsAction } from "./settings"
+
+import { CatalogType, PermissionStruct } from "../fetch"
+import { Error, Server } from "../types"
 
 export enum TypeKeys {
 	SERVLETS_REQUEST = "SERVLETS_REQUEST",
@@ -84,10 +87,10 @@ export function requestLogin(username: string, password: string): LoginRequestAc
 
 export interface LoginResponseAction extends Action {
 	type: TypeKeys.LOGIN_RESPONSE
-	data: UserPermissions
+	data: PermissionStruct
 	error: Error | undefined
 }
-export function respondLogin(data: UserPermissions, error: Error | undefined): LoginResponseAction {
+export function respondLogin(data: PermissionStruct, error: Error | undefined): LoginResponseAction {
 	return {
 		type: TypeKeys.LOGIN_RESPONSE,
 		data: data,
@@ -120,9 +123,9 @@ export function requestCheckUser(): CheckUserRequestAction {
 export interface CheckUserResponseAction extends Action {
 	type: TypeKeys.CHECK_USER_RESPONSE
 	ok: boolean
-	data: UserPermissions
+	data: PermissionStruct
 }
-export function respondCheckUser(ok: boolean, data: UserPermissions): CheckUserResponseAction {
+export function respondCheckUser(ok: boolean, data: PermissionStruct): CheckUserResponseAction {
 	return {
 		type: TypeKeys.CHECK_USER_RESPONSE,
 		ok,
@@ -164,7 +167,7 @@ export type AppAction =
 	// Others
 	DashboardAction |
 	CommandAction |
-	DataViewAction<DataObject> |
+	DataViewAction<any> |
 	NotificationAction |
 	PlayerAction |
 	PluginAction |

@@ -1,5 +1,5 @@
 import { Action } from "redux"
-import { Player } from "../types";
+import { Player } from "../fetch"
 
 export enum TypeKeys {
 	KICK_REQUEST = "PLAYER_KICK_REQUEST",

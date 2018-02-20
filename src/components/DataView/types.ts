@@ -1,12 +1,13 @@
-import { PermissionTree } from "../Util"
-import { IdFunction, DataViewRef, DataField, DataObject, DataFieldViewFunc } from "../../types"
 import { SemanticICONS } from "semantic-ui-react"
-import { ListRequestAction, CreateRequestAction, DetailsRequestAction, ChangeRequestAction,
-	DeleteRequestAction, SetFilterAction } from "../../actions/dataview"
 
-export interface OwnProps<T extends DataObject> {
-	title: string
-	icon: SemanticICONS
+import { ChangeRequestAction, CreateRequestAction, DeleteRequestAction, DetailsRequestAction,
+	ListRequestAction, SetFilterAction } from "../../actions/dataview"
+import { DataField, DataFieldViewFunc, DataViewRef, IdFunction } from "../../types"
+import { PermissionTree } from "../Util"
+
+export interface OwnProps<T> {
+	title?: string
+	icon?: SemanticICONS
 	canEdit?: boolean
 	canDelete?: boolean
 	createTitle?: string
@@ -24,7 +25,7 @@ export interface OwnProps<T extends DataObject> {
 	onDelete?: (data: T, view: DataViewRef<T>) => void
 }
 
-export interface StateProps<T extends DataObject> {
+export interface StateProps<T> {
 	creating: boolean
 	list: T[]
 	types: {}
@@ -36,10 +37,10 @@ export interface StateProps<T extends DataObject> {
 	}
 }
 
-export interface Props<T extends DataObject> extends OwnProps<T>, StateProps<T>,
+export interface Props<T> extends OwnProps<T>, StateProps<T>,
 	reactI18Next.InjectedTranslateProps {}
 
-export interface DispatchProps<T extends DataObject> {
+export interface DispatchProps<T> {
 	requestList: () => ListRequestAction
 	requestCreate: (data: T) => CreateRequestAction<T>
 	requestDetails: (data: T) => DetailsRequestAction<T>
@@ -49,9 +50,9 @@ export interface DispatchProps<T extends DataObject> {
 	equals:  (o1: T | null, o2: T | null) => boolean
 }
 
-export interface FullProps<T  extends DataObject> extends Props<T>, DispatchProps<T> {}
+export interface FullProps<T> extends Props<T>, DispatchProps<T> {}
 
-export interface OwnState<T  extends DataObject> {
+export interface OwnState<T> {
 	page: 0
 	data: T | null
 }

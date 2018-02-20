@@ -1,17 +1,18 @@
+import { Action, Dispatch, MiddlewareAPI } from "redux"
 import * as request from "superagent"
-import { Dispatch, Action, MiddlewareAPI } from "redux"
-import { AppState, Error, ExtendedMiddleware } from "../types"
 
-import { requestServlets, AppAction, TypeKeys, requestLogout, respondServlets,
-	respondLogin, respondCheckUser, respondCatalog } from "../actions"
-import { TypeKeys as CommandTypeKeys, respondExecute } from "../actions/command"
-import { TypeKeys as DashboardTypeKeys, respondInfo, respondStats } from "../actions/dashboard"
-import { TypeKeys as DataViewTypeKeys, respondList, respondDetails,
-	respondCreate, respondChange, respondDelete } from "../actions/dataview"
-import { TypeKeys as PlayerTypeKeys, respondKickPlayer, respondBanPlayer } from "../actions/player"
-import { TypeKeys as PluginTypeKeys, respondPluginConfig, respondPluginConfigSave } from "../actions/plugin"
-import { TypeKeys as SettingTypeKeys, respondSaveProperty } from "../actions/settings"
+import { AppAction, requestLogout, requestServlets, respondCatalog, respondCheckUser,
+	respondLogin, respondServlets, TypeKeys } from "../actions"
+import { respondExecute, TypeKeys as CommandTypeKeys } from "../actions/command"
+import { respondInfo, respondStats, TypeKeys as DashboardTypeKeys } from "../actions/dashboard"
+import { respondChange, respondCreate, respondDelete, respondDetails, respondList,
+	TypeKeys as DataViewTypeKeys } from "../actions/dataview"
 import { showNotification } from "../actions/notification"
+import { respondBanPlayer, respondKickPlayer, TypeKeys as PlayerTypeKeys } from "../actions/player"
+import { respondPluginConfig, respondPluginConfigSave, TypeKeys as PluginTypeKeys } from "../actions/plugin"
+import { respondSaveProperty, TypeKeys as SettingTypeKeys } from "../actions/settings"
+
+import { AppState, Error, ExtendedMiddleware } from "../types"
 
 const call = (state: AppState, dispatch: Dispatch<Action>) => (method: string) => (
 	path: string,
@@ -126,7 +127,7 @@ const api: ExtendedMiddleware<AppState> = ({ getState, dispatch }: MiddlewareAPI
 
 		case DashboardTypeKeys.STATS_REQUEST:
 			get("info/stats", data => {
-				next(respondStats(data.tps, data.players, data.cpu, data.memory, data.disk))
+				next(respondStats({ tps: data.tps, players: data.players, cpu: data.cpu, memory: data.memory, disk: data.disk }))
 			})
 			break
 

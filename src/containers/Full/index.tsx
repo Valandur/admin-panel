@@ -1,19 +1,19 @@
+import * as _ from "lodash"
+import * as Raven from "raven-js"
 import * as React from "react"
+import { translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
 import { RouteComponentProps } from "react-router"
-import { Switch, Route, Redirect } from "react-router-dom"
-import { Button, Sidebar, Segment, Message } from "semantic-ui-react"
-import { translate } from "react-i18next"
-import * as Raven from "raven-js"
+import { Redirect, Route, Switch } from "react-router-dom"
 import { Action } from "redux"
-import * as _ from "lodash"
+import { Button, Message, Segment, Sidebar } from "semantic-ui-react"
 
-import { ViewDefinition, AppState } from "../../types"
 import { requestStats } from "../../actions/dashboard"
-
-import SidebarMenu from "../../components/Menu/SidebarMenu"
 import HeaderMenu from "../../components/Menu/HeaderMenu"
+import SidebarMenu from "../../components/Menu/SidebarMenu"
 import { checkPermissions, PermissionTree } from "../../components/Util"
+import { AppState, ViewDefinition } from "../../types"
+
 import views from "./Views"
 
 const baseIssueUrl = "https://github.com/Valandur/admin-panel/issues/new?"

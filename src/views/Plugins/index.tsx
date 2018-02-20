@@ -1,33 +1,46 @@
-import React, { Component } from 'react'
-import { connect } from "react-redux"
-import { Segment, Button, Modal, Label, Tab, Message } from "semantic-ui-react"
-import JsonEditor from "@dr-kobros/react-jsoneditor"
+import * as _ from "lodash"
+import * as React from "react"
 import { translate } from "react-i18next"
-import _ from "lodash"
+import { connect, Dispatch } from "react-redux"
+import { Button, Label, Message, Modal, Segment, Tab } from "semantic-ui-react"
 
-import {
-	requestPluginConfig,
-	setPluginConfig,
-	requestPluginConfigSave
-} from "../../actions/plugin"
+import { AppAction } from "../../actions"
+import { PluginConfigRequestAction, PluginConfigSaveRequestAction, requestPluginConfig, requestPluginConfigSave,
+	setPluginConfig, SetPluginConfigAction } from "../../actions/plugin"
+import { ReactJSONEditor } from "../../components/JsonEditor"
+import { PluginContainer } from "../../fetch"
+import { AppState, DataViewRef } from "../../types"
 
 import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("plugin", "id", true)
 
-class Plugins extends Component {
+interface Props extends reactI18Next.InjectedTranslateProps {
+	configs: {
+		[x: string]: any
+	}
+	requestPluginConfig: (id: string) => PluginConfigRequestAction
+	setPluginConfig: (id: string, conf: any) => SetPluginConfigAction
+	requestPluginConfigSave: (id: string, plugin: PluginContainer, configs: any) => PluginConfigSaveRequestAction
+}
 
-	constructor(props) {
-		super(props);
+interface OwnState {
+	activeTab?: number
+	modal: boolean
+	plugin?: PluginContainer
+}
+
+class Plugins extends React.Component<Props, OwnState> {
+
+	constructor(props: Props) {
+		super(props)
 
 		this.state = {
-			activeTab: false,
 			modal: false,
-			plugin: {},
-		};
+		}
 
-		this.toggleModal = this.toggleModal.bind(this);
-		this.save = this.save.bind(this);
-		this.handleChange = this.handleChange.bind(this);
+		this.toggleModal = this.toggleModal.bind(this)
+		this.save = this.save.bind(this)
+		this.handleChange = this.handleChange.bind(this)
 	}
 
 	toggleModal() {
@@ -36,110 +49,125 @@ class Plugins extends Component {
 		})
 	}
 
-	showDetails(plugin, view) {
+	showDetails(plugin: PluginContainer, view: DataViewRef<PluginContainer>) {
 		this.setState({
 			modal: true,
 			plugin: plugin,
 		})
-		this.props.requestPluginConfig(plugin.id);
+		this.props.requestPluginConfig(plugin.id)
 	}
 
-	toggle(tab) {
+	toggle(tab: number) {
 		if (this.state.activeTab !== tab) {
 			this.setState({
 				activeTab: tab
-			});
+			})
 		}
 	}
 
-	handleChange(name, json) {
+	handleChange(name: string, json: any) {
 		this.props.setPluginConfig(name, json)
 	}
 
 	save() {
-		const plugin = this.state.plugin;
-		this.props.requestPluginConfigSave(plugin.id, plugin, this.props.configs);
-		this.toggleModal();
+		const plugin = this.state.plugin
+		if (!plugin) {
+			return
+		}
+		this.props.requestPluginConfigSave(plugin.id, plugin, this.props.configs)
+		this.toggleModal()
 	}
 
 	render() {
 		const _t = this.props.t
 
-		return <div>
-			<Segment basic>
-				<Message warning>
-					<Message.Header>{_t("WarnTitle")}</Message.Header>
-					<p>{_t("WarnText")}</p>
-				</Message>
-			</Segment>
-			<DataView
-				icon="plug"
-				title={_t("Plugins")}
-				fields={{
-					id: _t("Id"),
-					name: _t("Name"),
-					version: _t("Version"),
-				}}
-				actions={(plugin, view) => <div>
-					<Button
+		return (
+			<div>
+				<Segment basic>
+					<Message warning>
+						<Message.Header>{_t("WarnTitle")}</Message.Header>
+						<p>{_t("WarnText")}</p>
+					</Message>
+				</Segment>
+				<DataView
+					icon="plug"
+					title={_t("Plugins")}
+					fields={{
+						id: _t("Id"),
+						name: _t("Name"),
+						version: _t("Version"),
+					}}
+					actions={(plugin: PluginContainer, view) => <div>
+						<Button
 							color="blue"
-							onClick={e => this.showDetails(plugin, view)}>
-						{_t("Details")}
-					</Button>
-				</div>}
-			/>
+							onClick={e => this.showDetails(plugin, view)}
+						>
+							{_t("Details")}
+						</Button>
+					</div>}
+				/>
 
-			{this.renderModal()}
-		</div>
+				{this.renderModal()}
+			</div>
+		)
 	}
 
 	renderModal() {
+		if (!this.state.plugin) {
+			return
+		}
+
 		const _t = this.props.t
 
-		return <Modal
+		return (
+			<Modal
 				open={this.state.modal}
 				onClose={this.toggleModal}
-				size="fullscreen">
-			<Modal.Header>
-				{this.state.plugin.name}{" "}
-				<Label color="blue">{this.state.plugin.version}</Label>
-			</Modal.Header>
-			<Modal.Content>
-				<Tab panes={
-					_.map(this.props.configs, (conf, name) => ({
-						menuItem: name,
-						render: () =>
-							<JsonEditor
-								key={name}
-								value={conf}
-								onChange={conf => this.handleChange(name, conf)}
-								width="100%"
-								height="calc(100vh - 20em)"
-							/>
-					}))
-				} />
-			</Modal.Content>
-			<Modal.Actions>
-				<Button primary content={_t("Save")} onClick={this.save} />
-				<Button content={_t("Cancel")} onClick={this.toggleModal} />
-			</Modal.Actions>
-		</Modal>
+				size="fullscreen"
+			>
+				<Modal.Header>
+					{this.state.plugin.name}{" "}
+					<Label color="blue">{this.state.plugin.version}</Label>
+				</Modal.Header>
+				<Modal.Content>
+					<Tab
+						panes={
+							_.map(this.props.configs, (conf, name) => ({
+								menuItem: name,
+								render: () =>
+									<ReactJSONEditor
+										key={name}
+										json={conf}
+										onChange={newConf => this.handleChange(name, newConf)}
+										width="100%"
+										height="calc(100vh - 20em)"
+									/>
+							}))
+						}
+					/>
+				</Modal.Content>
+				<Modal.Actions>
+					<Button primary content={_t("Save")} onClick={this.save} />
+					<Button content={_t("Cancel")} onClick={this.toggleModal} />
+				</Modal.Actions>
+			</Modal>
+		)
 	}
 }
 
-const mapStateToProps = (_state) => {
+const mapStateToProps = (state: AppState) => {
 	return {
-		configs: _state.plugin.configs,
+		configs: state.plugin.configs,
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
-		requestPluginConfig: (id) => dispatch(requestPluginConfig(id)),
-		setPluginConfig: (id, conf) => dispatch(setPluginConfig(id, conf)),
-		requestPluginConfigSave: (id, plugin, configs) => 
+		requestPluginConfig: (id: string) => dispatch(requestPluginConfig(id)),
+		setPluginConfig: (id: string, conf: any) => dispatch(setPluginConfig(id, conf)),
+		requestPluginConfigSave: (id: string, plugin: PluginContainer, configs: any) =>
 			dispatch(requestPluginConfigSave(id, plugin, configs)),
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate("Plugins")(Plugins));
+export default connect(mapStateToProps, mapDispatchToProps)(translate("Plugins")(Plugins))

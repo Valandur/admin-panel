@@ -1,11 +1,10 @@
-import * as React from "react"
-import { Label, Progress, Button, ButtonProps } from "semantic-ui-react"
 import * as _ from "lodash"
+import * as React from "react"
+import { Button, ButtonProps, Label, Progress } from "semantic-ui-react"
 
+import { ItemStack, PotionEffect } from "../../fetch"
 import { formatRange } from "../Util"
-import { ItemPotionEffect, ItemStack } from "../../types"
 
-const getAmplifier: (effect: ItemPotionEffect) => string = (effect: ItemPotionEffect) => getRoman(effect.amplifier + 1)
 const getRoman: (num: number) => string = (num: number) => {
 	if (num === 1) { return "I" }
 	if (num === 2) { return "II" }
@@ -14,6 +13,7 @@ const getRoman: (num: number) => string = (num: number) => {
 	if (num === 5) { return "V" }
 	return ""
 }
+const getAmplifier: (effect: PotionEffect) => string = (effect: PotionEffect) => getRoman(effect.amplifier + 1)
 
 const itemStackStyle = {
 	display: "inline-block",
@@ -46,56 +46,55 @@ class ItemStackComp extends React.Component<AppProps> {
 					/>
 				}
 				<div style={{ color: "gray", marginBottom: "0.5em" }}>{item.type.id}</div>
-				{item.data &&
 					<div>
-						{item.data.durability && 
-							(item.data.durability.unbreakable ?
+						{item.durability &&
+							(item.durability.unbreakable ?
 								<Label size="tiny">Unbreakable</Label>
 							:
 								<Progress
 									progress
 									size="small"
-									percent={formatRange(item.data.durability.durability, item.data.durability.useLimit)}
+									percent={formatRange(item.durability.durability, item.useLimit ? item.useLimit : 0)}
 									style={{ margin: "0 0 .5em 0" }}
 								/>)}
 						{item.quantity > 1 &&
 							<Label size="tiny" color="blue">
 								x{item.quantity}
 							</Label>}
-						{item.data.enchantments && 
+						{item.enchantments &&
 							<div>
-								{_.map(item.data.enchantments, enchant =>
+								{_.map(item.enchantments, enchant =>
 									<Label color="purple" size="tiny" key={enchant.id}>
 										{enchant.name}
 										<Label.Detail>{enchant.level}</Label.Detail>
 									</Label>
 								)}
 							</div>}
-						{item.data.spawn &&
+						{item.spawn &&
 							<Label size="tiny">
-								{item.data.spawn.name}
+								{item.spawn.name}
 							</Label>}
-						{item.data.potionEffects &&
-							_.map(item.data.potionEffects, effect =>
-								<Label size="tiny" color="brown" key={effect.id}>
-									{effect.name} {getAmplifier(effect)}
+						{item.potionEffects &&
+							_.map(item.potionEffects, effect =>
+								<Label size="tiny" color="brown" key={effect.type.id}>
+									{effect.type.name} {getAmplifier(effect)}
 								</Label>
 							)}
-						{item.data.foodRestoration &&
+						{item.foodRestoration &&
 							<Label
 								size="tiny"
 								color="green"
 								icon="food"
-								content={item.data.foodRestoration}
+								content={item.foodRestoration}
 							/>}
-						{item.data.burningFuel &&
+						{item.burningFuel &&
 							<Label
 								size="tiny"
 								color="red"
 								icon="fire"
-								content={item.data.burningFuel}
+								content={item.burningFuel}
 							/>}
-					</div>}
+					</div>
 			</div>
 		)
 	}

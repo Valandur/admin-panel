@@ -1,18 +1,18 @@
-import * as React from "react"
-import { connect } from "react-redux"
-import { Form } from "semantic-ui-react"
-import { translate } from "react-i18next"
-import * as moment from "moment"
 import * as _ from "lodash"
+import * as moment from "moment"
+import * as React from "react"
+import { translate } from "react-i18next"
+import { connect, Dispatch } from "react-redux"
+import { Form } from "semantic-ui-react"
 
+import { AppAction } from "../../actions"
+import { ExecuteRequestAction, requestExecute } from "../../actions/command"
+import { ListRequestAction, requestList } from "../../actions/dataview"
 import Autosuggest from "../../components/Autosuggest"
-import { requestList, ListRequestAction } from "../../actions/dataview"
-import { requestExecute, ExecuteRequestAction } from "../../actions/command"
+import { Command, CommandCall } from "../../fetch"
+import { AppState } from "../../types"
 
 import DataViewFunc from "../../components/DataView"
-import { AppState, Command, CommandCall } from "../../types"
-import { Dispatch } from "redux"
-import { AppAction } from "../../actions"
 const DataView = DataViewFunc("history/cmd", "timestamp")
 
 interface Props extends reactI18Next.InjectedTranslateProps {
@@ -65,8 +65,11 @@ class Commands extends React.Component<Props, {}> {
 			cmds = _.map(subs, sub => ({
 				name: sub,
 				description: cmds[0].description,
+				aliases: cmds[0].aliases,
 				usage: cmds[0].usage,
+				help: cmds[0].help,
 				base: cmds[0].name,
+				link: cmds[0].link,
 				isSub: true,
 			}))
 		}
@@ -118,11 +121,11 @@ class Commands extends React.Component<Props, {}> {
 						label: _t("Source"),
 						filter: true,
 						filterValue: (cmd: CommandCall) => cmd.cause.causes ? (cmd.cause.causes[0]) :
-							(cmd.cause.source && cmd.cause.source.name ?
-								cmd.cause.source.name : cmd.cause.source),
+							((cmd as any).cause.source && (cmd as any).cause.source.name ?
+							(cmd as any).cause.source.name : (cmd as any).cause.source),
 						view: (cmd: CommandCall) => cmd.cause.causes ? (cmd.cause.causes[0]) :
-							(cmd.cause.source && cmd.cause.source.name ?
-								cmd.cause.source.name : cmd.cause.source),
+							((cmd as any).cause.source && (cmd as any).cause.source.name ?
+							(cmd as any).cause.source.name : (cmd as any).cause.source),
 					},
 					command: {
 						label: _t("Command"),

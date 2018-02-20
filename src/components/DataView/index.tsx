@@ -1,28 +1,23 @@
+import * as _ from "lodash"
 import * as React from "react"
 import { connect } from "react-redux"
-import { Segment, Grid } from "semantic-ui-react"
 import { Dispatch } from "redux"
-import * as _ from "lodash"
+import { Grid, Segment } from "semantic-ui-react"
 
+import CreateForm from "../CreateForm"
 import DataTable, { DataTableProps } from "../DataTable"
 import FilterForm from "../FilterForm"
-import CreateForm from "../CreateForm"
 import { checkPermissions } from "../Util"
-import { IdFunction, DataViewRef, DataObject, DataFieldRaw, AppState, DataTableRef } from "../../types"
-import { FullProps, OwnState, OwnProps, StateProps, DispatchProps } from "./types"
 
-import {
-	setFilter,
-	requestList,
-	requestDetails,
-	requestCreate,
-	requestChange,
-	requestDelete,
-} from "../../actions/dataview"
+import { AppState, DataFieldRaw, DataTableRef, DataViewRef, IdFunction } from "../../types"
+import { DispatchProps, FullProps, OwnProps, OwnState, StateProps } from "./types"
+
+import { AppAction } from "../../actions"
+import { requestChange, requestCreate, requestDelete, requestDetails, requestList,
+	setFilter } from "../../actions/dataview"
 import { DataViewState } from "../../reducers/dataview"
-import { AppAction } from "../../actions";
 
-class DataView<T extends DataObject> extends React.Component<FullProps<T>, OwnState<T>> {
+class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 
 	interval: NodeJS.Timer
 
@@ -94,7 +89,7 @@ class DataView<T extends DataObject> extends React.Component<FullProps<T>, OwnSt
 	}
 
 	render() {
-		const checks: ((val: object) => boolean)[] = []
+		const checks: ((val: T) => boolean)[] = []
 		let regsValid = false
 
 		// Reference that we pass to our various functions

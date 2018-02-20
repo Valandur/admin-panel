@@ -1,9 +1,10 @@
 import * as i18next from "i18next"
 import * as _ from "lodash"
 
-import { TypeKeys, AppAction } from "../actions"
-import { Server, CatalogType, Lang } from "../types"
+import { AppAction, TypeKeys } from "../actions"
 import { PermissionTree } from "../components/Util"
+import { CatalogType } from "../fetch"
+import { Lang, Server } from "../types"
 
 export interface ApiState {
 	key?: string

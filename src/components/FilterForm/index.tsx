@@ -1,11 +1,11 @@
-import * as React from "react"
-import { Segment, Header, Form, Icon, Dropdown, Message } from "semantic-ui-react"
 import * as _ from "lodash"
+import * as React from "react"
+import { Dropdown, Form, Header, Icon, Message, Segment } from "semantic-ui-react"
 
+import { DataFieldGroup, DataFieldRaw } from "../../types"
 import { handleChange, HandleChangeFunc } from "../Util"
-import { DataObject, DataFieldGroup, DataFieldRaw } from "../../types"
 
-export interface AppProps<T extends DataObject> {
+export interface AppProps<T> {
 	title: string
 	valid: boolean
 	fields: {
@@ -17,7 +17,7 @@ export interface AppProps<T extends DataObject> {
 	onFilterChange: (key: string, value: string) => void
 }
 
-class FilterForm<T extends DataObject> extends React.Component<AppProps<T>> {
+class FilterForm<T> extends React.Component<AppProps<T>> {
 
 	handleChange: HandleChangeFunc
 

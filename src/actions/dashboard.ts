@@ -1,5 +1,5 @@
 import { Action } from "redux"
-import { ServerStat, InfoData } from "../types"
+import { ServerInfo, ServerStats } from "../fetch"
 
 export enum TypeKeys {
 	INFO_REQUEST = "INFO_REQUEST",
@@ -19,9 +19,9 @@ export function requestInfo(): InfoRequestAction {
 
 export interface InfoResponseAction extends Action {
 	type: TypeKeys.INFO_RESPONSE
-	data: InfoData
+	data: ServerInfo
 }
-export function respondInfo(data: InfoData): InfoResponseAction {
+export function respondInfo(data: ServerInfo): InfoResponseAction {
 	return {
 		type: TypeKeys.INFO_RESPONSE,
 		data: data,
@@ -37,24 +37,17 @@ export function requestStats() {
 	}
 }
 
-export interface StatsResponseAction extends Action {
+export interface StatsResponseAction extends Action, ServerStats {
 	type: TypeKeys.STATS_RESPONSE
-	tps: ServerStat[]
-	players: ServerStat[]
-	cpu: ServerStat[]
-	memory: ServerStat[]
-	disk: ServerStat[]
 }
-export function respondStats(
-			tps: ServerStat[], players: ServerStat[], cpu: ServerStat[],
-			memory: ServerStat[], disk: ServerStat[]): StatsResponseAction {
+export function respondStats(stats: ServerStats): StatsResponseAction {
 	return {
 		type: TypeKeys.STATS_RESPONSE,
-		tps: tps,
-		players: players,
-		cpu: cpu,
-		memory: memory,
-		disk: disk,
+		tps: stats.tps,
+		players: stats.players,
+		cpu: stats.cpu,
+		memory: stats.memory,
+		disk: stats.disk,
 	}
 }
 

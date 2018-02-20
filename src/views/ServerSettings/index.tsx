@@ -1,59 +1,58 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import { Segment, Message } from "semantic-ui-react"
+import * as React from "react"
 import { translate } from "react-i18next"
+import { connect, Dispatch } from "react-redux"
+import { Message, Segment } from "semantic-ui-react"
+
+import { AppAction } from "../../actions"
+import { AppState } from "../../types"
 
 import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("info/properties", "key")
 
-class ServerSettings extends Component {
+interface Props extends reactI18Next.InjectedTranslateProps {
+}
 
-	handleEdit(prop) {
-		this.props.editProperty(prop);
-	}
+interface OwnState {
+}
 
-	handleChange(event, prop) {
-		this.props.setProperty(prop, event.target.value);
-	}
-
-	handleSave(prop) {
-		this.props.requestSaveProperty(prop);
-	}
+class ServerSettings extends React.Component<Props, OwnState> {
 
 	render() {
 		const _t = this.props.t
-		
-		return <div>
-			<Segment basic>
-				<Message negative>
-					<Message.Header>{_t("WIPTitle")}</Message.Header>
-					<p>{_t("WIPText")}</p>
-				</Message>
-			</Segment>
 
-			<DataView
-				canEdit
-				icon="cogs"
-				title={_t("ServerSettings")}
-				fields={{
-					key: {
-						label: _t("Key"),
-					},
-					value: {
-						label: _t("Value"),
-						edit: true,
-					}
-				}}
-			/>
-		</div>
+		return (
+			<div>
+				<Segment basic>
+					<Message negative>
+						<Message.Header>{_t("WIPTitle")}</Message.Header>
+						<p>{_t("WIPText")}</p>
+					</Message>
+				</Segment>
+
+				<DataView
+					canEdit
+					icon="cogs"
+					title={_t("ServerSettings")}
+					fields={{
+						key: {
+							label: _t("Key"),
+						},
+						value: {
+							label: _t("Value"),
+							edit: true,
+						}
+					}}
+				/>
+			</div>
+		)
 	}
 }
 
-const mapStateToProps = (_state) => {
+const mapStateToProps = (state: AppState) => {
 	return {}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {}
 }
 

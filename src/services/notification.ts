@@ -1,13 +1,13 @@
 import * as _ from "lodash"
+import { System } from "react-notification-system"
+import { Action, Dispatch, MiddlewareAPI } from "redux"
 
-import { TypeKeys, AppAction } from "../actions"
-import { TypeKeys as NotifTypeKeys } from "../actions/notification"
+import { AppAction, TypeKeys } from "../actions"
 import { TypeKeys as CmdTypeKeys } from "../actions/command"
 import { TypeKeys as DataTypeKeys } from "../actions/dataview"
+import { TypeKeys as NotifTypeKeys } from "../actions/notification"
 import { TypeKeys as PlayerTypeKeys } from "../actions/player"
-import { MiddlewareAPI, Dispatch, Action } from "redux"
 import { AppState, ExtendedMiddleware } from "../types"
-import { System } from "react-notification-system"
 
 let notifRef: System
 

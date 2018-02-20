@@ -1,12 +1,12 @@
-import * as React from "react"
-import { Accordion, Radio, Button } from "semantic-ui-react"
-import { translate } from "react-i18next"
 import * as _ from "lodash"
+import * as React from "react"
+import { translate } from "react-i18next"
+import { Accordion, Button, Radio } from "semantic-ui-react"
 
+import { ItemStack } from "../../fetch"
 import ItemStackComp from "../ItemStack"
-import { ItemStack } from "../../types"
 
-const customizer: (objValue: ItemStack, srcValue: ItemStack) => ItemStack[] | undefined = 
+const customizer: (objValue: ItemStack, srcValue: ItemStack) => ItemStack[] | undefined =
 	(objValue: ItemStack, srcValue: ItemStack) => {
 		if (_.isArray(objValue)) {
 			return objValue.concat(srcValue)
@@ -16,9 +16,9 @@ const customizer: (objValue: ItemStack, srcValue: ItemStack) => ItemStack[] | un
 
 export interface AppProps extends reactI18Next.InjectedTranslateProps {
 	items: ItemStack[]
-	dontStack: boolean
-	stackOption: boolean
-	dontCollapse: boolean
+	dontStack?: boolean
+	stackOption?: boolean
+	dontCollapse?: boolean
 }
 
 interface AppState {

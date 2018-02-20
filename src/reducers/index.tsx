@@ -1,16 +1,17 @@
-import { routerReducer } from "react-router-redux"
 import * as _ from "lodash"
+import { routerReducer } from "react-router-redux"
 
 import api from "./api"
-import dashboard from "./dashboard"
 import cmd from "./command"
+import dashboard from "./dashboard"
+import dataview from "./dataview"
 import player from "./player"
 import plugin from "./plugin"
 import settings from "./settings"
-import dataview from "./dataview"
+
 import { AppAction } from "../actions"
-import { AppState } from "../types"
 import { TypeKeys as DataViewTypeKeys } from "../actions/dataview"
+import { AppState } from "../types"
 
 const app = (state: AppState, action: AppAction) => {
 	let data = state

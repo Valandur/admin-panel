@@ -1,11 +1,11 @@
 import * as _ from "lodash"
 
-import { TypeKeys } from "../actions/plugin"
 import { AppAction } from "../actions"
+import { TypeKeys } from "../actions/plugin"
 
 export interface PluginState {
 	configs: {
-		[x: string]: object
+		[x: string]: any
 	}
 }
 

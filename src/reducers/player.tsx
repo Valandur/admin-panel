@@ -1,11 +1,12 @@
 import * as _ from "lodash"
 
-import { TypeKeys } from "../actions/player"
 import { AppAction } from "../actions"
-import { Player } from "../types"
+import { TypeKeys } from "../actions/player"
 import { DataViewState } from "./dataview"
 
-const initialState: DataViewState<Player> = {
+import { PlayerFull } from "../fetch"
+
+const initialState: DataViewState<PlayerFull> = {
 	creating: false,
 	filter: {},
 	list: [],

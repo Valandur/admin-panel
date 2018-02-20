@@ -1,16 +1,12 @@
 import * as _ from "lodash"
 
-import { TypeKeys } from "../actions/dashboard"
 import { AppAction } from "../actions"
-import { ServerStat, InfoData } from "../types"
+import { TypeKeys } from "../actions/dashboard"
 
-export interface DashboardState {
-	tps: ServerStat[]
-	players: ServerStat[]
-	cpu: ServerStat[]
-	memory: ServerStat[]
-	disk: ServerStat[]
-	data?: InfoData
+import { ServerInfo, ServerStats } from "../fetch"
+
+export interface DashboardState extends ServerStats {
+	data?: ServerInfo
 }
 
 const defaultState: DashboardState = {

@@ -1,11 +1,11 @@
 import * as React from "react"
-import { connect } from "react-redux"
-import { Menu, Icon, Image, Dropdown, MenuItemProps } from "semantic-ui-react"
 import { translate } from "react-i18next"
-
-import { requestLogout, changeLanguage, ChangeLanguageAction, LogoutRequestAction, AppAction } from "../../actions"
+import { connect } from "react-redux"
 import { Dispatch } from "redux"
-import { Lang, AppState } from "../../types"
+import { Dropdown, Icon, Image, Menu, MenuItemProps } from "semantic-ui-react"
+
+import { AppAction, changeLanguage, ChangeLanguageAction, LogoutRequestAction, requestLogout } from "../../actions"
+import { AppState, Lang } from "../../types"
 
 const apiLink = "/docs"
 const spongeLink = "https://forums.spongepowered.org/t/" +

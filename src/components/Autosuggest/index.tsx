@@ -1,7 +1,7 @@
+import * as _ from "lodash"
 import * as React from "react"
 import * as enhanceWithClickOutside from "react-click-outside"
-import * as _ from "lodash"
-import { AutosuggestItem, AutosuggestChangeData } from "../../types"
+import { AutosuggestChangeData, AutosuggestItem } from "../../types"
 
 export interface AppProps {
 	id: string

@@ -1,20 +1,21 @@
 import * as React from "react"
+import { translate } from "react-i18next"
 import { connect } from "react-redux"
 import { NavLink } from "react-router-dom"
-import { Sidebar, Menu, Icon, Progress } from "semantic-ui-react"
-import { translate } from "react-i18next"
 import { Dispatch } from "redux"
+import { Icon, Menu, Progress, Sidebar } from "semantic-ui-react"
 
-import { requestServlets, ServletsRequestAction, AppAction } from "../../actions"
+import { AppAction, requestServlets, ServletsRequestAction } from "../../actions"
 
 import { checkPermissions, PermissionTree } from "../../components/Util"
-import { ViewDefinition, ServerStat, AppState } from "../../types"
+import { ServerStatDouble } from "../../fetch"
+import { AppState, ViewDefinition } from "../../types"
 
 export interface Props extends reactI18Next.InjectedTranslateProps {
 	// State
-	cpu: ServerStat[],
-	memory: ServerStat[],
-	disk: ServerStat[],
+	cpu: Array<ServerStatDouble>
+	disk: Array<ServerStatDouble>
+	memory: Array<ServerStatDouble>
 	servlets: {},
 	perms: PermissionTree,
 	path: string

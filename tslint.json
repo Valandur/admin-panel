@@ -16,6 +16,7 @@
         "curly": true,
         "eofline": true,
         "forin": true,
+        "grouped-imports": true,
         "indent": [ true, "tabs" ],
         "interface-name": [true, "never-prefix"],
         "jsdoc-format": true,
@@ -31,10 +32,10 @@
             "variables-before-functions"
         ],
         //"no-any": true,
-        "no-unsafe-any": true,
+        //"no-unsafe-any": true,
         "no-arg": true,
         "no-bitwise": true,
-        "no-console": [
+        /*"no-console": [
             true,
             "log",
             "error",
@@ -43,7 +44,7 @@
             "time",
             "timeEnd",
             "trace"
-        ],
+        ],*/
         "no-consecutive-blank-lines": true,
         "no-construct": true,
         "no-debugger": true,
@@ -63,6 +64,7 @@
             "check-open-brace",
             "check-whitespace"
         ],
+        "ordered-imports": true,
         "quotemark": [true, "double", "jsx-double"],
         "radix": true,
         "semicolon": [true, "never"],
