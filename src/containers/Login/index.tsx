@@ -10,6 +10,8 @@ import { AppAction, changeLanguage, ChangeLanguageAction, changeServer, ChangeSe
 import { handleChange, HandleChangeFunc } from "../../components/Util"
 import { AppState, Lang, Server } from "../../types"
 
+const imageUrl = require("../../assets/logo.png")
+
 interface StateProps {
 	loggingIn: boolean
 	server?: Server
@@ -81,7 +83,7 @@ class Login extends React.Component<Props, OwnState> {
 			>
 				<Grid.Column style={{ maxWidth: 450 }}>
 
-					<Image size="medium" centered src="./img/logo.png" />
+					<Image size="medium" centered src={imageUrl} />
 
 					<Form size="large" loading={this.props.loggingIn}>
 						<Segment>
@@ -103,14 +105,18 @@ class Login extends React.Component<Props, OwnState> {
 								control={Dropdown}
 								placeholder="Change language"
 								options={[{
-									text: "English",
+
 									value: "en",
+									flag: "us",
+									text: "English",
 								}, {
 									text: "Deutsch",
 									value: "de",
+									flag: "de",
 								}, {
-									"text": "русский",
+									text: "русский",
 									value: "ru",
+									flag: "ru",
 								}]}
 								value={this.props.lang}
 								onChange={(e: Event, data: DropdownProps) => this.props.changeLanguage(data.value as string)}

@@ -46,15 +46,13 @@ export function requestSaveProperty(prop: EServerProperty): SavePropertyRequestA
 export interface SavePropertyResponseAction extends Action {
 	type: TypeKeys.SAVE_PROPERTY_RESPONSE
 	key: string
-	properties: {
-		[x: string]: string
-	}
+	value: string
 }
-export function respondSaveProperty(key: string, properties: { [x: string]: string }): SavePropertyResponseAction {
+export function respondSaveProperty(key: string, value: string): SavePropertyResponseAction {
 	return {
 		type: TypeKeys.SAVE_PROPERTY_RESPONSE,
 		key,
-		properties,
+		value,
 	}
 }
 

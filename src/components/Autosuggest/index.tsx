@@ -1,6 +1,7 @@
 import * as _ from "lodash"
 import * as React from "react"
 import * as enhanceWithClickOutside from "react-click-outside"
+
 import { AutosuggestChangeData, AutosuggestItem } from "../../types"
 
 export interface AppProps {
@@ -28,10 +29,6 @@ class Autosuggest extends React.Component<AppProps, AppState> {
 			value: "",
 			suggestions: [],
 		}
-
-		this.handleChange = this.handleChange.bind(this)
-		this.handleClick = this.handleClick.bind(this)
-		this.handleFocus = this.handleFocus.bind(this)
 	}
 
 	handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -77,10 +74,10 @@ class Autosuggest extends React.Component<AppProps, AppState> {
 					type="text"
 					placeholder={this.props.placeholder}
 					value={this.state.value}
-					style={{width: "100%"}}
+					style={{ width: "100%" }}
 					ref={input => { if (input !== null) { this.input = input }}}
-					onFocus={this.handleFocus}
-					onChange={this.handleChange}
+					onFocus={() => this.handleFocus()}
+					onChange={e => this.handleChange(e)}
 					onKeyPress={this.props.onKeyPress}
 				/>
 				{ this.state.suggestions.length ?

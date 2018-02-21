@@ -76,7 +76,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 	}
 
 	// Save/Update an existing data entry
-	save(data: T, newData: T | {}) {
+	save(data: T, newData: any) {
 		this.props.requestChange(data, newData)
 		this.setState({
 			data: null,
@@ -199,7 +199,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 								button={this.props.createButton}
 								creating={this.props.creating}
 								fields={createFields}
-								onCreate={(obj: T, tableRef: DataTableRef) =>
+								onCreate={(obj: any, tableRef: DataTableRef) =>
 									this.props.onCreate ?
 										this.props.onCreate(obj, expandRef(tableRef))
 									:
@@ -261,7 +261,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 
 function mapStateToProps<T>(endpoint: string, id: IdFunction<T>) {
 	return (_state: AppState, ownProps: OwnProps<T>) => {
-		const state: DataViewState<T> = _.get(_state, endpoint.replace(/\//g, "."))
+		const state: DataViewState<T> = _.get(_state, endpoint.replace(/\//g, "_").replace("-", ""))
 
 		return {
 			creating: state ? state.creating : false,

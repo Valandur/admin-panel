@@ -18,9 +18,9 @@ export interface DataTableProps<T> extends reactI18Next.InjectedTranslateProps {
 		[key: string]: DataFieldRaw<T>
 	}
 	actions?: (data: T, view: DataTableRef) => JSX.Element
-	onEdit: (data: T | null, view: DataTableRef) => void
-	onSave: (data: T, newData: any, view: DataTableRef) => void
-	onDelete: (data: T, view: DataTableRef) => void
+	onEdit?: (data: T | null, view: DataTableRef) => void
+	onSave?: (data: T, newData: any, view: DataTableRef) => void
+	onDelete?: (data: T, view: DataTableRef) => void
 	idFunc: (data: T) => string
 	isEditing: (data: T) => boolean
 }
@@ -78,7 +78,9 @@ class DataTable<T> extends React.Component<DataTableProps<T>, DataTableState> {
 			newData: newData,
 		})
 
-		this.props.onEdit(obj, view)
+		if (this.props.onEdit) {
+			this.props.onEdit(obj, view)
+		}
 	}
 
 	render() {
@@ -151,7 +153,7 @@ class DataTable<T> extends React.Component<DataTableProps<T>, DataTableState> {
 												color="green"
 												disabled={(obj as any).updating}
 												loading={(obj as any).updating}
-												onClick={() => this.props.onSave(obj, this.state.newData, thisRef)}
+												onClick={() => { if (this.props.onSave) { this.props.onSave(obj, this.state.newData, thisRef) }}}
 											>
 												<Icon name="save" /> {_t("Save")}
 											</Button>,
@@ -179,7 +181,7 @@ class DataTable<T> extends React.Component<DataTableProps<T>, DataTableState> {
 												color="red"
 												disabled={(obj as any).updating}
 												loading={(obj as any).updating}
-												onClick={() => this.props.onDelete(obj, thisRef)}
+												onClick={() => { if (this.props.onDelete) { this.props.onDelete(obj, thisRef) }}}
 											>
 												<Icon name="trash" /> {_t("Remove")}
 											</Button>
@@ -254,4 +256,3 @@ class DataTable<T> extends React.Component<DataTableProps<T>, DataTableState> {
 }
 
 export default translate("DataTable")(DataTable)
-// export default DataTable

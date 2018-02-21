@@ -1,5 +1,6 @@
 import * as _ from "lodash"
 
+import { AppAction } from "../actions"
 import { DataViewAction, TypeKeys } from "../actions/dataview"
 import { AppState, IdFunction } from "../types"
 
@@ -11,11 +12,18 @@ export interface DataViewState<T> {
 	list: T[]
 }
 
-export default (state: AppState, action: DataViewAction<any>) => {
-	let path: string = ""
-	if (_.has(action, "endpoint")) {
-		path = action.endpoint.replace(/\//g, ".")
+const normalizePath = (path: string) => path.replace(/\//g, "_").replace(/-/g, "")
+
+const isDataviewAction = (_action: AppAction): _action is DataViewAction<any> => {
+	return (_action as DataViewAction<any>).endpoint !== undefined
+}
+
+export default (state: AppState, action: AppAction) => {
+	if (!isDataviewAction(action)) {
+		return state
 	}
+
+	const path = normalizePath(action.endpoint)
 
 	const changeObjectStatus = (id: IdFunction<any>, data: any, updating: boolean) =>
 		_.assign({}, state, {
@@ -73,13 +81,13 @@ export default (state: AppState, action: DataViewAction<any>) => {
 			return changeObjectStatus(action.id, action.data, true)
 
 		case TypeKeys.DETAILS_RESPONSE:
-			return changeObjectStatus(action.id, action.data, !action.err)
+			return changeObjectStatus(action.id, action.data, false)
 
 		case TypeKeys.CHANGE_REQUEST:
 			return changeObjectStatus(action.id, action.data, true)
 
 		case TypeKeys.CHANGE_RESPONSE:
-			return changeObjectStatus(action.id, action.data, !action.err)
+			return changeObjectStatus(action.id, action.data, false)
 
 		case TypeKeys.DELETE_REQUEST:
 			return changeObjectStatus(action.id, action.data, true)

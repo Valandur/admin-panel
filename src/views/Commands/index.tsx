@@ -39,13 +39,14 @@ class Commands extends React.Component<Props, {}> {
 	getSuggestions(newValue: string) {
 		const val = newValue.trim().toLowerCase()
 		const parts = val.split(" ")
+		const isExact = newValue.endsWith(" ") || parts.length > 1
 
 		if (parts.length > 2) {
 			return []
 		}
 
 		let cmds: ExtendedCommand[] = this.props.commands.filter(cmd => {
-			if (parts.length > 1) {
+			if (isExact) {
 				return cmd.name.toLowerCase() === parts[0]
 			} else {
 				return _.startsWith(cmd.name.toLowerCase(), parts[0])
@@ -168,7 +169,7 @@ class Commands extends React.Component<Props, {}> {
 					},
 				}}
 				onCreate={(obj, view) =>
-					this.props.requestExecute(obj.execCmd, obj.waitLines, obj.waitTime)
+					this.props.requestExecute(obj.execCmd.trim(), obj.waitLines, obj.waitTime)
 				}
 			/>
 		)

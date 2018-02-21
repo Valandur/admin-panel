@@ -12,6 +12,7 @@ const spongeLink = "https://forums.spongepowered.org/t/" +
 	"web-api-provides-an-admin-panel-and-api-for-your-minecraft-server/15709"
 const docsLink = "https://github.com/Valandur/Web-API/blob/master/docs/INDEX.md"
 const issuesLink = "https://github.com/Valandur/admin-panel/issues"
+const imageUrl = require("../../assets/logo.png")
 
 export interface AppProps extends reactI18Next.InjectedTranslateProps {
 	lang: Lang
@@ -28,7 +29,7 @@ class HeaderMenu extends React.Component<AppProps> {
 		return (
 			<Menu fluid stackable size="small" style={{ marginBottom: 0 }}>
 				<Menu.Item as="a" header style={{ minWidth: "259px" }}>
-					<Image size="small" centered src="./img/logo.png" />
+					<Image size="small" centered src={imageUrl} />
 				</Menu.Item>
 
 				<Menu.Item name="sidebar" onClick={this.props.toggleSidebar}>
@@ -42,12 +43,15 @@ class HeaderMenu extends React.Component<AppProps> {
 						options={[{
 							text: "English",
 							value: "en",
+							flag: "us",
 						}, {
 							text: "Deutsch",
 							value: "de",
+							flag: "de",
 						}, {
-							"text": "русский",
+							text: "русский",
 							value: "ru",
+							flag: "ru",
 						}]}
 						value={this.props.lang}
 						onChange={(e, data) => { if (typeof data.value === "string") { this.props.changeLanguage(data.value) }}}

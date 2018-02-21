@@ -128,7 +128,7 @@ class Dashboard extends React.Component<Props, {}> {
 							<br />
 							Please report any bugs you find
 							<a
-								href="https://github.com/Valandur/Web-API/issues"
+								href="https://github.com/Valandur/admin-panel/issues"
 								target="_blank"
 								rel="noopener noreferrer"
 							>

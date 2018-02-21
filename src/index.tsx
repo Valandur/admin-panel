@@ -15,7 +15,6 @@ import "./locales/i18n"
 // CSS
 import "rc-slider/assets/index.css"
 import "react-select/dist/react-select.css"
-// import "semantic-ui-css/semantic.min.css"
 
 // Redux
 import App from "./reducers"

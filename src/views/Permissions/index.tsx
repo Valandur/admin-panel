@@ -4,16 +4,19 @@ import { translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
 import { Icon, Label, Menu, Segment, Tab, Table, TabProps } from "semantic-ui-react"
 
+import DataTable from "../../components/DataTable"
+
 import { AppAction } from "../../actions"
-import { ListRequestAction, requestList } from "../../actions/dataview"
-import DataViewFunc from "../../components/DataView"
+import { CollectionsListRequestAction, requestCollections, requestSubjects,
+	SubjectsListRequestAction } from "../../actions/permission"
 import { Subject, SubjectCollection } from "../../fetch"
 import { AppState } from "../../types"
 
 interface Props extends reactI18Next.InjectedTranslateProps {
-	collections: any[]
-	requestCollections: () => ListRequestAction
-	requestSubjects: (id: string) => ListRequestAction
+	collections: SubjectCollection[]
+	subjects: Subject[]
+	requestCollections: () => CollectionsListRequestAction
+	requestSubjects: (coll: SubjectCollection) => SubjectsListRequestAction
 }
 
 interface OwnState {
@@ -55,14 +58,16 @@ class Permissions extends React.Component<Props, OwnState> {
 								{_.upperFirst(coll.id)}<Label>{coll.loadedSubjectCount}</Label>
 							</Menu.Item>,
 						render: () => {
-							const DataView = DataViewFunc("permission/collection/" + coll.id + "/subject", "id")
 							return <Segment basic>
-								<DataView
-									static
+								<DataTable
+									list={this.props.subjects}
+									idFunc={(subj: Subject) => subj.id}
+									isEditing={(subj: Subject) => false}
 									fields={{
 										id: _t("Id"),
 										friendlyId: _t("Name"),
 										permissions: {
+											name: "permissions",
 											label: _t("Permissions"),
 											view: (subject: Subject) =>
 												<Table basic compact>
@@ -95,25 +100,16 @@ class Permissions extends React.Component<Props, OwnState> {
 }
 
 const mapStateToProps = (state: AppState) => {
-	const colls = state["permission.collection"]
-	if (!colls) {
-		return { collections: [] }
-	}
-
 	return {
-		collections: colls.list.map((coll: SubjectCollection) => {
-			const subjs = state["permission.collection." + coll.id + ".subject"]
-			return _.assign({}, coll, {
-				subjects: subjs ? subjs.list : []
-			})
-		}),
+		collections: state.permission.collections,
+		subjects: state.permission.subjects,
 	}
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
-		requestCollections: () => dispatch(requestList("permission/collection", false)),
-		requestSubjects: (id: string) => dispatch(requestList("permission/collection/" + id + "/subject", true)),
+		requestCollections: () => dispatch(requestCollections()),
+		requestSubjects: (coll: SubjectCollection) => dispatch(requestSubjects(coll)),
 	}
 }
 

@@ -8,10 +8,12 @@ import { respondInfo, respondStats, TypeKeys as DashboardTypeKeys } from "../act
 import { respondChange, respondCreate, respondDelete, respondDetails, respondList,
 	TypeKeys as DataViewTypeKeys } from "../actions/dataview"
 import { showNotification } from "../actions/notification"
+import { respondCollections, respondSubjects, TypeKeys as PermissionTypeKeys } from "../actions/permission"
 import { respondBanPlayer, respondKickPlayer, TypeKeys as PlayerTypeKeys } from "../actions/player"
 import { respondPluginConfig, respondPluginConfigSave, TypeKeys as PluginTypeKeys } from "../actions/plugin"
 import { respondSaveProperty, TypeKeys as SettingTypeKeys } from "../actions/settings"
 
+import { ExecuteMethodParam } from "../fetch"
 import { AppState, Error, ExtendedMiddleware } from "../types"
 
 const call = (state: AppState, dispatch: Dispatch<Action>) => (method: string) => (
@@ -65,48 +67,42 @@ const api: ExtendedMiddleware<AppState> = ({ getState, dispatch }: MiddlewareAPI
 	const put = callTemp("PUT")
 	const del = callTemp("DELETE")
 
+	const errorHandler = (err: Response) => dispatch(showNotification("error", "API Error", err.statusText))
+
 	switch (action.type) {
 		case TypeKeys.SERVLETS_REQUEST:
-			get("servlet", (data, err) => {
-				if (err) {
+			state.api.apis.info.listServlets()
+				.then(servlets => next(respondServlets(true, servlets)))
+				.catch((err: Response) => {
 					if (err.status === 401 || err.status === 403) {
 						next(requestLogout())
 					} else {
-						next(showNotification("error", "Servlet error", err.error))
+						next(showNotification("error", "Servlet error", err.statusText))
 					}
-				}
-
-				return next(respondServlets(!err, data ? data.servlets : {}))
-			}, null, false)
+					next(respondServlets(false, {}))
+				})
 			break
 
 		case TypeKeys.CHECK_USER_REQUEST:
-			get("user", (data, err) => {
-				if (err) {
+			state.api.apis.user.getUserDetails()
+				.then(perms => next(respondCheckUser(true, perms)))
+				.catch((err: Response) => {
 					if (err.status === 401 || err.status === 403) {
 						next(requestLogout())
 					} else {
-						next(showNotification("error", "User error", err.error))
+						next(showNotification("error", "User error", err.statusText))
 					}
-				}
-
-				next(respondCheckUser(!err, data))
-			}, null, false)
+				})
 			break
 
 		case TypeKeys.LOGIN_REQUEST:
-			post("user", (data, err) => {
-				// Request a list of servlets we have access to if we are logged in
-				if (!err) {
-					next(requestServlets())
-				}
-
-				// Tell our reducers that login was successful (or not)
-				return next(respondLogin(data, err))
-			}, {
+			state.api.apis.user.authUser({
 				username: action.username,
 				password: action.password,
-			}, false)
+			})
+				.then(perms => next(respondLogin(perms)))
+				.then(() => next(requestServlets()))
+				.catch(err => next(respondLogin(undefined, err)))
 			break
 
 		case TypeKeys.CATALOG_REQUEST:
@@ -114,88 +110,85 @@ const api: ExtendedMiddleware<AppState> = ({ getState, dispatch }: MiddlewareAPI
 				break
 			}
 
-			get("registry/org.spongepowered.api." + action.class, data => {
-				next(respondCatalog(action.class, data))
-			})
+			state.api.apis.registry.getRegistry("org.spongepowered.api." + action.class)
+				.then(types => next(respondCatalog(action.class, types)))
+				.catch(errorHandler)
 			break
 
 		case DashboardTypeKeys.INFO_REQUEST:
-			get("info", data => {
-				next(respondInfo(data))
-			})
+			state.api.apis.info.getInfo()
+				.then(info => next(respondInfo(info)))
+				.catch(errorHandler)
 			break
 
 		case DashboardTypeKeys.STATS_REQUEST:
-			get("info/stats", data => {
-				next(respondStats({ tps: data.tps, players: data.players, cpu: data.cpu, memory: data.memory, disk: data.disk }))
-			})
+			state.api.apis.info.getStats()
+				.then(stats => next(respondStats(stats)))
+				.catch(errorHandler)
+			break
+
+		case PermissionTypeKeys.COLLECTIONS_LIST_REQUEST:
+			state.api.apis.permission.listCollections()
+				.then(collections => next(respondCollections(collections)))
+				.catch(errorHandler)
+			break
+
+		case PermissionTypeKeys.SUBJECTS_LIST_REQUEST:
+			state.api.apis.permission.listSubjects(action.collection.id)
+				.then(subjects => next(respondSubjects(action.collection, subjects)))
+				.catch(errorHandler)
 			break
 
 		case PlayerTypeKeys.KICK_REQUEST:
-			post("player/" + action.player.uuid + "/method", (data, err) => {
-				if (err) {
-					next(respondKickPlayer(false, action.player))
-					return
-				}
-
-				next(respondKickPlayer(true, action.player))
-			}, {
+			state.api.apis.player.executeMethod(action.player.uuid, {
 				"method": "kick",
 				"parameters": [{
-					"type": "TEXT",
+					"type": ExecuteMethodParam.TypeEnum.STRING,
 					"value": "Bye",
 				}],
-			}, false)
+			})
+				.then(() => next(respondKickPlayer(true, action.player)))
+				.catch(() => next(respondKickPlayer(false, action.player)))
 			break
 
 		case PlayerTypeKeys.BAN_REQUEST:
-			post("cmd", (data, err) => {
-				if (err) {
-					next(respondBanPlayer(false, action.player, err.error))
-					return
-				}
-
-				next(respondBanPlayer(true, action.player, data[0][0]))
-			}, [{
+			state.api.apis.cmd.runCommands([{
 				"command": "ban " + action.player.name,
-			}], false)
+			}])
+				.then(results => next(respondBanPlayer(true, action.player, results[0])))
+				.catch(err => next(respondBanPlayer(false, action.player, err)))
 			break
 
 		case PluginTypeKeys.CONFIG_REQUEST:
-			get("plugin/" + action.id + "/config", (data) => {
-				next(respondPluginConfig(data))
-			})
+			state.api.apis.plugin.getPluginConfig(action.id)
+				.then(configs => respondPluginConfig(configs))
+				.catch(errorHandler)
 			break
 
 		case PluginTypeKeys.CONFIG_SAVE_REQUEST:
-			post("plugin/" + action.id + "/config", (data) => {
-				next(respondPluginConfigSave(data))
-			}, action.configs)
+			state.api.apis.plugin.changePluginConfig(action.id, action.configs)
+				.then(configs => next(respondPluginConfigSave(configs)))
+				.catch(errorHandler)
 			break
 
 		case SettingTypeKeys.SAVE_PROPERTY_REQUEST:
-			post("info/properties", data => {
-				next(respondSaveProperty(action.prop.key, data.properties))
-			}, {
+			state.api.apis.server.modifyProperties({
 				properties: {
 					[action.prop.key]: action.prop.value
 				}
 			})
+				.then(properties => next(respondSaveProperty(action.prop.key, action.prop.value)))
+				.catch(errorHandler)
 			break
 
 		case CommandTypeKeys.EXECUTE_REQUEST:
-			post("cmd", (data, err) => {
-				if (err) {
-					next(respondExecute(false, action.command, [], err))
-					return
-				}
-
-				next(respondExecute(true, action.command, data))
-			}, [{
+			state.api.apis.cmd.runCommands([{
 				command: action.command,
 				waitLines: action.waitLines,
 				waitTime: action.waitTime,
-			}], false)
+			}])
+				.then(results => next(respondExecute(true, action.command, results)))
+				.catch(err => next(respondExecute(false, action.command, [], err)))
 			break
 
 		case DataViewTypeKeys.LIST_REQUEST:

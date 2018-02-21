@@ -1,3 +1,4 @@
+import * as _ from "lodash"
 import { Dispatch } from "react-redux"
 import { push } from "react-router-redux"
 import { Action, MiddlewareAPI } from "redux"
@@ -6,7 +7,11 @@ import { AppAction, TypeKeys } from "../actions"
 import { ApiState } from "../reducers/api"
 import { AppState, ExtendedMiddleware } from "../types"
 
-const formatApi = (api: ApiState) => JSON.stringify(api)
+const formatApi = (api: ApiState): string => {
+	const data = _.clone(api)
+	delete data.apis
+	return JSON.stringify(data)
+}
 
 const persist: ExtendedMiddleware<AppState> = ({ dispatch, getState }: MiddlewareAPI<AppState>) =>
 		(next: Dispatch<Action>) => (action: AppAction): any => {

@@ -3,11 +3,12 @@ import { Dispatch, Middleware, MiddlewareAPI } from "redux"
 import { SemanticICONS } from "semantic-ui-react"
 
 import { HandleChangeFunc } from "../components/Util"
-import { Entity, PlayerFull, ServerProperty, WorldFull } from "../fetch"
+import { Entity, PlayerFull, ServerProperty, TileEntity, WorldFull } from "../fetch"
 import { ApiState } from "../reducers/api"
 import { CommandState } from "../reducers/command"
 import { DashboardState } from "../reducers/dashboard"
 import { DataViewState } from "../reducers/dataview"
+import { PermissionState } from "../reducers/permission"
 import { PluginState } from "../reducers/plugin"
 import { SettingsState } from "../reducers/settings"
 
@@ -17,14 +18,15 @@ export type Lang = "en" | "de" | "fr" | "ru"
 // Reducers
 export interface AppState {
 	api: ApiState
-	cmd: CommandState
 	dashboard: DashboardState
+	cmd: CommandState
 	entity: DataViewState<Entity>
+	permission: PermissionState
 	player: DataViewState<PlayerFull>
 	plugin: PluginState
 	world: DataViewState<WorldFull>
-	settings: SettingsState
-	"tile-entity": DataViewState<any>
+	tileentity: DataViewState<TileEntity>
+	info_properties: SettingsState
 	router: RouterState
 }
 
@@ -51,19 +53,19 @@ export interface DataViewRef<T> extends DataTableRef {
 }
 
 export type DataFieldViewFunc<T> = (obj: T, view: DataTableRef) => JSX.Element | string | undefined
-export type DataFieldFilterFunc = (view: DataTableRef) => JSX.Element
-export type DataFieldCreateFunc = (view: DataTableRef) => JSX.Element
-export type DataFieldEditFunc<T> = (obj: T, view: DataTableRef) => void
+export type DataFieldEditFunc<T> = (obj: T, view: DataTableRef) => JSX.Element | string | undefined
+export type DataFieldFilterFunc = (view: DataTableRef) => JSX.Element | undefined
+export type DataFieldCreateFunc = (view: DataTableRef) => JSX.Element | undefined
 export interface DataField<T> {
 	label?: string
 	type?: string
 	view?: DataFieldViewFunc<T> | boolean
+	edit?: DataFieldEditFunc<T> | boolean
 	createName?: string
 	create?: DataFieldCreateFunc | boolean
 	filterName?: string
 	filter?: DataFieldFilterFunc | boolean
 	filterValue?: (val: T) => string
-	edit?: DataFieldEditFunc<T> | boolean
 	required?: boolean
 	isGroup?: boolean
 	options?: { value: string, text: string }[]

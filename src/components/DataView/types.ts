@@ -21,7 +21,7 @@ export interface OwnProps<T> {
 	actions?: (data: T, view: DataViewRef<T>) => JSX.Element
 	onCreate?: (data: any, view: DataViewRef<T>) => void
 	onEdit?: (data: T | null, view: DataViewRef<T>) => void
-	onSave?: (data: T, newData: T | {}, view: DataViewRef<T>) => void
+	onSave?: (data: T, newData: any, view: DataViewRef<T>) => void
 	onDelete?: (data: T, view: DataViewRef<T>) => void
 }
 
@@ -44,7 +44,7 @@ export interface DispatchProps<T> {
 	requestList: () => ListRequestAction
 	requestCreate: (data: T) => CreateRequestAction<T>
 	requestDetails: (data: T) => DetailsRequestAction<T>
-	requestChange: (data: T, newData: T | {}) => ChangeRequestAction<T>
+	requestChange: (data: T, newData: any) => ChangeRequestAction<T>
 	requestDelete: (data: T) => DeleteRequestAction<T>
 	setFilter: (filter: string, value: string) => SetFilterAction
 	equals:  (o1: T | null, o2: T | null) => boolean

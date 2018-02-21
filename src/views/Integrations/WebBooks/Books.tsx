@@ -13,6 +13,7 @@ import DataViewFunc from "../../../components/DataView"
 const DataView = DataViewFunc("web-books/book", "id")
 
 interface Props extends reactI18Next.InjectedTranslateProps {
+	apiUrl: string
 }
 
 interface OwnState {
@@ -59,7 +60,7 @@ class Books extends React.Component<Props, OwnState> {
 	}
 
 	copy(book: WebBooksBook) {
-		copy(window.location.origin + "/api/webbooks/book/" + book.id + "/html")
+		copy(this.props.apiUrl + "/web-books/book/" + book.id + "/html")
 	}
 
 	render() {
@@ -105,9 +106,16 @@ class Books extends React.Component<Props, OwnState> {
 								fluid
 								onFocus={(e: React.SyntheticEvent<HTMLInputElement>) => (e.target as any).select()}
 								action={{ color: "teal", icon: "linkify", onClick: () => this.copy(book) }}
-								value={window.location.origin + "/api/webbooks/book/" + book.id + "/html"}
+								value={this.props.apiUrl + "/api/web-books/book/" + book.id + "/html"}
 							/>,
 					},
+				}}
+				onSave={(obj: WebBooksBook, newData: any, view: DataViewRef<WebBooksBook>) => {
+					view.save(obj, {
+						id: obj.id,
+						title: newData.title,
+						lines: newData.lines,
+					})
 				}}
 			/>
 		)
@@ -163,7 +171,9 @@ class Books extends React.Component<Props, OwnState> {
 }
 
 const mapStateToProps = (state: AppState) => {
-	return {}
+	return {
+		apiUrl: state.api.server.apiUrl
+	}
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {

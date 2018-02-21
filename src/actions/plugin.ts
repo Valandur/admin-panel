@@ -22,9 +22,11 @@ export function requestPluginConfig(id: string): PluginConfigRequestAction {
 
 export interface PluginConfigResponseAction extends Action {
 	type: TypeKeys.CONFIG_RESPONSE
-	configs: object[]
+	configs: {
+		[x: string]: any
+	}
 }
-export function respondPluginConfig(configs: object[]): PluginConfigResponseAction {
+export function respondPluginConfig(configs: { [x: string]: any }): PluginConfigResponseAction {
 	return {
 		type: TypeKeys.CONFIG_RESPONSE,
 		configs,
@@ -34,9 +36,9 @@ export function respondPluginConfig(configs: object[]): PluginConfigResponseActi
 export interface SetPluginConfigAction extends Action {
 	type: TypeKeys.CONFIG_SET
 	name: string
-	conf: object
+	conf: any
 }
-export function setPluginConfig(name: string, conf: object): SetPluginConfigAction {
+export function setPluginConfig(name: string, conf: any): SetPluginConfigAction {
 	return {
 		type: TypeKeys.CONFIG_SET,
 		name: name,
@@ -48,9 +50,11 @@ export interface PluginConfigSaveRequestAction extends Action {
 	type: TypeKeys.CONFIG_SAVE_REQUEST
 	id: string
 	plugin: PluginContainer
-	configs: object[]
+	configs: {
+		[x: string]: any
+	}
 }
-export function requestPluginConfigSave(id: string, plugin: PluginContainer, configs: object[]):
+export function requestPluginConfigSave(id: string, plugin: PluginContainer, configs: { [x: string]: any }):
 		PluginConfigSaveRequestAction {
 	return {
 		type: TypeKeys.CONFIG_SAVE_REQUEST,
@@ -62,9 +66,11 @@ export function requestPluginConfigSave(id: string, plugin: PluginContainer, con
 
 export interface PluginConfigSaveResponseAction extends Action {
 	type: TypeKeys.CONFIG_SAVE_RESPONSE
-	configs: object[]
+	configs: {
+		[x: string]: any
+	}
 }
-export function respondPluginConfigSave(configs: object[]): PluginConfigSaveResponseAction {
+export function respondPluginConfigSave(configs: { [x: string]: any }): PluginConfigSaveResponseAction {
 	return {
 		type: TypeKeys.CONFIG_SAVE_RESPONSE,
 		configs,

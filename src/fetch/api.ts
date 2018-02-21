@@ -40,7 +40,7 @@ export interface FetchAPI {
 }
 
 /**
- *
+ *  
  * @export
  * @interface FetchArgs
  */
@@ -50,7 +50,7 @@ export interface FetchArgs {
 }
 
 /**
- *
+ * 
  * @export
  * @class BaseAPI
  */
@@ -66,7 +66,7 @@ export class BaseAPI {
 };
 
 /**
- *
+ * 
  * @export
  * @class RequiredError
  * @extends {Error}
@@ -79,25 +79,25 @@ export class RequiredError extends Error {
 }
 
 /**
- *
+ * 
  * @export
  * @interface AcceptsItems
  */
 export interface AcceptsItems {
     /**
-     *
+     * 
      * @type {string}
      * @memberof AcceptsItems
      */
     operator?: AcceptsItems.OperatorEnum;
     /**
-     *
+     * 
      * @type {string}
      * @memberof AcceptsItems
      */
     key?: string;
     /**
-     *
+     * 
      * @type {Array&lt;CatalogType&gt;}
      * @memberof AcceptsItems
      */
@@ -125,31 +125,31 @@ export namespace AcceptsItems {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Account
  */
 export interface Account {
     /**
-     *
+     * 
      * @type {{ [key: string]: number; }}
      * @memberof Account
      */
     balances?: { [key: string]: number; };
     /**
-     *
+     * 
      * @type {string}
      * @memberof Account
      */
     displayName?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Account
      */
     friendlyId?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Account
      */
@@ -157,7 +157,7 @@ export interface Account {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Advancement
  */
@@ -225,7 +225,7 @@ export interface Advancement {
 }
 
 /**
- *
+ * 
  * @export
  * @interface AgeableData
  */
@@ -245,25 +245,25 @@ export interface AgeableData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ArmorSlotType
  */
 export interface ArmorSlotType {
     /**
-     *
+     * 
      * @type {string}
      * @memberof ArmorSlotType
      */
     operator?: ArmorSlotType.OperatorEnum;
     /**
-     *
+     * 
      * @type {string}
      * @memberof ArmorSlotType
      */
     key?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ArmorSlotType
      */
@@ -291,7 +291,7 @@ export namespace ArmorSlotType {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ArmorStandData
  */
@@ -323,7 +323,7 @@ export interface ArmorStandData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface AuthenticationRequest
  */
@@ -343,7 +343,7 @@ export interface AuthenticationRequest {
 }
 
 /**
- *
+ * 
  * @export
  * @interface BannerData
  */
@@ -363,7 +363,7 @@ export interface BannerData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface BeaconData
  */
@@ -383,7 +383,7 @@ export interface BeaconData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface BlockOperation
  */
@@ -490,7 +490,7 @@ export namespace BlockOperation {
 }
 
 /**
- *
+ * 
  * @export
  * @interface BlockState
  */
@@ -510,7 +510,7 @@ export interface BlockState {
 }
 
 /**
- *
+ * 
  * @export
  * @interface BreathingData
  */
@@ -530,7 +530,7 @@ export interface BreathingData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface BrewingStandData
  */
@@ -544,7 +544,7 @@ export interface BrewingStandData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CachedCause
  */
@@ -561,16 +561,10 @@ export interface CachedCause {
      * @memberof CachedCause
      */
     context: { [key: string]: any; };
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof CachedCause
-     */
-    link: string;
 }
 
 /**
- *
+ * 
  * @export
  * @interface CachedChunk
  */
@@ -638,7 +632,7 @@ export interface CachedChunk {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CachedEntity
  */
@@ -694,7 +688,7 @@ export interface CachedEntity {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CachedObject
  */
@@ -708,7 +702,7 @@ export interface CachedObject {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CachedPluginContainer
  */
@@ -764,7 +758,7 @@ export interface CachedPluginContainer {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Career
  */
@@ -790,7 +784,7 @@ export interface Career {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CatalogType
  */
@@ -810,7 +804,7 @@ export interface CatalogType {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CatalogTypeAdvancementTree
  */
@@ -822,6 +816,12 @@ export interface CatalogTypeAdvancementTree {
      */
     id: string;
     /**
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
+     * @memberof CatalogTypeAdvancementTree
+     */
+    link: string;
+    /**
      * The name of the catalog type
      * @type {string}
      * @memberof CatalogTypeAdvancementTree
@@ -830,7 +830,7 @@ export interface CatalogTypeAdvancementTree {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CatalogTypeDifficulty
  */
@@ -847,10 +847,16 @@ export interface CatalogTypeDifficulty {
      * @memberof CatalogTypeDifficulty
      */
     id: string;
+    /**
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
+     * @memberof CatalogTypeDifficulty
+     */
+    link: string;
 }
 
 /**
- *
+ * 
  * @export
  * @interface CatalogTypeDimensionType
  */
@@ -867,10 +873,16 @@ export interface CatalogTypeDimensionType {
      * @memberof CatalogTypeDimensionType
      */
     id: string;
+    /**
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
+     * @memberof CatalogTypeDimensionType
+     */
+    link: string;
 }
 
 /**
- *
+ * 
  * @export
  * @interface CatalogTypeGameMode
  */
@@ -887,10 +899,16 @@ export interface CatalogTypeGameMode {
      * @memberof CatalogTypeGameMode
      */
     id: string;
+    /**
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
+     * @memberof CatalogTypeGameMode
+     */
+    link: string;
 }
 
 /**
- *
+ * 
  * @export
  * @interface CatalogTypeGeneratorType
  */
@@ -907,10 +925,16 @@ export interface CatalogTypeGeneratorType {
      * @memberof CatalogTypeGeneratorType
      */
     id: string;
+    /**
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
+     * @memberof CatalogTypeGeneratorType
+     */
+    link: string;
 }
 
 /**
- *
+ * 
  * @export
  * @interface CatalogTypeItemType
  */
@@ -930,7 +954,7 @@ export interface CatalogTypeItemType {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CatalogTypeWeather
  */
@@ -947,10 +971,16 @@ export interface CatalogTypeWeather {
      * @memberof CatalogTypeWeather
      */
     id: string;
+    /**
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
+     * @memberof CatalogTypeWeather
+     */
+    link: string;
 }
 
 /**
- *
+ * 
  * @export
  * @interface Cause
  */
@@ -976,7 +1006,7 @@ export interface Cause {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ChatMessage
  */
@@ -1008,7 +1038,7 @@ export interface ChatMessage {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Color
  */
@@ -1034,7 +1064,7 @@ export interface Color {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Command
  */
@@ -1078,7 +1108,7 @@ export interface Command {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CommandCall
  */
@@ -1128,7 +1158,7 @@ export interface CommandCall {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CommandData
  */
@@ -1160,7 +1190,7 @@ export interface CommandData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CommandResult
  */
@@ -1204,7 +1234,7 @@ export interface CommandResult {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CreateBlockOperationRequest
  */
@@ -1263,7 +1293,7 @@ export namespace CreateBlockOperationRequest {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CreateEntityRequest
  */
@@ -1289,7 +1319,7 @@ export interface CreateEntityRequest {
 }
 
 /**
- *
+ * 
  * @export
  * @interface CreateWorldRequest
  */
@@ -1301,7 +1331,7 @@ export interface CreateWorldRequest {
      */
     name: string;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof CreateWorldRequest
      */
@@ -1331,13 +1361,13 @@ export interface CreateWorldRequest {
      */
     generator?: string;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof CreateWorldRequest
      */
     keepSpawnLoaded?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof CreateWorldRequest
      */
@@ -1349,7 +1379,7 @@ export interface CreateWorldRequest {
      */
     seed?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof CreateWorldRequest
      */
@@ -1357,43 +1387,43 @@ export interface CreateWorldRequest {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Currency
  */
 export interface Currency {
     /**
-     *
+     * 
      * @type {number}
      * @memberof Currency
      */
     defaultFractionDigits?: number;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Currency
      */
     displayName?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Currency
      */
     id?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Currency
      */
     name?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Currency
      */
     pluralDisplayName?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Currency
      */
@@ -1401,7 +1431,7 @@ export interface Currency {
 }
 
 /**
- *
+ * 
  * @export
  * @interface DamageRequest
  */
@@ -1421,7 +1451,7 @@ export interface DamageRequest {
 }
 
 /**
- *
+ * 
  * @export
  * @interface DamageableData
  */
@@ -1441,7 +1471,7 @@ export interface DamageableData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface DespawnDelayData
  */
@@ -1461,7 +1491,7 @@ export interface DespawnDelayData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface DurabilityData
  */
@@ -1481,7 +1511,7 @@ export interface DurabilityData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface DyeColor
  */
@@ -1507,7 +1537,7 @@ export interface DyeColor {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Enchantment
  */
@@ -1533,7 +1563,7 @@ export interface Enchantment {
 }
 
 /**
- *
+ * 
  * @export
  * @interface EndGatewayData
  */
@@ -1565,7 +1595,7 @@ export interface EndGatewayData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Entity
  */
@@ -1613,1171 +1643,1171 @@ export interface Entity {
      */
     velocity: Vector3d;
     /**
-     *
+     * 
      * @type {Inventory}
      * @memberof Entity
      */
     inventory?: Inventory;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     absorption?: number;
     /**
-     *
+     * 
      * @type {AgeableData}
      * @memberof Entity
      */
     age?: AgeableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     aggressive?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     aiEnabled?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     angerLevel?: number;
     /**
-     *
+     * 
      * @type {ArmorStandData}
      * @memberof Entity
      */
     armorStand?: ArmorStandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     art?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     attached?: boolean;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Entity
      */
     author?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Entity
      */
     axis?: Entity.AxisEnum;
     /**
-     *
+     * 
      * @type {BannerData}
      * @memberof Entity
      */
     banner?: BannerData;
     /**
-     *
+     * 
      * @type {BeaconData}
      * @memberof Entity
      */
     beacon?: BeaconData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     bigMushroom?: CatalogType;
     /**
-     *
+     * 
      * @type {BlockState}
      * @memberof Entity
      */
     block?: BlockState;
     /**
-     *
+     * 
      * @type {BreathingData}
      * @memberof Entity
      */
     breathing?: BreathingData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     breedable?: boolean;
     /**
-     *
+     * 
      * @type {BrewingStandData}
      * @memberof Entity
      */
     brewingStand?: BrewingStandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     brick?: CatalogType;
     /**
-     *
+     * 
      * @type {Career}
      * @memberof Entity
      */
     career?: Career;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     charged?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     coal?: CatalogType;
     /**
-     *
+     * 
      * @type {Color}
      * @memberof Entity
      */
     color?: Color;
     /**
-     *
+     * 
      * @type {CommandData}
      * @memberof Entity
      */
     command?: CommandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     comparator?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof Entity
      */
     connectedDirection?: Array<Entity.ConnectedDirectionEnum>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     cookedFish?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     cooldown?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     criticalHit?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     customName?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     damage?: number;
     /**
-     *
+     * 
      * @type {DamageableData}
      * @memberof Entity
      */
     damageable?: DamageableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     decayable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     delay?: number;
     /**
-     *
+     * 
      * @type {DespawnDelayData}
      * @memberof Entity
      */
     despawnDelay?: DespawnDelayData;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Entity
      */
     direction?: Entity.DirectionEnum;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     dirt?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     disarmed?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     disguisedBlock?: CatalogType;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Entity
      */
     displayName?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     dominantHand?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     doublePlant?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     drops?: boolean;
     /**
-     *
+     * 
      * @type {DurabilityData}
      * @memberof Entity
      */
     durability?: DurabilityData;
     /**
-     *
+     * 
      * @type {DyeColor}
      * @memberof Entity
      */
     dye?: DyeColor;
     /**
-     *
+     * 
      * @type {Array&lt;Enchantment&gt;}
      * @memberof Entity
      */
     enchantments?: Array<Enchantment>;
     /**
-     *
+     * 
      * @type {EndGatewayData}
      * @memberof Entity
      */
     endGateway?: EndGatewayData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     expOrb?: number;
     /**
-     *
+     * 
      * @type {ExperienceHolderData}
      * @memberof Entity
      */
     experience?: ExperienceHolderData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     expireTicks?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     explosionRadius?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     extended?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     fallDistance?: number;
     /**
-     *
+     * 
      * @type {FallingBlockData}
      * @memberof Entity
      */
     fallingBlock?: FallingBlockData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     filled?: boolean;
     /**
-     *
+     * 
      * @type {Array&lt;FireworkEffect&gt;}
      * @memberof Entity
      */
     fireworkEffects?: Array<FireworkEffect>;
     /**
-     *
+     * 
      * @type {FireworkRocketData}
      * @memberof Entity
      */
     fireworkRocket?: FireworkRocketData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     fish?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     flammable?: boolean;
     /**
-     *
+     * 
      * @type {FluidStack}
      * @memberof Entity
      */
     fluid?: FluidStack;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     fluidLevel?: number;
     /**
-     *
+     * 
      * @type {{ [key: string]: Array&lt;FluidStack&gt;; }}
      * @memberof Entity
      */
     fluidTanks?: { [key: string]: Array<FluidStack>; };
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     flying?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     flyingAbility?: boolean;
     /**
-     *
+     * 
      * @type {FoodData}
      * @memberof Entity
      */
     food?: FoodData;
     /**
-     *
+     * 
      * @type {FurnaceData}
      * @memberof Entity
      */
     furnace?: FurnaceData;
     /**
-     *
+     * 
      * @type {FuseData}
      * @memberof Entity
      */
     fuse?: FuseData;
     /**
-     *
+     * 
      * @type {GameMode}
      * @memberof Entity
      */
     gameMode?: GameMode;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     generation?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     glowing?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     goldenApple?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     griefs?: boolean;
     /**
-     *
+     * 
      * @type {GrowthData}
      * @memberof Entity
      */
     growth?: GrowthData;
     /**
-     *
+     * 
      * @type {HealthData}
      * @memberof Entity
      */
     health?: HealthData;
     /**
-     *
+     * 
      * @type {HideData}
      * @memberof Entity
      */
     hide?: HideData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     hinge?: CatalogType;
     /**
-     *
+     * 
      * @type {HorseData}
      * @memberof Entity
      */
     horse?: HorseData;
     /**
-     *
+     * 
      * @type {IgniteableData}
      * @memberof Entity
      */
     igniteable?: IgniteableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     inWall?: boolean;
     /**
-     *
+     * 
      * @type {InvisibilityData}
      * @memberof Entity
      */
     invisibility?: InvisibilityData;
     /**
-     *
+     * 
      * @type {InvulnerabilityData}
      * @memberof Entity
      */
     invulnerability?: InvulnerabilityData;
     /**
-     *
+     * 
      * @type {JoinData}
      * @memberof Entity
      */
     joined?: JoinData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     knockback?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     layer?: number;
     /**
-     *
+     * 
      * @type {LeashData}
      * @memberof Entity
      */
     leash?: LeashData;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Entity
      */
     lockToken?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     logAxis?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof Entity
      */
     lore?: Array<string>;
     /**
-     *
+     * 
      * @type {MinecartBlockData}
      * @memberof Entity
      */
     minecartBlock?: MinecartBlockData;
     /**
-     *
+     * 
      * @type {MobSpawnerData}
      * @memberof Entity
      */
     mobSpawner?: MobSpawnerData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     moisture?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     note?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     occupied?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     ocelot?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     open?: boolean;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof Entity
      */
     pages?: Array<string>;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof Entity
      */
     passengers?: Array<string>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     persists?: boolean;
     /**
-     *
+     * 
      * @type {PickupDelayData}
      * @memberof Entity
      */
     pickupDelay?: PickupDelayData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     pickupRule?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     pigSaddle?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     piston?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;CatalogType&gt;}
      * @memberof Entity
      */
     placeableOn?: Array<CatalogType>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     plant?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     playerCreated?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     playing?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     portion?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;PotionEffect&gt;}
      * @memberof Entity
      */
     potionEffects?: Array<PotionEffect>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     powered?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     prismarine?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     quartz?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     rabbit?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     railDirection?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     redstonePower?: number;
     /**
-     *
+     * 
      * @type {ItemStack}
      * @memberof Entity
      */
     representedItem?: ItemStack;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Entity
      */
     representedPlayer?: string;
     /**
-     *
+     * 
      * @type {{ [key: string]: Location; }}
      * @memberof Entity
      */
     respawnLocations?: { [key: string]: Location; };
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     sand?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     sandStone?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     screaming?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     seamless?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     shatters?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     sheared?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     shrub?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof Entity
      */
     sign?: Array<string>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     silent?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     sitting?: boolean;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Entity
      */
     skin?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     skull?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     slab?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     sleeping?: boolean;
     /**
-     *
+     * 
      * @type {SlimeData}
      * @memberof Entity
      */
     slime?: SlimeData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     sneaking?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     snow?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     spawn?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     sprinting?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     stairShape?: CatalogType;
     /**
-     *
+     * 
      * @type {{ [key: string]: number; }}
      * @memberof Entity
      */
     statistics?: { [key: string]: number; };
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     stone?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;Enchantment&gt;}
      * @memberof Entity
      */
     storedEnchantments?: Array<Enchantment>;
     /**
-     *
+     * 
      * @type {StructureData}
      * @memberof Entity
      */
     structure?: StructureData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     stuckArrows?: number;
     /**
-     *
+     * 
      * @type {TameableData}
      * @memberof Entity
      */
     tamed?: TameableData;
     /**
-     *
+     * 
      * @type {Vector3d}
      * @memberof Entity
      */
     target?: Vector3d;
     /**
-     *
+     * 
      * @type {Array&lt;TradeOffer&gt;}
      * @memberof Entity
      */
     trades?: Array<TradeOffer>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     tree?: CatalogType;
     /**
-     *
+     * 
      * @type {VehicleData}
      * @memberof Entity
      */
     vehicle?: VehicleData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     wall?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     wet?: boolean;
     /**
-     *
+     * 
      * @type {WireAttachmentData}
      * @memberof Entity
      */
     wires?: WireAttachmentData;
     /**
-     *
+     * 
      * @type {AcceptsItems}
      * @memberof Entity
      */
     acceptsItems?: AcceptsItems;
     /**
-     *
+     * 
      * @type {Array&lt;PotionEffect&gt;}
      * @memberof Entity
      */
     applicableEffect?: Array<PotionEffect>;
     /**
-     *
+     * 
      * @type {ArmorSlotType}
      * @memberof Entity
      */
     armorSlotType?: ArmorSlotType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     armorType?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     blastResistance?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     burningFuel?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     damageAbsorption?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     efficiency?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     equipmentType?: CatalogType;
     /**
-     *
+     * 
      * @type {EquipmentSlotType}
      * @memberof Entity
      */
     equiptmentSlotType?: EquipmentSlotType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     eyeHeight?: number;
     /**
-     *
+     * 
      * @type {Vector3d}
      * @memberof Entity
      */
     eyeLocation?: Vector3d;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     fluidTemperature?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     fluidViscosity?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     foodRestoration?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     fullBlockSelectionBox?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     gravityAffected?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     groundLuminance?: number;
     /**
-     *
+     * 
      * @type {GuiIdProperty}
      * @memberof Entity
      */
     guiId?: GuiIdProperty;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     hardness?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     heldItem?: CatalogType;
     /**
-     *
+     * 
      * @type {Identifiable}
      * @memberof Entity
      */
     identifiable?: Identifiable;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     indirectlyPowered?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     instrument?: CatalogType;
     /**
-     *
+     * 
      * @type {InventoryCapacity}
      * @memberof Entity
      */
     inventoryCapacity?: InventoryCapacity;
     /**
-     *
+     * 
      * @type {InventoryDimension}
      * @memberof Entity
      */
     inventoryDimension?: InventoryDimension;
     /**
-     *
+     * 
      * @type {InventoryTitle}
      * @memberof Entity
      */
     inventoryTitle?: InventoryTitle;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     lightEmission?: number;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Entity
      */
     matter?: Entity.MatterEnum;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     passable?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     record?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     replaceable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     saturationProperty?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     skyLuminance?: number;
     /**
-     *
+     * 
      * @type {SlotIndex}
      * @memberof Entity
      */
     slotIndex?: SlotIndex;
     /**
-     *
+     * 
      * @type {SlotPos}
      * @memberof Entity
      */
     slotPos?: SlotPos;
     /**
-     *
+     * 
      * @type {SlotSide}
      * @memberof Entity
      */
     slotSide?: SlotSide;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     smeltable?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     solidCube?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     statisticsTracked?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     surrogateBlock?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
     temperature?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof Entity
      */
     toolType?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof Entity
      */
     unbreakable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Entity
      */
@@ -2860,7 +2890,7 @@ export namespace Entity {
 }
 
 /**
- *
+ * 
  * @export
  * @interface EntityArchtype
  */
@@ -2874,7 +2904,7 @@ export interface EntityArchtype {
 }
 
 /**
- *
+ * 
  * @export
  * @interface EntitySnapshot
  */
@@ -2900,25 +2930,25 @@ export interface EntitySnapshot {
 }
 
 /**
- *
+ * 
  * @export
  * @interface EquipmentSlotType
  */
 export interface EquipmentSlotType {
     /**
-     *
+     * 
      * @type {string}
      * @memberof EquipmentSlotType
      */
     operator?: EquipmentSlotType.OperatorEnum;
     /**
-     *
+     * 
      * @type {string}
      * @memberof EquipmentSlotType
      */
     key?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof EquipmentSlotType
      */
@@ -2946,7 +2976,7 @@ export namespace EquipmentSlotType {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ExecuteCommandRequest
  */
@@ -2984,7 +3014,7 @@ export interface ExecuteCommandRequest {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ExecuteMethodParam
  */
@@ -3037,7 +3067,7 @@ export namespace ExecuteMethodParam {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ExecuteMethodRequest
  */
@@ -3057,19 +3087,19 @@ export interface ExecuteMethodRequest {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ExecuteMethodResponse
  */
 export interface ExecuteMethodResponse {
     /**
-     *
+     * 
      * @type {CachedObject}
      * @memberof ExecuteMethodResponse
      */
     object?: CachedObject;
     /**
-     *
+     * 
      * @type {any}
      * @memberof ExecuteMethodResponse
      */
@@ -3077,7 +3107,7 @@ export interface ExecuteMethodResponse {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ExperienceHolderData
  */
@@ -3103,7 +3133,7 @@ export interface ExperienceHolderData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface FallingBlockData
  */
@@ -3153,7 +3183,7 @@ export interface FallingBlockData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface FireworkEffect
  */
@@ -3191,7 +3221,7 @@ export interface FireworkEffect {
 }
 
 /**
- *
+ * 
  * @export
  * @interface FireworkRocketData
  */
@@ -3205,7 +3235,7 @@ export interface FireworkRocketData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface FluidStack
  */
@@ -3223,1171 +3253,1171 @@ export interface FluidStack {
      */
     volume: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     absorption?: number;
     /**
-     *
+     * 
      * @type {AgeableData}
      * @memberof FluidStack
      */
     age?: AgeableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     aggressive?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     aiEnabled?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     angerLevel?: number;
     /**
-     *
+     * 
      * @type {ArmorStandData}
      * @memberof FluidStack
      */
     armorStand?: ArmorStandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     art?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     attached?: boolean;
     /**
-     *
+     * 
      * @type {string}
      * @memberof FluidStack
      */
     author?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof FluidStack
      */
     axis?: FluidStack.AxisEnum;
     /**
-     *
+     * 
      * @type {BannerData}
      * @memberof FluidStack
      */
     banner?: BannerData;
     /**
-     *
+     * 
      * @type {BeaconData}
      * @memberof FluidStack
      */
     beacon?: BeaconData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     bigMushroom?: CatalogType;
     /**
-     *
+     * 
      * @type {BlockState}
      * @memberof FluidStack
      */
     block?: BlockState;
     /**
-     *
+     * 
      * @type {BreathingData}
      * @memberof FluidStack
      */
     breathing?: BreathingData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     breedable?: boolean;
     /**
-     *
+     * 
      * @type {BrewingStandData}
      * @memberof FluidStack
      */
     brewingStand?: BrewingStandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     brick?: CatalogType;
     /**
-     *
+     * 
      * @type {Career}
      * @memberof FluidStack
      */
     career?: Career;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     charged?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     coal?: CatalogType;
     /**
-     *
+     * 
      * @type {Color}
      * @memberof FluidStack
      */
     color?: Color;
     /**
-     *
+     * 
      * @type {CommandData}
      * @memberof FluidStack
      */
     command?: CommandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     comparator?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof FluidStack
      */
     connectedDirection?: Array<FluidStack.ConnectedDirectionEnum>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     cookedFish?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     cooldown?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     criticalHit?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     customName?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     damage?: number;
     /**
-     *
+     * 
      * @type {DamageableData}
      * @memberof FluidStack
      */
     damageable?: DamageableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     decayable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     delay?: number;
     /**
-     *
+     * 
      * @type {DespawnDelayData}
      * @memberof FluidStack
      */
     despawnDelay?: DespawnDelayData;
     /**
-     *
+     * 
      * @type {string}
      * @memberof FluidStack
      */
     direction?: FluidStack.DirectionEnum;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     dirt?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     disarmed?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     disguisedBlock?: CatalogType;
     /**
-     *
+     * 
      * @type {string}
      * @memberof FluidStack
      */
     displayName?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     dominantHand?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     doublePlant?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     drops?: boolean;
     /**
-     *
+     * 
      * @type {DurabilityData}
      * @memberof FluidStack
      */
     durability?: DurabilityData;
     /**
-     *
+     * 
      * @type {DyeColor}
      * @memberof FluidStack
      */
     dye?: DyeColor;
     /**
-     *
+     * 
      * @type {Array&lt;Enchantment&gt;}
      * @memberof FluidStack
      */
     enchantments?: Array<Enchantment>;
     /**
-     *
+     * 
      * @type {EndGatewayData}
      * @memberof FluidStack
      */
     endGateway?: EndGatewayData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     expOrb?: number;
     /**
-     *
+     * 
      * @type {ExperienceHolderData}
      * @memberof FluidStack
      */
     experience?: ExperienceHolderData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     expireTicks?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     explosionRadius?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     extended?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     fallDistance?: number;
     /**
-     *
+     * 
      * @type {FallingBlockData}
      * @memberof FluidStack
      */
     fallingBlock?: FallingBlockData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     filled?: boolean;
     /**
-     *
+     * 
      * @type {Array&lt;FireworkEffect&gt;}
      * @memberof FluidStack
      */
     fireworkEffects?: Array<FireworkEffect>;
     /**
-     *
+     * 
      * @type {FireworkRocketData}
      * @memberof FluidStack
      */
     fireworkRocket?: FireworkRocketData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     fish?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     flammable?: boolean;
     /**
-     *
+     * 
      * @type {FluidStack}
      * @memberof FluidStack
      */
     fluid?: FluidStack;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     fluidLevel?: number;
     /**
-     *
+     * 
      * @type {{ [key: string]: Array&lt;FluidStack&gt;; }}
      * @memberof FluidStack
      */
     fluidTanks?: { [key: string]: Array<FluidStack>; };
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     flying?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     flyingAbility?: boolean;
     /**
-     *
+     * 
      * @type {FoodData}
      * @memberof FluidStack
      */
     food?: FoodData;
     /**
-     *
+     * 
      * @type {FurnaceData}
      * @memberof FluidStack
      */
     furnace?: FurnaceData;
     /**
-     *
+     * 
      * @type {FuseData}
      * @memberof FluidStack
      */
     fuse?: FuseData;
     /**
-     *
+     * 
      * @type {GameMode}
      * @memberof FluidStack
      */
     gameMode?: GameMode;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     generation?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     glowing?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     goldenApple?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     griefs?: boolean;
     /**
-     *
+     * 
      * @type {GrowthData}
      * @memberof FluidStack
      */
     growth?: GrowthData;
     /**
-     *
+     * 
      * @type {HealthData}
      * @memberof FluidStack
      */
     health?: HealthData;
     /**
-     *
+     * 
      * @type {HideData}
      * @memberof FluidStack
      */
     hide?: HideData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     hinge?: CatalogType;
     /**
-     *
+     * 
      * @type {HorseData}
      * @memberof FluidStack
      */
     horse?: HorseData;
     /**
-     *
+     * 
      * @type {IgniteableData}
      * @memberof FluidStack
      */
     igniteable?: IgniteableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     inWall?: boolean;
     /**
-     *
+     * 
      * @type {Inventory}
      * @memberof FluidStack
      */
     inventory?: Inventory;
     /**
-     *
+     * 
      * @type {InvisibilityData}
      * @memberof FluidStack
      */
     invisibility?: InvisibilityData;
     /**
-     *
+     * 
      * @type {InvulnerabilityData}
      * @memberof FluidStack
      */
     invulnerability?: InvulnerabilityData;
     /**
-     *
+     * 
      * @type {JoinData}
      * @memberof FluidStack
      */
     joined?: JoinData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     knockback?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     layer?: number;
     /**
-     *
+     * 
      * @type {LeashData}
      * @memberof FluidStack
      */
     leash?: LeashData;
     /**
-     *
+     * 
      * @type {string}
      * @memberof FluidStack
      */
     lockToken?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     logAxis?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof FluidStack
      */
     lore?: Array<string>;
     /**
-     *
+     * 
      * @type {MinecartBlockData}
      * @memberof FluidStack
      */
     minecartBlock?: MinecartBlockData;
     /**
-     *
+     * 
      * @type {MobSpawnerData}
      * @memberof FluidStack
      */
     mobSpawner?: MobSpawnerData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     moisture?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     note?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     occupied?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     ocelot?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     open?: boolean;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof FluidStack
      */
     pages?: Array<string>;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof FluidStack
      */
     passengers?: Array<string>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     persists?: boolean;
     /**
-     *
+     * 
      * @type {PickupDelayData}
      * @memberof FluidStack
      */
     pickupDelay?: PickupDelayData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     pickupRule?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     pigSaddle?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     piston?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;CatalogType&gt;}
      * @memberof FluidStack
      */
     placeableOn?: Array<CatalogType>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     plant?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     playerCreated?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     playing?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     portion?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;PotionEffect&gt;}
      * @memberof FluidStack
      */
     potionEffects?: Array<PotionEffect>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     powered?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     prismarine?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     quartz?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     rabbit?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     railDirection?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     redstonePower?: number;
     /**
-     *
+     * 
      * @type {ItemStack}
      * @memberof FluidStack
      */
     representedItem?: ItemStack;
     /**
-     *
+     * 
      * @type {string}
      * @memberof FluidStack
      */
     representedPlayer?: string;
     /**
-     *
+     * 
      * @type {{ [key: string]: Location; }}
      * @memberof FluidStack
      */
     respawnLocations?: { [key: string]: Location; };
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     sand?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     sandStone?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     screaming?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     seamless?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     shatters?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     sheared?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     shrub?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof FluidStack
      */
     sign?: Array<string>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     silent?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     sitting?: boolean;
     /**
-     *
+     * 
      * @type {string}
      * @memberof FluidStack
      */
     skin?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     skull?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     slab?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     sleeping?: boolean;
     /**
-     *
+     * 
      * @type {SlimeData}
      * @memberof FluidStack
      */
     slime?: SlimeData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     sneaking?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     snow?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     spawn?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     sprinting?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     stairShape?: CatalogType;
     /**
-     *
+     * 
      * @type {{ [key: string]: number; }}
      * @memberof FluidStack
      */
     statistics?: { [key: string]: number; };
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     stone?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;Enchantment&gt;}
      * @memberof FluidStack
      */
     storedEnchantments?: Array<Enchantment>;
     /**
-     *
+     * 
      * @type {StructureData}
      * @memberof FluidStack
      */
     structure?: StructureData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     stuckArrows?: number;
     /**
-     *
+     * 
      * @type {TameableData}
      * @memberof FluidStack
      */
     tamed?: TameableData;
     /**
-     *
+     * 
      * @type {Vector3d}
      * @memberof FluidStack
      */
     target?: Vector3d;
     /**
-     *
+     * 
      * @type {Array&lt;TradeOffer&gt;}
      * @memberof FluidStack
      */
     trades?: Array<TradeOffer>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     tree?: CatalogType;
     /**
-     *
+     * 
      * @type {VehicleData}
      * @memberof FluidStack
      */
     vehicle?: VehicleData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     wall?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     wet?: boolean;
     /**
-     *
+     * 
      * @type {WireAttachmentData}
      * @memberof FluidStack
      */
     wires?: WireAttachmentData;
     /**
-     *
+     * 
      * @type {AcceptsItems}
      * @memberof FluidStack
      */
     acceptsItems?: AcceptsItems;
     /**
-     *
+     * 
      * @type {Array&lt;PotionEffect&gt;}
      * @memberof FluidStack
      */
     applicableEffect?: Array<PotionEffect>;
     /**
-     *
+     * 
      * @type {ArmorSlotType}
      * @memberof FluidStack
      */
     armorSlotType?: ArmorSlotType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     armorType?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     blastResistance?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     burningFuel?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     damageAbsorption?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     efficiency?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     equipmentType?: CatalogType;
     /**
-     *
+     * 
      * @type {EquipmentSlotType}
      * @memberof FluidStack
      */
     equiptmentSlotType?: EquipmentSlotType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     eyeHeight?: number;
     /**
-     *
+     * 
      * @type {Vector3d}
      * @memberof FluidStack
      */
     eyeLocation?: Vector3d;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     fluidTemperature?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     fluidViscosity?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     foodRestoration?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     fullBlockSelectionBox?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     gravityAffected?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     groundLuminance?: number;
     /**
-     *
+     * 
      * @type {GuiIdProperty}
      * @memberof FluidStack
      */
     guiId?: GuiIdProperty;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     hardness?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     heldItem?: CatalogType;
     /**
-     *
+     * 
      * @type {Identifiable}
      * @memberof FluidStack
      */
     identifiable?: Identifiable;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     indirectlyPowered?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     instrument?: CatalogType;
     /**
-     *
+     * 
      * @type {InventoryCapacity}
      * @memberof FluidStack
      */
     inventoryCapacity?: InventoryCapacity;
     /**
-     *
+     * 
      * @type {InventoryDimension}
      * @memberof FluidStack
      */
     inventoryDimension?: InventoryDimension;
     /**
-     *
+     * 
      * @type {InventoryTitle}
      * @memberof FluidStack
      */
     inventoryTitle?: InventoryTitle;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     lightEmission?: number;
     /**
-     *
+     * 
      * @type {string}
      * @memberof FluidStack
      */
     matter?: FluidStack.MatterEnum;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     passable?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     record?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     replaceable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     saturationProperty?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     skyLuminance?: number;
     /**
-     *
+     * 
      * @type {SlotIndex}
      * @memberof FluidStack
      */
     slotIndex?: SlotIndex;
     /**
-     *
+     * 
      * @type {SlotPos}
      * @memberof FluidStack
      */
     slotPos?: SlotPos;
     /**
-     *
+     * 
      * @type {SlotSide}
      * @memberof FluidStack
      */
     slotSide?: SlotSide;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     smeltable?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     solidCube?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     statisticsTracked?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     surrogateBlock?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
     temperature?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof FluidStack
      */
     toolType?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof FluidStack
      */
     unbreakable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof FluidStack
      */
@@ -4470,7 +4500,7 @@ export namespace FluidStack {
 }
 
 /**
- *
+ * 
  * @export
  * @interface FoodData
  */
@@ -4496,7 +4526,7 @@ export interface FoodData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface FurnaceData
  */
@@ -4528,7 +4558,7 @@ export interface FurnaceData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface FuseData
  */
@@ -4548,7 +4578,7 @@ export interface FuseData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface GameMode
  */
@@ -4568,7 +4598,7 @@ export interface GameMode {
 }
 
 /**
- *
+ * 
  * @export
  * @interface GrowthData
  */
@@ -4582,25 +4612,25 @@ export interface GrowthData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface GuiIdProperty
  */
 export interface GuiIdProperty {
     /**
-     *
+     * 
      * @type {string}
      * @memberof GuiIdProperty
      */
     operator?: GuiIdProperty.OperatorEnum;
     /**
-     *
+     * 
      * @type {string}
      * @memberof GuiIdProperty
      */
     key?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof GuiIdProperty
      */
@@ -4628,7 +4658,7 @@ export namespace GuiIdProperty {
 }
 
 /**
- *
+ * 
  * @export
  * @interface HealthData
  */
@@ -4648,7 +4678,7 @@ export interface HealthData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface HideData
  */
@@ -4692,7 +4722,7 @@ export interface HideData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface HorseData
  */
@@ -4712,7 +4742,7 @@ export interface HorseData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface HuskyCratesCrate
  */
@@ -4785,7 +4815,7 @@ export namespace HuskyCratesCrate {
 }
 
 /**
- *
+ * 
  * @export
  * @interface HuskyCratesCrateReward
  */
@@ -4823,7 +4853,7 @@ export interface HuskyCratesCrateReward {
 }
 
 /**
- *
+ * 
  * @export
  * @interface HuskyCratesCrateRewardObject
  */
@@ -4852,25 +4882,25 @@ export namespace HuskyCratesCrateRewardObject {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Identifiable
  */
 export interface Identifiable {
     /**
-     *
+     * 
      * @type {string}
      * @memberof Identifiable
      */
     operator?: Identifiable.OperatorEnum;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Identifiable
      */
     key?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof Identifiable
      */
@@ -4898,7 +4928,7 @@ export namespace Identifiable {
 }
 
 /**
- *
+ * 
  * @export
  * @interface IgniteableData
  */
@@ -4918,7 +4948,7 @@ export interface IgniteableData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface InlineResponse400
  */
@@ -4938,7 +4968,7 @@ export interface InlineResponse400 {
 }
 
 /**
- *
+ * 
  * @export
  * @interface InlineResponse401
  */
@@ -4958,7 +4988,7 @@ export interface InlineResponse401 {
 }
 
 /**
- *
+ * 
  * @export
  * @interface InlineResponse403
  */
@@ -4978,7 +5008,7 @@ export interface InlineResponse403 {
 }
 
 /**
- *
+ * 
  * @export
  * @interface InlineResponse404
  */
@@ -4998,7 +5028,7 @@ export interface InlineResponse404 {
 }
 
 /**
- *
+ * 
  * @export
  * @interface InlineResponse500
  */
@@ -5018,7 +5048,7 @@ export interface InlineResponse500 {
 }
 
 /**
- *
+ * 
  * @export
  * @interface InlineResponse501
  */
@@ -5038,7 +5068,7 @@ export interface InlineResponse501 {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Inventory
  */
@@ -5076,25 +5106,25 @@ export interface Inventory {
 }
 
 /**
- *
+ * 
  * @export
  * @interface InventoryCapacity
  */
 export interface InventoryCapacity {
     /**
-     *
+     * 
      * @type {string}
      * @memberof InventoryCapacity
      */
     operator?: InventoryCapacity.OperatorEnum;
     /**
-     *
+     * 
      * @type {string}
      * @memberof InventoryCapacity
      */
     key?: string;
     /**
-     *
+     * 
      * @type {number}
      * @memberof InventoryCapacity
      */
@@ -5122,41 +5152,41 @@ export namespace InventoryCapacity {
 }
 
 /**
- *
+ * 
  * @export
  * @interface InventoryDimension
  */
 export interface InventoryDimension {
     /**
-     *
+     * 
      * @type {string}
      * @memberof InventoryDimension
      */
     operator?: InventoryDimension.OperatorEnum;
     /**
-     *
+     * 
      * @type {string}
      * @memberof InventoryDimension
      */
     key?: string;
     /**
-     *
+     * 
      * @type {Vector2i}
      * @memberof InventoryDimension
      */
     value?: Vector2i;
     /**
-     *
-     * @type {number}
-     * @memberof InventoryDimension
-     */
-    columns?: number;
-    /**
-     *
+     * 
      * @type {number}
      * @memberof InventoryDimension
      */
     rows?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof InventoryDimension
+     */
+    columns?: number;
 }
 
 /**
@@ -5180,25 +5210,25 @@ export namespace InventoryDimension {
 }
 
 /**
- *
+ * 
  * @export
  * @interface InventoryTitle
  */
 export interface InventoryTitle {
     /**
-     *
+     * 
      * @type {string}
      * @memberof InventoryTitle
      */
     operator?: InventoryTitle.OperatorEnum;
     /**
-     *
+     * 
      * @type {string}
      * @memberof InventoryTitle
      */
     key?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof InventoryTitle
      */
@@ -5226,7 +5256,7 @@ export namespace InventoryTitle {
 }
 
 /**
- *
+ * 
  * @export
  * @interface InvisibilityData
  */
@@ -5258,7 +5288,7 @@ export interface InvisibilityData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface InvulnerabilityData
  */
@@ -5272,7 +5302,7 @@ export interface InvulnerabilityData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ItemStack
  */
@@ -5290,1171 +5320,1171 @@ export interface ItemStack {
      */
     quantity: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     absorption?: number;
     /**
-     *
+     * 
      * @type {AgeableData}
      * @memberof ItemStack
      */
     age?: AgeableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     aggressive?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     aiEnabled?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     angerLevel?: number;
     /**
-     *
+     * 
      * @type {ArmorStandData}
      * @memberof ItemStack
      */
     armorStand?: ArmorStandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     art?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     attached?: boolean;
     /**
-     *
+     * 
      * @type {string}
      * @memberof ItemStack
      */
     author?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof ItemStack
      */
     axis?: ItemStack.AxisEnum;
     /**
-     *
+     * 
      * @type {BannerData}
      * @memberof ItemStack
      */
     banner?: BannerData;
     /**
-     *
+     * 
      * @type {BeaconData}
      * @memberof ItemStack
      */
     beacon?: BeaconData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     bigMushroom?: CatalogType;
     /**
-     *
+     * 
      * @type {BlockState}
      * @memberof ItemStack
      */
     block?: BlockState;
     /**
-     *
+     * 
      * @type {BreathingData}
      * @memberof ItemStack
      */
     breathing?: BreathingData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     breedable?: boolean;
     /**
-     *
+     * 
      * @type {BrewingStandData}
      * @memberof ItemStack
      */
     brewingStand?: BrewingStandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     brick?: CatalogType;
     /**
-     *
+     * 
      * @type {Career}
      * @memberof ItemStack
      */
     career?: Career;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     charged?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     coal?: CatalogType;
     /**
-     *
+     * 
      * @type {Color}
      * @memberof ItemStack
      */
     color?: Color;
     /**
-     *
+     * 
      * @type {CommandData}
      * @memberof ItemStack
      */
     command?: CommandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     comparator?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof ItemStack
      */
     connectedDirection?: Array<ItemStack.ConnectedDirectionEnum>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     cookedFish?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     cooldown?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     criticalHit?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     customName?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     damage?: number;
     /**
-     *
+     * 
      * @type {DamageableData}
      * @memberof ItemStack
      */
     damageable?: DamageableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     decayable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     delay?: number;
     /**
-     *
+     * 
      * @type {DespawnDelayData}
      * @memberof ItemStack
      */
     despawnDelay?: DespawnDelayData;
     /**
-     *
+     * 
      * @type {string}
      * @memberof ItemStack
      */
     direction?: ItemStack.DirectionEnum;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     dirt?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     disarmed?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     disguisedBlock?: CatalogType;
     /**
-     *
+     * 
      * @type {string}
      * @memberof ItemStack
      */
     displayName?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     dominantHand?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     doublePlant?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     drops?: boolean;
     /**
-     *
+     * 
      * @type {DurabilityData}
      * @memberof ItemStack
      */
     durability?: DurabilityData;
     /**
-     *
+     * 
      * @type {DyeColor}
      * @memberof ItemStack
      */
     dye?: DyeColor;
     /**
-     *
+     * 
      * @type {Array&lt;Enchantment&gt;}
      * @memberof ItemStack
      */
     enchantments?: Array<Enchantment>;
     /**
-     *
+     * 
      * @type {EndGatewayData}
      * @memberof ItemStack
      */
     endGateway?: EndGatewayData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     expOrb?: number;
     /**
-     *
+     * 
      * @type {ExperienceHolderData}
      * @memberof ItemStack
      */
     experience?: ExperienceHolderData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     expireTicks?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     explosionRadius?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     extended?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     fallDistance?: number;
     /**
-     *
+     * 
      * @type {FallingBlockData}
      * @memberof ItemStack
      */
     fallingBlock?: FallingBlockData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     filled?: boolean;
     /**
-     *
+     * 
      * @type {Array&lt;FireworkEffect&gt;}
      * @memberof ItemStack
      */
     fireworkEffects?: Array<FireworkEffect>;
     /**
-     *
+     * 
      * @type {FireworkRocketData}
      * @memberof ItemStack
      */
     fireworkRocket?: FireworkRocketData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     fish?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     flammable?: boolean;
     /**
-     *
+     * 
      * @type {FluidStack}
      * @memberof ItemStack
      */
     fluid?: FluidStack;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     fluidLevel?: number;
     /**
-     *
+     * 
      * @type {{ [key: string]: Array&lt;FluidStack&gt;; }}
      * @memberof ItemStack
      */
     fluidTanks?: { [key: string]: Array<FluidStack>; };
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     flying?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     flyingAbility?: boolean;
     /**
-     *
+     * 
      * @type {FoodData}
      * @memberof ItemStack
      */
     food?: FoodData;
     /**
-     *
+     * 
      * @type {FurnaceData}
      * @memberof ItemStack
      */
     furnace?: FurnaceData;
     /**
-     *
+     * 
      * @type {FuseData}
      * @memberof ItemStack
      */
     fuse?: FuseData;
     /**
-     *
+     * 
      * @type {GameMode}
      * @memberof ItemStack
      */
     gameMode?: GameMode;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     generation?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     glowing?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     goldenApple?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     griefs?: boolean;
     /**
-     *
+     * 
      * @type {GrowthData}
      * @memberof ItemStack
      */
     growth?: GrowthData;
     /**
-     *
+     * 
      * @type {HealthData}
      * @memberof ItemStack
      */
     health?: HealthData;
     /**
-     *
+     * 
      * @type {HideData}
      * @memberof ItemStack
      */
     hide?: HideData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     hinge?: CatalogType;
     /**
-     *
+     * 
      * @type {HorseData}
      * @memberof ItemStack
      */
     horse?: HorseData;
     /**
-     *
+     * 
      * @type {IgniteableData}
      * @memberof ItemStack
      */
     igniteable?: IgniteableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     inWall?: boolean;
     /**
-     *
+     * 
      * @type {Inventory}
      * @memberof ItemStack
      */
     inventory?: Inventory;
     /**
-     *
+     * 
      * @type {InvisibilityData}
      * @memberof ItemStack
      */
     invisibility?: InvisibilityData;
     /**
-     *
+     * 
      * @type {InvulnerabilityData}
      * @memberof ItemStack
      */
     invulnerability?: InvulnerabilityData;
     /**
-     *
+     * 
      * @type {JoinData}
      * @memberof ItemStack
      */
     joined?: JoinData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     knockback?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     layer?: number;
     /**
-     *
+     * 
      * @type {LeashData}
      * @memberof ItemStack
      */
     leash?: LeashData;
     /**
-     *
+     * 
      * @type {string}
      * @memberof ItemStack
      */
     lockToken?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     logAxis?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof ItemStack
      */
     lore?: Array<string>;
     /**
-     *
+     * 
      * @type {MinecartBlockData}
      * @memberof ItemStack
      */
     minecartBlock?: MinecartBlockData;
     /**
-     *
+     * 
      * @type {MobSpawnerData}
      * @memberof ItemStack
      */
     mobSpawner?: MobSpawnerData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     moisture?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     note?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     occupied?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     ocelot?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     open?: boolean;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof ItemStack
      */
     pages?: Array<string>;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof ItemStack
      */
     passengers?: Array<string>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     persists?: boolean;
     /**
-     *
+     * 
      * @type {PickupDelayData}
      * @memberof ItemStack
      */
     pickupDelay?: PickupDelayData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     pickupRule?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     pigSaddle?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     piston?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;CatalogType&gt;}
      * @memberof ItemStack
      */
     placeableOn?: Array<CatalogType>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     plant?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     playerCreated?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     playing?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     portion?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;PotionEffect&gt;}
      * @memberof ItemStack
      */
     potionEffects?: Array<PotionEffect>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     powered?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     prismarine?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     quartz?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     rabbit?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     railDirection?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     redstonePower?: number;
     /**
-     *
+     * 
      * @type {ItemStack}
      * @memberof ItemStack
      */
     representedItem?: ItemStack;
     /**
-     *
+     * 
      * @type {string}
      * @memberof ItemStack
      */
     representedPlayer?: string;
     /**
-     *
+     * 
      * @type {{ [key: string]: Location; }}
      * @memberof ItemStack
      */
     respawnLocations?: { [key: string]: Location; };
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     sand?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     sandStone?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     screaming?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     seamless?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     shatters?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     sheared?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     shrub?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof ItemStack
      */
     sign?: Array<string>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     silent?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     sitting?: boolean;
     /**
-     *
+     * 
      * @type {string}
      * @memberof ItemStack
      */
     skin?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     skull?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     slab?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     sleeping?: boolean;
     /**
-     *
+     * 
      * @type {SlimeData}
      * @memberof ItemStack
      */
     slime?: SlimeData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     sneaking?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     snow?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     spawn?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     sprinting?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     stairShape?: CatalogType;
     /**
-     *
+     * 
      * @type {{ [key: string]: number; }}
      * @memberof ItemStack
      */
     statistics?: { [key: string]: number; };
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     stone?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;Enchantment&gt;}
      * @memberof ItemStack
      */
     storedEnchantments?: Array<Enchantment>;
     /**
-     *
+     * 
      * @type {StructureData}
      * @memberof ItemStack
      */
     structure?: StructureData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     stuckArrows?: number;
     /**
-     *
+     * 
      * @type {TameableData}
      * @memberof ItemStack
      */
     tamed?: TameableData;
     /**
-     *
+     * 
      * @type {Vector3d}
      * @memberof ItemStack
      */
     target?: Vector3d;
     /**
-     *
+     * 
      * @type {Array&lt;TradeOffer&gt;}
      * @memberof ItemStack
      */
     trades?: Array<TradeOffer>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     tree?: CatalogType;
     /**
-     *
+     * 
      * @type {VehicleData}
      * @memberof ItemStack
      */
     vehicle?: VehicleData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     wall?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     wet?: boolean;
     /**
-     *
+     * 
      * @type {WireAttachmentData}
      * @memberof ItemStack
      */
     wires?: WireAttachmentData;
     /**
-     *
+     * 
      * @type {AcceptsItems}
      * @memberof ItemStack
      */
     acceptsItems?: AcceptsItems;
     /**
-     *
+     * 
      * @type {Array&lt;PotionEffect&gt;}
      * @memberof ItemStack
      */
     applicableEffect?: Array<PotionEffect>;
     /**
-     *
+     * 
      * @type {ArmorSlotType}
      * @memberof ItemStack
      */
     armorSlotType?: ArmorSlotType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     armorType?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     blastResistance?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     burningFuel?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     damageAbsorption?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     efficiency?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     equipmentType?: CatalogType;
     /**
-     *
+     * 
      * @type {EquipmentSlotType}
      * @memberof ItemStack
      */
     equiptmentSlotType?: EquipmentSlotType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     eyeHeight?: number;
     /**
-     *
+     * 
      * @type {Vector3d}
      * @memberof ItemStack
      */
     eyeLocation?: Vector3d;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     fluidTemperature?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     fluidViscosity?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     foodRestoration?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     fullBlockSelectionBox?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     gravityAffected?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     groundLuminance?: number;
     /**
-     *
+     * 
      * @type {GuiIdProperty}
      * @memberof ItemStack
      */
     guiId?: GuiIdProperty;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     hardness?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     heldItem?: CatalogType;
     /**
-     *
+     * 
      * @type {Identifiable}
      * @memberof ItemStack
      */
     identifiable?: Identifiable;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     indirectlyPowered?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     instrument?: CatalogType;
     /**
-     *
+     * 
      * @type {InventoryCapacity}
      * @memberof ItemStack
      */
     inventoryCapacity?: InventoryCapacity;
     /**
-     *
+     * 
      * @type {InventoryDimension}
      * @memberof ItemStack
      */
     inventoryDimension?: InventoryDimension;
     /**
-     *
+     * 
      * @type {InventoryTitle}
      * @memberof ItemStack
      */
     inventoryTitle?: InventoryTitle;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     lightEmission?: number;
     /**
-     *
+     * 
      * @type {string}
      * @memberof ItemStack
      */
     matter?: ItemStack.MatterEnum;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     passable?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     record?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     replaceable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     saturationProperty?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     skyLuminance?: number;
     /**
-     *
+     * 
      * @type {SlotIndex}
      * @memberof ItemStack
      */
     slotIndex?: SlotIndex;
     /**
-     *
+     * 
      * @type {SlotPos}
      * @memberof ItemStack
      */
     slotPos?: SlotPos;
     /**
-     *
+     * 
      * @type {SlotSide}
      * @memberof ItemStack
      */
     slotSide?: SlotSide;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     smeltable?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     solidCube?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     statisticsTracked?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     surrogateBlock?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
     temperature?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof ItemStack
      */
     toolType?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof ItemStack
      */
     unbreakable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof ItemStack
      */
@@ -6537,7 +6567,7 @@ export namespace ItemStack {
 }
 
 /**
- *
+ * 
  * @export
  * @interface JoinData
  */
@@ -6557,7 +6587,7 @@ export interface JoinData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface LeashData
  */
@@ -6571,7 +6601,7 @@ export interface LeashData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface LocalDate
  */
@@ -6597,7 +6627,7 @@ export interface LocalDate {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Location
  */
@@ -6614,16 +6644,10 @@ export interface Location {
      * @memberof Location
      */
     position: Vector3d;
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof Location
-     */
-    link: string;
 }
 
 /**
- *
+ * 
  * @export
  * @interface MMCRestrictItem
  */
@@ -6685,7 +6709,7 @@ export interface MMCRestrictItem {
 }
 
 /**
- *
+ * 
  * @export
  * @interface MMCTicketsTicket
  */
@@ -6770,7 +6794,7 @@ export namespace MMCTicketsTicket {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Message
  */
@@ -6800,7 +6824,7 @@ export interface Message {
      */
     uuid: string;
     /**
-     * The actual content of the message
+     * 
      * @type {string}
      * @memberof Message
      */
@@ -6826,7 +6850,7 @@ export interface Message {
 }
 
 /**
- *
+ * 
  * @export
  * @interface MessageOption
  */
@@ -6846,7 +6870,7 @@ export interface MessageOption {
 }
 
 /**
- *
+ * 
  * @export
  * @interface MinecartBlockData
  */
@@ -6866,7 +6890,7 @@ export interface MinecartBlockData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface MobSpawnerData
  */
@@ -6928,7 +6952,7 @@ export interface MobSpawnerData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ModifyBlockOperationRequest
  */
@@ -6942,7 +6966,7 @@ export interface ModifyBlockOperationRequest {
 }
 
 /**
- *
+ * 
  * @export
  * @interface NucleusJail
  */
@@ -6974,7 +6998,7 @@ export interface NucleusJail {
 }
 
 /**
- *
+ * 
  * @export
  * @interface NucleusKit
  */
@@ -7030,7 +7054,7 @@ export interface NucleusKit {
 }
 
 /**
- *
+ * 
  * @export
  * @interface PatternLayer
  */
@@ -7076,7 +7100,7 @@ export interface PermissionStruct {
 }
 
 /**
- *
+ * 
  * @export
  * @interface PickupDelayData
  */
@@ -7096,7 +7120,7 @@ export interface PickupDelayData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Player
  */
@@ -7128,7 +7152,7 @@ export interface Player {
 }
 
 /**
- *
+ * 
  * @export
  * @interface PluginContainer
  */
@@ -7184,7 +7208,7 @@ export interface PluginContainer {
 }
 
 /**
- *
+ * 
  * @export
  * @interface PluginDependency
  */
@@ -7238,7 +7262,7 @@ export namespace PluginDependency {
 }
 
 /**
- *
+ * 
  * @export
  * @interface PotionEffect
  */
@@ -7264,7 +7288,7 @@ export interface PotionEffect {
 }
 
 /**
- *
+ * 
  * @export
  * @interface RedProtectRegion
  */
@@ -7362,19 +7386,19 @@ export interface RedProtectRegion {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ServerInfo
  */
 export interface ServerInfo {
     /**
-     *
+     * 
      * @type {CachedPluginContainer}
      * @memberof ServerInfo
      */
     api: CachedPluginContainer;
     /**
-     *
+     * 
      * @type {CachedPluginContainer}
      * @memberof ServerInfo
      */
@@ -7386,7 +7410,7 @@ export interface ServerInfo {
      */
     hasWhitelist: boolean;
     /**
-     *
+     * 
      * @type {CachedPluginContainer}
      * @memberof ServerInfo
      */
@@ -7448,7 +7472,7 @@ export interface ServerInfo {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ServerProperty
  */
@@ -7468,43 +7492,43 @@ export interface ServerProperty {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ServerReport
  */
 export interface ServerReport {
     /**
-     *
+     * 
      * @type {TimeHolder}
      * @memberof ServerReport
      */
     dailyAverage?: TimeHolder;
     /**
-     *
+     * 
      * @type {LocalDate}
      * @memberof ServerReport
      */
     from?: LocalDate;
     /**
-     *
+     * 
      * @type {TimeHolder}
      * @memberof ServerReport
      */
     monthlyAverage?: TimeHolder;
     /**
-     *
+     * 
      * @type {LocalDate}
      * @memberof ServerReport
      */
     to?: LocalDate;
     /**
-     *
+     * 
      * @type {TimeHolder}
      * @memberof ServerReport
      */
     total?: TimeHolder;
     /**
-     *
+     * 
      * @type {TimeHolder}
      * @memberof ServerReport
      */
@@ -7512,7 +7536,7 @@ export interface ServerReport {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ServerStat
  */
@@ -7532,7 +7556,7 @@ export interface ServerStat {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ServerStatDouble
  */
@@ -7552,7 +7576,7 @@ export interface ServerStatDouble {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ServerStatInteger
  */
@@ -7572,7 +7596,7 @@ export interface ServerStatInteger {
 }
 
 /**
- *
+ * 
  * @export
  * @interface ServerStats
  */
@@ -7610,7 +7634,7 @@ export interface ServerStats {
 }
 
 /**
- *
+ * 
  * @export
  * @interface SlimeData
  */
@@ -7624,25 +7648,25 @@ export interface SlimeData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface SlotIndex
  */
 export interface SlotIndex {
     /**
-     *
+     * 
      * @type {string}
      * @memberof SlotIndex
      */
     operator?: SlotIndex.OperatorEnum;
     /**
-     *
+     * 
      * @type {string}
      * @memberof SlotIndex
      */
     key?: string;
     /**
-     *
+     * 
      * @type {number}
      * @memberof SlotIndex
      */
@@ -7670,41 +7694,41 @@ export namespace SlotIndex {
 }
 
 /**
- *
+ * 
  * @export
  * @interface SlotPos
  */
 export interface SlotPos {
     /**
-     *
+     * 
      * @type {string}
      * @memberof SlotPos
      */
     operator?: SlotPos.OperatorEnum;
     /**
-     *
+     * 
      * @type {string}
      * @memberof SlotPos
      */
     key?: string;
     /**
-     *
+     * 
      * @type {Vector2i}
      * @memberof SlotPos
      */
     value?: Vector2i;
     /**
-     *
-     * @type {number}
-     * @memberof SlotPos
-     */
-    y?: number;
-    /**
-     *
+     * 
      * @type {number}
      * @memberof SlotPos
      */
     x?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof SlotPos
+     */
+    y?: number;
 }
 
 /**
@@ -7728,25 +7752,25 @@ export namespace SlotPos {
 }
 
 /**
- *
+ * 
  * @export
  * @interface SlotSide
  */
 export interface SlotSide {
     /**
-     *
+     * 
      * @type {string}
      * @memberof SlotSide
      */
     operator?: SlotSide.OperatorEnum;
     /**
-     *
+     * 
      * @type {string}
      * @memberof SlotSide
      */
     key?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof SlotSide
      */
@@ -7799,7 +7823,7 @@ export namespace SlotSide {
 }
 
 /**
- *
+ * 
  * @export
  * @interface StructureData
  */
@@ -7867,59 +7891,59 @@ export interface StructureData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Subject
  */
 export interface Subject {
     /**
-     *
+     * The unique id of this subject
+     * @type {string}
+     * @memberof Subject
+     */
+    id: string;
+    /**
+     * The permissions that are assigned to this subject
+     * @type {{ [key: string]: boolean; }}
+     * @memberof Subject
+     */
+    permissions: { [key: string]: boolean; };
+    /**
+     * The friendly id of this subject (often a 'name'
      * @type {string}
      * @memberof Subject
      */
     friendlyId?: string;
-    /**
-     *
-     * @type {string}
-     * @memberof Subject
-     */
-    id?: string;
-    /**
-     *
-     * @type {{ [key: string]: boolean; }}
-     * @memberof Subject
-     */
-    permissions?: { [key: string]: boolean; };
 }
 
 /**
- *
+ * 
  * @export
  * @interface SubjectCollection
  */
 export interface SubjectCollection {
     /**
-     *
+     * The unique id of this subject collection
      * @type {string}
      * @memberof SubjectCollection
      */
-    id?: string;
+    id: string;
     /**
-     *
+     * The amount of subjects currently loaded from this collection
      * @type {number}
      * @memberof SubjectCollection
      */
-    loadedSubjectCount?: number;
+    loadedSubjectCount: number;
 }
 
 /**
- *
+ * 
  * @export
  * @interface TableEntry
  */
 export interface TableEntry {
     /**
-     *
+     * 
      * @type {number}
      * @memberof TableEntry
      */
@@ -7927,13 +7951,13 @@ export interface TableEntry {
 }
 
 /**
- *
+ * 
  * @export
  * @interface TableEntryEntityArchetype
  */
 export interface TableEntryEntityArchetype {
     /**
-     *
+     * 
      * @type {number}
      * @memberof TableEntryEntityArchetype
      */
@@ -7941,7 +7965,7 @@ export interface TableEntryEntityArchetype {
 }
 
 /**
- *
+ * 
  * @export
  * @interface TameableData
  */
@@ -7961,7 +7985,7 @@ export interface TameableData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface TileEntity
  */
@@ -7985,1171 +8009,1171 @@ export interface TileEntity {
      */
     type: CatalogType;
     /**
-     *
+     * 
      * @type {Inventory}
      * @memberof TileEntity
      */
     inventory?: Inventory;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     absorption?: number;
     /**
-     *
+     * 
      * @type {AgeableData}
      * @memberof TileEntity
      */
     age?: AgeableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     aggressive?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     aiEnabled?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     angerLevel?: number;
     /**
-     *
+     * 
      * @type {ArmorStandData}
      * @memberof TileEntity
      */
     armorStand?: ArmorStandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     art?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     attached?: boolean;
     /**
-     *
+     * 
      * @type {string}
      * @memberof TileEntity
      */
     author?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof TileEntity
      */
     axis?: TileEntity.AxisEnum;
     /**
-     *
+     * 
      * @type {BannerData}
      * @memberof TileEntity
      */
     banner?: BannerData;
     /**
-     *
+     * 
      * @type {BeaconData}
      * @memberof TileEntity
      */
     beacon?: BeaconData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     bigMushroom?: CatalogType;
     /**
-     *
+     * 
      * @type {BlockState}
      * @memberof TileEntity
      */
     block?: BlockState;
     /**
-     *
+     * 
      * @type {BreathingData}
      * @memberof TileEntity
      */
     breathing?: BreathingData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     breedable?: boolean;
     /**
-     *
+     * 
      * @type {BrewingStandData}
      * @memberof TileEntity
      */
     brewingStand?: BrewingStandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     brick?: CatalogType;
     /**
-     *
+     * 
      * @type {Career}
      * @memberof TileEntity
      */
     career?: Career;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     charged?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     coal?: CatalogType;
     /**
-     *
+     * 
      * @type {Color}
      * @memberof TileEntity
      */
     color?: Color;
     /**
-     *
+     * 
      * @type {CommandData}
      * @memberof TileEntity
      */
     command?: CommandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     comparator?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof TileEntity
      */
     connectedDirection?: Array<TileEntity.ConnectedDirectionEnum>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     cookedFish?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     cooldown?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     criticalHit?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     customName?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     damage?: number;
     /**
-     *
+     * 
      * @type {DamageableData}
      * @memberof TileEntity
      */
     damageable?: DamageableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     decayable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     delay?: number;
     /**
-     *
+     * 
      * @type {DespawnDelayData}
      * @memberof TileEntity
      */
     despawnDelay?: DespawnDelayData;
     /**
-     *
+     * 
      * @type {string}
      * @memberof TileEntity
      */
     direction?: TileEntity.DirectionEnum;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     dirt?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     disarmed?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     disguisedBlock?: CatalogType;
     /**
-     *
+     * 
      * @type {string}
      * @memberof TileEntity
      */
     displayName?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     dominantHand?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     doublePlant?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     drops?: boolean;
     /**
-     *
+     * 
      * @type {DurabilityData}
      * @memberof TileEntity
      */
     durability?: DurabilityData;
     /**
-     *
+     * 
      * @type {DyeColor}
      * @memberof TileEntity
      */
     dye?: DyeColor;
     /**
-     *
+     * 
      * @type {Array&lt;Enchantment&gt;}
      * @memberof TileEntity
      */
     enchantments?: Array<Enchantment>;
     /**
-     *
+     * 
      * @type {EndGatewayData}
      * @memberof TileEntity
      */
     endGateway?: EndGatewayData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     expOrb?: number;
     /**
-     *
+     * 
      * @type {ExperienceHolderData}
      * @memberof TileEntity
      */
     experience?: ExperienceHolderData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     expireTicks?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     explosionRadius?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     extended?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     fallDistance?: number;
     /**
-     *
+     * 
      * @type {FallingBlockData}
      * @memberof TileEntity
      */
     fallingBlock?: FallingBlockData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     filled?: boolean;
     /**
-     *
+     * 
      * @type {Array&lt;FireworkEffect&gt;}
      * @memberof TileEntity
      */
     fireworkEffects?: Array<FireworkEffect>;
     /**
-     *
+     * 
      * @type {FireworkRocketData}
      * @memberof TileEntity
      */
     fireworkRocket?: FireworkRocketData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     fish?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     flammable?: boolean;
     /**
-     *
+     * 
      * @type {FluidStack}
      * @memberof TileEntity
      */
     fluid?: FluidStack;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     fluidLevel?: number;
     /**
-     *
+     * 
      * @type {{ [key: string]: Array&lt;FluidStack&gt;; }}
      * @memberof TileEntity
      */
     fluidTanks?: { [key: string]: Array<FluidStack>; };
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     flying?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     flyingAbility?: boolean;
     /**
-     *
+     * 
      * @type {FoodData}
      * @memberof TileEntity
      */
     food?: FoodData;
     /**
-     *
+     * 
      * @type {FurnaceData}
      * @memberof TileEntity
      */
     furnace?: FurnaceData;
     /**
-     *
+     * 
      * @type {FuseData}
      * @memberof TileEntity
      */
     fuse?: FuseData;
     /**
-     *
+     * 
      * @type {GameMode}
      * @memberof TileEntity
      */
     gameMode?: GameMode;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     generation?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     glowing?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     goldenApple?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     griefs?: boolean;
     /**
-     *
+     * 
      * @type {GrowthData}
      * @memberof TileEntity
      */
     growth?: GrowthData;
     /**
-     *
+     * 
      * @type {HealthData}
      * @memberof TileEntity
      */
     health?: HealthData;
     /**
-     *
+     * 
      * @type {HideData}
      * @memberof TileEntity
      */
     hide?: HideData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     hinge?: CatalogType;
     /**
-     *
+     * 
      * @type {HorseData}
      * @memberof TileEntity
      */
     horse?: HorseData;
     /**
-     *
+     * 
      * @type {IgniteableData}
      * @memberof TileEntity
      */
     igniteable?: IgniteableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     inWall?: boolean;
     /**
-     *
+     * 
      * @type {InvisibilityData}
      * @memberof TileEntity
      */
     invisibility?: InvisibilityData;
     /**
-     *
+     * 
      * @type {InvulnerabilityData}
      * @memberof TileEntity
      */
     invulnerability?: InvulnerabilityData;
     /**
-     *
+     * 
      * @type {JoinData}
      * @memberof TileEntity
      */
     joined?: JoinData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     knockback?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     layer?: number;
     /**
-     *
+     * 
      * @type {LeashData}
      * @memberof TileEntity
      */
     leash?: LeashData;
     /**
-     *
+     * 
      * @type {string}
      * @memberof TileEntity
      */
     lockToken?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     logAxis?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof TileEntity
      */
     lore?: Array<string>;
     /**
-     *
+     * 
      * @type {MinecartBlockData}
      * @memberof TileEntity
      */
     minecartBlock?: MinecartBlockData;
     /**
-     *
+     * 
      * @type {MobSpawnerData}
      * @memberof TileEntity
      */
     mobSpawner?: MobSpawnerData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     moisture?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     note?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     occupied?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     ocelot?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     open?: boolean;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof TileEntity
      */
     pages?: Array<string>;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof TileEntity
      */
     passengers?: Array<string>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     persists?: boolean;
     /**
-     *
+     * 
      * @type {PickupDelayData}
      * @memberof TileEntity
      */
     pickupDelay?: PickupDelayData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     pickupRule?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     pigSaddle?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     piston?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;CatalogType&gt;}
      * @memberof TileEntity
      */
     placeableOn?: Array<CatalogType>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     plant?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     playerCreated?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     playing?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     portion?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;PotionEffect&gt;}
      * @memberof TileEntity
      */
     potionEffects?: Array<PotionEffect>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     powered?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     prismarine?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     quartz?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     rabbit?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     railDirection?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     redstonePower?: number;
     /**
-     *
+     * 
      * @type {ItemStack}
      * @memberof TileEntity
      */
     representedItem?: ItemStack;
     /**
-     *
+     * 
      * @type {string}
      * @memberof TileEntity
      */
     representedPlayer?: string;
     /**
-     *
+     * 
      * @type {{ [key: string]: Location; }}
      * @memberof TileEntity
      */
     respawnLocations?: { [key: string]: Location; };
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     sand?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     sandStone?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     screaming?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     seamless?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     shatters?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     sheared?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     shrub?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof TileEntity
      */
     sign?: Array<string>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     silent?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     sitting?: boolean;
     /**
-     *
+     * 
      * @type {string}
      * @memberof TileEntity
      */
     skin?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     skull?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     slab?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     sleeping?: boolean;
     /**
-     *
+     * 
      * @type {SlimeData}
      * @memberof TileEntity
      */
     slime?: SlimeData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     sneaking?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     snow?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     spawn?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     sprinting?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     stairShape?: CatalogType;
     /**
-     *
+     * 
      * @type {{ [key: string]: number; }}
      * @memberof TileEntity
      */
     statistics?: { [key: string]: number; };
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     stone?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;Enchantment&gt;}
      * @memberof TileEntity
      */
     storedEnchantments?: Array<Enchantment>;
     /**
-     *
+     * 
      * @type {StructureData}
      * @memberof TileEntity
      */
     structure?: StructureData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     stuckArrows?: number;
     /**
-     *
+     * 
      * @type {TameableData}
      * @memberof TileEntity
      */
     tamed?: TameableData;
     /**
-     *
+     * 
      * @type {Vector3d}
      * @memberof TileEntity
      */
     target?: Vector3d;
     /**
-     *
+     * 
      * @type {Array&lt;TradeOffer&gt;}
      * @memberof TileEntity
      */
     trades?: Array<TradeOffer>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     tree?: CatalogType;
     /**
-     *
+     * 
      * @type {VehicleData}
      * @memberof TileEntity
      */
     vehicle?: VehicleData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     wall?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     wet?: boolean;
     /**
-     *
+     * 
      * @type {WireAttachmentData}
      * @memberof TileEntity
      */
     wires?: WireAttachmentData;
     /**
-     *
+     * 
      * @type {AcceptsItems}
      * @memberof TileEntity
      */
     acceptsItems?: AcceptsItems;
     /**
-     *
+     * 
      * @type {Array&lt;PotionEffect&gt;}
      * @memberof TileEntity
      */
     applicableEffect?: Array<PotionEffect>;
     /**
-     *
+     * 
      * @type {ArmorSlotType}
      * @memberof TileEntity
      */
     armorSlotType?: ArmorSlotType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     armorType?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     blastResistance?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     burningFuel?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     damageAbsorption?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     efficiency?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     equipmentType?: CatalogType;
     /**
-     *
+     * 
      * @type {EquipmentSlotType}
      * @memberof TileEntity
      */
     equiptmentSlotType?: EquipmentSlotType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     eyeHeight?: number;
     /**
-     *
+     * 
      * @type {Vector3d}
      * @memberof TileEntity
      */
     eyeLocation?: Vector3d;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     fluidTemperature?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     fluidViscosity?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     foodRestoration?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     fullBlockSelectionBox?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     gravityAffected?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     groundLuminance?: number;
     /**
-     *
+     * 
      * @type {GuiIdProperty}
      * @memberof TileEntity
      */
     guiId?: GuiIdProperty;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     hardness?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     heldItem?: CatalogType;
     /**
-     *
+     * 
      * @type {Identifiable}
      * @memberof TileEntity
      */
     identifiable?: Identifiable;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     indirectlyPowered?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     instrument?: CatalogType;
     /**
-     *
+     * 
      * @type {InventoryCapacity}
      * @memberof TileEntity
      */
     inventoryCapacity?: InventoryCapacity;
     /**
-     *
+     * 
      * @type {InventoryDimension}
      * @memberof TileEntity
      */
     inventoryDimension?: InventoryDimension;
     /**
-     *
+     * 
      * @type {InventoryTitle}
      * @memberof TileEntity
      */
     inventoryTitle?: InventoryTitle;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     lightEmission?: number;
     /**
-     *
+     * 
      * @type {string}
      * @memberof TileEntity
      */
     matter?: TileEntity.MatterEnum;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     passable?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     record?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     replaceable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     saturationProperty?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     skyLuminance?: number;
     /**
-     *
+     * 
      * @type {SlotIndex}
      * @memberof TileEntity
      */
     slotIndex?: SlotIndex;
     /**
-     *
+     * 
      * @type {SlotPos}
      * @memberof TileEntity
      */
     slotPos?: SlotPos;
     /**
-     *
+     * 
      * @type {SlotSide}
      * @memberof TileEntity
      */
     slotSide?: SlotSide;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     smeltable?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     solidCube?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     statisticsTracked?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     surrogateBlock?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
     temperature?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof TileEntity
      */
     toolType?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof TileEntity
      */
     unbreakable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof TileEntity
      */
@@ -9232,7 +9256,7 @@ export namespace TileEntity {
 }
 
 /**
- *
+ * 
  * @export
  * @interface TimeHolder
  */
@@ -9252,7 +9276,7 @@ export interface TimeHolder {
 }
 
 /**
- *
+ * 
  * @export
  * @interface TradeOffer
  */
@@ -9302,7 +9326,7 @@ export interface TradeOffer {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Transform
  */
@@ -9331,16 +9355,10 @@ export interface Transform {
      * @memberof Transform
      */
     scale: Vector3d;
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof Transform
-     */
-    link: string;
 }
 
 /**
- *
+ * 
  * @export
  * @interface UniversalMarketItem
  */
@@ -9384,7 +9402,7 @@ export interface UniversalMarketItem {
 }
 
 /**
- *
+ * 
  * @export
  * @interface UpdateEntityRequest
  */
@@ -9434,7 +9452,7 @@ export interface UpdateEntityRequest {
 }
 
 /**
- *
+ * 
  * @export
  * @interface UpdatePlayerRequest
  */
@@ -9532,7 +9550,7 @@ export interface UpdatePlayerRequest {
 }
 
 /**
- *
+ * 
  * @export
  * @interface UpdateWorldRequest
  */
@@ -9544,7 +9562,7 @@ export interface UpdateWorldRequest {
      */
     name: string;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof UpdateWorldRequest
      */
@@ -9574,13 +9592,13 @@ export interface UpdateWorldRequest {
      */
     generator?: string;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof UpdateWorldRequest
      */
     keepSpawnLoaded?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof UpdateWorldRequest
      */
@@ -9598,7 +9616,7 @@ export interface UpdateWorldRequest {
      */
     seed?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof UpdateWorldRequest
      */
@@ -9606,55 +9624,55 @@ export interface UpdateWorldRequest {
 }
 
 /**
- *
+ * 
  * @export
  * @interface UserReport
  */
 export interface UserReport {
     /**
-     *
+     * 
      * @type {TimeHolder}
      * @memberof UserReport
      */
     dailyAverage?: TimeHolder;
     /**
-     *
+     * 
      * @type {LocalDate}
      * @memberof UserReport
      */
     from?: LocalDate;
     /**
-     *
+     * 
      * @type {TimeHolder}
      * @memberof UserReport
      */
     monthlyAverage?: TimeHolder;
     /**
-     *
+     * 
      * @type {string}
      * @memberof UserReport
      */
     name?: string;
     /**
-     *
+     * 
      * @type {LocalDate}
      * @memberof UserReport
      */
     to?: LocalDate;
     /**
-     *
+     * 
      * @type {TimeHolder}
      * @memberof UserReport
      */
     total?: TimeHolder;
     /**
-     *
+     * 
      * @type {string}
      * @memberof UserReport
      */
     uuid?: string;
     /**
-     *
+     * 
      * @type {TimeHolder}
      * @memberof UserReport
      */
@@ -9662,39 +9680,39 @@ export interface UserReport {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Vector2i
  */
 export interface Vector2i {
     /**
-     *
+     * 
      * @type {number}
      * @memberof Vector2i
      */
     x?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Vector2i
      */
     y?: number;
     /**
-     *
-     * @type {number}
-     * @memberof Vector2i
-     */
-    minAxis?: number;
-    /**
-     *
+     * 
      * @type {number}
      * @memberof Vector2i
      */
     maxAxis?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Vector2i
+     */
+    minAxis?: number;
 }
 
 /**
- *
+ * 
  * @export
  * @interface Vector3d
  */
@@ -9720,7 +9738,7 @@ export interface Vector3d {
 }
 
 /**
- *
+ * 
  * @export
  * @interface Vector3i
  */
@@ -9746,7 +9764,7 @@ export interface Vector3i {
 }
 
 /**
- *
+ * 
  * @export
  * @interface VehicleData
  */
@@ -9766,7 +9784,7 @@ export interface VehicleData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface WebBooksBook
  */
@@ -9804,7 +9822,7 @@ export interface WebBooksBook {
 }
 
 /**
- *
+ * 
  * @export
  * @interface WireAttachmentData
  */
@@ -9836,7 +9854,7 @@ export interface WireAttachmentData {
 }
 
 /**
- *
+ * 
  * @export
  * @interface World
  */
@@ -9868,11 +9886,41 @@ export interface World {
 }
 
 /**
- *
+ * 
  * @export
  * @interface WorldBorder
  */
 export interface WorldBorder {
+    /**
+     * The maximum amount of damage done to a player
+     * @type {number}
+     * @memberof WorldBorder
+     */
+    damageThreshold: number;
+    /**
+     * The amount of distance from the border a player will receive a warning at
+     * @type {number}
+     * @memberof WorldBorder
+     */
+    warningDistance: number;
+    /**
+     * The new diameter of the border, in case it is collapsing/expanding
+     * @type {number}
+     * @memberof WorldBorder
+     */
+    newDiameter: number;
+    /**
+     * The time remaining until the border reaches it's new size
+     * @type {number}
+     * @memberof WorldBorder
+     */
+    timeRemaining: number;
+    /**
+     * The amount of time near a border before a warning is shown for players
+     * @type {number}
+     * @memberof WorldBorder
+     */
+    warningTime: number;
     /**
      * The amount of damage done to players outside the border
      * @type {number}
@@ -9892,36 +9940,6 @@ export interface WorldBorder {
      */
     diameter: number;
     /**
-     * The amount of time near a border before a warning is shown for players
-     * @type {number}
-     * @memberof WorldBorder
-     */
-    warningTime: number;
-    /**
-     * The time remaining until the border reaches it's new size
-     * @type {number}
-     * @memberof WorldBorder
-     */
-    timeRemaining: number;
-    /**
-     * The new diameter of the border, in case it is collapsing/expanding
-     * @type {number}
-     * @memberof WorldBorder
-     */
-    newDiameter: number;
-    /**
-     * The amount of distance from the border a player will receive a warning at
-     * @type {number}
-     * @memberof WorldBorder
-     */
-    warningDistance: number;
-    /**
-     * The maximum amount of damage done to a player
-     * @type {number}
-     * @memberof WorldBorder
-     */
-    damageThreshold: number;
-    /**
      * The API link that can be used to obtain more information about this object
      * @type {string}
      * @memberof WorldBorder
@@ -9930,7 +9948,7 @@ export interface WorldBorder {
 }
 
 /**
- *
+ * 
  * @export
  * @interface HuskyCratesCommandReward
  */
@@ -9951,7 +9969,7 @@ export namespace HuskyCratesCommandReward {
 }
 
 /**
- *
+ * 
  * @export
  * @interface HuskyCratesItemReward
  */
@@ -9972,7 +9990,7 @@ export namespace HuskyCratesItemReward {
 }
 
 /**
- *
+ * 
  * @export
  * @interface PlayerFull
  */
@@ -10026,11 +10044,29 @@ export interface PlayerFull {
      */
     unlockedAdvancements: Array<Advancement>;
     /**
-     *
+     * 
      * @type {Inventory}
      * @memberof PlayerFull
      */
     inventory?: Inventory;
+    /**
+     * The current rotation of the player
+     * @type {Vector3d}
+     * @memberof PlayerFull
+     */
+    rotation: Vector3d;
+    /**
+     * The current velocity of the player
+     * @type {Vector3d}
+     * @memberof PlayerFull
+     */
+    velocity: Vector3d;
+    /**
+     * The current scale of the player
+     * @type {Vector3d}
+     * @memberof PlayerFull
+     */
+    scale: Vector3d;
     /**
      * The item stack that the player is wearing as chestplate
      * @type {ItemStack}
@@ -10056,1183 +10092,1165 @@ export interface PlayerFull {
      */
     boots?: ItemStack;
     /**
-     * The current rotation of the player
-     * @type {Vector3d}
-     * @memberof PlayerFull
-     */
-    rotation: Vector3d;
-    /**
-     * The current velocity of the player
-     * @type {Vector3d}
-     * @memberof PlayerFull
-     */
-    velocity: Vector3d;
-    /**
-     * The current scale of the player
-     * @type {Vector3d}
-     * @memberof PlayerFull
-     */
-    scale: Vector3d;
-    /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     absorption?: number;
     /**
-     *
+     * 
      * @type {AgeableData}
      * @memberof PlayerFull
      */
     age?: AgeableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     aggressive?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     aiEnabled?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     angerLevel?: number;
     /**
-     *
+     * 
      * @type {ArmorStandData}
      * @memberof PlayerFull
      */
     armorStand?: ArmorStandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     art?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     attached?: boolean;
     /**
-     *
+     * 
      * @type {string}
      * @memberof PlayerFull
      */
     author?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof PlayerFull
      */
     axis?: PlayerFull.AxisEnum;
     /**
-     *
+     * 
      * @type {BannerData}
      * @memberof PlayerFull
      */
     banner?: BannerData;
     /**
-     *
+     * 
      * @type {BeaconData}
      * @memberof PlayerFull
      */
     beacon?: BeaconData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     bigMushroom?: CatalogType;
     /**
-     *
+     * 
      * @type {BlockState}
      * @memberof PlayerFull
      */
     block?: BlockState;
     /**
-     *
+     * 
      * @type {BreathingData}
      * @memberof PlayerFull
      */
     breathing?: BreathingData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     breedable?: boolean;
     /**
-     *
+     * 
      * @type {BrewingStandData}
      * @memberof PlayerFull
      */
     brewingStand?: BrewingStandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     brick?: CatalogType;
     /**
-     *
+     * 
      * @type {Career}
      * @memberof PlayerFull
      */
     career?: Career;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     charged?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     coal?: CatalogType;
     /**
-     *
+     * 
      * @type {Color}
      * @memberof PlayerFull
      */
     color?: Color;
     /**
-     *
+     * 
      * @type {CommandData}
      * @memberof PlayerFull
      */
     command?: CommandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     comparator?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof PlayerFull
      */
     connectedDirection?: Array<PlayerFull.ConnectedDirectionEnum>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     cookedFish?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     cooldown?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     criticalHit?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     customName?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     damage?: number;
     /**
-     *
+     * 
      * @type {DamageableData}
      * @memberof PlayerFull
      */
     damageable?: DamageableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     decayable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     delay?: number;
     /**
-     *
+     * 
      * @type {DespawnDelayData}
      * @memberof PlayerFull
      */
     despawnDelay?: DespawnDelayData;
     /**
-     *
+     * 
      * @type {string}
      * @memberof PlayerFull
      */
     direction?: PlayerFull.DirectionEnum;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     dirt?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     disarmed?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     disguisedBlock?: CatalogType;
     /**
-     *
+     * 
      * @type {string}
      * @memberof PlayerFull
      */
     displayName?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     dominantHand?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     doublePlant?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     drops?: boolean;
     /**
-     *
+     * 
      * @type {DurabilityData}
      * @memberof PlayerFull
      */
     durability?: DurabilityData;
     /**
-     *
+     * 
      * @type {DyeColor}
      * @memberof PlayerFull
      */
     dye?: DyeColor;
     /**
-     *
+     * 
      * @type {Array&lt;Enchantment&gt;}
      * @memberof PlayerFull
      */
     enchantments?: Array<Enchantment>;
     /**
-     *
+     * 
      * @type {EndGatewayData}
      * @memberof PlayerFull
      */
     endGateway?: EndGatewayData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     expOrb?: number;
     /**
-     *
+     * 
      * @type {ExperienceHolderData}
      * @memberof PlayerFull
      */
     experience?: ExperienceHolderData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     expireTicks?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     explosionRadius?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     extended?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     fallDistance?: number;
     /**
-     *
+     * 
      * @type {FallingBlockData}
      * @memberof PlayerFull
      */
     fallingBlock?: FallingBlockData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     filled?: boolean;
     /**
-     *
+     * 
      * @type {Array&lt;FireworkEffect&gt;}
      * @memberof PlayerFull
      */
     fireworkEffects?: Array<FireworkEffect>;
     /**
-     *
+     * 
      * @type {FireworkRocketData}
      * @memberof PlayerFull
      */
     fireworkRocket?: FireworkRocketData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     fish?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     flammable?: boolean;
     /**
-     *
+     * 
      * @type {FluidStack}
      * @memberof PlayerFull
      */
     fluid?: FluidStack;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     fluidLevel?: number;
     /**
-     *
+     * 
      * @type {{ [key: string]: Array&lt;FluidStack&gt;; }}
      * @memberof PlayerFull
      */
     fluidTanks?: { [key: string]: Array<FluidStack>; };
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     flying?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     flyingAbility?: boolean;
     /**
-     *
+     * 
      * @type {FoodData}
      * @memberof PlayerFull
      */
     food?: FoodData;
     /**
-     *
+     * 
      * @type {FurnaceData}
      * @memberof PlayerFull
      */
     furnace?: FurnaceData;
     /**
-     *
+     * 
      * @type {FuseData}
      * @memberof PlayerFull
      */
     fuse?: FuseData;
     /**
-     *
+     * 
      * @type {GameMode}
      * @memberof PlayerFull
      */
     gameMode?: GameMode;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     generation?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     glowing?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     goldenApple?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     griefs?: boolean;
     /**
-     *
+     * 
      * @type {GrowthData}
      * @memberof PlayerFull
      */
     growth?: GrowthData;
     /**
-     *
+     * 
      * @type {HealthData}
      * @memberof PlayerFull
      */
     health?: HealthData;
     /**
-     *
+     * 
      * @type {HideData}
      * @memberof PlayerFull
      */
     hide?: HideData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     hinge?: CatalogType;
     /**
-     *
+     * 
      * @type {HorseData}
      * @memberof PlayerFull
      */
     horse?: HorseData;
     /**
-     *
+     * 
      * @type {IgniteableData}
      * @memberof PlayerFull
      */
     igniteable?: IgniteableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     inWall?: boolean;
     /**
-     *
+     * 
      * @type {InvisibilityData}
      * @memberof PlayerFull
      */
     invisibility?: InvisibilityData;
     /**
-     *
+     * 
      * @type {InvulnerabilityData}
      * @memberof PlayerFull
      */
     invulnerability?: InvulnerabilityData;
     /**
-     *
+     * 
      * @type {JoinData}
      * @memberof PlayerFull
      */
     joined?: JoinData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     knockback?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     layer?: number;
     /**
-     *
+     * 
      * @type {LeashData}
      * @memberof PlayerFull
      */
     leash?: LeashData;
     /**
-     *
+     * 
      * @type {string}
      * @memberof PlayerFull
      */
     lockToken?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     logAxis?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof PlayerFull
      */
     lore?: Array<string>;
     /**
-     *
+     * 
      * @type {MinecartBlockData}
      * @memberof PlayerFull
      */
     minecartBlock?: MinecartBlockData;
     /**
-     *
+     * 
      * @type {MobSpawnerData}
      * @memberof PlayerFull
      */
     mobSpawner?: MobSpawnerData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     moisture?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     note?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     occupied?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     ocelot?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     open?: boolean;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof PlayerFull
      */
     pages?: Array<string>;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof PlayerFull
      */
     passengers?: Array<string>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     persists?: boolean;
     /**
-     *
+     * 
      * @type {PickupDelayData}
      * @memberof PlayerFull
      */
     pickupDelay?: PickupDelayData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     pickupRule?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     pigSaddle?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     piston?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;CatalogType&gt;}
      * @memberof PlayerFull
      */
     placeableOn?: Array<CatalogType>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     plant?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     playerCreated?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     playing?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     portion?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;PotionEffect&gt;}
      * @memberof PlayerFull
      */
     potionEffects?: Array<PotionEffect>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     powered?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     prismarine?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     quartz?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     rabbit?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     railDirection?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     redstonePower?: number;
     /**
-     *
+     * 
      * @type {ItemStack}
      * @memberof PlayerFull
      */
     representedItem?: ItemStack;
     /**
-     *
+     * 
      * @type {string}
      * @memberof PlayerFull
      */
     representedPlayer?: string;
     /**
-     *
+     * 
      * @type {{ [key: string]: Location; }}
      * @memberof PlayerFull
      */
     respawnLocations?: { [key: string]: Location; };
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     sand?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     sandStone?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     screaming?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     seamless?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     shatters?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     sheared?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     shrub?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof PlayerFull
      */
     sign?: Array<string>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     silent?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     sitting?: boolean;
     /**
-     *
+     * 
      * @type {string}
      * @memberof PlayerFull
      */
     skin?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     skull?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     slab?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     sleeping?: boolean;
     /**
-     *
+     * 
      * @type {SlimeData}
      * @memberof PlayerFull
      */
     slime?: SlimeData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     sneaking?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     snow?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     spawn?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     sprinting?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     stairShape?: CatalogType;
     /**
-     *
+     * 
      * @type {{ [key: string]: number; }}
      * @memberof PlayerFull
      */
     statistics?: { [key: string]: number; };
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     stone?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;Enchantment&gt;}
      * @memberof PlayerFull
      */
     storedEnchantments?: Array<Enchantment>;
     /**
-     *
+     * 
      * @type {StructureData}
      * @memberof PlayerFull
      */
     structure?: StructureData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     stuckArrows?: number;
     /**
-     *
+     * 
      * @type {TameableData}
      * @memberof PlayerFull
      */
     tamed?: TameableData;
     /**
-     *
+     * 
      * @type {Vector3d}
      * @memberof PlayerFull
      */
     target?: Vector3d;
     /**
-     *
+     * 
      * @type {Array&lt;TradeOffer&gt;}
      * @memberof PlayerFull
      */
     trades?: Array<TradeOffer>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     tree?: CatalogType;
     /**
-     *
+     * 
      * @type {VehicleData}
      * @memberof PlayerFull
      */
     vehicle?: VehicleData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     wall?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     wet?: boolean;
     /**
-     *
+     * 
      * @type {WireAttachmentData}
      * @memberof PlayerFull
      */
     wires?: WireAttachmentData;
     /**
-     *
+     * 
      * @type {AcceptsItems}
      * @memberof PlayerFull
      */
     acceptsItems?: AcceptsItems;
     /**
-     *
+     * 
      * @type {Array&lt;PotionEffect&gt;}
      * @memberof PlayerFull
      */
     applicableEffect?: Array<PotionEffect>;
     /**
-     *
+     * 
      * @type {ArmorSlotType}
      * @memberof PlayerFull
      */
     armorSlotType?: ArmorSlotType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     armorType?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     blastResistance?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     burningFuel?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     damageAbsorption?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     efficiency?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     equipmentType?: CatalogType;
     /**
-     *
+     * 
      * @type {EquipmentSlotType}
      * @memberof PlayerFull
      */
     equiptmentSlotType?: EquipmentSlotType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     eyeHeight?: number;
     /**
-     *
+     * 
      * @type {Vector3d}
      * @memberof PlayerFull
      */
     eyeLocation?: Vector3d;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     fluidTemperature?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     fluidViscosity?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     foodRestoration?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     fullBlockSelectionBox?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     gravityAffected?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     groundLuminance?: number;
     /**
-     *
+     * 
      * @type {GuiIdProperty}
      * @memberof PlayerFull
      */
     guiId?: GuiIdProperty;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     hardness?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     heldItem?: CatalogType;
     /**
-     *
+     * 
      * @type {Identifiable}
      * @memberof PlayerFull
      */
     identifiable?: Identifiable;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     indirectlyPowered?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     instrument?: CatalogType;
     /**
-     *
+     * 
      * @type {InventoryCapacity}
      * @memberof PlayerFull
      */
     inventoryCapacity?: InventoryCapacity;
     /**
-     *
+     * 
      * @type {InventoryDimension}
      * @memberof PlayerFull
      */
     inventoryDimension?: InventoryDimension;
     /**
-     *
+     * 
      * @type {InventoryTitle}
      * @memberof PlayerFull
      */
     inventoryTitle?: InventoryTitle;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     lightEmission?: number;
     /**
-     *
+     * 
      * @type {string}
      * @memberof PlayerFull
      */
     matter?: PlayerFull.MatterEnum;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     passable?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     record?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     replaceable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     saturationProperty?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     skyLuminance?: number;
     /**
-     *
+     * 
      * @type {SlotIndex}
      * @memberof PlayerFull
      */
     slotIndex?: SlotIndex;
     /**
-     *
+     * 
      * @type {SlotPos}
      * @memberof PlayerFull
      */
     slotPos?: SlotPos;
     /**
-     *
+     * 
      * @type {SlotSide}
      * @memberof PlayerFull
      */
     slotSide?: SlotSide;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     smeltable?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     solidCube?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     statisticsTracked?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     surrogateBlock?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
     temperature?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof PlayerFull
      */
     toolType?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof PlayerFull
      */
     unbreakable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof PlayerFull
      */
@@ -11315,7 +11333,7 @@ export namespace PlayerFull {
 }
 
 /**
- *
+ * 
  * @export
  * @interface WorldFull
  */
@@ -11357,17 +11375,35 @@ export interface WorldFull {
      */
     seed: number;
     /**
-     * The dimension of the world
-     * @type {CatalogTypeDimensionType}
+     * True if map specific features are enabled for this world, false otherwise
+     * @type {boolean}
      * @memberof WorldFull
      */
-    dimensionType: CatalogTypeDimensionType;
+    mapFeaturesEnabled: boolean;
     /**
-     *
-     * @type {CatalogType}
+     * True if the spawn of this world is always kept loaded, false otherwise
+     * @type {boolean}
      * @memberof WorldFull
      */
-    spawn?: CatalogType;
+    keepSpawnLoaded: boolean;
+    /**
+     * True if bonus chests are generated for this world, false otherwise
+     * @type {boolean}
+     * @memberof WorldFull
+     */
+    generateBonusChests: boolean;
+    /**
+     * The generator type used for this world
+     * @type {CatalogTypeGeneratorType}
+     * @memberof WorldFull
+     */
+    generatorType: CatalogTypeGeneratorType;
+    /**
+     * True if this world is loaded when the server starts, false otherwise
+     * @type {boolean}
+     * @memberof WorldFull
+     */
+    loadOnStartup: boolean;
     /**
      * The border of the world
      * @type {WorldBorder}
@@ -11381,53 +11417,17 @@ export interface WorldFull {
      */
     allowCommands: boolean;
     /**
-     * True if this world is loaded when the server starts, false otherwise
-     * @type {boolean}
+     * 
+     * @type {CatalogType}
      * @memberof WorldFull
      */
-    loadOnStartup: boolean;
+    spawn?: CatalogType;
     /**
-     * True if the spawn of this world is always kept loaded, false otherwise
-     * @type {boolean}
+     * The dimension of the world
+     * @type {CatalogTypeDimensionType}
      * @memberof WorldFull
      */
-    keepSpawnLoaded: boolean;
-    /**
-     * True if map specific features are enabled for this world, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    mapFeaturesEnabled: boolean;
-    /**
-     * True if bonus chests are generated for this world, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    generateBonusChests: boolean;
-    /**
-     *
-     * @type {GameMode}
-     * @memberof WorldFull
-     */
-    gameMode?: GameMode;
-    /**
-     * The generator type used for this world
-     * @type {CatalogTypeGeneratorType}
-     * @memberof WorldFull
-     */
-    generatorType: CatalogTypeGeneratorType;
-    /**
-     * The current weather in the world
-     * @type {CatalogTypeWeather}
-     * @memberof WorldFull
-     */
-    weather: CatalogTypeWeather;
-    /**
-     * The difficulty of the world
-     * @type {CatalogTypeDifficulty}
-     * @memberof WorldFull
-     */
-    difficulty: CatalogTypeDifficulty;
+    dimensionType: CatalogTypeDimensionType;
     /**
      * A map of world rule names to values
      * @type {{ [key: string]: string; }}
@@ -11435,1159 +11435,1177 @@ export interface WorldFull {
      */
     gameRules: { [key: string]: string; };
     /**
-     *
+     * The difficulty of the world
+     * @type {CatalogTypeDifficulty}
+     * @memberof WorldFull
+     */
+    difficulty: CatalogTypeDifficulty;
+    /**
+     * The current weather in the world
+     * @type {CatalogTypeWeather}
+     * @memberof WorldFull
+     */
+    weather: CatalogTypeWeather;
+    /**
+     * 
+     * @type {GameMode}
+     * @memberof WorldFull
+     */
+    gameMode?: GameMode;
+    /**
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     absorption?: number;
     /**
-     *
+     * 
      * @type {AgeableData}
      * @memberof WorldFull
      */
     age?: AgeableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     aggressive?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     aiEnabled?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     angerLevel?: number;
     /**
-     *
+     * 
      * @type {ArmorStandData}
      * @memberof WorldFull
      */
     armorStand?: ArmorStandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     art?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     attached?: boolean;
     /**
-     *
+     * 
      * @type {string}
      * @memberof WorldFull
      */
     author?: string;
     /**
-     *
+     * 
      * @type {string}
      * @memberof WorldFull
      */
     axis?: WorldFull.AxisEnum;
     /**
-     *
+     * 
      * @type {BannerData}
      * @memberof WorldFull
      */
     banner?: BannerData;
     /**
-     *
+     * 
      * @type {BeaconData}
      * @memberof WorldFull
      */
     beacon?: BeaconData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     bigMushroom?: CatalogType;
     /**
-     *
+     * 
      * @type {BlockState}
      * @memberof WorldFull
      */
     block?: BlockState;
     /**
-     *
+     * 
      * @type {BreathingData}
      * @memberof WorldFull
      */
     breathing?: BreathingData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     breedable?: boolean;
     /**
-     *
+     * 
      * @type {BrewingStandData}
      * @memberof WorldFull
      */
     brewingStand?: BrewingStandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     brick?: CatalogType;
     /**
-     *
+     * 
      * @type {Career}
      * @memberof WorldFull
      */
     career?: Career;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     charged?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     coal?: CatalogType;
     /**
-     *
+     * 
      * @type {Color}
      * @memberof WorldFull
      */
     color?: Color;
     /**
-     *
+     * 
      * @type {CommandData}
      * @memberof WorldFull
      */
     command?: CommandData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     comparator?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof WorldFull
      */
     connectedDirection?: Array<WorldFull.ConnectedDirectionEnum>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     cookedFish?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     cooldown?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     criticalHit?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     customName?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     damage?: number;
     /**
-     *
+     * 
      * @type {DamageableData}
      * @memberof WorldFull
      */
     damageable?: DamageableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     decayable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     delay?: number;
     /**
-     *
+     * 
      * @type {DespawnDelayData}
      * @memberof WorldFull
      */
     despawnDelay?: DespawnDelayData;
     /**
-     *
+     * 
      * @type {string}
      * @memberof WorldFull
      */
     direction?: WorldFull.DirectionEnum;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     dirt?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     disarmed?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     disguisedBlock?: CatalogType;
     /**
-     *
+     * 
      * @type {string}
      * @memberof WorldFull
      */
     displayName?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     dominantHand?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     doublePlant?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     drops?: boolean;
     /**
-     *
+     * 
      * @type {DurabilityData}
      * @memberof WorldFull
      */
     durability?: DurabilityData;
     /**
-     *
+     * 
      * @type {DyeColor}
      * @memberof WorldFull
      */
     dye?: DyeColor;
     /**
-     *
+     * 
      * @type {Array&lt;Enchantment&gt;}
      * @memberof WorldFull
      */
     enchantments?: Array<Enchantment>;
     /**
-     *
+     * 
      * @type {EndGatewayData}
      * @memberof WorldFull
      */
     endGateway?: EndGatewayData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     expOrb?: number;
     /**
-     *
+     * 
      * @type {ExperienceHolderData}
      * @memberof WorldFull
      */
     experience?: ExperienceHolderData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     expireTicks?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     explosionRadius?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     extended?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     fallDistance?: number;
     /**
-     *
+     * 
      * @type {FallingBlockData}
      * @memberof WorldFull
      */
     fallingBlock?: FallingBlockData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     filled?: boolean;
     /**
-     *
+     * 
      * @type {Array&lt;FireworkEffect&gt;}
      * @memberof WorldFull
      */
     fireworkEffects?: Array<FireworkEffect>;
     /**
-     *
+     * 
      * @type {FireworkRocketData}
      * @memberof WorldFull
      */
     fireworkRocket?: FireworkRocketData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     fish?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     flammable?: boolean;
     /**
-     *
+     * 
      * @type {FluidStack}
      * @memberof WorldFull
      */
     fluid?: FluidStack;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     fluidLevel?: number;
     /**
-     *
+     * 
      * @type {{ [key: string]: Array&lt;FluidStack&gt;; }}
      * @memberof WorldFull
      */
     fluidTanks?: { [key: string]: Array<FluidStack>; };
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     flying?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     flyingAbility?: boolean;
     /**
-     *
+     * 
      * @type {FoodData}
      * @memberof WorldFull
      */
     food?: FoodData;
     /**
-     *
+     * 
      * @type {FurnaceData}
      * @memberof WorldFull
      */
     furnace?: FurnaceData;
     /**
-     *
+     * 
      * @type {FuseData}
      * @memberof WorldFull
      */
     fuse?: FuseData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     generation?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     glowing?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     goldenApple?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     griefs?: boolean;
     /**
-     *
+     * 
      * @type {GrowthData}
      * @memberof WorldFull
      */
     growth?: GrowthData;
     /**
-     *
+     * 
      * @type {HealthData}
      * @memberof WorldFull
      */
     health?: HealthData;
     /**
-     *
+     * 
      * @type {HideData}
      * @memberof WorldFull
      */
     hide?: HideData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     hinge?: CatalogType;
     /**
-     *
+     * 
      * @type {HorseData}
      * @memberof WorldFull
      */
     horse?: HorseData;
     /**
-     *
+     * 
      * @type {IgniteableData}
      * @memberof WorldFull
      */
     igniteable?: IgniteableData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     inWall?: boolean;
     /**
-     *
+     * 
      * @type {Inventory}
      * @memberof WorldFull
      */
     inventory?: Inventory;
     /**
-     *
+     * 
      * @type {InvisibilityData}
      * @memberof WorldFull
      */
     invisibility?: InvisibilityData;
     /**
-     *
+     * 
      * @type {InvulnerabilityData}
      * @memberof WorldFull
      */
     invulnerability?: InvulnerabilityData;
     /**
-     *
+     * 
      * @type {JoinData}
      * @memberof WorldFull
      */
     joined?: JoinData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     knockback?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     layer?: number;
     /**
-     *
+     * 
      * @type {LeashData}
      * @memberof WorldFull
      */
     leash?: LeashData;
     /**
-     *
+     * 
      * @type {string}
      * @memberof WorldFull
      */
     lockToken?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     logAxis?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof WorldFull
      */
     lore?: Array<string>;
     /**
-     *
+     * 
      * @type {MinecartBlockData}
      * @memberof WorldFull
      */
     minecartBlock?: MinecartBlockData;
     /**
-     *
+     * 
      * @type {MobSpawnerData}
      * @memberof WorldFull
      */
     mobSpawner?: MobSpawnerData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     moisture?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     note?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     occupied?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     ocelot?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     open?: boolean;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof WorldFull
      */
     pages?: Array<string>;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof WorldFull
      */
     passengers?: Array<string>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     persists?: boolean;
     /**
-     *
+     * 
      * @type {PickupDelayData}
      * @memberof WorldFull
      */
     pickupDelay?: PickupDelayData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     pickupRule?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     pigSaddle?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     piston?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;CatalogType&gt;}
      * @memberof WorldFull
      */
     placeableOn?: Array<CatalogType>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     plant?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     playerCreated?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     playing?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     portion?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;PotionEffect&gt;}
      * @memberof WorldFull
      */
     potionEffects?: Array<PotionEffect>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     powered?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     prismarine?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     quartz?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     rabbit?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     railDirection?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     redstonePower?: number;
     /**
-     *
+     * 
      * @type {ItemStack}
      * @memberof WorldFull
      */
     representedItem?: ItemStack;
     /**
-     *
+     * 
      * @type {string}
      * @memberof WorldFull
      */
     representedPlayer?: string;
     /**
-     *
+     * 
      * @type {{ [key: string]: Location; }}
      * @memberof WorldFull
      */
     respawnLocations?: { [key: string]: Location; };
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     sand?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     sandStone?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     screaming?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     seamless?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     shatters?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     sheared?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     shrub?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;string&gt;}
      * @memberof WorldFull
      */
     sign?: Array<string>;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     silent?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     sitting?: boolean;
     /**
-     *
+     * 
      * @type {string}
      * @memberof WorldFull
      */
     skin?: string;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     skull?: CatalogType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     slab?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     sleeping?: boolean;
     /**
-     *
+     * 
      * @type {SlimeData}
      * @memberof WorldFull
      */
     slime?: SlimeData;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     sneaking?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     snow?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     sprinting?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     stairShape?: CatalogType;
     /**
-     *
+     * 
      * @type {{ [key: string]: number; }}
      * @memberof WorldFull
      */
     statistics?: { [key: string]: number; };
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     stone?: CatalogType;
     /**
-     *
+     * 
      * @type {Array&lt;Enchantment&gt;}
      * @memberof WorldFull
      */
     storedEnchantments?: Array<Enchantment>;
     /**
-     *
+     * 
      * @type {StructureData}
      * @memberof WorldFull
      */
     structure?: StructureData;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     stuckArrows?: number;
     /**
-     *
+     * 
      * @type {TameableData}
      * @memberof WorldFull
      */
     tamed?: TameableData;
     /**
-     *
+     * 
      * @type {Vector3d}
      * @memberof WorldFull
      */
     target?: Vector3d;
     /**
-     *
+     * 
      * @type {Array&lt;TradeOffer&gt;}
      * @memberof WorldFull
      */
     trades?: Array<TradeOffer>;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     tree?: CatalogType;
     /**
-     *
+     * 
      * @type {VehicleData}
      * @memberof WorldFull
      */
     vehicle?: VehicleData;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     wall?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     wet?: boolean;
     /**
-     *
+     * 
      * @type {WireAttachmentData}
      * @memberof WorldFull
      */
     wires?: WireAttachmentData;
     /**
-     *
+     * 
      * @type {AcceptsItems}
      * @memberof WorldFull
      */
     acceptsItems?: AcceptsItems;
     /**
-     *
+     * 
      * @type {Array&lt;PotionEffect&gt;}
      * @memberof WorldFull
      */
     applicableEffect?: Array<PotionEffect>;
     /**
-     *
+     * 
      * @type {ArmorSlotType}
      * @memberof WorldFull
      */
     armorSlotType?: ArmorSlotType;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     armorType?: CatalogType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     blastResistance?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     burningFuel?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     damageAbsorption?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     efficiency?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     equipmentType?: CatalogType;
     /**
-     *
+     * 
      * @type {EquipmentSlotType}
      * @memberof WorldFull
      */
     equiptmentSlotType?: EquipmentSlotType;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     eyeHeight?: number;
     /**
-     *
+     * 
      * @type {Vector3d}
      * @memberof WorldFull
      */
     eyeLocation?: Vector3d;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     fluidTemperature?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     fluidViscosity?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     foodRestoration?: number;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     fullBlockSelectionBox?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     gravityAffected?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     groundLuminance?: number;
     /**
-     *
+     * 
      * @type {GuiIdProperty}
      * @memberof WorldFull
      */
     guiId?: GuiIdProperty;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     hardness?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     heldItem?: CatalogType;
     /**
-     *
+     * 
      * @type {Identifiable}
      * @memberof WorldFull
      */
     identifiable?: Identifiable;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     indirectlyPowered?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     instrument?: CatalogType;
     /**
-     *
+     * 
      * @type {InventoryCapacity}
      * @memberof WorldFull
      */
     inventoryCapacity?: InventoryCapacity;
     /**
-     *
+     * 
      * @type {InventoryDimension}
      * @memberof WorldFull
      */
     inventoryDimension?: InventoryDimension;
     /**
-     *
+     * 
      * @type {InventoryTitle}
      * @memberof WorldFull
      */
     inventoryTitle?: InventoryTitle;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     lightEmission?: number;
     /**
-     *
+     * 
      * @type {string}
      * @memberof WorldFull
      */
     matter?: WorldFull.MatterEnum;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     passable?: boolean;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     record?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     replaceable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     saturationProperty?: number;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     skyLuminance?: number;
     /**
-     *
+     * 
      * @type {SlotIndex}
      * @memberof WorldFull
      */
     slotIndex?: SlotIndex;
     /**
-     *
+     * 
      * @type {SlotPos}
      * @memberof WorldFull
      */
     slotPos?: SlotPos;
     /**
-     *
+     * 
      * @type {SlotSide}
      * @memberof WorldFull
      */
     slotSide?: SlotSide;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     smeltable?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     solidCube?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     statisticsTracked?: boolean;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     surrogateBlock?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
     temperature?: number;
     /**
-     *
+     * 
      * @type {CatalogType}
      * @memberof WorldFull
      */
     toolType?: CatalogType;
     /**
-     *
+     * 
      * @type {boolean}
      * @memberof WorldFull
      */
     unbreakable?: boolean;
     /**
-     *
+     * 
      * @type {number}
      * @memberof WorldFull
      */
@@ -12677,7 +12695,7 @@ export namespace WorldFull {
 export const ActiveTimeApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Generates a report for the whole server from week ago until now     **Required permissions:**    - **active-time.report.server**
+         * Generates a report for the whole server from week ago until now     **Required permissions:**    - **active-time.report.server**   
          * @summary Server report
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12716,9 +12734,9 @@ export const ActiveTimeApiFetchParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Generates a report for a specific user from a week ago until now     **Required permissions:**    - **active-time.report.user**
+         * Generates a report for a specific user from a week ago until now     **Required permissions:**    - **active-time.report.user**   
          * @summary User report
-         * @param {string} uuid
+         * @param {string} uuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -12770,7 +12788,7 @@ export const ActiveTimeApiFetchParamCreator = function (configuration?: Configur
 export const ActiveTimeApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Generates a report for the whole server from week ago until now     **Required permissions:**    - **active-time.report.server**
+         * Generates a report for the whole server from week ago until now     **Required permissions:**    - **active-time.report.server**   
          * @summary Server report
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12788,9 +12806,9 @@ export const ActiveTimeApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Generates a report for a specific user from a week ago until now     **Required permissions:**    - **active-time.report.user**
+         * Generates a report for a specific user from a week ago until now     **Required permissions:**    - **active-time.report.user**   
          * @summary User report
-         * @param {string} uuid
+         * @param {string} uuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -12816,7 +12834,7 @@ export const ActiveTimeApiFp = function(configuration?: Configuration) {
 export const ActiveTimeApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Generates a report for the whole server from week ago until now     **Required permissions:**    - **active-time.report.server**
+         * Generates a report for the whole server from week ago until now     **Required permissions:**    - **active-time.report.server**   
          * @summary Server report
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12825,9 +12843,9 @@ export const ActiveTimeApiFactory = function (configuration?: Configuration, fet
             return ActiveTimeApiFp(configuration).getServerReport(options)(fetch, basePath);
         },
         /**
-         * Generates a report for a specific user from a week ago until now     **Required permissions:**    - **active-time.report.user**
+         * Generates a report for a specific user from a week ago until now     **Required permissions:**    - **active-time.report.user**   
          * @summary User report
-         * @param {string} uuid
+         * @param {string} uuid 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -12845,7 +12863,7 @@ export const ActiveTimeApiFactory = function (configuration?: Configuration, fet
  */
 export class ActiveTimeApi extends BaseAPI {
     /**
-     * Generates a report for the whole server from week ago until now     **Required permissions:**    - **active-time.report.server**
+     * Generates a report for the whole server from week ago until now     **Required permissions:**    - **active-time.report.server**   
      * @summary Server report
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12856,9 +12874,9 @@ export class ActiveTimeApi extends BaseAPI {
     }
 
     /**
-     * Generates a report for a specific user from a week ago until now     **Required permissions:**    - **active-time.report.user**
+     * Generates a report for a specific user from a week ago until now     **Required permissions:**    - **active-time.report.user**   
      * @summary User report
-     * @param {} uuid
+     * @param {} uuid 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ActiveTimeApi
@@ -12876,9 +12894,9 @@ export class ActiveTimeApi extends BaseAPI {
 export const BlockApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Start a request to get or change blocks on the server.     **Required permissions:**    - **block.op.create**
+         * Start a request to get or change blocks on the server.     **Required permissions:**    - **block.op.create**   
          * @summary Create a block operation
-         * @param {CreateBlockOperationRequest} [body]
+         * @param {CreateBlockOperationRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -12920,7 +12938,7 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Cancel a pending or running block operation. **THIS DOES NOT UNDO THE BLOCK CHANGES**     **Required permissions:**    - **block.op.delete**
+         * Cancel a pending or running block operation. **THIS DOES NOT UNDO THE BLOCK CHANGES**     **Required permissions:**    - **block.op.delete**   
          * @summary Stop a block operation
          * @param {string} uuid The uuid of the block operation
          * @param {*} [options] Override http request option.
@@ -12965,7 +12983,7 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Gets information about one block in the world.     **Required permissions:**    - **block.one**
+         * Gets information about one block in the world.     **Required permissions:**    - **block.one**   
          * @summary Get a block
          * @param {string} world The uuid of the world to get the block from
          * @param {number} x The x-coordinate of the block
@@ -13028,7 +13046,7 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Gets details about a specific block operation     **Required permissions:**    - **block.op.one**
+         * Gets details about a specific block operation     **Required permissions:**    - **block.op.one**   
          * @summary Get a block operation
          * @param {string} uuid The uuid of the block operation
          * @param {*} [options] Override http request option.
@@ -13073,7 +13091,7 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Returns a list of all the currently running block operations.     **Required permissions:**    - **block.op.list**
+         * Returns a list of all the currently running block operations.     **Required permissions:**    - **block.op.list**   
          * @summary List block operations
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13112,10 +13130,10 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Modify an existing block operation to either pause or continue it.     **Required permissions:**    - **block.op.modify**
+         * Modify an existing block operation to either pause or continue it.     **Required permissions:**    - **block.op.modify**   
          * @summary Modify a block operation
          * @param {string} uuid The uuid of the block operation
-         * @param {ModifyBlockOperationRequest} [body]
+         * @param {ModifyBlockOperationRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -13171,9 +13189,9 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
 export const BlockApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Start a request to get or change blocks on the server.     **Required permissions:**    - **block.op.create**
+         * Start a request to get or change blocks on the server.     **Required permissions:**    - **block.op.create**   
          * @summary Create a block operation
-         * @param {CreateBlockOperationRequest} [body]
+         * @param {CreateBlockOperationRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -13190,7 +13208,7 @@ export const BlockApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Cancel a pending or running block operation. **THIS DOES NOT UNDO THE BLOCK CHANGES**     **Required permissions:**    - **block.op.delete**
+         * Cancel a pending or running block operation. **THIS DOES NOT UNDO THE BLOCK CHANGES**     **Required permissions:**    - **block.op.delete**   
          * @summary Stop a block operation
          * @param {string} uuid The uuid of the block operation
          * @param {*} [options] Override http request option.
@@ -13209,7 +13227,7 @@ export const BlockApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Gets information about one block in the world.     **Required permissions:**    - **block.one**
+         * Gets information about one block in the world.     **Required permissions:**    - **block.one**   
          * @summary Get a block
          * @param {string} world The uuid of the world to get the block from
          * @param {number} x The x-coordinate of the block
@@ -13231,7 +13249,7 @@ export const BlockApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Gets details about a specific block operation     **Required permissions:**    - **block.op.one**
+         * Gets details about a specific block operation     **Required permissions:**    - **block.op.one**   
          * @summary Get a block operation
          * @param {string} uuid The uuid of the block operation
          * @param {*} [options] Override http request option.
@@ -13250,7 +13268,7 @@ export const BlockApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Returns a list of all the currently running block operations.     **Required permissions:**    - **block.op.list**
+         * Returns a list of all the currently running block operations.     **Required permissions:**    - **block.op.list**   
          * @summary List block operations
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13268,10 +13286,10 @@ export const BlockApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Modify an existing block operation to either pause or continue it.     **Required permissions:**    - **block.op.modify**
+         * Modify an existing block operation to either pause or continue it.     **Required permissions:**    - **block.op.modify**   
          * @summary Modify a block operation
          * @param {string} uuid The uuid of the block operation
-         * @param {ModifyBlockOperationRequest} [body]
+         * @param {ModifyBlockOperationRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -13297,9 +13315,9 @@ export const BlockApiFp = function(configuration?: Configuration) {
 export const BlockApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Start a request to get or change blocks on the server.     **Required permissions:**    - **block.op.create**
+         * Start a request to get or change blocks on the server.     **Required permissions:**    - **block.op.create**   
          * @summary Create a block operation
-         * @param {CreateBlockOperationRequest} [body]
+         * @param {CreateBlockOperationRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -13307,7 +13325,7 @@ export const BlockApiFactory = function (configuration?: Configuration, fetch?: 
             return BlockApiFp(configuration).createBlockOperation(body, options)(fetch, basePath);
         },
         /**
-         * Cancel a pending or running block operation. **THIS DOES NOT UNDO THE BLOCK CHANGES**     **Required permissions:**    - **block.op.delete**
+         * Cancel a pending or running block operation. **THIS DOES NOT UNDO THE BLOCK CHANGES**     **Required permissions:**    - **block.op.delete**   
          * @summary Stop a block operation
          * @param {string} uuid The uuid of the block operation
          * @param {*} [options] Override http request option.
@@ -13317,7 +13335,7 @@ export const BlockApiFactory = function (configuration?: Configuration, fetch?: 
             return BlockApiFp(configuration).deleteBlockOperation(uuid, options)(fetch, basePath);
         },
         /**
-         * Gets information about one block in the world.     **Required permissions:**    - **block.one**
+         * Gets information about one block in the world.     **Required permissions:**    - **block.one**   
          * @summary Get a block
          * @param {string} world The uuid of the world to get the block from
          * @param {number} x The x-coordinate of the block
@@ -13330,7 +13348,7 @@ export const BlockApiFactory = function (configuration?: Configuration, fetch?: 
             return BlockApiFp(configuration).getBlock(world, x, y, z, options)(fetch, basePath);
         },
         /**
-         * Gets details about a specific block operation     **Required permissions:**    - **block.op.one**
+         * Gets details about a specific block operation     **Required permissions:**    - **block.op.one**   
          * @summary Get a block operation
          * @param {string} uuid The uuid of the block operation
          * @param {*} [options] Override http request option.
@@ -13340,7 +13358,7 @@ export const BlockApiFactory = function (configuration?: Configuration, fetch?: 
             return BlockApiFp(configuration).getBlockOperation(uuid, options)(fetch, basePath);
         },
         /**
-         * Returns a list of all the currently running block operations.     **Required permissions:**    - **block.op.list**
+         * Returns a list of all the currently running block operations.     **Required permissions:**    - **block.op.list**   
          * @summary List block operations
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13349,10 +13367,10 @@ export const BlockApiFactory = function (configuration?: Configuration, fetch?: 
             return BlockApiFp(configuration).listBlockOperations(options)(fetch, basePath);
         },
         /**
-         * Modify an existing block operation to either pause or continue it.     **Required permissions:**    - **block.op.modify**
+         * Modify an existing block operation to either pause or continue it.     **Required permissions:**    - **block.op.modify**   
          * @summary Modify a block operation
          * @param {string} uuid The uuid of the block operation
-         * @param {ModifyBlockOperationRequest} [body]
+         * @param {ModifyBlockOperationRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -13370,9 +13388,9 @@ export const BlockApiFactory = function (configuration?: Configuration, fetch?: 
  */
 export class BlockApi extends BaseAPI {
     /**
-     * Start a request to get or change blocks on the server.     **Required permissions:**    - **block.op.create**
+     * Start a request to get or change blocks on the server.     **Required permissions:**    - **block.op.create**   
      * @summary Create a block operation
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlockApi
@@ -13382,7 +13400,7 @@ export class BlockApi extends BaseAPI {
     }
 
     /**
-     * Cancel a pending or running block operation. **THIS DOES NOT UNDO THE BLOCK CHANGES**     **Required permissions:**    - **block.op.delete**
+     * Cancel a pending or running block operation. **THIS DOES NOT UNDO THE BLOCK CHANGES**     **Required permissions:**    - **block.op.delete**   
      * @summary Stop a block operation
      * @param {} uuid The uuid of the block operation
      * @param {*} [options] Override http request option.
@@ -13394,7 +13412,7 @@ export class BlockApi extends BaseAPI {
     }
 
     /**
-     * Gets information about one block in the world.     **Required permissions:**    - **block.one**
+     * Gets information about one block in the world.     **Required permissions:**    - **block.one**   
      * @summary Get a block
      * @param {} world The uuid of the world to get the block from
      * @param {} x The x-coordinate of the block
@@ -13409,7 +13427,7 @@ export class BlockApi extends BaseAPI {
     }
 
     /**
-     * Gets details about a specific block operation     **Required permissions:**    - **block.op.one**
+     * Gets details about a specific block operation     **Required permissions:**    - **block.op.one**   
      * @summary Get a block operation
      * @param {} uuid The uuid of the block operation
      * @param {*} [options] Override http request option.
@@ -13421,7 +13439,7 @@ export class BlockApi extends BaseAPI {
     }
 
     /**
-     * Returns a list of all the currently running block operations.     **Required permissions:**    - **block.op.list**
+     * Returns a list of all the currently running block operations.     **Required permissions:**    - **block.op.list**   
      * @summary List block operations
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13432,10 +13450,10 @@ export class BlockApi extends BaseAPI {
     }
 
     /**
-     * Modify an existing block operation to either pause or continue it.     **Required permissions:**    - **block.op.modify**
+     * Modify an existing block operation to either pause or continue it.     **Required permissions:**    - **block.op.modify**   
      * @summary Modify a block operation
      * @param {} uuid The uuid of the block operation
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlockApi
@@ -13453,7 +13471,7 @@ export class BlockApi extends BaseAPI {
 export const ChunkApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.chunk.create**
+         * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.chunk.create**   
          * @summary Load & Generate a chunk
          * @param {string} world The uuid of the world in which to create the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
@@ -13510,7 +13528,7 @@ export const ChunkApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Get detailed information about a chunk     **Required permissions:**    - **chunk.chunk.one **
+         * Get detailed information about a chunk     **Required permissions:**    - **chunk.chunk.one **   
          * @summary Get a chunk
          * @param {string} world The uuid of the world in which to get the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
@@ -13567,7 +13585,7 @@ export const ChunkApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**
+         * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**   
          * @summary List chunks
          * @param {string} world The uuid of the for which to get all chunks
          * @param {*} [options] Override http request option.
@@ -13621,7 +13639,7 @@ export const ChunkApiFetchParamCreator = function (configuration?: Configuration
 export const ChunkApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.chunk.create**
+         * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.chunk.create**   
          * @summary Load & Generate a chunk
          * @param {string} world The uuid of the world in which to create the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
@@ -13642,7 +13660,7 @@ export const ChunkApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get detailed information about a chunk     **Required permissions:**    - **chunk.chunk.one **
+         * Get detailed information about a chunk     **Required permissions:**    - **chunk.chunk.one **   
          * @summary Get a chunk
          * @param {string} world The uuid of the world in which to get the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
@@ -13663,7 +13681,7 @@ export const ChunkApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**
+         * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**   
          * @summary List chunks
          * @param {string} world The uuid of the for which to get all chunks
          * @param {*} [options] Override http request option.
@@ -13691,7 +13709,7 @@ export const ChunkApiFp = function(configuration?: Configuration) {
 export const ChunkApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.chunk.create**
+         * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.chunk.create**   
          * @summary Load & Generate a chunk
          * @param {string} world The uuid of the world in which to create the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
@@ -13703,7 +13721,7 @@ export const ChunkApiFactory = function (configuration?: Configuration, fetch?: 
             return ChunkApiFp(configuration).createChunkAt(world, x, z, options)(fetch, basePath);
         },
         /**
-         * Get detailed information about a chunk     **Required permissions:**    - **chunk.chunk.one **
+         * Get detailed information about a chunk     **Required permissions:**    - **chunk.chunk.one **   
          * @summary Get a chunk
          * @param {string} world The uuid of the world in which to get the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
@@ -13715,7 +13733,7 @@ export const ChunkApiFactory = function (configuration?: Configuration, fetch?: 
             return ChunkApiFp(configuration).getChunkAt(world, x, z, options)(fetch, basePath);
         },
         /**
-         * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**
+         * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**   
          * @summary List chunks
          * @param {string} world The uuid of the for which to get all chunks
          * @param {*} [options] Override http request option.
@@ -13735,7 +13753,7 @@ export const ChunkApiFactory = function (configuration?: Configuration, fetch?: 
  */
 export class ChunkApi extends BaseAPI {
     /**
-     * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.chunk.create**
+     * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.chunk.create**   
      * @summary Load & Generate a chunk
      * @param {} world The uuid of the world in which to create the chunk
      * @param {} x The x-coordinate of the chunk (in chunk coordinates)
@@ -13749,7 +13767,7 @@ export class ChunkApi extends BaseAPI {
     }
 
     /**
-     * Get detailed information about a chunk     **Required permissions:**    - **chunk.chunk.one **
+     * Get detailed information about a chunk     **Required permissions:**    - **chunk.chunk.one **   
      * @summary Get a chunk
      * @param {} world The uuid of the world in which to get the chunk
      * @param {} x The x-coordinate of the chunk (in chunk coordinates)
@@ -13763,7 +13781,7 @@ export class ChunkApi extends BaseAPI {
     }
 
     /**
-     * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**
+     * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**   
      * @summary List chunks
      * @param {} world The uuid of the for which to get all chunks
      * @param {*} [options] Override http request option.
@@ -13783,7 +13801,7 @@ export class ChunkApi extends BaseAPI {
 export const CommandApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Get detailed information about a command.     **Required permissions:**    - **cmd.one**
+         * Get detailed information about a command.     **Required permissions:**    - **cmd.one**   
          * @summary Get a command
          * @param {string} cmd The id of the command
          * @param {*} [options] Override http request option.
@@ -13828,7 +13846,7 @@ export const CommandApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Gets a list of all the commands available on the server.     **Required permissions:**    - **cmd.list**
+         * Gets a list of all the commands available on the server.     **Required permissions:**    - **cmd.list**   
          * @summary List commands
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13867,9 +13885,9 @@ export const CommandApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Execute a command on the server. (Almost the same as running it from the console).   Pass an array of commands to execute them in succession, you can also just pass a list with only one command if that's all you want to execute.  Returns a list with each response corresponding to a command.     **Required permissions:**    - **cmd.run**   - **cmd.run.[command]**
+         * Execute a command on the server. (Almost the same as running it from the console).   Pass an array of commands to execute them in succession, you can also just pass a list with only one command if that's all you want to execute.  Returns a list with each response corresponding to a command.     **Required permissions:**    - **cmd.run**   - **cmd.run.[command]**   
          * @summary Execute a command
-         * @param {Array&lt;ExecuteCommandRequest&gt;} [body]
+         * @param {Array&lt;ExecuteCommandRequest&gt;} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -13920,7 +13938,7 @@ export const CommandApiFetchParamCreator = function (configuration?: Configurati
 export const CommandApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Get detailed information about a command.     **Required permissions:**    - **cmd.one**
+         * Get detailed information about a command.     **Required permissions:**    - **cmd.one**   
          * @summary Get a command
          * @param {string} cmd The id of the command
          * @param {*} [options] Override http request option.
@@ -13939,7 +13957,7 @@ export const CommandApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Gets a list of all the commands available on the server.     **Required permissions:**    - **cmd.list**
+         * Gets a list of all the commands available on the server.     **Required permissions:**    - **cmd.list**   
          * @summary List commands
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13957,9 +13975,9 @@ export const CommandApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Execute a command on the server. (Almost the same as running it from the console).   Pass an array of commands to execute them in succession, you can also just pass a list with only one command if that's all you want to execute.  Returns a list with each response corresponding to a command.     **Required permissions:**    - **cmd.run**   - **cmd.run.[command]**
+         * Execute a command on the server. (Almost the same as running it from the console).   Pass an array of commands to execute them in succession, you can also just pass a list with only one command if that's all you want to execute.  Returns a list with each response corresponding to a command.     **Required permissions:**    - **cmd.run**   - **cmd.run.[command]**   
          * @summary Execute a command
-         * @param {Array&lt;ExecuteCommandRequest&gt;} [body]
+         * @param {Array&lt;ExecuteCommandRequest&gt;} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -13985,7 +14003,7 @@ export const CommandApiFp = function(configuration?: Configuration) {
 export const CommandApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Get detailed information about a command.     **Required permissions:**    - **cmd.one**
+         * Get detailed information about a command.     **Required permissions:**    - **cmd.one**   
          * @summary Get a command
          * @param {string} cmd The id of the command
          * @param {*} [options] Override http request option.
@@ -13995,7 +14013,7 @@ export const CommandApiFactory = function (configuration?: Configuration, fetch?
             return CommandApiFp(configuration).getCommand(cmd, options)(fetch, basePath);
         },
         /**
-         * Gets a list of all the commands available on the server.     **Required permissions:**    - **cmd.list**
+         * Gets a list of all the commands available on the server.     **Required permissions:**    - **cmd.list**   
          * @summary List commands
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14004,9 +14022,9 @@ export const CommandApiFactory = function (configuration?: Configuration, fetch?
             return CommandApiFp(configuration).listCommands(options)(fetch, basePath);
         },
         /**
-         * Execute a command on the server. (Almost the same as running it from the console).   Pass an array of commands to execute them in succession, you can also just pass a list with only one command if that's all you want to execute.  Returns a list with each response corresponding to a command.     **Required permissions:**    - **cmd.run**   - **cmd.run.[command]**
+         * Execute a command on the server. (Almost the same as running it from the console).   Pass an array of commands to execute them in succession, you can also just pass a list with only one command if that's all you want to execute.  Returns a list with each response corresponding to a command.     **Required permissions:**    - **cmd.run**   - **cmd.run.[command]**   
          * @summary Execute a command
-         * @param {Array&lt;ExecuteCommandRequest&gt;} [body]
+         * @param {Array&lt;ExecuteCommandRequest&gt;} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14024,7 +14042,7 @@ export const CommandApiFactory = function (configuration?: Configuration, fetch?
  */
 export class CommandApi extends BaseAPI {
     /**
-     * Get detailed information about a command.     **Required permissions:**    - **cmd.one**
+     * Get detailed information about a command.     **Required permissions:**    - **cmd.one**   
      * @summary Get a command
      * @param {} cmd The id of the command
      * @param {*} [options] Override http request option.
@@ -14036,7 +14054,7 @@ export class CommandApi extends BaseAPI {
     }
 
     /**
-     * Gets a list of all the commands available on the server.     **Required permissions:**    - **cmd.list**
+     * Gets a list of all the commands available on the server.     **Required permissions:**    - **cmd.list**   
      * @summary List commands
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14047,9 +14065,9 @@ export class CommandApi extends BaseAPI {
     }
 
     /**
-     * Execute a command on the server. (Almost the same as running it from the console).   Pass an array of commands to execute them in succession, you can also just pass a list with only one command if that's all you want to execute.  Returns a list with each response corresponding to a command.     **Required permissions:**    - **cmd.run**   - **cmd.run.[command]**
+     * Execute a command on the server. (Almost the same as running it from the console).   Pass an array of commands to execute them in succession, you can also just pass a list with only one command if that's all you want to execute.  Returns a list with each response corresponding to a command.     **Required permissions:**    - **cmd.run**   - **cmd.run.[command]**   
      * @summary Execute a command
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CommandApi
@@ -14067,9 +14085,9 @@ export class CommandApi extends BaseAPI {
 export const EconomyApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.account.one**
+         * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.account.one**   
          * @summary List currencies
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14112,7 +14130,7 @@ export const EconomyApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.currency.list**
+         * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.currency.list**   
          * @summary List currencies
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14160,9 +14178,9 @@ export const EconomyApiFetchParamCreator = function (configuration?: Configurati
 export const EconomyApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.account.one**
+         * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.account.one**   
          * @summary List currencies
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14179,7 +14197,7 @@ export const EconomyApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.currency.list**
+         * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.currency.list**   
          * @summary List currencies
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14206,9 +14224,9 @@ export const EconomyApiFp = function(configuration?: Configuration) {
 export const EconomyApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.account.one**
+         * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.account.one**   
          * @summary List currencies
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14216,7 +14234,7 @@ export const EconomyApiFactory = function (configuration?: Configuration, fetch?
             return EconomyApiFp(configuration).getAccount(id, options)(fetch, basePath);
         },
         /**
-         * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.currency.list**
+         * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.currency.list**   
          * @summary List currencies
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14235,9 +14253,9 @@ export const EconomyApiFactory = function (configuration?: Configuration, fetch?
  */
 export class EconomyApi extends BaseAPI {
     /**
-     * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.account.one**
+     * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.account.one**   
      * @summary List currencies
-     * @param {} id
+     * @param {} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EconomyApi
@@ -14247,7 +14265,7 @@ export class EconomyApi extends BaseAPI {
     }
 
     /**
-     * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.currency.list**
+     * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.currency.list**   
      * @summary List currencies
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14266,9 +14284,9 @@ export class EconomyApi extends BaseAPI {
 export const EntityApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Creates & Spawns a new entity with the specified properties.     **Required permissions:**    - **entity.create**
+         * Creates & Spawns a new entity with the specified properties.     **Required permissions:**    - **entity.create**   
          * @summary Spawn an entity
-         * @param {CreateEntityRequest} [body]
+         * @param {CreateEntityRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14310,10 +14328,10 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Provides direct access to the underlaying entity object and can execute any method on it.     **Required permissions:**    - **entity.method**
+         * Provides direct access to the underlaying entity object and can execute any method on it.     **Required permissions:**    - **entity.method**   
          * @summary Execute a method
          * @param {string} entity The uuid of the entity
-         * @param {ExecuteMethodRequest} [body]
+         * @param {ExecuteMethodRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14360,7 +14378,7 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Get detailed information about an entity.     **Required permissions:**    - **entity.one**
+         * Get detailed information about an entity.     **Required permissions:**    - **entity.one**   
          * @summary Get entity
          * @param {string} entity The uuid of the entity
          * @param {*} [options] Override http request option.
@@ -14405,7 +14423,7 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Get a list of all entities on the server (in all worlds).     **Required permissions:**    - **entity.list**
+         * Get a list of all entities on the server (in all worlds).     **Required permissions:**    - **entity.list**   
          * @summary List entities
          * @param {string} [world] The world to filter the entities by
          * @param {string} [type] The type id of the entities to filter by
@@ -14459,10 +14477,10 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Modify the properties of an existing entity.     **Required permissions:**    - **entity.modify**
+         * Modify the properties of an existing entity.     **Required permissions:**    - **entity.modify**   
          * @summary Modify an entity
          * @param {string} entity The uuid of the entity
-         * @param {UpdateEntityRequest} [body]
+         * @param {UpdateEntityRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14509,7 +14527,7 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Destroys an entity.     **Required permissions:**    - **entity.delete**
+         * Destroys an entity.     **Required permissions:**    - **entity.delete**   
          * @summary Destroy an entity
          * @param {string} entity The uuid of the entity
          * @param {*} [options] Override http request option.
@@ -14563,9 +14581,9 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
 export const EntityApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Creates & Spawns a new entity with the specified properties.     **Required permissions:**    - **entity.create**
+         * Creates & Spawns a new entity with the specified properties.     **Required permissions:**    - **entity.create**   
          * @summary Spawn an entity
-         * @param {CreateEntityRequest} [body]
+         * @param {CreateEntityRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14582,10 +14600,10 @@ export const EntityApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Provides direct access to the underlaying entity object and can execute any method on it.     **Required permissions:**    - **entity.method**
+         * Provides direct access to the underlaying entity object and can execute any method on it.     **Required permissions:**    - **entity.method**   
          * @summary Execute a method
          * @param {string} entity The uuid of the entity
-         * @param {ExecuteMethodRequest} [body]
+         * @param {ExecuteMethodRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14602,7 +14620,7 @@ export const EntityApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get detailed information about an entity.     **Required permissions:**    - **entity.one**
+         * Get detailed information about an entity.     **Required permissions:**    - **entity.one**   
          * @summary Get entity
          * @param {string} entity The uuid of the entity
          * @param {*} [options] Override http request option.
@@ -14621,7 +14639,7 @@ export const EntityApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get a list of all entities on the server (in all worlds).     **Required permissions:**    - **entity.list**
+         * Get a list of all entities on the server (in all worlds).     **Required permissions:**    - **entity.list**   
          * @summary List entities
          * @param {string} [world] The world to filter the entities by
          * @param {string} [type] The type id of the entities to filter by
@@ -14642,10 +14660,10 @@ export const EntityApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Modify the properties of an existing entity.     **Required permissions:**    - **entity.modify**
+         * Modify the properties of an existing entity.     **Required permissions:**    - **entity.modify**   
          * @summary Modify an entity
          * @param {string} entity The uuid of the entity
-         * @param {UpdateEntityRequest} [body]
+         * @param {UpdateEntityRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14662,7 +14680,7 @@ export const EntityApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Destroys an entity.     **Required permissions:**    - **entity.delete**
+         * Destroys an entity.     **Required permissions:**    - **entity.delete**   
          * @summary Destroy an entity
          * @param {string} entity The uuid of the entity
          * @param {*} [options] Override http request option.
@@ -14690,9 +14708,9 @@ export const EntityApiFp = function(configuration?: Configuration) {
 export const EntityApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Creates & Spawns a new entity with the specified properties.     **Required permissions:**    - **entity.create**
+         * Creates & Spawns a new entity with the specified properties.     **Required permissions:**    - **entity.create**   
          * @summary Spawn an entity
-         * @param {CreateEntityRequest} [body]
+         * @param {CreateEntityRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14700,10 +14718,10 @@ export const EntityApiFactory = function (configuration?: Configuration, fetch?:
             return EntityApiFp(configuration).createEntity(body, options)(fetch, basePath);
         },
         /**
-         * Provides direct access to the underlaying entity object and can execute any method on it.     **Required permissions:**    - **entity.method**
+         * Provides direct access to the underlaying entity object and can execute any method on it.     **Required permissions:**    - **entity.method**   
          * @summary Execute a method
          * @param {string} entity The uuid of the entity
-         * @param {ExecuteMethodRequest} [body]
+         * @param {ExecuteMethodRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14711,7 +14729,7 @@ export const EntityApiFactory = function (configuration?: Configuration, fetch?:
             return EntityApiFp(configuration).executeMethod(entity, body, options)(fetch, basePath);
         },
         /**
-         * Get detailed information about an entity.     **Required permissions:**    - **entity.one**
+         * Get detailed information about an entity.     **Required permissions:**    - **entity.one**   
          * @summary Get entity
          * @param {string} entity The uuid of the entity
          * @param {*} [options] Override http request option.
@@ -14721,7 +14739,7 @@ export const EntityApiFactory = function (configuration?: Configuration, fetch?:
             return EntityApiFp(configuration).getEntity(entity, options)(fetch, basePath);
         },
         /**
-         * Get a list of all entities on the server (in all worlds).     **Required permissions:**    - **entity.list**
+         * Get a list of all entities on the server (in all worlds).     **Required permissions:**    - **entity.list**   
          * @summary List entities
          * @param {string} [world] The world to filter the entities by
          * @param {string} [type] The type id of the entities to filter by
@@ -14733,10 +14751,10 @@ export const EntityApiFactory = function (configuration?: Configuration, fetch?:
             return EntityApiFp(configuration).listEntities(world, type, limit, options)(fetch, basePath);
         },
         /**
-         * Modify the properties of an existing entity.     **Required permissions:**    - **entity.modify**
+         * Modify the properties of an existing entity.     **Required permissions:**    - **entity.modify**   
          * @summary Modify an entity
          * @param {string} entity The uuid of the entity
-         * @param {UpdateEntityRequest} [body]
+         * @param {UpdateEntityRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14744,7 +14762,7 @@ export const EntityApiFactory = function (configuration?: Configuration, fetch?:
             return EntityApiFp(configuration).modifyEntity(entity, body, options)(fetch, basePath);
         },
         /**
-         * Destroys an entity.     **Required permissions:**    - **entity.delete**
+         * Destroys an entity.     **Required permissions:**    - **entity.delete**   
          * @summary Destroy an entity
          * @param {string} entity The uuid of the entity
          * @param {*} [options] Override http request option.
@@ -14764,9 +14782,9 @@ export const EntityApiFactory = function (configuration?: Configuration, fetch?:
  */
 export class EntityApi extends BaseAPI {
     /**
-     * Creates & Spawns a new entity with the specified properties.     **Required permissions:**    - **entity.create**
+     * Creates & Spawns a new entity with the specified properties.     **Required permissions:**    - **entity.create**   
      * @summary Spawn an entity
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EntityApi
@@ -14776,10 +14794,10 @@ export class EntityApi extends BaseAPI {
     }
 
     /**
-     * Provides direct access to the underlaying entity object and can execute any method on it.     **Required permissions:**    - **entity.method**
+     * Provides direct access to the underlaying entity object and can execute any method on it.     **Required permissions:**    - **entity.method**   
      * @summary Execute a method
      * @param {} entity The uuid of the entity
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EntityApi
@@ -14789,7 +14807,7 @@ export class EntityApi extends BaseAPI {
     }
 
     /**
-     * Get detailed information about an entity.     **Required permissions:**    - **entity.one**
+     * Get detailed information about an entity.     **Required permissions:**    - **entity.one**   
      * @summary Get entity
      * @param {} entity The uuid of the entity
      * @param {*} [options] Override http request option.
@@ -14801,7 +14819,7 @@ export class EntityApi extends BaseAPI {
     }
 
     /**
-     * Get a list of all entities on the server (in all worlds).     **Required permissions:**    - **entity.list**
+     * Get a list of all entities on the server (in all worlds).     **Required permissions:**    - **entity.list**   
      * @summary List entities
      * @param {} [world] The world to filter the entities by
      * @param {} [type] The type id of the entities to filter by
@@ -14815,10 +14833,10 @@ export class EntityApi extends BaseAPI {
     }
 
     /**
-     * Modify the properties of an existing entity.     **Required permissions:**    - **entity.modify**
+     * Modify the properties of an existing entity.     **Required permissions:**    - **entity.modify**   
      * @summary Modify an entity
      * @param {} entity The uuid of the entity
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EntityApi
@@ -14828,7 +14846,7 @@ export class EntityApi extends BaseAPI {
     }
 
     /**
-     * Destroys an entity.     **Required permissions:**    - **entity.delete**
+     * Destroys an entity.     **Required permissions:**    - **entity.delete**   
      * @summary Destroy an entity
      * @param {} entity The uuid of the entity
      * @param {*} [options] Override http request option.
@@ -14848,7 +14866,7 @@ export class EntityApi extends BaseAPI {
 export const HistoryApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * View a history of the server chat.     **Required permissions:**    - **history.chat**
+         * View a history of the server chat.     **Required permissions:**    - **history.chat**   
          * @summary Get chat history
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14887,7 +14905,7 @@ export const HistoryApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * View a history of the server commands.     **Required permissions:**    - **history.cmd**
+         * View a history of the server commands.     **Required permissions:**    - **history.cmd**   
          * @summary Get command history
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14935,7 +14953,7 @@ export const HistoryApiFetchParamCreator = function (configuration?: Configurati
 export const HistoryApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * View a history of the server chat.     **Required permissions:**    - **history.chat**
+         * View a history of the server chat.     **Required permissions:**    - **history.chat**   
          * @summary Get chat history
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14953,7 +14971,7 @@ export const HistoryApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * View a history of the server commands.     **Required permissions:**    - **history.cmd**
+         * View a history of the server commands.     **Required permissions:**    - **history.cmd**   
          * @summary Get command history
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14980,7 +14998,7 @@ export const HistoryApiFp = function(configuration?: Configuration) {
 export const HistoryApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * View a history of the server chat.     **Required permissions:**    - **history.chat**
+         * View a history of the server chat.     **Required permissions:**    - **history.chat**   
          * @summary Get chat history
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14989,7 +15007,7 @@ export const HistoryApiFactory = function (configuration?: Configuration, fetch?
             return HistoryApiFp(configuration).getChat(options)(fetch, basePath);
         },
         /**
-         * View a history of the server commands.     **Required permissions:**    - **history.cmd**
+         * View a history of the server commands.     **Required permissions:**    - **history.cmd**   
          * @summary Get command history
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15008,7 +15026,7 @@ export const HistoryApiFactory = function (configuration?: Configuration, fetch?
  */
 export class HistoryApi extends BaseAPI {
     /**
-     * View a history of the server chat.     **Required permissions:**    - **history.chat**
+     * View a history of the server chat.     **Required permissions:**    - **history.chat**   
      * @summary Get chat history
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15019,7 +15037,7 @@ export class HistoryApi extends BaseAPI {
     }
 
     /**
-     * View a history of the server commands.     **Required permissions:**    - **history.cmd**
+     * View a history of the server commands.     **Required permissions:**    - **history.cmd**   
      * @summary Get command history
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15038,9 +15056,9 @@ export class HistoryApi extends BaseAPI {
 export const HuskyCratesApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Creates a new crate.     **Required permissions:**    - **husky-crates.crate.create **
+         * Creates a new crate.     **Required permissions:**    - **husky-crates.crate.create **   
          * @summary Create a crate
-         * @param {HuskyCratesCrate} [body]
+         * @param {HuskyCratesCrate} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15082,9 +15100,9 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * Delete a crate.     **Required permissions:**    - **husky-crates.crate.delete**
+         * Delete a crate.     **Required permissions:**    - **husky-crates.crate.delete**   
          * @summary Delete a crate
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15127,9 +15145,9 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * Get detailed information about a crate.     **Required permissions:**    - **husky-crates.crate.one**
+         * Get detailed information about a crate.     **Required permissions:**    - **husky-crates.crate.one**   
          * @summary Get a crate
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15172,7 +15190,7 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * Get a list of all the crates on the server.     **Required permissions:**    - **husky-crates.crate.list**
+         * Get a list of all the crates on the server.     **Required permissions:**    - **husky-crates.crate.list**   
          * @summary List crates
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15211,10 +15229,10 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * Modify a crate.     **Required permissions:**    - **husky-crates.crate.modify**
+         * Modify a crate.     **Required permissions:**    - **husky-crates.crate.modify**   
          * @summary Change a crate
-         * @param {string} id
-         * @param {HuskyCratesCrate} [body]
+         * @param {string} id 
+         * @param {HuskyCratesCrate} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15270,9 +15288,9 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
 export const HuskyCratesApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Creates a new crate.     **Required permissions:**    - **husky-crates.crate.create **
+         * Creates a new crate.     **Required permissions:**    - **husky-crates.crate.create **   
          * @summary Create a crate
-         * @param {HuskyCratesCrate} [body]
+         * @param {HuskyCratesCrate} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15289,9 +15307,9 @@ export const HuskyCratesApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Delete a crate.     **Required permissions:**    - **husky-crates.crate.delete**
+         * Delete a crate.     **Required permissions:**    - **husky-crates.crate.delete**   
          * @summary Delete a crate
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15308,9 +15326,9 @@ export const HuskyCratesApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get detailed information about a crate.     **Required permissions:**    - **husky-crates.crate.one**
+         * Get detailed information about a crate.     **Required permissions:**    - **husky-crates.crate.one**   
          * @summary Get a crate
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15327,7 +15345,7 @@ export const HuskyCratesApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get a list of all the crates on the server.     **Required permissions:**    - **husky-crates.crate.list**
+         * Get a list of all the crates on the server.     **Required permissions:**    - **husky-crates.crate.list**   
          * @summary List crates
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15345,10 +15363,10 @@ export const HuskyCratesApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Modify a crate.     **Required permissions:**    - **husky-crates.crate.modify**
+         * Modify a crate.     **Required permissions:**    - **husky-crates.crate.modify**   
          * @summary Change a crate
-         * @param {string} id
-         * @param {HuskyCratesCrate} [body]
+         * @param {string} id 
+         * @param {HuskyCratesCrate} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15374,9 +15392,9 @@ export const HuskyCratesApiFp = function(configuration?: Configuration) {
 export const HuskyCratesApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Creates a new crate.     **Required permissions:**    - **husky-crates.crate.create **
+         * Creates a new crate.     **Required permissions:**    - **husky-crates.crate.create **   
          * @summary Create a crate
-         * @param {HuskyCratesCrate} [body]
+         * @param {HuskyCratesCrate} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15384,9 +15402,9 @@ export const HuskyCratesApiFactory = function (configuration?: Configuration, fe
             return HuskyCratesApiFp(configuration).createCrate(body, options)(fetch, basePath);
         },
         /**
-         * Delete a crate.     **Required permissions:**    - **husky-crates.crate.delete**
+         * Delete a crate.     **Required permissions:**    - **husky-crates.crate.delete**   
          * @summary Delete a crate
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15394,9 +15412,9 @@ export const HuskyCratesApiFactory = function (configuration?: Configuration, fe
             return HuskyCratesApiFp(configuration).deleteCrate(id, options)(fetch, basePath);
         },
         /**
-         * Get detailed information about a crate.     **Required permissions:**    - **husky-crates.crate.one**
+         * Get detailed information about a crate.     **Required permissions:**    - **husky-crates.crate.one**   
          * @summary Get a crate
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15404,7 +15422,7 @@ export const HuskyCratesApiFactory = function (configuration?: Configuration, fe
             return HuskyCratesApiFp(configuration).getCrate(id, options)(fetch, basePath);
         },
         /**
-         * Get a list of all the crates on the server.     **Required permissions:**    - **husky-crates.crate.list**
+         * Get a list of all the crates on the server.     **Required permissions:**    - **husky-crates.crate.list**   
          * @summary List crates
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15413,10 +15431,10 @@ export const HuskyCratesApiFactory = function (configuration?: Configuration, fe
             return HuskyCratesApiFp(configuration).listCrates(options)(fetch, basePath);
         },
         /**
-         * Modify a crate.     **Required permissions:**    - **husky-crates.crate.modify**
+         * Modify a crate.     **Required permissions:**    - **husky-crates.crate.modify**   
          * @summary Change a crate
-         * @param {string} id
-         * @param {HuskyCratesCrate} [body]
+         * @param {string} id 
+         * @param {HuskyCratesCrate} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15434,9 +15452,9 @@ export const HuskyCratesApiFactory = function (configuration?: Configuration, fe
  */
 export class HuskyCratesApi extends BaseAPI {
     /**
-     * Creates a new crate.     **Required permissions:**    - **husky-crates.crate.create **
+     * Creates a new crate.     **Required permissions:**    - **husky-crates.crate.create **   
      * @summary Create a crate
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HuskyCratesApi
@@ -15446,9 +15464,9 @@ export class HuskyCratesApi extends BaseAPI {
     }
 
     /**
-     * Delete a crate.     **Required permissions:**    - **husky-crates.crate.delete**
+     * Delete a crate.     **Required permissions:**    - **husky-crates.crate.delete**   
      * @summary Delete a crate
-     * @param {} id
+     * @param {} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HuskyCratesApi
@@ -15458,9 +15476,9 @@ export class HuskyCratesApi extends BaseAPI {
     }
 
     /**
-     * Get detailed information about a crate.     **Required permissions:**    - **husky-crates.crate.one**
+     * Get detailed information about a crate.     **Required permissions:**    - **husky-crates.crate.one**   
      * @summary Get a crate
-     * @param {} id
+     * @param {} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HuskyCratesApi
@@ -15470,7 +15488,7 @@ export class HuskyCratesApi extends BaseAPI {
     }
 
     /**
-     * Get a list of all the crates on the server.     **Required permissions:**    - **husky-crates.crate.list**
+     * Get a list of all the crates on the server.     **Required permissions:**    - **husky-crates.crate.list**   
      * @summary List crates
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15481,10 +15499,10 @@ export class HuskyCratesApi extends BaseAPI {
     }
 
     /**
-     * Modify a crate.     **Required permissions:**    - **husky-crates.crate.modify**
+     * Modify a crate.     **Required permissions:**    - **husky-crates.crate.modify**   
      * @summary Change a crate
-     * @param {} id
-     * @param {} [body]
+     * @param {} id 
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HuskyCratesApi
@@ -15502,7 +15520,7 @@ export class HuskyCratesApi extends BaseAPI {
 export const InfoApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Get general information about the Minecraft server.     **Required permissions:**    - **info.info**
+         * Get general information about the Minecraft server.     **Required permissions:**    - **info.info**   
          * @summary Server info
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15541,7 +15559,7 @@ export const InfoApiFetchParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**
+         * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**   
          * @summary Server stats
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15580,13 +15598,13 @@ export const InfoApiFetchParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Get the main server properties (server.properties file).     **Required permissions:**    - **info.properties.list**
-         * @summary List server properties
+         * Lists all the active servlets running in the Web-API     **Required permissions:**    - **info.servlets**   
+         * @summary List servlets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listProperties(options: any = {}): FetchArgs {
-            const localVarPath = `/info/properties`;
+        listServlets(options: any = {}): FetchArgs {
+            const localVarPath = `/info/servlets`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
@@ -15618,50 +15636,6 @@ export const InfoApiFetchParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * Modify settings in the server.properties file. **Note that these settings don't take effect until you restart the server.     **Required permissions:**    - **info.properties.modify**   - **info.properties.modify.[property]**
-         * @summary Modify server properties
-         * @param {any} [body]
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        modifyProperties(body?: any, options: any = {}): FetchArgs {
-            const localVarPath = `/info/properties`;
-            const localVarUrlObj = url.parse(localVarPath, true);
-            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyHeader required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-					? configuration.apiKey("X-WebAPI-Key")
-					: configuration.apiKey;
-                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
-            }
-
-            // authentication ApiKeyQuery required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-					? configuration.apiKey("key")
-					: configuration.apiKey;
-                localVarQueryParameter["key"] = localVarApiKeyValue;
-            }
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            const needsSerialization = (<any>"any" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
-
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -15672,7 +15646,7 @@ export const InfoApiFetchParamCreator = function (configuration?: Configuration)
 export const InfoApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Get general information about the Minecraft server.     **Required permissions:**    - **info.info**
+         * Get general information about the Minecraft server.     **Required permissions:**    - **info.info**   
          * @summary Server info
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15690,7 +15664,7 @@ export const InfoApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**
+         * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**   
          * @summary Server stats
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15708,32 +15682,13 @@ export const InfoApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get the main server properties (server.properties file).     **Required permissions:**    - **info.properties.list**
-         * @summary List server properties
+         * Lists all the active servlets running in the Web-API     **Required permissions:**    - **info.servlets**   
+         * @summary List servlets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listProperties(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<ServerProperty>> {
-            const localVarFetchArgs = InfoApiFetchParamCreator(configuration).listProperties(options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Modify settings in the server.properties file. **Note that these settings don't take effect until you restart the server.     **Required permissions:**    - **info.properties.modify**   - **info.properties.modify.[property]**
-         * @summary Modify server properties
-         * @param {any} [body]
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        modifyProperties(body?: any, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<ServerProperty>> {
-            const localVarFetchArgs = InfoApiFetchParamCreator(configuration).modifyProperties(body, options);
+        listServlets(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{ [key: string]: string; }> {
+            const localVarFetchArgs = InfoApiFetchParamCreator(configuration).listServlets(options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15754,7 +15709,7 @@ export const InfoApiFp = function(configuration?: Configuration) {
 export const InfoApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Get general information about the Minecraft server.     **Required permissions:**    - **info.info**
+         * Get general information about the Minecraft server.     **Required permissions:**    - **info.info**   
          * @summary Server info
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15763,7 +15718,7 @@ export const InfoApiFactory = function (configuration?: Configuration, fetch?: F
             return InfoApiFp(configuration).getInfo(options)(fetch, basePath);
         },
         /**
-         * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**
+         * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**   
          * @summary Server stats
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15772,23 +15727,13 @@ export const InfoApiFactory = function (configuration?: Configuration, fetch?: F
             return InfoApiFp(configuration).getStats(options)(fetch, basePath);
         },
         /**
-         * Get the main server properties (server.properties file).     **Required permissions:**    - **info.properties.list**
-         * @summary List server properties
+         * Lists all the active servlets running in the Web-API     **Required permissions:**    - **info.servlets**   
+         * @summary List servlets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listProperties(options?: any) {
-            return InfoApiFp(configuration).listProperties(options)(fetch, basePath);
-        },
-        /**
-         * Modify settings in the server.properties file. **Note that these settings don't take effect until you restart the server.     **Required permissions:**    - **info.properties.modify**   - **info.properties.modify.[property]**
-         * @summary Modify server properties
-         * @param {any} [body]
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        modifyProperties(body?: any, options?: any) {
-            return InfoApiFp(configuration).modifyProperties(body, options)(fetch, basePath);
+        listServlets(options?: any) {
+            return InfoApiFp(configuration).listServlets(options)(fetch, basePath);
         },
     };
 };
@@ -15801,7 +15746,7 @@ export const InfoApiFactory = function (configuration?: Configuration, fetch?: F
  */
 export class InfoApi extends BaseAPI {
     /**
-     * Get general information about the Minecraft server.     **Required permissions:**    - **info.info**
+     * Get general information about the Minecraft server.     **Required permissions:**    - **info.info**   
      * @summary Server info
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15812,7 +15757,7 @@ export class InfoApi extends BaseAPI {
     }
 
     /**
-     * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**
+     * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**   
      * @summary Server stats
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15823,26 +15768,14 @@ export class InfoApi extends BaseAPI {
     }
 
     /**
-     * Get the main server properties (server.properties file).     **Required permissions:**    - **info.properties.list**
-     * @summary List server properties
+     * Lists all the active servlets running in the Web-API     **Required permissions:**    - **info.servlets**   
+     * @summary List servlets
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InfoApi
      */
-    public listProperties(options?: any) {
-        return InfoApiFp(this.configuration).listProperties(options)(this.fetch, this.basePath);
-    }
-
-    /**
-     * Modify settings in the server.properties file. **Note that these settings don't take effect until you restart the server.     **Required permissions:**    - **info.properties.modify**   - **info.properties.modify.[property]**
-     * @summary Modify server properties
-     * @param {} [body]
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof InfoApi
-     */
-    public modifyProperties(body?: any, options?: any) {
-        return InfoApiFp(this.configuration).modifyProperties(body, options)(this.fetch, this.basePath);
+    public listServlets(options?: any) {
+        return InfoApiFp(this.configuration).listServlets(options)(this.fetch, this.basePath);
     }
 
 }
@@ -15854,9 +15787,9 @@ export class InfoApi extends BaseAPI {
 export const MMCRestrictApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Adds a new item to the restricted item list.     **Required permissions:**    - **mmc-restrict.item.create**
+         * Adds a new item to the restricted item list.     **Required permissions:**    - **mmc-restrict.item.create**   
          * @summary Add an item
-         * @param {MMCRestrictItem} [body]
+         * @param {MMCRestrictItem} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15898,9 +15831,9 @@ export const MMCRestrictApiFetchParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * Delete an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.delete**
+         * Delete an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.delete**   
          * @summary Delete an item
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15943,7 +15876,7 @@ export const MMCRestrictApiFetchParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * Gets the list of restricted items on the server.     **Required permissions:**    - **mmc-restrict.item.list**
+         * Gets the list of restricted items on the server.     **Required permissions:**    - **mmc-restrict.item.list**   
          * @summary List items
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -15982,10 +15915,10 @@ export const MMCRestrictApiFetchParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * Modify an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.modify**
+         * Modify an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.modify**   
          * @summary Modify an item
-         * @param {string} id
-         * @param {MMCRestrictItem} [body]
+         * @param {string} id 
+         * @param {MMCRestrictItem} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16041,9 +15974,9 @@ export const MMCRestrictApiFetchParamCreator = function (configuration?: Configu
 export const MMCRestrictApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Adds a new item to the restricted item list.     **Required permissions:**    - **mmc-restrict.item.create**
+         * Adds a new item to the restricted item list.     **Required permissions:**    - **mmc-restrict.item.create**   
          * @summary Add an item
-         * @param {MMCRestrictItem} [body]
+         * @param {MMCRestrictItem} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16060,9 +15993,9 @@ export const MMCRestrictApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Delete an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.delete**
+         * Delete an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.delete**   
          * @summary Delete an item
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16079,7 +16012,7 @@ export const MMCRestrictApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Gets the list of restricted items on the server.     **Required permissions:**    - **mmc-restrict.item.list**
+         * Gets the list of restricted items on the server.     **Required permissions:**    - **mmc-restrict.item.list**   
          * @summary List items
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16097,10 +16030,10 @@ export const MMCRestrictApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Modify an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.modify**
+         * Modify an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.modify**   
          * @summary Modify an item
-         * @param {string} id
-         * @param {MMCRestrictItem} [body]
+         * @param {string} id 
+         * @param {MMCRestrictItem} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16126,9 +16059,9 @@ export const MMCRestrictApiFp = function(configuration?: Configuration) {
 export const MMCRestrictApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Adds a new item to the restricted item list.     **Required permissions:**    - **mmc-restrict.item.create**
+         * Adds a new item to the restricted item list.     **Required permissions:**    - **mmc-restrict.item.create**   
          * @summary Add an item
-         * @param {MMCRestrictItem} [body]
+         * @param {MMCRestrictItem} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16136,9 +16069,9 @@ export const MMCRestrictApiFactory = function (configuration?: Configuration, fe
             return MMCRestrictApiFp(configuration).addItem(body, options)(fetch, basePath);
         },
         /**
-         * Delete an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.delete**
+         * Delete an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.delete**   
          * @summary Delete an item
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16146,7 +16079,7 @@ export const MMCRestrictApiFactory = function (configuration?: Configuration, fe
             return MMCRestrictApiFp(configuration).deleteItem(id, options)(fetch, basePath);
         },
         /**
-         * Gets the list of restricted items on the server.     **Required permissions:**    - **mmc-restrict.item.list**
+         * Gets the list of restricted items on the server.     **Required permissions:**    - **mmc-restrict.item.list**   
          * @summary List items
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16155,10 +16088,10 @@ export const MMCRestrictApiFactory = function (configuration?: Configuration, fe
             return MMCRestrictApiFp(configuration).listItems(options)(fetch, basePath);
         },
         /**
-         * Modify an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.modify**
+         * Modify an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.modify**   
          * @summary Modify an item
-         * @param {string} id
-         * @param {MMCRestrictItem} [body]
+         * @param {string} id 
+         * @param {MMCRestrictItem} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16176,9 +16109,9 @@ export const MMCRestrictApiFactory = function (configuration?: Configuration, fe
  */
 export class MMCRestrictApi extends BaseAPI {
     /**
-     * Adds a new item to the restricted item list.     **Required permissions:**    - **mmc-restrict.item.create**
+     * Adds a new item to the restricted item list.     **Required permissions:**    - **mmc-restrict.item.create**   
      * @summary Add an item
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MMCRestrictApi
@@ -16188,9 +16121,9 @@ export class MMCRestrictApi extends BaseAPI {
     }
 
     /**
-     * Delete an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.delete**
+     * Delete an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.delete**   
      * @summary Delete an item
-     * @param {} id
+     * @param {} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MMCRestrictApi
@@ -16200,7 +16133,7 @@ export class MMCRestrictApi extends BaseAPI {
     }
 
     /**
-     * Gets the list of restricted items on the server.     **Required permissions:**    - **mmc-restrict.item.list**
+     * Gets the list of restricted items on the server.     **Required permissions:**    - **mmc-restrict.item.list**   
      * @summary List items
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -16211,10 +16144,10 @@ export class MMCRestrictApi extends BaseAPI {
     }
 
     /**
-     * Modify an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.modify**
+     * Modify an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.modify**   
      * @summary Modify an item
-     * @param {} id
-     * @param {} [body]
+     * @param {} id 
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MMCRestrictApi
@@ -16232,9 +16165,9 @@ export class MMCRestrictApi extends BaseAPI {
 export const MMCTicketsApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Get detailed information about a ticket.     **Required permissions:**    - **mmc-tickets.ticket.one**
+         * Get detailed information about a ticket.     **Required permissions:**    - **mmc-tickets.ticket.one**   
          * @summary Get a ticket
-         * @param {number} id
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16277,7 +16210,7 @@ export const MMCTicketsApiFetchParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Get a list of all the tickets on the server.     **Required permissions:**    - **mmc-tickets.ticket.list**
+         * Get a list of all the tickets on the server.     **Required permissions:**    - **mmc-tickets.ticket.list**   
          * @summary List tickets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16316,10 +16249,10 @@ export const MMCTicketsApiFetchParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Modify the properties of an existing ticket.     **Required permissions:**    - **mmc-tickets.ticket.modify**
+         * Modify the properties of an existing ticket.     **Required permissions:**    - **mmc-tickets.ticket.modify**   
          * @summary Modify a ticket
-         * @param {number} id
-         * @param {MMCTicketsTicket} [body]
+         * @param {number} id 
+         * @param {MMCTicketsTicket} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16375,9 +16308,9 @@ export const MMCTicketsApiFetchParamCreator = function (configuration?: Configur
 export const MMCTicketsApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Get detailed information about a ticket.     **Required permissions:**    - **mmc-tickets.ticket.one**
+         * Get detailed information about a ticket.     **Required permissions:**    - **mmc-tickets.ticket.one**   
          * @summary Get a ticket
-         * @param {number} id
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16394,7 +16327,7 @@ export const MMCTicketsApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get a list of all the tickets on the server.     **Required permissions:**    - **mmc-tickets.ticket.list**
+         * Get a list of all the tickets on the server.     **Required permissions:**    - **mmc-tickets.ticket.list**   
          * @summary List tickets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16412,10 +16345,10 @@ export const MMCTicketsApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Modify the properties of an existing ticket.     **Required permissions:**    - **mmc-tickets.ticket.modify**
+         * Modify the properties of an existing ticket.     **Required permissions:**    - **mmc-tickets.ticket.modify**   
          * @summary Modify a ticket
-         * @param {number} id
-         * @param {MMCTicketsTicket} [body]
+         * @param {number} id 
+         * @param {MMCTicketsTicket} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16441,9 +16374,9 @@ export const MMCTicketsApiFp = function(configuration?: Configuration) {
 export const MMCTicketsApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Get detailed information about a ticket.     **Required permissions:**    - **mmc-tickets.ticket.one**
+         * Get detailed information about a ticket.     **Required permissions:**    - **mmc-tickets.ticket.one**   
          * @summary Get a ticket
-         * @param {number} id
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16451,7 +16384,7 @@ export const MMCTicketsApiFactory = function (configuration?: Configuration, fet
             return MMCTicketsApiFp(configuration).getTicket(id, options)(fetch, basePath);
         },
         /**
-         * Get a list of all the tickets on the server.     **Required permissions:**    - **mmc-tickets.ticket.list**
+         * Get a list of all the tickets on the server.     **Required permissions:**    - **mmc-tickets.ticket.list**   
          * @summary List tickets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16460,10 +16393,10 @@ export const MMCTicketsApiFactory = function (configuration?: Configuration, fet
             return MMCTicketsApiFp(configuration).listTickets(options)(fetch, basePath);
         },
         /**
-         * Modify the properties of an existing ticket.     **Required permissions:**    - **mmc-tickets.ticket.modify**
+         * Modify the properties of an existing ticket.     **Required permissions:**    - **mmc-tickets.ticket.modify**   
          * @summary Modify a ticket
-         * @param {number} id
-         * @param {MMCTicketsTicket} [body]
+         * @param {number} id 
+         * @param {MMCTicketsTicket} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16481,9 +16414,9 @@ export const MMCTicketsApiFactory = function (configuration?: Configuration, fet
  */
 export class MMCTicketsApi extends BaseAPI {
     /**
-     * Get detailed information about a ticket.     **Required permissions:**    - **mmc-tickets.ticket.one**
+     * Get detailed information about a ticket.     **Required permissions:**    - **mmc-tickets.ticket.one**   
      * @summary Get a ticket
-     * @param {} id
+     * @param {} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MMCTicketsApi
@@ -16493,7 +16426,7 @@ export class MMCTicketsApi extends BaseAPI {
     }
 
     /**
-     * Get a list of all the tickets on the server.     **Required permissions:**    - **mmc-tickets.ticket.list**
+     * Get a list of all the tickets on the server.     **Required permissions:**    - **mmc-tickets.ticket.list**   
      * @summary List tickets
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -16504,10 +16437,10 @@ export class MMCTicketsApi extends BaseAPI {
     }
 
     /**
-     * Modify the properties of an existing ticket.     **Required permissions:**    - **mmc-tickets.ticket.modify**
+     * Modify the properties of an existing ticket.     **Required permissions:**    - **mmc-tickets.ticket.modify**   
      * @summary Modify a ticket
-     * @param {} id
-     * @param {} [body]
+     * @param {} id 
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MMCTicketsApi
@@ -16525,7 +16458,7 @@ export class MMCTicketsApi extends BaseAPI {
 export const MapApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Returns an image representing the biomes of the blocks within the specified tile     **Required permissions:**    - **map.map**
+         * Returns an image representing the biomes of the blocks within the specified tile     **Required permissions:**    - **map.map**   
          * @summary Get a map tile
          * @param {string} world The world to get the map tile from
          * @param {number} x The x-coordinate of the tile (is multiplied by the TILE_SIZE)
@@ -16591,7 +16524,7 @@ export const MapApiFetchParamCreator = function (configuration?: Configuration) 
 export const MapApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Returns an image representing the biomes of the blocks within the specified tile     **Required permissions:**    - **map.map**
+         * Returns an image representing the biomes of the blocks within the specified tile     **Required permissions:**    - **map.map**   
          * @summary Get a map tile
          * @param {string} world The world to get the map tile from
          * @param {number} x The x-coordinate of the tile (is multiplied by the TILE_SIZE)
@@ -16621,7 +16554,7 @@ export const MapApiFp = function(configuration?: Configuration) {
 export const MapApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Returns an image representing the biomes of the blocks within the specified tile     **Required permissions:**    - **map.map**
+         * Returns an image representing the biomes of the blocks within the specified tile     **Required permissions:**    - **map.map**   
          * @summary Get a map tile
          * @param {string} world The world to get the map tile from
          * @param {number} x The x-coordinate of the tile (is multiplied by the TILE_SIZE)
@@ -16643,7 +16576,7 @@ export const MapApiFactory = function (configuration?: Configuration, fetch?: Fe
  */
 export class MapApi extends BaseAPI {
     /**
-     * Returns an image representing the biomes of the blocks within the specified tile     **Required permissions:**    - **map.map**
+     * Returns an image representing the biomes of the blocks within the specified tile     **Required permissions:**    - **map.map**   
      * @summary Get a map tile
      * @param {} world The world to get the map tile from
      * @param {} x The x-coordinate of the tile (is multiplied by the TILE_SIZE)
@@ -16665,7 +16598,7 @@ export class MapApi extends BaseAPI {
 export const MessageApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Get detailed information about a message.     **Required permissions:**    - **message.one**
+         * Get detailed information about a message.     **Required permissions:**    - **message.one**   
          * @summary Get a message
          * @param {string} uuid The uuid of the sent message
          * @param {*} [options] Override http request option.
@@ -16710,7 +16643,7 @@ export const MessageApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **message.list**
+         * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **message.list**   
          * @summary List messages
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16749,9 +16682,9 @@ export const MessageApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **message.create**
+         * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **message.create**   
          * @summary Send a message
-         * @param {Message} [body]
+         * @param {Message} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16802,7 +16735,7 @@ export const MessageApiFetchParamCreator = function (configuration?: Configurati
 export const MessageApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Get detailed information about a message.     **Required permissions:**    - **message.one**
+         * Get detailed information about a message.     **Required permissions:**    - **message.one**   
          * @summary Get a message
          * @param {string} uuid The uuid of the sent message
          * @param {*} [options] Override http request option.
@@ -16821,7 +16754,7 @@ export const MessageApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **message.list**
+         * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **message.list**   
          * @summary List messages
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16839,9 +16772,9 @@ export const MessageApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **message.create**
+         * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **message.create**   
          * @summary Send a message
-         * @param {Message} [body]
+         * @param {Message} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16867,7 +16800,7 @@ export const MessageApiFp = function(configuration?: Configuration) {
 export const MessageApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Get detailed information about a message.     **Required permissions:**    - **message.one**
+         * Get detailed information about a message.     **Required permissions:**    - **message.one**   
          * @summary Get a message
          * @param {string} uuid The uuid of the sent message
          * @param {*} [options] Override http request option.
@@ -16877,7 +16810,7 @@ export const MessageApiFactory = function (configuration?: Configuration, fetch?
             return MessageApiFp(configuration).getMessage(uuid, options)(fetch, basePath);
         },
         /**
-         * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **message.list**
+         * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **message.list**   
          * @summary List messages
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -16886,9 +16819,9 @@ export const MessageApiFactory = function (configuration?: Configuration, fetch?
             return MessageApiFp(configuration).listMessages(options)(fetch, basePath);
         },
         /**
-         * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **message.create**
+         * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **message.create**   
          * @summary Send a message
-         * @param {Message} [body]
+         * @param {Message} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16906,7 +16839,7 @@ export const MessageApiFactory = function (configuration?: Configuration, fetch?
  */
 export class MessageApi extends BaseAPI {
     /**
-     * Get detailed information about a message.     **Required permissions:**    - **message.one**
+     * Get detailed information about a message.     **Required permissions:**    - **message.one**   
      * @summary Get a message
      * @param {} uuid The uuid of the sent message
      * @param {*} [options] Override http request option.
@@ -16918,7 +16851,7 @@ export class MessageApi extends BaseAPI {
     }
 
     /**
-     * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **message.list**
+     * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **message.list**   
      * @summary List messages
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -16929,9 +16862,9 @@ export class MessageApi extends BaseAPI {
     }
 
     /**
-     * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **message.create**
+     * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **message.create**   
      * @summary Send a message
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MessageApi
@@ -16949,9 +16882,9 @@ export class MessageApi extends BaseAPI {
 export const NucleusApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**
+         * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**   
          * @summary Create a jail
-         * @param {NucleusJail} [body]
+         * @param {NucleusJail} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16993,9 +16926,9 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Creates a new kit.     **Required permissions:**    - **nucleus.kit.create**
+         * Creates a new kit.     **Required permissions:**    - **nucleus.kit.create**   
          * @summary Create a kit
-         * @param {NucleusKit} [body]
+         * @param {NucleusKit} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17037,9 +16970,9 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Delete an existing jail.     **Required permissions:**    - **nucleus.jail.delete**
+         * Delete an existing jail.     **Required permissions:**    - **nucleus.jail.delete**   
          * @summary Delete a jail
-         * @param {string} name
+         * @param {string} name 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17082,9 +17015,9 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Delete an existing kit.     **Required permissions:**    - **nucleus.kit.delete**
+         * Delete an existing kit.     **Required permissions:**    - **nucleus.kit.delete**   
          * @summary Delete a kit
-         * @param {string} name
+         * @param {string} name 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17127,9 +17060,9 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Get detailed information about a jail.     **Required permissions:**    - **nucleus.jail.one**
+         * Get detailed information about a jail.     **Required permissions:**    - **nucleus.jail.one**   
          * @summary Get a jail
-         * @param {string} name
+         * @param {string} name 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17172,9 +17105,9 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Get detailed information about a kit.     **Required permissions:**    - **nucleus.kit.one**
+         * Get detailed information about a kit.     **Required permissions:**    - **nucleus.kit.one**   
          * @summary Get a kit
-         * @param {string} name
+         * @param {string} name 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17217,7 +17150,7 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**
+         * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**   
          * @summary List jails
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -17256,7 +17189,7 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Get a list of all the kits on the server.     **Required permissions:**    - **nucleus.kit.list**
+         * Get a list of all the kits on the server.     **Required permissions:**    - **nucleus.kit.list**   
          * @summary List kits
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -17295,7 +17228,7 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**
+         * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**   
          * @summary Modify a jail
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -17334,10 +17267,10 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Modify an existing kit.     **Required permissions:**    - **nucleus.kit.modify**
+         * Modify an existing kit.     **Required permissions:**    - **nucleus.kit.modify**   
          * @summary Modify a kit
-         * @param {string} name
-         * @param {NucleusKit} [body]
+         * @param {string} name 
+         * @param {NucleusKit} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17393,9 +17326,9 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
 export const NucleusApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**
+         * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**   
          * @summary Create a jail
-         * @param {NucleusJail} [body]
+         * @param {NucleusJail} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17412,9 +17345,9 @@ export const NucleusApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Creates a new kit.     **Required permissions:**    - **nucleus.kit.create**
+         * Creates a new kit.     **Required permissions:**    - **nucleus.kit.create**   
          * @summary Create a kit
-         * @param {NucleusKit} [body]
+         * @param {NucleusKit} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17431,9 +17364,9 @@ export const NucleusApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Delete an existing jail.     **Required permissions:**    - **nucleus.jail.delete**
+         * Delete an existing jail.     **Required permissions:**    - **nucleus.jail.delete**   
          * @summary Delete a jail
-         * @param {string} name
+         * @param {string} name 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17450,9 +17383,9 @@ export const NucleusApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Delete an existing kit.     **Required permissions:**    - **nucleus.kit.delete**
+         * Delete an existing kit.     **Required permissions:**    - **nucleus.kit.delete**   
          * @summary Delete a kit
-         * @param {string} name
+         * @param {string} name 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17469,9 +17402,9 @@ export const NucleusApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get detailed information about a jail.     **Required permissions:**    - **nucleus.jail.one**
+         * Get detailed information about a jail.     **Required permissions:**    - **nucleus.jail.one**   
          * @summary Get a jail
-         * @param {string} name
+         * @param {string} name 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17488,9 +17421,9 @@ export const NucleusApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get detailed information about a kit.     **Required permissions:**    - **nucleus.kit.one**
+         * Get detailed information about a kit.     **Required permissions:**    - **nucleus.kit.one**   
          * @summary Get a kit
-         * @param {string} name
+         * @param {string} name 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17507,7 +17440,7 @@ export const NucleusApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**
+         * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**   
          * @summary List jails
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -17525,7 +17458,7 @@ export const NucleusApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get a list of all the kits on the server.     **Required permissions:**    - **nucleus.kit.list**
+         * Get a list of all the kits on the server.     **Required permissions:**    - **nucleus.kit.list**   
          * @summary List kits
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -17543,7 +17476,7 @@ export const NucleusApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**
+         * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**   
          * @summary Modify a jail
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -17561,10 +17494,10 @@ export const NucleusApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Modify an existing kit.     **Required permissions:**    - **nucleus.kit.modify**
+         * Modify an existing kit.     **Required permissions:**    - **nucleus.kit.modify**   
          * @summary Modify a kit
-         * @param {string} name
-         * @param {NucleusKit} [body]
+         * @param {string} name 
+         * @param {NucleusKit} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17590,9 +17523,9 @@ export const NucleusApiFp = function(configuration?: Configuration) {
 export const NucleusApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**
+         * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**   
          * @summary Create a jail
-         * @param {NucleusJail} [body]
+         * @param {NucleusJail} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17600,9 +17533,9 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
             return NucleusApiFp(configuration).createJail(body, options)(fetch, basePath);
         },
         /**
-         * Creates a new kit.     **Required permissions:**    - **nucleus.kit.create**
+         * Creates a new kit.     **Required permissions:**    - **nucleus.kit.create**   
          * @summary Create a kit
-         * @param {NucleusKit} [body]
+         * @param {NucleusKit} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17610,9 +17543,9 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
             return NucleusApiFp(configuration).createKit(body, options)(fetch, basePath);
         },
         /**
-         * Delete an existing jail.     **Required permissions:**    - **nucleus.jail.delete**
+         * Delete an existing jail.     **Required permissions:**    - **nucleus.jail.delete**   
          * @summary Delete a jail
-         * @param {string} name
+         * @param {string} name 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17620,9 +17553,9 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
             return NucleusApiFp(configuration).deleteJail(name, options)(fetch, basePath);
         },
         /**
-         * Delete an existing kit.     **Required permissions:**    - **nucleus.kit.delete**
+         * Delete an existing kit.     **Required permissions:**    - **nucleus.kit.delete**   
          * @summary Delete a kit
-         * @param {string} name
+         * @param {string} name 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17630,9 +17563,9 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
             return NucleusApiFp(configuration).deleteKit(name, options)(fetch, basePath);
         },
         /**
-         * Get detailed information about a jail.     **Required permissions:**    - **nucleus.jail.one**
+         * Get detailed information about a jail.     **Required permissions:**    - **nucleus.jail.one**   
          * @summary Get a jail
-         * @param {string} name
+         * @param {string} name 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17640,9 +17573,9 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
             return NucleusApiFp(configuration).getJail(name, options)(fetch, basePath);
         },
         /**
-         * Get detailed information about a kit.     **Required permissions:**    - **nucleus.kit.one**
+         * Get detailed information about a kit.     **Required permissions:**    - **nucleus.kit.one**   
          * @summary Get a kit
-         * @param {string} name
+         * @param {string} name 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17650,7 +17583,7 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
             return NucleusApiFp(configuration).getKit(name, options)(fetch, basePath);
         },
         /**
-         * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**
+         * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**   
          * @summary List jails
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -17659,7 +17592,7 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
             return NucleusApiFp(configuration).listJails(options)(fetch, basePath);
         },
         /**
-         * Get a list of all the kits on the server.     **Required permissions:**    - **nucleus.kit.list**
+         * Get a list of all the kits on the server.     **Required permissions:**    - **nucleus.kit.list**   
          * @summary List kits
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -17668,7 +17601,7 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
             return NucleusApiFp(configuration).listKits(options)(fetch, basePath);
         },
         /**
-         * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**
+         * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**   
          * @summary Modify a jail
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -17677,10 +17610,10 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
             return NucleusApiFp(configuration).modifyJail(options)(fetch, basePath);
         },
         /**
-         * Modify an existing kit.     **Required permissions:**    - **nucleus.kit.modify**
+         * Modify an existing kit.     **Required permissions:**    - **nucleus.kit.modify**   
          * @summary Modify a kit
-         * @param {string} name
-         * @param {NucleusKit} [body]
+         * @param {string} name 
+         * @param {NucleusKit} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17698,9 +17631,9 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
  */
 export class NucleusApi extends BaseAPI {
     /**
-     * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**
+     * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**   
      * @summary Create a jail
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
@@ -17710,9 +17643,9 @@ export class NucleusApi extends BaseAPI {
     }
 
     /**
-     * Creates a new kit.     **Required permissions:**    - **nucleus.kit.create**
+     * Creates a new kit.     **Required permissions:**    - **nucleus.kit.create**   
      * @summary Create a kit
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
@@ -17722,9 +17655,9 @@ export class NucleusApi extends BaseAPI {
     }
 
     /**
-     * Delete an existing jail.     **Required permissions:**    - **nucleus.jail.delete**
+     * Delete an existing jail.     **Required permissions:**    - **nucleus.jail.delete**   
      * @summary Delete a jail
-     * @param {} name
+     * @param {} name 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
@@ -17734,9 +17667,9 @@ export class NucleusApi extends BaseAPI {
     }
 
     /**
-     * Delete an existing kit.     **Required permissions:**    - **nucleus.kit.delete**
+     * Delete an existing kit.     **Required permissions:**    - **nucleus.kit.delete**   
      * @summary Delete a kit
-     * @param {} name
+     * @param {} name 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
@@ -17746,9 +17679,9 @@ export class NucleusApi extends BaseAPI {
     }
 
     /**
-     * Get detailed information about a jail.     **Required permissions:**    - **nucleus.jail.one**
+     * Get detailed information about a jail.     **Required permissions:**    - **nucleus.jail.one**   
      * @summary Get a jail
-     * @param {} name
+     * @param {} name 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
@@ -17758,9 +17691,9 @@ export class NucleusApi extends BaseAPI {
     }
 
     /**
-     * Get detailed information about a kit.     **Required permissions:**    - **nucleus.kit.one**
+     * Get detailed information about a kit.     **Required permissions:**    - **nucleus.kit.one**   
      * @summary Get a kit
-     * @param {} name
+     * @param {} name 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
@@ -17770,7 +17703,7 @@ export class NucleusApi extends BaseAPI {
     }
 
     /**
-     * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**
+     * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**   
      * @summary List jails
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -17781,7 +17714,7 @@ export class NucleusApi extends BaseAPI {
     }
 
     /**
-     * Get a list of all the kits on the server.     **Required permissions:**    - **nucleus.kit.list**
+     * Get a list of all the kits on the server.     **Required permissions:**    - **nucleus.kit.list**   
      * @summary List kits
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -17792,7 +17725,7 @@ export class NucleusApi extends BaseAPI {
     }
 
     /**
-     * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**
+     * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**   
      * @summary Modify a jail
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -17803,10 +17736,10 @@ export class NucleusApi extends BaseAPI {
     }
 
     /**
-     * Modify an existing kit.     **Required permissions:**    - **nucleus.kit.modify**
+     * Modify an existing kit.     **Required permissions:**    - **nucleus.kit.modify**   
      * @summary Modify a kit
-     * @param {} name
-     * @param {} [body]
+     * @param {} name 
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
@@ -17824,9 +17757,9 @@ export class NucleusApi extends BaseAPI {
 export const PermissionApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Gets a specific subject collection     **Required permissions:**    - **permission.collection.one**
+         * Gets a specific subject collection     **Required permissions:**    - **permission.collection.one**   
          * @summary Get collection
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17869,10 +17802,10 @@ export const PermissionApiFetchParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**
+         * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
          * @summary Get subject
-         * @param {string} id
-         * @param {string} subId
+         * @param {string} id 
+         * @param {string} subId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -17920,7 +17853,7 @@ export const PermissionApiFetchParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Gets a list of all the subject collections, for example groups, users, etc.     **Required permissions:**    - **permission.collection.list**
+         * Gets a list of all the subject collections, for example groups, users, etc.     **Required permissions:**    - **permission.collection.list**   
          * @summary List collections
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -17959,9 +17892,9 @@ export const PermissionApiFetchParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * List all subjects belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**
+         * List all subjects belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
          * @summary List subjects
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18013,9 +17946,9 @@ export const PermissionApiFetchParamCreator = function (configuration?: Configur
 export const PermissionApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Gets a specific subject collection     **Required permissions:**    - **permission.collection.one**
+         * Gets a specific subject collection     **Required permissions:**    - **permission.collection.one**   
          * @summary Get collection
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18032,10 +17965,10 @@ export const PermissionApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**
+         * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
          * @summary Get subject
-         * @param {string} id
-         * @param {string} subId
+         * @param {string} id 
+         * @param {string} subId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18052,7 +17985,7 @@ export const PermissionApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Gets a list of all the subject collections, for example groups, users, etc.     **Required permissions:**    - **permission.collection.list**
+         * Gets a list of all the subject collections, for example groups, users, etc.     **Required permissions:**    - **permission.collection.list**   
          * @summary List collections
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -18070,9 +18003,9 @@ export const PermissionApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * List all subjects belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**
+         * List all subjects belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
          * @summary List subjects
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18098,9 +18031,9 @@ export const PermissionApiFp = function(configuration?: Configuration) {
 export const PermissionApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Gets a specific subject collection     **Required permissions:**    - **permission.collection.one**
+         * Gets a specific subject collection     **Required permissions:**    - **permission.collection.one**   
          * @summary Get collection
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18108,10 +18041,10 @@ export const PermissionApiFactory = function (configuration?: Configuration, fet
             return PermissionApiFp(configuration).getCollection(id, options)(fetch, basePath);
         },
         /**
-         * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**
+         * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
          * @summary Get subject
-         * @param {string} id
-         * @param {string} subId
+         * @param {string} id 
+         * @param {string} subId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18119,7 +18052,7 @@ export const PermissionApiFactory = function (configuration?: Configuration, fet
             return PermissionApiFp(configuration).getSubject(id, subId, options)(fetch, basePath);
         },
         /**
-         * Gets a list of all the subject collections, for example groups, users, etc.     **Required permissions:**    - **permission.collection.list**
+         * Gets a list of all the subject collections, for example groups, users, etc.     **Required permissions:**    - **permission.collection.list**   
          * @summary List collections
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -18128,9 +18061,9 @@ export const PermissionApiFactory = function (configuration?: Configuration, fet
             return PermissionApiFp(configuration).listCollections(options)(fetch, basePath);
         },
         /**
-         * List all subjects belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**
+         * List all subjects belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
          * @summary List subjects
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18148,9 +18081,9 @@ export const PermissionApiFactory = function (configuration?: Configuration, fet
  */
 export class PermissionApi extends BaseAPI {
     /**
-     * Gets a specific subject collection     **Required permissions:**    - **permission.collection.one**
+     * Gets a specific subject collection     **Required permissions:**    - **permission.collection.one**   
      * @summary Get collection
-     * @param {} id
+     * @param {} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PermissionApi
@@ -18160,10 +18093,10 @@ export class PermissionApi extends BaseAPI {
     }
 
     /**
-     * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**
+     * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
      * @summary Get subject
-     * @param {} id
-     * @param {} subId
+     * @param {} id 
+     * @param {} subId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PermissionApi
@@ -18173,7 +18106,7 @@ export class PermissionApi extends BaseAPI {
     }
 
     /**
-     * Gets a list of all the subject collections, for example groups, users, etc.     **Required permissions:**    - **permission.collection.list**
+     * Gets a list of all the subject collections, for example groups, users, etc.     **Required permissions:**    - **permission.collection.list**   
      * @summary List collections
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -18184,9 +18117,9 @@ export class PermissionApi extends BaseAPI {
     }
 
     /**
-     * List all subjects belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**
+     * List all subjects belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
      * @summary List subjects
-     * @param {} id
+     * @param {} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PermissionApi
@@ -18204,10 +18137,10 @@ export class PermissionApi extends BaseAPI {
 export const PlayerApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Provides direct access to the underlying player object and can execute any method on it.     **Required permissions:**    - **player.method**
+         * Provides direct access to the underlying player object and can execute any method on it.     **Required permissions:**    - **player.method**   
          * @summary Execute a method
          * @param {string} player The uuid of the player
-         * @param {ExecuteMethodRequest} [body]
+         * @param {ExecuteMethodRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18254,7 +18187,7 @@ export const PlayerApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Get detailed information about a player.     **Required permissions:**    - **player.one**
+         * Get detailed information about a player.     **Required permissions:**    - **player.one**   
          * @summary Get a player
          * @param {string} player The uuid of the player
          * @param {*} [options] Override http request option.
@@ -18299,7 +18232,7 @@ export const PlayerApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Get a list of all the players on the server.     **Required permissions:**    - **player.list**
+         * Get a list of all the players on the server.     **Required permissions:**    - **player.list**   
          * @summary List players
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -18338,10 +18271,10 @@ export const PlayerApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Modify the properties of an existing player.     **Required permissions:**    - **player.modify**
+         * Modify the properties of an existing player.     **Required permissions:**    - **player.modify**   
          * @summary Modify a player
          * @param {string} player The uuid of the player
-         * @param {UpdatePlayerRequest} [body]
+         * @param {UpdatePlayerRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18397,10 +18330,10 @@ export const PlayerApiFetchParamCreator = function (configuration?: Configuratio
 export const PlayerApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Provides direct access to the underlying player object and can execute any method on it.     **Required permissions:**    - **player.method**
+         * Provides direct access to the underlying player object and can execute any method on it.     **Required permissions:**    - **player.method**   
          * @summary Execute a method
          * @param {string} player The uuid of the player
-         * @param {ExecuteMethodRequest} [body]
+         * @param {ExecuteMethodRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18417,7 +18350,7 @@ export const PlayerApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get detailed information about a player.     **Required permissions:**    - **player.one**
+         * Get detailed information about a player.     **Required permissions:**    - **player.one**   
          * @summary Get a player
          * @param {string} player The uuid of the player
          * @param {*} [options] Override http request option.
@@ -18436,7 +18369,7 @@ export const PlayerApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get a list of all the players on the server.     **Required permissions:**    - **player.list**
+         * Get a list of all the players on the server.     **Required permissions:**    - **player.list**   
          * @summary List players
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -18454,10 +18387,10 @@ export const PlayerApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Modify the properties of an existing player.     **Required permissions:**    - **player.modify**
+         * Modify the properties of an existing player.     **Required permissions:**    - **player.modify**   
          * @summary Modify a player
          * @param {string} player The uuid of the player
-         * @param {UpdatePlayerRequest} [body]
+         * @param {UpdatePlayerRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18483,10 +18416,10 @@ export const PlayerApiFp = function(configuration?: Configuration) {
 export const PlayerApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Provides direct access to the underlying player object and can execute any method on it.     **Required permissions:**    - **player.method**
+         * Provides direct access to the underlying player object and can execute any method on it.     **Required permissions:**    - **player.method**   
          * @summary Execute a method
          * @param {string} player The uuid of the player
-         * @param {ExecuteMethodRequest} [body]
+         * @param {ExecuteMethodRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18494,7 +18427,7 @@ export const PlayerApiFactory = function (configuration?: Configuration, fetch?:
             return PlayerApiFp(configuration).executeMethod(player, body, options)(fetch, basePath);
         },
         /**
-         * Get detailed information about a player.     **Required permissions:**    - **player.one**
+         * Get detailed information about a player.     **Required permissions:**    - **player.one**   
          * @summary Get a player
          * @param {string} player The uuid of the player
          * @param {*} [options] Override http request option.
@@ -18504,7 +18437,7 @@ export const PlayerApiFactory = function (configuration?: Configuration, fetch?:
             return PlayerApiFp(configuration).getPlayer(player, options)(fetch, basePath);
         },
         /**
-         * Get a list of all the players on the server.     **Required permissions:**    - **player.list**
+         * Get a list of all the players on the server.     **Required permissions:**    - **player.list**   
          * @summary List players
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -18513,10 +18446,10 @@ export const PlayerApiFactory = function (configuration?: Configuration, fetch?:
             return PlayerApiFp(configuration).listPlayers(options)(fetch, basePath);
         },
         /**
-         * Modify the properties of an existing player.     **Required permissions:**    - **player.modify**
+         * Modify the properties of an existing player.     **Required permissions:**    - **player.modify**   
          * @summary Modify a player
          * @param {string} player The uuid of the player
-         * @param {UpdatePlayerRequest} [body]
+         * @param {UpdatePlayerRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18534,10 +18467,10 @@ export const PlayerApiFactory = function (configuration?: Configuration, fetch?:
  */
 export class PlayerApi extends BaseAPI {
     /**
-     * Provides direct access to the underlying player object and can execute any method on it.     **Required permissions:**    - **player.method**
+     * Provides direct access to the underlying player object and can execute any method on it.     **Required permissions:**    - **player.method**   
      * @summary Execute a method
      * @param {} player The uuid of the player
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PlayerApi
@@ -18547,7 +18480,7 @@ export class PlayerApi extends BaseAPI {
     }
 
     /**
-     * Get detailed information about a player.     **Required permissions:**    - **player.one**
+     * Get detailed information about a player.     **Required permissions:**    - **player.one**   
      * @summary Get a player
      * @param {} player The uuid of the player
      * @param {*} [options] Override http request option.
@@ -18559,7 +18492,7 @@ export class PlayerApi extends BaseAPI {
     }
 
     /**
-     * Get a list of all the players on the server.     **Required permissions:**    - **player.list**
+     * Get a list of all the players on the server.     **Required permissions:**    - **player.list**   
      * @summary List players
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -18570,10 +18503,10 @@ export class PlayerApi extends BaseAPI {
     }
 
     /**
-     * Modify the properties of an existing player.     **Required permissions:**    - **player.modify**
+     * Modify the properties of an existing player.     **Required permissions:**    - **player.modify**   
      * @summary Modify a player
      * @param {} player The uuid of the player
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PlayerApi
@@ -18591,10 +18524,10 @@ export class PlayerApi extends BaseAPI {
 export const PluginApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.change**
+         * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.change**   
          * @summary Change plugin configs
          * @param {string} plugin The id of the plugin
-         * @param {any} [body]
+         * @param {any} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18641,7 +18574,7 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Gets detailed information about a plugin.     **Required permissions:**    - **plugin.one**
+         * Gets detailed information about a plugin.     **Required permissions:**    - **plugin.one**   
          * @summary Get a plugin
          * @param {string} plugin The id of the plugin
          * @param {*} [options] Override http request option.
@@ -18686,7 +18619,7 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Gets a map containing the plugin config file names as keys, and their config file contents as their values.     **Required permissions:**    - **plugin.config.get**
+         * Gets a map containing the plugin config file names as keys, and their config file contents as their values.     **Required permissions:**    - **plugin.config.get**   
          * @summary Get plugin configs
          * @param {string} plugin The id of the plugin
          * @param {*} [options] Override http request option.
@@ -18731,7 +18664,7 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Get a list of all the plugins running on the server.     **Required permissions:**    - **plugin.list**
+         * Get a list of all the plugins running on the server.     **Required permissions:**    - **plugin.list**   
          * @summary List plugins
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -18779,10 +18712,10 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
 export const PluginApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.change**
+         * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.change**   
          * @summary Change plugin configs
          * @param {string} plugin The id of the plugin
-         * @param {any} [body]
+         * @param {any} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18799,7 +18732,7 @@ export const PluginApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Gets detailed information about a plugin.     **Required permissions:**    - **plugin.one**
+         * Gets detailed information about a plugin.     **Required permissions:**    - **plugin.one**   
          * @summary Get a plugin
          * @param {string} plugin The id of the plugin
          * @param {*} [options] Override http request option.
@@ -18818,7 +18751,7 @@ export const PluginApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Gets a map containing the plugin config file names as keys, and their config file contents as their values.     **Required permissions:**    - **plugin.config.get**
+         * Gets a map containing the plugin config file names as keys, and their config file contents as their values.     **Required permissions:**    - **plugin.config.get**   
          * @summary Get plugin configs
          * @param {string} plugin The id of the plugin
          * @param {*} [options] Override http request option.
@@ -18837,7 +18770,7 @@ export const PluginApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get a list of all the plugins running on the server.     **Required permissions:**    - **plugin.list**
+         * Get a list of all the plugins running on the server.     **Required permissions:**    - **plugin.list**   
          * @summary List plugins
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -18864,10 +18797,10 @@ export const PluginApiFp = function(configuration?: Configuration) {
 export const PluginApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.change**
+         * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.change**   
          * @summary Change plugin configs
          * @param {string} plugin The id of the plugin
-         * @param {any} [body]
+         * @param {any} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -18875,7 +18808,7 @@ export const PluginApiFactory = function (configuration?: Configuration, fetch?:
             return PluginApiFp(configuration).changePluginConfig(plugin, body, options)(fetch, basePath);
         },
         /**
-         * Gets detailed information about a plugin.     **Required permissions:**    - **plugin.one**
+         * Gets detailed information about a plugin.     **Required permissions:**    - **plugin.one**   
          * @summary Get a plugin
          * @param {string} plugin The id of the plugin
          * @param {*} [options] Override http request option.
@@ -18885,7 +18818,7 @@ export const PluginApiFactory = function (configuration?: Configuration, fetch?:
             return PluginApiFp(configuration).getPlugin(plugin, options)(fetch, basePath);
         },
         /**
-         * Gets a map containing the plugin config file names as keys, and their config file contents as their values.     **Required permissions:**    - **plugin.config.get**
+         * Gets a map containing the plugin config file names as keys, and their config file contents as their values.     **Required permissions:**    - **plugin.config.get**   
          * @summary Get plugin configs
          * @param {string} plugin The id of the plugin
          * @param {*} [options] Override http request option.
@@ -18895,7 +18828,7 @@ export const PluginApiFactory = function (configuration?: Configuration, fetch?:
             return PluginApiFp(configuration).getPluginConfig(plugin, options)(fetch, basePath);
         },
         /**
-         * Get a list of all the plugins running on the server.     **Required permissions:**    - **plugin.list**
+         * Get a list of all the plugins running on the server.     **Required permissions:**    - **plugin.list**   
          * @summary List plugins
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -18914,10 +18847,10 @@ export const PluginApiFactory = function (configuration?: Configuration, fetch?:
  */
 export class PluginApi extends BaseAPI {
     /**
-     * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.change**
+     * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.change**   
      * @summary Change plugin configs
      * @param {} plugin The id of the plugin
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PluginApi
@@ -18927,7 +18860,7 @@ export class PluginApi extends BaseAPI {
     }
 
     /**
-     * Gets detailed information about a plugin.     **Required permissions:**    - **plugin.one**
+     * Gets detailed information about a plugin.     **Required permissions:**    - **plugin.one**   
      * @summary Get a plugin
      * @param {} plugin The id of the plugin
      * @param {*} [options] Override http request option.
@@ -18939,7 +18872,7 @@ export class PluginApi extends BaseAPI {
     }
 
     /**
-     * Gets a map containing the plugin config file names as keys, and their config file contents as their values.     **Required permissions:**    - **plugin.config.get**
+     * Gets a map containing the plugin config file names as keys, and their config file contents as their values.     **Required permissions:**    - **plugin.config.get**   
      * @summary Get plugin configs
      * @param {} plugin The id of the plugin
      * @param {*} [options] Override http request option.
@@ -18951,7 +18884,7 @@ export class PluginApi extends BaseAPI {
     }
 
     /**
-     * Get a list of all the plugins running on the server.     **Required permissions:**    - **plugin.list**
+     * Get a list of all the plugins running on the server.     **Required permissions:**    - **plugin.list**   
      * @summary List plugins
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -18970,7 +18903,7 @@ export class PluginApi extends BaseAPI {
 export const RecipeApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         *      **Required permissions:**    - **recipe.list**
+         *      **Required permissions:**    - **recipe.list**   
          * @summary List recipes
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -19018,7 +18951,7 @@ export const RecipeApiFetchParamCreator = function (configuration?: Configuratio
 export const RecipeApiFp = function(configuration?: Configuration) {
     return {
         /**
-         *      **Required permissions:**    - **recipe.list**
+         *      **Required permissions:**    - **recipe.list**   
          * @summary List recipes
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -19045,7 +18978,7 @@ export const RecipeApiFp = function(configuration?: Configuration) {
 export const RecipeApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         *      **Required permissions:**    - **recipe.list**
+         *      **Required permissions:**    - **recipe.list**   
          * @summary List recipes
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -19064,7 +18997,7 @@ export const RecipeApiFactory = function (configuration?: Configuration, fetch?:
  */
 export class RecipeApi extends BaseAPI {
     /**
-     *      **Required permissions:**    - **recipe.list**
+     *      **Required permissions:**    - **recipe.list**   
      * @summary List recipes
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -19083,9 +19016,9 @@ export class RecipeApi extends BaseAPI {
 export const RedProtectApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Create a new region at a specified location     **Required permissions:**    - **red-protect.region.create**
+         * Create a new region at a specified location     **Required permissions:**    - **red-protect.region.create**   
          * @summary Create a region
-         * @param {RedProtectRegion} [body]
+         * @param {RedProtectRegion} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19127,9 +19060,9 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Remove the specified protected region     **Required permissions:**    - **red-protect.region.delete**
+         * Remove the specified protected region     **Required permissions:**    - **red-protect.region.delete**   
          * @summary Delete a region
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19172,9 +19105,9 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Get details for a specific protected region     **Required permissions:**    - **red-protect.region.one**
+         * Get details for a specific protected region     **Required permissions:**    - **red-protect.region.one**   
          * @summary Get a region
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19217,9 +19150,9 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Lists all the regions being protected     **Required permissions:**    - **red-protect.region.list**
+         * Lists all the regions being protected     **Required permissions:**    - **red-protect.region.list**   
          * @summary List regions
-         * @param {string} [world]
+         * @param {string} [world] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19261,10 +19194,10 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Update the details for a specific protected region     **Required permissions:**    - **red-protect.region.modify**
+         * Update the details for a specific protected region     **Required permissions:**    - **red-protect.region.modify**   
          * @summary Modify a region
-         * @param {string} id
-         * @param {RedProtectRegion} [body]
+         * @param {string} id 
+         * @param {RedProtectRegion} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19320,9 +19253,9 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
 export const RedProtectApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Create a new region at a specified location     **Required permissions:**    - **red-protect.region.create**
+         * Create a new region at a specified location     **Required permissions:**    - **red-protect.region.create**   
          * @summary Create a region
-         * @param {RedProtectRegion} [body]
+         * @param {RedProtectRegion} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19339,9 +19272,9 @@ export const RedProtectApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Remove the specified protected region     **Required permissions:**    - **red-protect.region.delete**
+         * Remove the specified protected region     **Required permissions:**    - **red-protect.region.delete**   
          * @summary Delete a region
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19358,9 +19291,9 @@ export const RedProtectApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get details for a specific protected region     **Required permissions:**    - **red-protect.region.one**
+         * Get details for a specific protected region     **Required permissions:**    - **red-protect.region.one**   
          * @summary Get a region
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19377,9 +19310,9 @@ export const RedProtectApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Lists all the regions being protected     **Required permissions:**    - **red-protect.region.list**
+         * Lists all the regions being protected     **Required permissions:**    - **red-protect.region.list**   
          * @summary List regions
-         * @param {string} [world]
+         * @param {string} [world] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19396,10 +19329,10 @@ export const RedProtectApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Update the details for a specific protected region     **Required permissions:**    - **red-protect.region.modify**
+         * Update the details for a specific protected region     **Required permissions:**    - **red-protect.region.modify**   
          * @summary Modify a region
-         * @param {string} id
-         * @param {RedProtectRegion} [body]
+         * @param {string} id 
+         * @param {RedProtectRegion} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19425,9 +19358,9 @@ export const RedProtectApiFp = function(configuration?: Configuration) {
 export const RedProtectApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Create a new region at a specified location     **Required permissions:**    - **red-protect.region.create**
+         * Create a new region at a specified location     **Required permissions:**    - **red-protect.region.create**   
          * @summary Create a region
-         * @param {RedProtectRegion} [body]
+         * @param {RedProtectRegion} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19435,9 +19368,9 @@ export const RedProtectApiFactory = function (configuration?: Configuration, fet
             return RedProtectApiFp(configuration).createRegion(body, options)(fetch, basePath);
         },
         /**
-         * Remove the specified protected region     **Required permissions:**    - **red-protect.region.delete**
+         * Remove the specified protected region     **Required permissions:**    - **red-protect.region.delete**   
          * @summary Delete a region
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19445,9 +19378,9 @@ export const RedProtectApiFactory = function (configuration?: Configuration, fet
             return RedProtectApiFp(configuration).deleteRegion(id, options)(fetch, basePath);
         },
         /**
-         * Get details for a specific protected region     **Required permissions:**    - **red-protect.region.one**
+         * Get details for a specific protected region     **Required permissions:**    - **red-protect.region.one**   
          * @summary Get a region
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19455,9 +19388,9 @@ export const RedProtectApiFactory = function (configuration?: Configuration, fet
             return RedProtectApiFp(configuration).getRegion(id, options)(fetch, basePath);
         },
         /**
-         * Lists all the regions being protected     **Required permissions:**    - **red-protect.region.list**
+         * Lists all the regions being protected     **Required permissions:**    - **red-protect.region.list**   
          * @summary List regions
-         * @param {string} [world]
+         * @param {string} [world] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19465,10 +19398,10 @@ export const RedProtectApiFactory = function (configuration?: Configuration, fet
             return RedProtectApiFp(configuration).listRegions(world, options)(fetch, basePath);
         },
         /**
-         * Update the details for a specific protected region     **Required permissions:**    - **red-protect.region.modify**
+         * Update the details for a specific protected region     **Required permissions:**    - **red-protect.region.modify**   
          * @summary Modify a region
-         * @param {string} id
-         * @param {RedProtectRegion} [body]
+         * @param {string} id 
+         * @param {RedProtectRegion} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19486,9 +19419,9 @@ export const RedProtectApiFactory = function (configuration?: Configuration, fet
  */
 export class RedProtectApi extends BaseAPI {
     /**
-     * Create a new region at a specified location     **Required permissions:**    - **red-protect.region.create**
+     * Create a new region at a specified location     **Required permissions:**    - **red-protect.region.create**   
      * @summary Create a region
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RedProtectApi
@@ -19498,9 +19431,9 @@ export class RedProtectApi extends BaseAPI {
     }
 
     /**
-     * Remove the specified protected region     **Required permissions:**    - **red-protect.region.delete**
+     * Remove the specified protected region     **Required permissions:**    - **red-protect.region.delete**   
      * @summary Delete a region
-     * @param {} id
+     * @param {} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RedProtectApi
@@ -19510,9 +19443,9 @@ export class RedProtectApi extends BaseAPI {
     }
 
     /**
-     * Get details for a specific protected region     **Required permissions:**    - **red-protect.region.one**
+     * Get details for a specific protected region     **Required permissions:**    - **red-protect.region.one**   
      * @summary Get a region
-     * @param {} id
+     * @param {} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RedProtectApi
@@ -19522,9 +19455,9 @@ export class RedProtectApi extends BaseAPI {
     }
 
     /**
-     * Lists all the regions being protected     **Required permissions:**    - **red-protect.region.list**
+     * Lists all the regions being protected     **Required permissions:**    - **red-protect.region.list**   
      * @summary List regions
-     * @param {} [world]
+     * @param {} [world] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RedProtectApi
@@ -19534,10 +19467,10 @@ export class RedProtectApi extends BaseAPI {
     }
 
     /**
-     * Update the details for a specific protected region     **Required permissions:**    - **red-protect.region.modify**
+     * Update the details for a specific protected region     **Required permissions:**    - **red-protect.region.modify**   
      * @summary Modify a region
-     * @param {} id
-     * @param {} [body]
+     * @param {} id 
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RedProtectApi
@@ -19555,7 +19488,7 @@ export class RedProtectApi extends BaseAPI {
 export const RegistryApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Lists all the catalog values of a specified CatalogType.     **Required permissions:**    - **registry.one**
+         * Lists all the catalog values of a specified CatalogType.     **Required permissions:**    - **registry.one**   
          * @summary Get a catalog type
          * @param {string} _class The fully qualified classname of the catalog type
          * @param {*} [options] Override http request option.
@@ -19609,7 +19542,7 @@ export const RegistryApiFetchParamCreator = function (configuration?: Configurat
 export const RegistryApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Lists all the catalog values of a specified CatalogType.     **Required permissions:**    - **registry.one**
+         * Lists all the catalog values of a specified CatalogType.     **Required permissions:**    - **registry.one**   
          * @summary Get a catalog type
          * @param {string} _class The fully qualified classname of the catalog type
          * @param {*} [options] Override http request option.
@@ -19637,7 +19570,7 @@ export const RegistryApiFp = function(configuration?: Configuration) {
 export const RegistryApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Lists all the catalog values of a specified CatalogType.     **Required permissions:**    - **registry.one**
+         * Lists all the catalog values of a specified CatalogType.     **Required permissions:**    - **registry.one**   
          * @summary Get a catalog type
          * @param {string} _class The fully qualified classname of the catalog type
          * @param {*} [options] Override http request option.
@@ -19657,7 +19590,7 @@ export const RegistryApiFactory = function (configuration?: Configuration, fetch
  */
 export class RegistryApi extends BaseAPI {
     /**
-     * Lists all the catalog values of a specified CatalogType.     **Required permissions:**    - **registry.one**
+     * Lists all the catalog values of a specified CatalogType.     **Required permissions:**    - **registry.one**   
      * @summary Get a catalog type
      * @param {} _class The fully qualified classname of the catalog type
      * @param {*} [options] Override http request option.
@@ -19671,13 +19604,211 @@ export class RegistryApi extends BaseAPI {
 }
 
 /**
+ * ServerApi - fetch parameter creator
+ * @export
+ */
+export const ServerApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Get the main server properties (server.properties file).     **Required permissions:**    - **server.properties.list**   
+         * @summary List server properties
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listProperties(options: any = {}): FetchArgs {
+            const localVarPath = `/server/properties`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Modify settings in the server.properties file. **Note that these settings don't take effect until you restart the server.     **Required permissions:**    - **server.properties.modify**   - **server.properties.modify.[property]**   
+         * @summary Modify server properties
+         * @param {any} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        modifyProperties(body?: any, options: any = {}): FetchArgs {
+            const localVarPath = `/server/properties`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"any" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ServerApi - functional programming interface
+ * @export
+ */
+export const ServerApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * Get the main server properties (server.properties file).     **Required permissions:**    - **server.properties.list**   
+         * @summary List server properties
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listProperties(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<ServerProperty>> {
+            const localVarFetchArgs = ServerApiFetchParamCreator(configuration).listProperties(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Modify settings in the server.properties file. **Note that these settings don't take effect until you restart the server.     **Required permissions:**    - **server.properties.modify**   - **server.properties.modify.[property]**   
+         * @summary Modify server properties
+         * @param {any} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        modifyProperties(body?: any, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<ServerProperty>> {
+            const localVarFetchArgs = ServerApiFetchParamCreator(configuration).modifyProperties(body, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * ServerApi - factory interface
+ * @export
+ */
+export const ServerApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * Get the main server properties (server.properties file).     **Required permissions:**    - **server.properties.list**   
+         * @summary List server properties
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listProperties(options?: any) {
+            return ServerApiFp(configuration).listProperties(options)(fetch, basePath);
+        },
+        /**
+         * Modify settings in the server.properties file. **Note that these settings don't take effect until you restart the server.     **Required permissions:**    - **server.properties.modify**   - **server.properties.modify.[property]**   
+         * @summary Modify server properties
+         * @param {any} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        modifyProperties(body?: any, options?: any) {
+            return ServerApiFp(configuration).modifyProperties(body, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * ServerApi - object-oriented interface
+ * @export
+ * @class ServerApi
+ * @extends {BaseAPI}
+ */
+export class ServerApi extends BaseAPI {
+    /**
+     * Get the main server properties (server.properties file).     **Required permissions:**    - **server.properties.list**   
+     * @summary List server properties
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServerApi
+     */
+    public listProperties(options?: any) {
+        return ServerApiFp(this.configuration).listProperties(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Modify settings in the server.properties file. **Note that these settings don't take effect until you restart the server.     **Required permissions:**    - **server.properties.modify**   - **server.properties.modify.[property]**   
+     * @summary Modify server properties
+     * @param {} [body] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServerApi
+     */
+    public modifyProperties(body?: any, options?: any) {
+        return ServerApiFp(this.configuration).modifyProperties(body, options)(this.fetch, this.basePath);
+    }
+
+}
+
+/**
  * ServletApi - fetch parameter creator
  * @export
  */
 export const ServletApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Lists all the active servlets running in the Web-API     **Required permissions:**    - **servlet.list**
+         * Lists all the active servlets running in the Web-API     **Required permissions:**    - **servlet.list**   
          * @summary List servlets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -19725,7 +19856,7 @@ export const ServletApiFetchParamCreator = function (configuration?: Configurati
 export const ServletApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Lists all the active servlets running in the Web-API     **Required permissions:**    - **servlet.list**
+         * Lists all the active servlets running in the Web-API     **Required permissions:**    - **servlet.list**   
          * @summary List servlets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -19752,7 +19883,7 @@ export const ServletApiFp = function(configuration?: Configuration) {
 export const ServletApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Lists all the active servlets running in the Web-API     **Required permissions:**    - **servlet.list**
+         * Lists all the active servlets running in the Web-API     **Required permissions:**    - **servlet.list**   
          * @summary List servlets
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -19771,7 +19902,7 @@ export const ServletApiFactory = function (configuration?: Configuration, fetch?
  */
 export class ServletApi extends BaseAPI {
     /**
-     * Lists all the active servlets running in the Web-API     **Required permissions:**    - **servlet.list**
+     * Lists all the active servlets running in the Web-API     **Required permissions:**    - **servlet.list**   
      * @summary List servlets
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -19790,13 +19921,13 @@ export class ServletApi extends BaseAPI {
 export const TileEntityApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Provides direct access to the underlaying tile entity object and can execute any method on it.     **Required permissions:**    - **tile-entity.method**
+         * Provides direct access to the underlaying tile entity object and can execute any method on it.     **Required permissions:**    - **tile-entity.method**   
          * @summary Execute a method
          * @param {string} world The world the tile entity is in
          * @param {number} x The x-coordinate of the tile-entity
          * @param {number} y The x-coordinate of the tile-entity
          * @param {number} z The x-coordinate of the tile-entity
-         * @param {ExecuteMethodRequest} [body]
+         * @param {ExecuteMethodRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19858,7 +19989,7 @@ export const TileEntityApiFetchParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Get detailed information about a tile entity.     **Required permissions:**    - **tile-entity.one**
+         * Get detailed information about a tile entity.     **Required permissions:**    - **tile-entity.one**   
          * @summary Get tile entity
          * @param {string} world The world the tile entity is in
          * @param {number} x The x-coordinate of the tile-entity
@@ -19921,7 +20052,7 @@ export const TileEntityApiFetchParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Get a list of all tile entities on the server (in all worlds, unless specified).     **Required permissions:**    - **tile-entity.list**
+         * Get a list of all tile entities on the server (in all worlds, unless specified).     **Required permissions:**    - **tile-entity.list**   
          * @summary List tile entities
          * @param {string} [world] The world to filter tile entities by
          * @param {string} [type] The type if of tile entities to filter by
@@ -19984,13 +20115,13 @@ export const TileEntityApiFetchParamCreator = function (configuration?: Configur
 export const TileEntityApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Provides direct access to the underlaying tile entity object and can execute any method on it.     **Required permissions:**    - **tile-entity.method**
+         * Provides direct access to the underlaying tile entity object and can execute any method on it.     **Required permissions:**    - **tile-entity.method**   
          * @summary Execute a method
          * @param {string} world The world the tile entity is in
          * @param {number} x The x-coordinate of the tile-entity
          * @param {number} y The x-coordinate of the tile-entity
          * @param {number} z The x-coordinate of the tile-entity
-         * @param {ExecuteMethodRequest} [body]
+         * @param {ExecuteMethodRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20007,7 +20138,7 @@ export const TileEntityApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get detailed information about a tile entity.     **Required permissions:**    - **tile-entity.one**
+         * Get detailed information about a tile entity.     **Required permissions:**    - **tile-entity.one**   
          * @summary Get tile entity
          * @param {string} world The world the tile entity is in
          * @param {number} x The x-coordinate of the tile-entity
@@ -20029,7 +20160,7 @@ export const TileEntityApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get a list of all tile entities on the server (in all worlds, unless specified).     **Required permissions:**    - **tile-entity.list**
+         * Get a list of all tile entities on the server (in all worlds, unless specified).     **Required permissions:**    - **tile-entity.list**   
          * @summary List tile entities
          * @param {string} [world] The world to filter tile entities by
          * @param {string} [type] The type if of tile entities to filter by
@@ -20059,13 +20190,13 @@ export const TileEntityApiFp = function(configuration?: Configuration) {
 export const TileEntityApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Provides direct access to the underlaying tile entity object and can execute any method on it.     **Required permissions:**    - **tile-entity.method**
+         * Provides direct access to the underlaying tile entity object and can execute any method on it.     **Required permissions:**    - **tile-entity.method**   
          * @summary Execute a method
          * @param {string} world The world the tile entity is in
          * @param {number} x The x-coordinate of the tile-entity
          * @param {number} y The x-coordinate of the tile-entity
          * @param {number} z The x-coordinate of the tile-entity
-         * @param {ExecuteMethodRequest} [body]
+         * @param {ExecuteMethodRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20073,7 +20204,7 @@ export const TileEntityApiFactory = function (configuration?: Configuration, fet
             return TileEntityApiFp(configuration).executeMethod(world, x, y, z, body, options)(fetch, basePath);
         },
         /**
-         * Get detailed information about a tile entity.     **Required permissions:**    - **tile-entity.one**
+         * Get detailed information about a tile entity.     **Required permissions:**    - **tile-entity.one**   
          * @summary Get tile entity
          * @param {string} world The world the tile entity is in
          * @param {number} x The x-coordinate of the tile-entity
@@ -20086,7 +20217,7 @@ export const TileEntityApiFactory = function (configuration?: Configuration, fet
             return TileEntityApiFp(configuration).getTileEntity(world, x, y, z, options)(fetch, basePath);
         },
         /**
-         * Get a list of all tile entities on the server (in all worlds, unless specified).     **Required permissions:**    - **tile-entity.list**
+         * Get a list of all tile entities on the server (in all worlds, unless specified).     **Required permissions:**    - **tile-entity.list**   
          * @summary List tile entities
          * @param {string} [world] The world to filter tile entities by
          * @param {string} [type] The type if of tile entities to filter by
@@ -20108,13 +20239,13 @@ export const TileEntityApiFactory = function (configuration?: Configuration, fet
  */
 export class TileEntityApi extends BaseAPI {
     /**
-     * Provides direct access to the underlaying tile entity object and can execute any method on it.     **Required permissions:**    - **tile-entity.method**
+     * Provides direct access to the underlaying tile entity object and can execute any method on it.     **Required permissions:**    - **tile-entity.method**   
      * @summary Execute a method
      * @param {} world The world the tile entity is in
      * @param {} x The x-coordinate of the tile-entity
      * @param {} y The x-coordinate of the tile-entity
      * @param {} z The x-coordinate of the tile-entity
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TileEntityApi
@@ -20124,7 +20255,7 @@ export class TileEntityApi extends BaseAPI {
     }
 
     /**
-     * Get detailed information about a tile entity.     **Required permissions:**    - **tile-entity.one**
+     * Get detailed information about a tile entity.     **Required permissions:**    - **tile-entity.one**   
      * @summary Get tile entity
      * @param {} world The world the tile entity is in
      * @param {} x The x-coordinate of the tile-entity
@@ -20139,7 +20270,7 @@ export class TileEntityApi extends BaseAPI {
     }
 
     /**
-     * Get a list of all tile entities on the server (in all worlds, unless specified).     **Required permissions:**    - **tile-entity.list**
+     * Get a list of all tile entities on the server (in all worlds, unless specified).     **Required permissions:**    - **tile-entity.list**   
      * @summary List tile entities
      * @param {} [world] The world to filter tile entities by
      * @param {} [type] The type if of tile entities to filter by
@@ -20161,7 +20292,7 @@ export class TileEntityApi extends BaseAPI {
 export const UniversalMarketApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Lists all the items in the market currently available for sale     **Required permissions:**    - **universal-market.item.list**
+         * Lists all the items in the market currently available for sale     **Required permissions:**    - **universal-market.item.list**   
          * @summary List items
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -20209,7 +20340,7 @@ export const UniversalMarketApiFetchParamCreator = function (configuration?: Con
 export const UniversalMarketApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Lists all the items in the market currently available for sale     **Required permissions:**    - **universal-market.item.list**
+         * Lists all the items in the market currently available for sale     **Required permissions:**    - **universal-market.item.list**   
          * @summary List items
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -20236,7 +20367,7 @@ export const UniversalMarketApiFp = function(configuration?: Configuration) {
 export const UniversalMarketApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Lists all the items in the market currently available for sale     **Required permissions:**    - **universal-market.item.list**
+         * Lists all the items in the market currently available for sale     **Required permissions:**    - **universal-market.item.list**   
          * @summary List items
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -20255,7 +20386,7 @@ export const UniversalMarketApiFactory = function (configuration?: Configuration
  */
 export class UniversalMarketApi extends BaseAPI {
     /**
-     * Lists all the items in the market currently available for sale     **Required permissions:**    - **universal-market.item.list**
+     * Lists all the items in the market currently available for sale     **Required permissions:**    - **universal-market.item.list**   
      * @summary List items
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -20276,7 +20407,7 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
         /**
          * Tries to acquire an api key with the passed credentials.
          * @summary Login
-         * @param {AuthenticationRequest} [body]
+         * @param {AuthenticationRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20302,7 +20433,7 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key
+         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.info**   
          * @summary Check info
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -20313,6 +20444,22 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -20336,7 +20483,7 @@ export const UserApiFp = function(configuration?: Configuration) {
         /**
          * Tries to acquire an api key with the passed credentials.
          * @summary Login
-         * @param {AuthenticationRequest} [body]
+         * @param {AuthenticationRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20353,7 +20500,7 @@ export const UserApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key
+         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.info**   
          * @summary Check info
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -20382,7 +20529,7 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
         /**
          * Tries to acquire an api key with the passed credentials.
          * @summary Login
-         * @param {AuthenticationRequest} [body]
+         * @param {AuthenticationRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20390,7 +20537,7 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
             return UserApiFp(configuration).authUser(body, options)(fetch, basePath);
         },
         /**
-         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key
+         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.info**   
          * @summary Check info
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -20411,7 +20558,7 @@ export class UserApi extends BaseAPI {
     /**
      * Tries to acquire an api key with the passed credentials.
      * @summary Login
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
@@ -20421,7 +20568,7 @@ export class UserApi extends BaseAPI {
     }
 
     /**
-     * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key
+     * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.info**   
      * @summary Check info
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -20440,9 +20587,9 @@ export class UserApi extends BaseAPI {
 export const WebBooksApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Create a new web book from the specified data.     **Required permissions:**    - **web-books.book.create**
+         * Create a new web book from the specified data.     **Required permissions:**    - **web-books.book.create**   
          * @summary Create a book
-         * @param {WebBooksBook} [body]
+         * @param {WebBooksBook} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20484,9 +20631,9 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Delete a web book.     **Required permissions:**    - **web-books.book.delete**
+         * Delete a web book.     **Required permissions:**    - **web-books.book.delete**   
          * @summary Delete a book
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20529,9 +20676,9 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Get detailed information about a web book.     **Required permissions:**    - **web-books.book.one**
+         * Get detailed information about a web book.     **Required permissions:**    - **web-books.book.one**   
          * @summary Get a book
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20576,7 +20723,7 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
         /**
          * Get the web book content as HTML.
          * @summary Book HTML
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20603,7 +20750,7 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Get a list of all the web books on the server.     **Required permissions:**    - **web-books.book.list**
+         * Get a list of all the web books on the server.     **Required permissions:**    - **web-books.book.list**   
          * @summary List books
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -20642,10 +20789,10 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Modify an existing book.     **Required permissions:**    - **web-books.book.modify**
+         * Modify an existing book.     **Required permissions:**    - **web-books.book.modify**   
          * @summary Modify a book
-         * @param {string} id
-         * @param {WebBooksBook} [body]
+         * @param {string} id 
+         * @param {WebBooksBook} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20701,9 +20848,9 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
 export const WebBooksApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Create a new web book from the specified data.     **Required permissions:**    - **web-books.book.create**
+         * Create a new web book from the specified data.     **Required permissions:**    - **web-books.book.create**   
          * @summary Create a book
-         * @param {WebBooksBook} [body]
+         * @param {WebBooksBook} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20720,9 +20867,9 @@ export const WebBooksApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Delete a web book.     **Required permissions:**    - **web-books.book.delete**
+         * Delete a web book.     **Required permissions:**    - **web-books.book.delete**   
          * @summary Delete a book
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20739,9 +20886,9 @@ export const WebBooksApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get detailed information about a web book.     **Required permissions:**    - **web-books.book.one**
+         * Get detailed information about a web book.     **Required permissions:**    - **web-books.book.one**   
          * @summary Get a book
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20760,7 +20907,7 @@ export const WebBooksApiFp = function(configuration?: Configuration) {
         /**
          * Get the web book content as HTML.
          * @summary Book HTML
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20777,7 +20924,7 @@ export const WebBooksApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get a list of all the web books on the server.     **Required permissions:**    - **web-books.book.list**
+         * Get a list of all the web books on the server.     **Required permissions:**    - **web-books.book.list**   
          * @summary List books
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -20795,10 +20942,10 @@ export const WebBooksApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Modify an existing book.     **Required permissions:**    - **web-books.book.modify**
+         * Modify an existing book.     **Required permissions:**    - **web-books.book.modify**   
          * @summary Modify a book
-         * @param {string} id
-         * @param {WebBooksBook} [body]
+         * @param {string} id 
+         * @param {WebBooksBook} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20824,9 +20971,9 @@ export const WebBooksApiFp = function(configuration?: Configuration) {
 export const WebBooksApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Create a new web book from the specified data.     **Required permissions:**    - **web-books.book.create**
+         * Create a new web book from the specified data.     **Required permissions:**    - **web-books.book.create**   
          * @summary Create a book
-         * @param {WebBooksBook} [body]
+         * @param {WebBooksBook} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20834,9 +20981,9 @@ export const WebBooksApiFactory = function (configuration?: Configuration, fetch
             return WebBooksApiFp(configuration).createWebBook(body, options)(fetch, basePath);
         },
         /**
-         * Delete a web book.     **Required permissions:**    - **web-books.book.delete**
+         * Delete a web book.     **Required permissions:**    - **web-books.book.delete**   
          * @summary Delete a book
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20844,9 +20991,9 @@ export const WebBooksApiFactory = function (configuration?: Configuration, fetch
             return WebBooksApiFp(configuration).deleteWebBook(id, options)(fetch, basePath);
         },
         /**
-         * Get detailed information about a web book.     **Required permissions:**    - **web-books.book.one**
+         * Get detailed information about a web book.     **Required permissions:**    - **web-books.book.one**   
          * @summary Get a book
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20856,7 +21003,7 @@ export const WebBooksApiFactory = function (configuration?: Configuration, fetch
         /**
          * Get the web book content as HTML.
          * @summary Book HTML
-         * @param {string} id
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20864,7 +21011,7 @@ export const WebBooksApiFactory = function (configuration?: Configuration, fetch
             return WebBooksApiFp(configuration).getWebBookContent(id, options)(fetch, basePath);
         },
         /**
-         * Get a list of all the web books on the server.     **Required permissions:**    - **web-books.book.list**
+         * Get a list of all the web books on the server.     **Required permissions:**    - **web-books.book.list**   
          * @summary List books
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -20873,10 +21020,10 @@ export const WebBooksApiFactory = function (configuration?: Configuration, fetch
             return WebBooksApiFp(configuration).listWebBooks(options)(fetch, basePath);
         },
         /**
-         * Modify an existing book.     **Required permissions:**    - **web-books.book.modify**
+         * Modify an existing book.     **Required permissions:**    - **web-books.book.modify**   
          * @summary Modify a book
-         * @param {string} id
-         * @param {WebBooksBook} [body]
+         * @param {string} id 
+         * @param {WebBooksBook} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -20894,9 +21041,9 @@ export const WebBooksApiFactory = function (configuration?: Configuration, fetch
  */
 export class WebBooksApi extends BaseAPI {
     /**
-     * Create a new web book from the specified data.     **Required permissions:**    - **web-books.book.create**
+     * Create a new web book from the specified data.     **Required permissions:**    - **web-books.book.create**   
      * @summary Create a book
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebBooksApi
@@ -20906,9 +21053,9 @@ export class WebBooksApi extends BaseAPI {
     }
 
     /**
-     * Delete a web book.     **Required permissions:**    - **web-books.book.delete**
+     * Delete a web book.     **Required permissions:**    - **web-books.book.delete**   
      * @summary Delete a book
-     * @param {} id
+     * @param {} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebBooksApi
@@ -20918,9 +21065,9 @@ export class WebBooksApi extends BaseAPI {
     }
 
     /**
-     * Get detailed information about a web book.     **Required permissions:**    - **web-books.book.one**
+     * Get detailed information about a web book.     **Required permissions:**    - **web-books.book.one**   
      * @summary Get a book
-     * @param {} id
+     * @param {} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebBooksApi
@@ -20932,7 +21079,7 @@ export class WebBooksApi extends BaseAPI {
     /**
      * Get the web book content as HTML.
      * @summary Book HTML
-     * @param {} id
+     * @param {} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebBooksApi
@@ -20942,7 +21089,7 @@ export class WebBooksApi extends BaseAPI {
     }
 
     /**
-     * Get a list of all the web books on the server.     **Required permissions:**    - **web-books.book.list**
+     * Get a list of all the web books on the server.     **Required permissions:**    - **web-books.book.list**   
      * @summary List books
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -20953,10 +21100,10 @@ export class WebBooksApi extends BaseAPI {
     }
 
     /**
-     * Modify an existing book.     **Required permissions:**    - **web-books.book.modify**
+     * Modify an existing book.     **Required permissions:**    - **web-books.book.modify**   
      * @summary Modify a book
-     * @param {} id
-     * @param {} [body]
+     * @param {} id 
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebBooksApi
@@ -20974,9 +21121,9 @@ export class WebBooksApi extends BaseAPI {
 export const WorldApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Creates a new world with the specified settings. This does not yet load the world.     **Required permissions:**    - **world.create**
+         * Creates a new world with the specified settings. This does not yet load the world.     **Required permissions:**    - **world.create**   
          * @summary Create a world
-         * @param {CreateWorldRequest} [body]
+         * @param {CreateWorldRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21018,7 +21165,7 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Deletes an existing world. **The world must be unloaded before deleting it**     **Required permissions:**    - **world.delete**
+         * Deletes an existing world. **The world must be unloaded before deleting it**     **Required permissions:**    - **world.delete**   
          * @summary Delete a world
          * @param {string} world The uuid of the world to delete
          * @param {*} [options] Override http request option.
@@ -21063,10 +21210,10 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Provides direct access to the underlaying world object and can execute any method on it.     **Required permissions:**    - **world.method**
+         * Provides direct access to the underlaying world object and can execute any method on it.     **Required permissions:**    - **world.method**   
          * @summary Execute a method
          * @param {string} world The uuid of the world on which to execute the method
-         * @param {ExecuteMethodRequest} [body]
+         * @param {ExecuteMethodRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21113,7 +21260,7 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Get detailed information about a world.     **Required permissions:**    - **world.one**
+         * Get detailed information about a world.     **Required permissions:**    - **world.one**   
          * @summary Get a world
          * @param {string} world The uuid of the world for which to get details
          * @param {*} [options] Override http request option.
@@ -21158,7 +21305,7 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Get a list of all the worlds on the server.     **Required permissions:**    - **world.list**
+         * Get a list of all the worlds on the server.     **Required permissions:**    - **world.list**   
          * @summary List worlds
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -21197,10 +21344,10 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Modify the properties of an existing world.     **Required permissions:**    - **world.modify**
+         * Modify the properties of an existing world.     **Required permissions:**    - **world.modify**   
          * @summary Modify a world
          * @param {string} world The uuid of the world which to update
-         * @param {UpdateWorldRequest} [body]
+         * @param {UpdateWorldRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21256,9 +21403,9 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
 export const WorldApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Creates a new world with the specified settings. This does not yet load the world.     **Required permissions:**    - **world.create**
+         * Creates a new world with the specified settings. This does not yet load the world.     **Required permissions:**    - **world.create**   
          * @summary Create a world
-         * @param {CreateWorldRequest} [body]
+         * @param {CreateWorldRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21275,7 +21422,7 @@ export const WorldApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Deletes an existing world. **The world must be unloaded before deleting it**     **Required permissions:**    - **world.delete**
+         * Deletes an existing world. **The world must be unloaded before deleting it**     **Required permissions:**    - **world.delete**   
          * @summary Delete a world
          * @param {string} world The uuid of the world to delete
          * @param {*} [options] Override http request option.
@@ -21294,10 +21441,10 @@ export const WorldApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Provides direct access to the underlaying world object and can execute any method on it.     **Required permissions:**    - **world.method**
+         * Provides direct access to the underlaying world object and can execute any method on it.     **Required permissions:**    - **world.method**   
          * @summary Execute a method
          * @param {string} world The uuid of the world on which to execute the method
-         * @param {ExecuteMethodRequest} [body]
+         * @param {ExecuteMethodRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21314,7 +21461,7 @@ export const WorldApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get detailed information about a world.     **Required permissions:**    - **world.one**
+         * Get detailed information about a world.     **Required permissions:**    - **world.one**   
          * @summary Get a world
          * @param {string} world The uuid of the world for which to get details
          * @param {*} [options] Override http request option.
@@ -21333,7 +21480,7 @@ export const WorldApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get a list of all the worlds on the server.     **Required permissions:**    - **world.list**
+         * Get a list of all the worlds on the server.     **Required permissions:**    - **world.list**   
          * @summary List worlds
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -21351,10 +21498,10 @@ export const WorldApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Modify the properties of an existing world.     **Required permissions:**    - **world.modify**
+         * Modify the properties of an existing world.     **Required permissions:**    - **world.modify**   
          * @summary Modify a world
          * @param {string} world The uuid of the world which to update
-         * @param {UpdateWorldRequest} [body]
+         * @param {UpdateWorldRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21380,9 +21527,9 @@ export const WorldApiFp = function(configuration?: Configuration) {
 export const WorldApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Creates a new world with the specified settings. This does not yet load the world.     **Required permissions:**    - **world.create**
+         * Creates a new world with the specified settings. This does not yet load the world.     **Required permissions:**    - **world.create**   
          * @summary Create a world
-         * @param {CreateWorldRequest} [body]
+         * @param {CreateWorldRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21390,7 +21537,7 @@ export const WorldApiFactory = function (configuration?: Configuration, fetch?: 
             return WorldApiFp(configuration).createWorld(body, options)(fetch, basePath);
         },
         /**
-         * Deletes an existing world. **The world must be unloaded before deleting it**     **Required permissions:**    - **world.delete**
+         * Deletes an existing world. **The world must be unloaded before deleting it**     **Required permissions:**    - **world.delete**   
          * @summary Delete a world
          * @param {string} world The uuid of the world to delete
          * @param {*} [options] Override http request option.
@@ -21400,10 +21547,10 @@ export const WorldApiFactory = function (configuration?: Configuration, fetch?: 
             return WorldApiFp(configuration).deleteWorld(world, options)(fetch, basePath);
         },
         /**
-         * Provides direct access to the underlaying world object and can execute any method on it.     **Required permissions:**    - **world.method**
+         * Provides direct access to the underlaying world object and can execute any method on it.     **Required permissions:**    - **world.method**   
          * @summary Execute a method
          * @param {string} world The uuid of the world on which to execute the method
-         * @param {ExecuteMethodRequest} [body]
+         * @param {ExecuteMethodRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21411,7 +21558,7 @@ export const WorldApiFactory = function (configuration?: Configuration, fetch?: 
             return WorldApiFp(configuration).executeMethod(world, body, options)(fetch, basePath);
         },
         /**
-         * Get detailed information about a world.     **Required permissions:**    - **world.one**
+         * Get detailed information about a world.     **Required permissions:**    - **world.one**   
          * @summary Get a world
          * @param {string} world The uuid of the world for which to get details
          * @param {*} [options] Override http request option.
@@ -21421,7 +21568,7 @@ export const WorldApiFactory = function (configuration?: Configuration, fetch?: 
             return WorldApiFp(configuration).getWorld(world, options)(fetch, basePath);
         },
         /**
-         * Get a list of all the worlds on the server.     **Required permissions:**    - **world.list**
+         * Get a list of all the worlds on the server.     **Required permissions:**    - **world.list**   
          * @summary List worlds
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -21430,10 +21577,10 @@ export const WorldApiFactory = function (configuration?: Configuration, fetch?: 
             return WorldApiFp(configuration).listWorlds(options)(fetch, basePath);
         },
         /**
-         * Modify the properties of an existing world.     **Required permissions:**    - **world.modify**
+         * Modify the properties of an existing world.     **Required permissions:**    - **world.modify**   
          * @summary Modify a world
          * @param {string} world The uuid of the world which to update
-         * @param {UpdateWorldRequest} [body]
+         * @param {UpdateWorldRequest} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21451,9 +21598,9 @@ export const WorldApiFactory = function (configuration?: Configuration, fetch?: 
  */
 export class WorldApi extends BaseAPI {
     /**
-     * Creates a new world with the specified settings. This does not yet load the world.     **Required permissions:**    - **world.create**
+     * Creates a new world with the specified settings. This does not yet load the world.     **Required permissions:**    - **world.create**   
      * @summary Create a world
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorldApi
@@ -21463,7 +21610,7 @@ export class WorldApi extends BaseAPI {
     }
 
     /**
-     * Deletes an existing world. **The world must be unloaded before deleting it**     **Required permissions:**    - **world.delete**
+     * Deletes an existing world. **The world must be unloaded before deleting it**     **Required permissions:**    - **world.delete**   
      * @summary Delete a world
      * @param {} world The uuid of the world to delete
      * @param {*} [options] Override http request option.
@@ -21475,10 +21622,10 @@ export class WorldApi extends BaseAPI {
     }
 
     /**
-     * Provides direct access to the underlaying world object and can execute any method on it.     **Required permissions:**    - **world.method**
+     * Provides direct access to the underlaying world object and can execute any method on it.     **Required permissions:**    - **world.method**   
      * @summary Execute a method
      * @param {} world The uuid of the world on which to execute the method
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorldApi
@@ -21488,7 +21635,7 @@ export class WorldApi extends BaseAPI {
     }
 
     /**
-     * Get detailed information about a world.     **Required permissions:**    - **world.one**
+     * Get detailed information about a world.     **Required permissions:**    - **world.one**   
      * @summary Get a world
      * @param {} world The uuid of the world for which to get details
      * @param {*} [options] Override http request option.
@@ -21500,7 +21647,7 @@ export class WorldApi extends BaseAPI {
     }
 
     /**
-     * Get a list of all the worlds on the server.     **Required permissions:**    - **world.list**
+     * Get a list of all the worlds on the server.     **Required permissions:**    - **world.list**   
      * @summary List worlds
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -21511,10 +21658,10 @@ export class WorldApi extends BaseAPI {
     }
 
     /**
-     * Modify the properties of an existing world.     **Required permissions:**    - **world.modify**
+     * Modify the properties of an existing world.     **Required permissions:**    - **world.modify**   
      * @summary Modify a world
      * @param {} world The uuid of the world which to update
-     * @param {} [body]
+     * @param {} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorldApi

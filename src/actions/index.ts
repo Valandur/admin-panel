@@ -4,6 +4,7 @@ import { CommandAction } from "./command"
 import { DashboardAction } from "./dashboard"
 import { DataViewAction } from "./dataview"
 import { NotificationAction } from "./notification"
+import { PermissionAction } from "./permission"
 import { PlayerAction } from "./player"
 import { PluginAction } from "./plugin"
 import { SettingsAction } from "./settings"
@@ -12,6 +13,7 @@ import { CatalogType, PermissionStruct } from "../fetch"
 import { Error, Server } from "../types"
 
 export enum TypeKeys {
+	INIT = "@@__INIT__@@",
 	SERVLETS_REQUEST = "SERVLETS_REQUEST",
 	SERVLETS_RESPONSE = "SERVLETS_RESPONSE",
 	CHANGE_LANGUAGE = "CHANGE_LANG",
@@ -87,10 +89,10 @@ export function requestLogin(username: string, password: string): LoginRequestAc
 
 export interface LoginResponseAction extends Action {
 	type: TypeKeys.LOGIN_RESPONSE
-	data: PermissionStruct
+	data: PermissionStruct | undefined
 	error: Error | undefined
 }
-export function respondLogin(data: PermissionStruct, error: Error | undefined): LoginResponseAction {
+export function respondLogin(data?: PermissionStruct, error?: Error): LoginResponseAction {
 	return {
 		type: TypeKeys.LOGIN_RESPONSE,
 		data: data,
@@ -157,10 +159,19 @@ export function respondCatalog(clazz: string, types: CatalogType[]): CatalogResp
 	}
 }
 
+export interface InitAction extends Action {
+	type: TypeKeys.INIT
+}
+export function initAction(): InitAction {
+	return {
+		type: TypeKeys.INIT
+	}
+}
+
 // Merge all actions
 export type AppAction =
 	// index
-	ServletsRequestAction | ServletsResponseAction | ChangeLanguageAction | ChangeServerAction |
+	InitAction | ServletsRequestAction | ServletsResponseAction | ChangeLanguageAction | ChangeServerAction |
 	LoginRequestAction | LoginResponseAction | LogoutRequestAction | LogoutResponseAction | CheckUserRequestAction |
 	CheckUserResponseAction | CatalogRequestAction | CatalogResponseAction |
 
@@ -169,6 +180,7 @@ export type AppAction =
 	CommandAction |
 	DataViewAction<any> |
 	NotificationAction |
+	PermissionAction |
 	PlayerAction |
 	PluginAction |
 	SettingsAction

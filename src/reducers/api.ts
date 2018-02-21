@@ -3,8 +3,35 @@ import * as _ from "lodash"
 
 import { AppAction, TypeKeys } from "../actions"
 import { PermissionTree } from "../components/Util"
-import { CatalogType } from "../fetch"
+import { CatalogType, CommandApi, InfoApi, PermissionApi, PlayerApi, PluginApi, RegistryApi, ServerApi,
+		UserApi } from "../fetch"
 import { Lang, Server } from "../types"
+
+export interface ApiCollection {
+	cmd: CommandApi
+	info: InfoApi
+	permission: PermissionApi
+	player: PlayerApi
+	plugin: PluginApi
+	registry: RegistryApi
+	server: ServerApi
+	user: UserApi
+}
+
+function setupApis(basePath?: string, apiKey?: string): ApiCollection {
+	const conf = { apiKey: apiKey, basePath: basePath + "/api/v5" }
+
+	return {
+		cmd: new CommandApi(conf),
+		info: new InfoApi(conf),
+		permission: new PermissionApi(conf),
+		player: new PlayerApi(conf),
+		plugin: new PluginApi(conf),
+		registry: new RegistryApi(conf),
+		server: new ServerApi(conf),
+		user: new UserApi(conf),
+	}
+}
 
 export interface ApiState {
 	key?: string
@@ -20,6 +47,8 @@ export interface ApiState {
 	}
 	lang: Lang
 	permissions?: PermissionTree
+
+	apis: ApiCollection
 }
 
 let initialState: ApiState = {
@@ -30,12 +59,16 @@ let initialState: ApiState = {
 	servlets: {},
 	types: {},
 	lang: "en",
+
+	apis: setupApis(window.config.servers[0].apiUrl)
 }
+
 if (window.localStorage) {
 	const str = window.localStorage.getItem("api")
 	const prevApi: ApiState | undefined = str ? JSON.parse(str) : undefined
 	if (prevApi && prevApi.loggedIn) {
 		initialState = prevApi
+		initialState.apis = setupApis(prevApi.server.apiUrl, prevApi.key)
 	}
 }
 
@@ -68,7 +101,7 @@ export default (state = initialState, action: AppAction) => {
 			})
 
 		case TypeKeys.LOGIN_RESPONSE:
-			if (action.error) {
+			if (action.error || !action.data) {
 				return _.assign({}, state, {
 					loggingIn: false,
 					loggedIn: false,
@@ -83,6 +116,7 @@ export default (state = initialState, action: AppAction) => {
 				key: action.data.key,
 				permissions: action.data.permissions,
 				rateLimit: action.data.rateLimit,
+				apis: setupApis(state.server.apiUrl, action.data.key)
 			})
 
 		case TypeKeys.LOGOUT_REQUEST:

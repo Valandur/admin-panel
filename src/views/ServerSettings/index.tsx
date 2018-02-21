@@ -7,7 +7,7 @@ import { AppAction } from "../../actions"
 import { AppState } from "../../types"
 
 import DataViewFunc from "../../components/DataView"
-const DataView = DataViewFunc("info/properties", "key")
+const DataView = DataViewFunc("server/properties", "key")
 
 interface Props extends reactI18Next.InjectedTranslateProps {
 }

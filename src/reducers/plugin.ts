@@ -2,15 +2,20 @@ import * as _ from "lodash"
 
 import { AppAction } from "../actions"
 import { TypeKeys } from "../actions/plugin"
+import { PluginContainer } from "../fetch"
+import { DataViewState } from "./dataview"
 
-export interface PluginState {
+export interface PluginState extends DataViewState<PluginContainer> {
 	configs: {
 		[x: string]: any
 	}
 }
 
 const initialState: PluginState = {
-	configs: {}
+	creating: false,
+	filter: {},
+	list: [],
+	configs: {},
 }
 
 export default (state = initialState, action: AppAction) => {

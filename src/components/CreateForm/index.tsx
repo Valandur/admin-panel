@@ -17,7 +17,7 @@ export interface AppProps<T> extends reactI18Next.InjectedTranslateProps {
 }
 
 interface AppState {
-	newData: object
+	newData: any
 }
 
 class CreateForm<T> extends React.Component<AppProps<T>, AppState> {
