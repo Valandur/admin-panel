@@ -11,8 +11,8 @@ import { Button, Message, Segment, Sidebar } from "semantic-ui-react"
 import { requestStats } from "../../actions/dashboard"
 import HeaderMenu from "../../components/Menu/HeaderMenu"
 import SidebarMenu from "../../components/Menu/SidebarMenu"
-import { checkPermissions, PermissionTree } from "../../components/Util"
-import { AppState, ViewDefinition } from "../../types"
+import { checkPermissions } from "../../components/Util"
+import { AppState, PermissionTree, ViewDefinition } from "../../types"
 
 import views from "./Views"
 

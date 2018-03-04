@@ -35,7 +35,7 @@ const initialState: AppState = {
 	router: routerReducer({ location: null }, initAcc),
 }
 
-const app = (state: AppState = initialState, action: AppAction) => {
+const app = (state: AppState = initialState, action: AppAction): AppState => {
 	const data = dataview(state, action)
 
 	return {
@@ -44,7 +44,7 @@ const app = (state: AppState = initialState, action: AppAction) => {
 		cmd: cmd(data.cmd, action),
 		dashboard: dashboard(data.dashboard, action),
 		entity: data.entity,
-		permissions: permission(data.permission, action),
+		permission: permission(data.permission, action),
 		player: player(data.player, action),
 		plugin: plugin(data.plugin, action),
 		world: data.world,

@@ -2,10 +2,9 @@ import * as i18next from "i18next"
 import * as _ from "lodash"
 
 import { AppAction, TypeKeys } from "../actions"
-import { PermissionTree } from "../components/Util"
 import { CatalogType, CommandApi, InfoApi, PermissionApi, PlayerApi, PluginApi, RegistryApi, ServerApi,
 		UserApi } from "../fetch"
-import { Lang, Server } from "../types"
+import { CatalogTypeKeys, Lang, PermissionTree, Server } from "../types"
 
 export interface ApiCollection {
 	cmd: CommandApi
@@ -43,12 +42,13 @@ export interface ApiState {
 		[x: string]: string
 	}
 	types: {
-		[x: string]: CatalogType[]
+		[x in CatalogTypeKeys]?: CatalogType[]
 	}
 	lang: Lang
 	permissions?: PermissionTree
 
 	apis: ApiCollection
+	version: 2,
 }
 
 let initialState: ApiState = {
@@ -58,16 +58,22 @@ let initialState: ApiState = {
 	servers: window.config.servers,
 	servlets: {},
 	types: {},
-	lang: "en",
+	lang: Lang.EN,
 
-	apis: setupApis(window.config.servers[0].apiUrl)
+	apis: setupApis(window.config.servers[0].apiUrl),
+	version: 2,
 }
 
 if (window.localStorage) {
 	const str = window.localStorage.getItem("api")
 	const prevApi: ApiState | undefined = str ? JSON.parse(str) : undefined
-	if (prevApi && prevApi.loggedIn) {
-		initialState = prevApi
+	if (prevApi && prevApi.version === initialState.version && prevApi.loggedIn) {
+		initialState = _.assign({}, initialState, prevApi)
+		// If the servers changed we need to reload them
+		if (!_.isEqual(initialState.servers, window.config.servers)) {
+			initialState.server = window.config.servers[0]
+			initialState.servers = window.config.servers
+		}
 		initialState.apis = setupApis(prevApi.server.apiUrl, prevApi.key)
 	}
 }
@@ -77,7 +83,8 @@ export default (state = initialState, action: AppAction) => {
 	switch (action.type) {
 		case TypeKeys.CHANGE_SERVER:
 			return _.assign({}, state, {
-				server: action.server
+				server: action.server,
+				apis: setupApis(action.server.apiUrl),
 			})
 
 		case TypeKeys.SERVLETS_RESPONSE:
@@ -138,12 +145,13 @@ export default (state = initialState, action: AppAction) => {
 			})
 
 		case TypeKeys.CATALOG_RESPONSE:
-			return _.assign({}, state, {
+			return {
+				...state,
 				types: {
 					...state.types,
-					[action.class]: action.types,
+					[action.class]: action.types.filter((t, i) => action.types.findIndex(otherT => otherT.id === t.id) === i),
 				},
-			})
+			}
 
 		default:
 			return state

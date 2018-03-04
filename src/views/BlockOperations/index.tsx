@@ -1,4 +1,3 @@
-import * as _ from "lodash"
 import * as moment from "moment"
 import * as React from "react"
 import { Trans, translate } from "react-i18next"
@@ -7,13 +6,12 @@ import { Button, Dropdown, Form, Icon, Label, Modal, Progress } from "semantic-u
 
 import { AppAction, CatalogRequestAction, requestCatalog } from "../../actions"
 import { ListRequestAction, requestList } from "../../actions/dataview"
+import { renderCatalogTypeOptions, renderWorldOptions } from "../../components/Util"
 import { BlockOperation, CatalogType, WorldFull } from "../../fetch"
-import { AppState, DataViewRef } from "../../types"
+import { AppState, CatalogTypeKeys, DataViewRef } from "../../types"
 
 import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("block/op", "uuid", true)
-
-const BLOCK_TYPES = "block.BlockType"
 
 interface OwnProps {
 
@@ -57,7 +55,7 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 
 	componentDidMount() {
 		this.props.requestWorlds()
-		this.props.requestCatalog(BLOCK_TYPES)
+		this.props.requestCatalog(CatalogTypeKeys.Block)
 	}
 
 	showDetails(operation: BlockOperation, view: DataViewRef<BlockOperation>) {
@@ -123,9 +121,7 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 											placeholder={_t("World")}
 											onChange={view.handleChange}
 											value={view.state.world}
-											options={_.map(this.props.worlds, w =>
-												({ value: w.uuid, text: w.name + " (" + w.dimensionType.name + ")" })
-											)}
+											options={renderWorldOptions(this.props.worlds)}
 										/>
 										<Form.Field
 											required
@@ -138,9 +134,7 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 											placeholder={_t("Block")}
 											onChange={view.handleChange}
 											value={view.state.block}
-											options={_.map(this.props.blockTypes, block =>
-												({ value: block.id, text: block.name + " (" + block.id + ")" })
-											)}
+											options={renderCatalogTypeOptions(this.props.blockTypes)}
 											disabled={view.state.type !== "CHANGE"}
 										/>
 									</Form.Group>
@@ -270,7 +264,7 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 const mapStateToProps = (state: AppState) => {
 	return {
 		worlds: state.world.list,
-		blockTypes: state.api.types[BLOCK_TYPES],
+		blockTypes: state.api.types[CatalogTypeKeys.Block],
 		types: [{
 			text: "Get",
 			value: BlockOperation.TypeEnum.GET,

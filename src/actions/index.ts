@@ -1,4 +1,5 @@
 import { Action } from "redux"
+import { ResponseError } from "superagent"
 
 import { CommandAction } from "./command"
 import { DashboardAction } from "./dashboard"
@@ -10,7 +11,7 @@ import { PluginAction } from "./plugin"
 import { SettingsAction } from "./settings"
 
 import { CatalogType, PermissionStruct } from "../fetch"
-import { Error, Server } from "../types"
+import { Server } from "../types"
 
 export enum TypeKeys {
 	INIT = "@@__INIT__@@",
@@ -90,9 +91,9 @@ export function requestLogin(username: string, password: string): LoginRequestAc
 export interface LoginResponseAction extends Action {
 	type: TypeKeys.LOGIN_RESPONSE
 	data: PermissionStruct | undefined
-	error: Error | undefined
+	error: ResponseError | undefined
 }
-export function respondLogin(data?: PermissionStruct, error?: Error): LoginResponseAction {
+export function respondLogin(data?: PermissionStruct, error?: ResponseError): LoginResponseAction {
 	return {
 		type: TypeKeys.LOGIN_RESPONSE,
 		data: data,

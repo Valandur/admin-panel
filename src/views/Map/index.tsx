@@ -9,7 +9,7 @@ import { Button, Dropdown, DropdownProps, Header, Progress, Segment } from "sema
 import { AppAction } from "../../actions"
 import { ListRequestAction, requestList } from "../../actions/dataview"
 import Inventory from "../../components/Inventory"
-import { formatRange } from "../../components/Util"
+import { formatRange, renderWorldOptions } from "../../components/Util"
 import { Entity, PlayerFull, TileEntity, WorldFull } from "../../fetch"
 import { AppState } from "../../types"
 
@@ -433,12 +433,7 @@ class Map extends React.Component<Props, OwnState> {
 						placeholder="Select world..."
 						value={this.state.worldId}
 						onChange={this.handleWorldChange}
-						options={_.map(this.props.worlds, world =>
-							({
-								value: world.uuid,
-								text: world.name + " (" + world.dimensionType.name + ")"
-							})
-						)}
+						options={renderWorldOptions(this.props.worlds)}
 					/>
 				</Segment>
 				<Segment style={{ position: "absolute", "top": 60, "left": 10, height: "25vh", width: 80 }}>

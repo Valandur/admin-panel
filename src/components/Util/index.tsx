@@ -1,6 +1,9 @@
 import * as _ from "lodash"
 import { CheckboxProps, InputProps } from "semantic-ui-react"
 
+import { CatalogType, WorldFull } from "../../fetch"
+import { PermissionTree } from "../../types"
+
 // Format a number to a certain accuracy as a ratio
 export function formatRange(current: number, max: number, a: number = 1): number {
 	if (max === 0) {
@@ -51,10 +54,6 @@ export function handleChange(
 }
 
 // Returns true if the permissions specified allow access to the specified path
-export interface PermissionTree {
-	[x: string]: boolean | string | PermissionTree
-}
-
 export function checkPermissions(_perms: PermissionTree | boolean | undefined, path: Array<string>): boolean {
 	if (!path || path.length === 0) {
 		return true
@@ -79,3 +78,33 @@ export function checkPermissions(_perms: PermissionTree | boolean | undefined, p
 	// If we get here then that means we have an exact permission for this path
 	return perms === true || perms["*"] === true
 }
+
+// Render catalog types as dropdown options
+export function renderCatalogTypeOptions(types: CatalogType[] | undefined): { value: string, text: string }[] {
+	if (!types) {
+		return []
+	}
+	return types.map(type =>
+		({
+			value: type.id,
+			text: type.name + " (" + type.id + ")",
+		})
+	)
+}
+
+// Render worlds as dropdown options
+export function renderWorldOptions(worlds: WorldFull[] | undefined): { value: string, text: string }[] {
+	if (!worlds) {
+		return []
+	}
+
+	return worlds.map(w =>
+		({
+			value: w.uuid,
+			text: w.name + " (" + w.dimensionType.name + ")"
+		})
+	)
+}
+
+// Get a property according to a path
+export const get = (o: any, path: string) => path.split(".").reduce((obj: any = {}, key) => obj[key], o)

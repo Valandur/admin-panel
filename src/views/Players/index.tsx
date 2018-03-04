@@ -1,4 +1,3 @@
-import * as _ from "lodash"
 import * as React from "react"
 import { Trans, translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
@@ -9,7 +8,7 @@ import { ListRequestAction, requestList } from "../../actions/dataview"
 import { BanPlayerRequestAction, KickPlayerRequestAction, requestBanPlayer,
 	requestKickPlayer } from "../../actions/player"
 import InventoryComp from "../../components/Inventory"
-import { formatRange } from "../../components/Util"
+import { formatRange, renderWorldOptions } from "../../components/Util"
 import { Inventory, Player, PlayerFull, WorldFull } from "../../fetch"
 import { AppState, DataViewRef } from "../../types"
 
@@ -95,12 +94,7 @@ class Players extends React.Component<Props, OwnState> {
 							view: false,
 							filter: true,
 							filterName: "location.world.uuid",
-							options: _.map(this.props.worlds, world =>
-								({
-									value: world.uuid,
-									text: world.name + " (" + world.dimensionType.name + ")"
-								})
-							),
+							options: renderWorldOptions(this.props.worlds),
 							required: true,
 						},
 						location: {

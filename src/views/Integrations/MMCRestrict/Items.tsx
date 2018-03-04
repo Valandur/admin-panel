@@ -1,17 +1,15 @@
-import * as _ from "lodash"
 import * as React from "react"
 import { translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
 import { Icon, Radio } from "semantic-ui-react"
 
 import { AppAction, CatalogRequestAction, requestCatalog } from "../../../actions"
+import { renderCatalogTypeOptions } from "../../../components/Util"
 import { CatalogType, MMCRestrictItem } from "../../../fetch"
-import { AppState, DataTableRef } from "../../../types"
+import { AppState, CatalogTypeKeys, DataTableRef } from "../../../types"
 
 import DataViewFunc from "../../../components/DataView"
 const DataView = DataViewFunc("mmc-restrict/item", "item.id")
-
-const ITEM_TYPES = "item.ItemType"
 
 const getIcon = (ban: boolean) => (
 	<Icon
@@ -40,7 +38,7 @@ interface OwnState {
 class Items extends React.Component<Props, OwnState> {
 
 	componentDidMount() {
-		this.props.requestCatalog(ITEM_TYPES)
+		this.props.requestCatalog(CatalogTypeKeys.Item)
 	}
 
 	render() {
@@ -59,9 +57,7 @@ class Items extends React.Component<Props, OwnState> {
 						createName: "item",
 						label: _t("Item"),
 						required: true,
-						options: _.map(this.props.itemTypes, type =>
-							({ value: type.id, text: type.name + " (" + type.id + ")" })
-						)
+						options: renderCatalogTypeOptions(this.props.itemTypes),
 					},
 					banReason: {
 						label: _t("Reason"),
@@ -106,7 +102,7 @@ class Items extends React.Component<Props, OwnState> {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		itemTypes: state.api.types[ITEM_TYPES],
+		itemTypes: state.api.types[CatalogTypeKeys.Item],
 	}
 }
 

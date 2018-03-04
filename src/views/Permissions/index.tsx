@@ -39,8 +39,8 @@ class Permissions extends React.Component<Props, OwnState> {
 			return
 		}
 
-		const coll = this.props.collections[data.activeIndex]
-		this.props.requestSubjects(coll.id)
+		const coll: SubjectCollection = this.props.collections[data.activeIndex]
+		this.props.requestSubjects(coll)
 	}
 
 	render() {
@@ -52,7 +52,7 @@ class Permissions extends React.Component<Props, OwnState> {
 					defaultActiveIndex={-1}
 					onTabChange={this.onTabChange}
 					menu={{secondary: true, pointing: true}}
-					panes={_.map(this.props.collections, coll => ({
+					panes={this.props.collections.map(coll => ({
 						menuItem:
 							<Menu.Item key={coll.id}>
 								{_.upperFirst(coll.id)}<Label>{coll.loadedSubjectCount}</Label>
@@ -64,29 +64,42 @@ class Permissions extends React.Component<Props, OwnState> {
 									idFunc={(subj: Subject) => subj.id}
 									isEditing={(subj: Subject) => false}
 									fields={{
-										id: _t("Id"),
-										friendlyId: _t("Name"),
+										id: {
+											name: "id",
+											label: _t("Id"),
+											view: true,
+										},
+										friendlyId: {
+											name: "friendlyId",
+											label: _t("Name"),
+											view: true,
+										},
 										permissions: {
 											name: "permissions",
 											label: _t("Permissions"),
-											view: (subject: Subject) =>
-												<Table basic compact>
+											view: (subject: Subject) => {
+												if (!subject.permissions) {
+													return
+												}
+
+												return (<Table basic compact>
 													<Table.Body>
-														{_.map(subject.permissions, (value, key) =>
-															<Table.Row>
+														{Object.keys(subject.permissions).map(key =>
+															<Table.Row key={key}>
 																<Table.Cell>
 																	{key}
 																</Table.Cell>
 																<Table.Cell>
 																	<Icon
-																		color={value ? "green" : "red"}
-																		name={value ? "check" : "delete"}
+																		color={subject.permissions[key] ? "green" : "red"}
+																		name={subject.permissions[key] ? "check" : "delete"}
 																	/>
 																</Table.Cell>
 															</Table.Row>
 														)}
 													</Table.Body>
-												</Table>
+												</Table>)
+											}
 										}
 									}}
 								/>

@@ -1,4 +1,3 @@
-import * as _ from "lodash"
 import * as React from "react"
 import { translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
@@ -6,6 +5,7 @@ import { Button, Form, Icon } from "semantic-ui-react"
 
 import { AppAction } from "../../../actions"
 import { ListRequestAction, requestList } from "../../../actions/dataview"
+import { renderWorldOptions } from "../../../components/Util"
 import { NucleusJail, WorldFull } from "../../../fetch"
 import { AppState } from "../../../types"
 
@@ -51,9 +51,7 @@ class Jails extends React.Component<Props, OwnState> {
 						createName: "location.world",
 						filter: true,
 						filterName: "location.world.uuid",
-						options: _.map(this.props.worlds, world =>
-							({ value: world.uuid, text: world.name + " (" + world.dimensionType.name + ")" })
-						),
+						options: renderWorldOptions(this.props.worlds),
 						required: true,
 					},
 					position: {

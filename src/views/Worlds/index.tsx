@@ -6,28 +6,24 @@ import { connect, Dispatch } from "react-redux"
 import { Button, Form, Grid, Icon, Label, Modal, Radio, Table } from "semantic-ui-react"
 
 import { AppAction, CatalogRequestAction, requestCatalog } from "../../actions"
+import { renderCatalogTypeOptions } from "../../components/Util"
 import { CatalogType, WorldFull } from "../../fetch"
-import { AppState, DataViewRef } from "../../types"
+import { AppState, CatalogTypeKeys, DataViewRef } from "../../types"
 
 import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("world", "uuid")
 
-const DIM_TYPES = "world.DimensionType"
-const GEN_TYPES = "world.GeneratorType"
-const DIFF_TYPES = "world.difficulty.Difficulty"
-const GM_TYPES = "entity.living.player.gamemode.GameMode"
-
 interface Props extends reactI18Next.InjectedTranslateProps {
-	dimTypes: CatalogType[]
-	genTypes: CatalogType[]
-	diffTypes: CatalogType[]
-	gmTypes: CatalogType[]
+	dimTypes: CatalogType[] | undefined
+	genTypes: CatalogType[] | undefined
+	diffTypes: CatalogType[] | undefined
+	gmTypes: CatalogType[] | undefined
 	requestCatalog: (type: string) => CatalogRequestAction
 }
 
 interface OwnState {
 	modal: boolean
-	rules?: { name: string, value: string }[]
+	rules: { name: string, value: string }[]
 	rulesWorld?: WorldFull
 	rulesView?: DataViewRef<WorldFull>
 }
@@ -39,6 +35,7 @@ class Worlds extends React.Component<Props, OwnState> {
 
 		this.state = {
 			modal: false,
+			rules: [],
 		}
 
 		this.toggleModal = this.toggleModal.bind(this)
@@ -46,16 +43,16 @@ class Worlds extends React.Component<Props, OwnState> {
 	}
 
 	componentDidMount() {
-		this.props.requestCatalog(DIM_TYPES)
-		this.props.requestCatalog(GEN_TYPES)
-		this.props.requestCatalog(DIFF_TYPES)
-		this.props.requestCatalog(GM_TYPES)
+		this.props.requestCatalog(CatalogTypeKeys.Dimension)
+		this.props.requestCatalog(CatalogTypeKeys.Generator)
+		this.props.requestCatalog(CatalogTypeKeys.Difficulty)
+		this.props.requestCatalog(CatalogTypeKeys.GameMode)
 	}
 
 	showGameRules(world: WorldFull, view: DataViewRef<WorldFull>) {
 		this.setState({
 			modal: true,
-			rules: _.map(world.gameRules, (value, name) => ({ name: name, value: value })),
+			rules: Object.keys(world.gameRules).map((key: string) => ({ name: key, value: world.gameRules[key] })),
 			rulesWorld: world,
 			rulesView: view,
 		})
@@ -63,7 +60,7 @@ class Worlds extends React.Component<Props, OwnState> {
 
 	toggleRule(name: string) {
 		const rules = this.state.rules
-		const rule = _.find(rules, { name: name })
+		const rule = rules.find(r => r.name === name)
 		if  (!rule) {
 			return
 		}
@@ -111,53 +108,33 @@ class Worlds extends React.Component<Props, OwnState> {
 						"dimensionType.name": {
 							label: _t("Dimension"),
 							create: true,
-							createName: "dimension",
+							createName: "dimension.id",
 							required: true,
-							options: _.map(this.props.dimTypes, dim =>
-								({
-									value: dim.id,
-									text: dim.name + " (" + dim.id + ")",
-								})
-							),
+							options: renderCatalogTypeOptions(this.props.dimTypes),
 						},
 						"generatorType.name": {
 							label: _t("Generator"),
 							create: true,
-							createName: "generator",
+							createName: "generator.id",
 							view: false,
 							required: true,
-							options: _.map(this.props.genTypes, gen =>
-								({
-									value: gen.id,
-									text: gen.name + " (" + gen.id + ")",
-								})
-							),
+							options: renderCatalogTypeOptions(this.props.genTypes),
 						},
 						"difficulty.name": {
 							label: _t("Difficulty"),
 							create: true,
-							createName: "difficulty",
+							createName: "difficulty.id",
 							view: false,
 							required: true,
-							options: _.map(this.props.diffTypes, diff =>
-								({
-									value: diff.id,
-									text: diff.name + " (" + diff.id + ")",
-								})
-							),
+							options: renderCatalogTypeOptions(this.props.diffTypes),
 						},
 						"gameMode.name": {
 							label: _t("GameMode"),
 							create: true,
-							createName: "gameMode",
+							createName: "gameMode.id",
 							view: false,
 							required: true,
-							options: _.map(this.props.gmTypes, gm =>
-								({
-									value: gm.id,
-									text: gm.name + " (" + gm.id + ")",
-								})
-							),
+							options: renderCatalogTypeOptions(this.props.gmTypes),
 						},
 						create: {
 							isGroup: true,
@@ -346,10 +323,10 @@ class Worlds extends React.Component<Props, OwnState> {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		dimTypes: state.api.types[DIM_TYPES],
-		genTypes: state.api.types[GEN_TYPES],
-		diffTypes: state.api.types[DIFF_TYPES],
-		gmTypes: state.api.types[GM_TYPES],
+		dimTypes: state.api.types[CatalogTypeKeys.Dimension],
+		genTypes: state.api.types[CatalogTypeKeys.Generator],
+		diffTypes: state.api.types[CatalogTypeKeys.Difficulty],
+		gmTypes: state.api.types[CatalogTypeKeys.GameMode],
 	}
 }
 

@@ -6,7 +6,7 @@ import { Button, Dropdown, Form, Header, Icon, Segment } from "semantic-ui-react
 import { DataFieldGroup, DataFieldRaw, DataTableRef } from "../../types"
 import { handleChange, HandleChangeFunc } from "../Util"
 
-export interface AppProps<T> extends reactI18Next.InjectedTranslateProps {
+export interface Props<T> extends reactI18Next.InjectedTranslateProps {
 	title: string
 	creating: boolean
 	onCreate: (data: any, view: DataTableRef) => void
@@ -16,15 +16,15 @@ export interface AppProps<T> extends reactI18Next.InjectedTranslateProps {
 	}
 }
 
-interface AppState {
+interface OwnState {
 	newData: any
 }
 
-class CreateForm<T> extends React.Component<AppProps<T>, AppState> {
+class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 
 	handleChange: HandleChangeFunc
 
-	constructor(props: AppProps<T>) {
+	constructor(props: Props<T>) {
 		super(props)
 
 		this.state = {
@@ -44,9 +44,17 @@ class CreateForm<T> extends React.Component<AppProps<T>, AppState> {
 		})
 	}
 
+	shouldComponentUpdate(nextProps: Props<T>, nextState: OwnState) {
+		return nextProps.creating !== this.props.creating ||
+			nextProps.fields !== this.props.fields ||
+			nextState.newData !== this.state.newData
+	}
+
 	create() {
 		const data = {}
-		_.each(this.state.newData, (value, name) => _.set(data, name, value))
+		Object.keys(this.state.newData).forEach(key => {
+			_.set(data, key, this.state.newData[key])
+		})
 
 		this.props.onCreate(data, {
 			state: this.state.newData,
@@ -56,7 +64,8 @@ class CreateForm<T> extends React.Component<AppProps<T>, AppState> {
 	}
 
 	canCreate(): boolean {
-		return _.every(this.props.fields, (field, name) => {
+		return Object.keys(this.props.fields).every(name => {
+			const field = this.props.fields[name]
 			const key = field.createName ? field.createName : name
 			return typeof field === "string" || !field.required || this.state.newData[key]
 		})
@@ -68,7 +77,8 @@ class CreateForm<T> extends React.Component<AppProps<T>, AppState> {
 		const _t = this.props.t
 
 		const fieldGroups: DataFieldGroup<T>[] = []
-		_.each(fields, (field, name) => {
+		Object.keys(fields).forEach(name => {
+			const field = fields[name]
 			const newField: DataFieldRaw<T> = _.assign({}, field, {
 				name: field.createName ? field.createName : name,
 			})
@@ -89,7 +99,7 @@ class CreateForm<T> extends React.Component<AppProps<T>, AppState> {
 				</Header>
 
 				<Form loading={creating}>
-					{_.map(fieldGroups, (fg, i) => {
+					{fieldGroups.map((fg, i) => {
 						if (fg.only) {
 							return <div key={i}>
 								{this.renderField(fg.only)}

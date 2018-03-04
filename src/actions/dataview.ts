@@ -1,6 +1,7 @@
 import { Action } from "redux"
+import { ResponseError } from "superagent"
 
-import { Error, IdFunction } from "../types"
+import { IdFunction } from "../types"
 
 export enum TypeKeys {
 	LIST_REQUEST = "DATA_LIST_REQUEST",
@@ -39,10 +40,10 @@ export interface ListResponseAction<T> extends Action {
 	type: TypeKeys.LIST_RESPONSE
 	endpoint: string
 	list?: T[]
-	err?: Error
+	err?: ResponseError
 }
 export function respondList<T>(
-		endpoint: string, list?: T[], err?: Error): ListResponseAction<T> {
+		endpoint: string, list?: T[], err?: ResponseError): ListResponseAction<T> {
 	return {
 		type: TypeKeys.LIST_RESPONSE,
 		endpoint,
@@ -82,10 +83,10 @@ export function requestCreate<T>(
 export interface CreateResponseAction<T> extends BaseAction<T> {
 	type: TypeKeys.CREATE_RESPONSE
 	data?: T
-	err?: Error
+	err?: ResponseError
 }
 export function respondCreate<T>(
-		endpoint: string, id: IdFunction<T>, data?: T, err?: Error): CreateResponseAction<T> {
+		endpoint: string, id: IdFunction<T>, data?: T, err?: ResponseError): CreateResponseAction<T> {
 	return {
 		type: TypeKeys.CREATE_RESPONSE,
 		endpoint,
@@ -98,10 +99,10 @@ export function respondCreate<T>(
 export interface DetailsResponseAction<T> extends BaseAction<T> {
 	type: TypeKeys.DETAILS_RESPONSE
 	data: T
-	err?: Error
+	err?: ResponseError
 }
 export function respondDetails<T>(
-		endpoint: string, id: IdFunction<T>, data: T, err?: Error): DetailsResponseAction<T> {
+		endpoint: string, id: IdFunction<T>, data: T, err?: ResponseError): DetailsResponseAction<T> {
 	return {
 		type: TypeKeys.DETAILS_RESPONSE,
 		endpoint,
@@ -130,10 +131,10 @@ export function requestChange<T>(
 export interface ChangeResponseAction<T> extends BaseAction<T> {
 	type: TypeKeys.CHANGE_RESPONSE
 	data: T
-	err?: Error
+	err?: ResponseError
 }
 export function respondChange<T>(
-		endpoint: string, id: IdFunction<T>, data: T, err?: Error): ChangeResponseAction<T> {
+		endpoint: string, id: IdFunction<T>, data: T, err?: ResponseError): ChangeResponseAction<T> {
 	return {
 		type: TypeKeys.CHANGE_RESPONSE,
 		endpoint,
@@ -160,10 +161,10 @@ export function requestDelete<T>(
 export interface DeleteResponseAction<T> extends BaseAction<T> {
 	type: TypeKeys.DELETE_RESPONSE
 	data: T
-	err?: Error
+	err?: ResponseError
 }
 export function respondDelete<T>(
-		endpoint: string, id: IdFunction<T>, data: T, err?: Error): DeleteResponseAction<T> {
+		endpoint: string, id: IdFunction<T>, data: T, err?: ResponseError): DeleteResponseAction<T> {
 	return {
 		type: TypeKeys.DELETE_RESPONSE,
 		endpoint,

@@ -1,4 +1,3 @@
-import * as _ from "lodash"
 import * as React from "react"
 import { translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
@@ -6,14 +5,12 @@ import { Button, Form, Icon, Label, Progress } from "semantic-ui-react"
 
 import { AppAction, CatalogRequestAction, requestCatalog } from "../../actions"
 import { ListRequestAction, requestList } from "../../actions/dataview"
-import { formatRange } from "../../components/Util"
+import { formatRange, renderCatalogTypeOptions, renderWorldOptions } from "../../components/Util"
 import { CatalogType, Entity, WorldFull } from "../../fetch"
-import { AppState } from "../../types"
+import { AppState, CatalogTypeKeys } from "../../types"
 
 import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("entity", "uuid")
-
-const ENT_TYPES = "entity.EntityType"
 
 interface Props extends reactI18Next.InjectedTranslateProps {
 	worlds: WorldFull[],
@@ -26,7 +23,7 @@ class Entities extends React.Component<Props> {
 
 	componentDidMount() {
 		this.props.requestWorlds()
-		this.props.requestCatalog(ENT_TYPES)
+		this.props.requestCatalog(CatalogTypeKeys.Entity)
 	}
 
 	render() {
@@ -47,12 +44,7 @@ class Entities extends React.Component<Props> {
 						filter: true,
 						filterName: "type.id",
 						view: (entity: Entity) => entity.type.name,
-						options: _.map(this.props.entTypes, type =>
-							({
-								value: type.id,
-								text: type.name + " (" + type.id + ")"
-							})
-						),
+						options: renderCatalogTypeOptions(this.props.entTypes),
 					},
 					world: {
 						label: _t("World"),
@@ -60,12 +52,7 @@ class Entities extends React.Component<Props> {
 						create: true,
 						filter: true,
 						filterName: "location.world.uuid",
-						options: _.map(this.props.worlds, world =>
-							({
-								value: world.uuid,
-								text: world.name + " (" + world.dimensionType.name + ")"
-							})
-						),
+						options: renderWorldOptions(this.props.worlds),
 						required: true,
 					},
 					position: {
@@ -179,7 +166,7 @@ class Entities extends React.Component<Props> {
 const mapStateToProps = (state: AppState) => {
 	return {
 		worlds: state.world.list,
-		entTypes: state.api.types[ENT_TYPES],
+		entTypes: state.api.types[CatalogTypeKeys.Entity],
 	}
 }
 

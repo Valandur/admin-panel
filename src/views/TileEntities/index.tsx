@@ -1,4 +1,3 @@
-import * as _ from "lodash"
 import * as React from "react"
 import { translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
@@ -8,15 +7,14 @@ import Inventory from "../../components/Inventory"
 
 import { AppAction, CatalogRequestAction, requestCatalog } from "../../actions"
 import { ListRequestAction, requestList } from "../../actions/dataview"
+import { renderCatalogTypeOptions, renderWorldOptions } from "../../components/Util"
 import { CatalogType, TileEntity, WorldFull } from "../../fetch"
-import { AppState } from "../../types"
+import { AppState, CatalogTypeKeys } from "../../types"
 
 import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("tile-entity", (te: TileEntity) =>
 	te.location.world.uuid + "/" + te.location.position.x + "/" +
 	te.location.position.y + "/" + te.location.position.z)
-
-const TE_TYPES = "block.tileentity.TileEntityType"
 
 interface Props extends reactI18Next.InjectedTranslateProps {
 	worlds: WorldFull[]
@@ -32,7 +30,7 @@ class TileEntities extends React.Component<Props, OwnState> {
 
 	componentDidMount() {
 		this.props.requestWorlds()
-		this.props.requestCatalog(TE_TYPES)
+		this.props.requestCatalog(CatalogTypeKeys.TileEntity)
 	}
 
 	render() {
@@ -48,24 +46,14 @@ class TileEntities extends React.Component<Props, OwnState> {
 						label: _t("Type"),
 						filter: true,
 						filterName: "type.id",
-						options: _.map(this.props.teTypes, type =>
-							({
-								value: type.id,
-								text: type.name + " (" + type.id + ")"
-							})
-						),
+						options: renderCatalogTypeOptions(this.props.teTypes),
 					},
 					world: {
 						label: _t("World"),
 						view: false,
 						filter: true,
 						filterName: "location.world.uuid",
-						options: _.map(this.props.worlds, world =>
-							({
-								value: world.uuid,
-								text: world.name + " (" + world.dimensionType.name + ")"
-							})
-						),
+						options: renderWorldOptions(this.props.worlds),
 					},
 					position: {
 						label: _t("Position"),
@@ -103,7 +91,7 @@ class TileEntities extends React.Component<Props, OwnState> {
 const mapStateToProps = (state: AppState) => {
 	return {
 		worlds: state.world.list,
-		teTypes: state.api.types[TE_TYPES],
+		teTypes: state.api.types[CatalogTypeKeys.TileEntity],
 	}
 }
 

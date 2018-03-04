@@ -49,21 +49,21 @@ class Commands extends React.Component<Props, {}> {
 			if (isExact) {
 				return cmd.name.toLowerCase() === parts[0]
 			} else {
-				return _.startsWith(cmd.name.toLowerCase(), parts[0])
+				return cmd.name.toLowerCase().startsWith(parts[0])
 			}
 		})
 
 		if (cmds.length > 0 && cmds[0].name.toLowerCase() === parts[0]) {
 			let subs = cmds[0].usage.replace(/(\[.*?])/g, "").split("|")
-			subs = _.map(subs, sub => sub.toLowerCase().trim())
-			subs = _.filter(subs, sub => sub !== "/" + cmds[0].name.toLowerCase() + " ?")
+			subs = subs.map(sub => sub.toLowerCase().trim())
+			subs = subs.filter(sub => sub !== "/" + cmds[0].name.toLowerCase() + " ?")
 
 			if (parts.length > 1 && !_.isEmpty(parts[1])) {
 				subs = subs.filter(sub =>
-					_.startsWith(sub, parts[1])
+					sub.startsWith(parts[1])
 				)
 			}
-			cmds = _.map(subs, sub => ({
+			cmds = subs.map(sub => ({
 				name: sub,
 				description: cmds[0].description,
 				aliases: cmds[0].aliases,
@@ -75,7 +75,7 @@ class Commands extends React.Component<Props, {}> {
 			}))
 		}
 
-		return _.map(cmds, cmd => {
+		return cmds.map(cmd => {
 			if (cmd.isSub) {
 				return {
 					value: cmd.base + " " + cmd.name + " ",

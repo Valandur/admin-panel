@@ -5,7 +5,7 @@ import { Dropdown, Form, Header, Icon, Message, Segment } from "semantic-ui-reac
 import { DataFieldGroup, DataFieldRaw } from "../../types"
 import { handleChange, HandleChangeFunc } from "../Util"
 
-export interface AppProps<T> {
+export interface Props<T> {
 	title: string
 	valid: boolean
 	fields: {
@@ -17,21 +17,28 @@ export interface AppProps<T> {
 	onFilterChange: (key: string, value: string) => void
 }
 
-class FilterForm<T> extends React.Component<AppProps<T>> {
+class FilterForm<T> extends React.Component<Props<T>> {
 
 	handleChange: HandleChangeFunc
 
-	constructor(props: AppProps<T>) {
+	constructor(props: Props<T>) {
 		super(props)
 
 		this.handleChange = handleChange.bind(this, this.props.onFilterChange)
+	}
+
+	shouldComponentUpdate(nextProps: Props<T>, nextState: any) {
+		return nextProps.values !== this.props.values ||
+			nextProps.fields !== this.props.fields ||
+			nextProps.valid !== this.props.valid
 	}
 
 	render() {
 		const { title, fields, values, valid } = this.props
 
 		const fieldGroups: DataFieldGroup<T>[] = []
-		_.each(fields, (field, name) => {
+		Object.keys(fields).forEach(name => {
+			const field = fields[name]
 			const newField: DataFieldRaw<T> = _.assign({}, field, {
 				name: field.filterName ? field.filterName : name,
 			})
@@ -52,7 +59,7 @@ class FilterForm<T> extends React.Component<AppProps<T>> {
 				</Header>
 
 				<Form>
-					{_.map(fieldGroups, (fg, i) => {
+					{fieldGroups.map((fg, i) => {
 						if (fg.only) {
 							return this.renderField(fg.only, _.get(values, fg.only.name), !valid)
 						}

@@ -1,14 +1,18 @@
 import * as _ from "lodash"
 import * as React from "react"
 import { translate } from "react-i18next"
-import { Button, Dropdown, Form, Header, Icon, Menu, SemanticICONS, Table } from "semantic-ui-react"
+import { Header, Icon, SemanticICONS, Table } from "semantic-ui-react"
 
-import { DataFieldRaw, DataTableRef } from "../../types"
+import { DataFieldRaw, DataTableRef, IdFunction } from "../../types"
 import { handleChange, HandleChangeFunc } from "../Util"
+
+import Pagination from "./Pagination"
+import TableHeader from "./TableHeader"
+import TableRow from "./TableRow"
 
 const ITEMS_PER_PAGE = 20
 
-export interface DataTableProps<T> extends reactI18Next.InjectedTranslateProps {
+export interface Props<T> extends reactI18Next.InjectedTranslateProps {
 	title?: string
 	icon?: SemanticICONS
 	list: T[]
@@ -21,20 +25,20 @@ export interface DataTableProps<T> extends reactI18Next.InjectedTranslateProps {
 	onEdit?: (data: T | null, view: DataTableRef) => void
 	onSave?: (data: T, newData: any, view: DataTableRef) => void
 	onDelete?: (data: T, view: DataTableRef) => void
-	idFunc: (data: T) => string
+	idFunc: IdFunction<T>
 	isEditing: (data: T) => boolean
 }
 
-interface DataTableState {
+interface OwnState {
 	page: number
 	newData: any
 }
 
-class DataTable<T> extends React.Component<DataTableProps<T>, DataTableState> {
+class DataTable<T> extends React.Component<Props<T>, OwnState> {
 
 	handleChange: HandleChangeFunc
 
-	constructor(props:  DataTableProps<T>) {
+	constructor(props:  Props<T>) {
 		super(props)
 
 		this.state = {
@@ -63,7 +67,7 @@ class DataTable<T> extends React.Component<DataTableProps<T>, DataTableState> {
 		})
 	}
 
-	onEdit(obj: T | null, view: DataTableRef) {
+	onEdit(obj: T | null, view: DataTableRef): void {
 		const newData = {}
 		if (obj) {
 			_.each(this.props.fields, (field, name) => {
@@ -81,6 +85,13 @@ class DataTable<T> extends React.Component<DataTableProps<T>, DataTableState> {
 		if (this.props.onEdit) {
 			this.props.onEdit(obj, view)
 		}
+	}
+
+	shouldComponentUpdate(nextProps: Props<T>, nextState: OwnState) {
+		return nextProps.fields !== this.props.fields ||
+			nextProps.list !== this.props.list ||
+			nextState.page !== this.state.page ||
+			nextState.newData !== this.state.newData
 	}
 
 	render() {
@@ -111,146 +122,40 @@ class DataTable<T> extends React.Component<DataTableProps<T>, DataTableState> {
 				}
 
 				<Table striped={true} stackable>
-					<Table.Header>
-						<Table.Row>
-							{_.map(fields, (field, i) =>
-								<Table.HeaderCell key={i}>
-									{field.label ? field.label : "<" + field.name + ">"}
-								</Table.HeaderCell>
-							)}
-							{actions || canEdit || canDelete ?
-								<Table.HeaderCell>{_t("Actions")}</Table.HeaderCell>
-							: null}
-						</Table.Row>
-					</Table.Header>
+					<TableHeader
+						fields={fields}
+						hasActions={typeof actions !== "undefined"}
+						canEdit={canEdit}
+						canDelete={canDelete}
+						t={_t}
+					/>
 					<Table.Body>
-						{_.map(listPage, (obj, i) => {
-							const editing = this.props.isEditing(obj)
-
-							return <Table.Row key={this.props.idFunc(obj)}>
-								{_.map(fields, (field, j) =>
-									<Table.Cell key={j} collapsing={!field.wide}>
-										{field.edit && editing ?
-											(typeof field.edit === "function" ?
-												field.edit(obj, thisRef)
-											:
-												this.renderEdit(obj, field)
-											)
-										:
-											(typeof field.view === "function" ?
-												field.view(obj, thisRef)
-											:
-												_.get(obj, field.name)
-											)
-										}
-									</Table.Cell>
-								)}
-								{actions || canEdit || canDelete ?
-									<Table.Cell collapsing>
-										{canEdit && editing ?
-											[<Button
-												key="save"
-												color="green"
-												disabled={(obj as any).updating}
-												loading={(obj as any).updating}
-												onClick={() => { if (this.props.onSave) { this.props.onSave(obj, this.state.newData, thisRef) }}}
-											>
-												<Icon name="save" /> {_t("Save")}
-											</Button>,
-											<Button
-												key="cancel"
-												color="yellow"
-												disabled={(obj as any).updating}
-												loading={(obj as any).updating}
-												onClick={() => this.onEdit(null, thisRef)}
-											>
-												<Icon name="cancel" /> {_t("Cancel")}
-											</Button>]
-										: canEdit ?
-											<Button
-												color="blue"
-												disabled={(obj as any).updating}
-												loading={(obj as any).updating}
-												onClick={() => this.onEdit(obj, thisRef)}
-											>
-												<Icon name="edit" /> {_t("Edit")}
-											</Button>
-										: null}
-										{canDelete &&
-											<Button
-												color="red"
-												disabled={(obj as any).updating}
-												loading={(obj as any).updating}
-												onClick={() => { if (this.props.onDelete) { this.props.onDelete(obj, thisRef) }}}
-											>
-												<Icon name="trash" /> {_t("Remove")}
-											</Button>
-										}
-										{actions && actions(obj, thisRef)}
-									</Table.Cell>
-								: null}
-							</Table.Row>
-						})}
+						{_.map(listPage, (obj, i) =>
+							<TableRow
+								key={this.props.idFunc(obj)}
+								obj={obj}
+								tableRef={thisRef}
+								canEdit={canEdit}
+								canDelete={canDelete}
+								editing={this.props.isEditing(obj)}
+								fields={fields}
+								onEdit={(d: T, v) => this.onEdit(d, v)}
+								onSave={this.props.onSave}
+								onDelete={this.props.onDelete}
+								actions={this.props.actions}
+								newData={this.state.newData}
+								handleChange={this.handleChange}
+								t={_t}
+							/>
+						)}
 					</Table.Body>
 				</Table>
-				{ maxPage > 1 ?
-					<Menu pagination>
-						{ page > 4 ?
-							<Menu.Item onClick={e => this.changePage(e, 0)}>
-								1
-							</Menu.Item>
-						: null }
-						{ page > 5 ?
-							<Menu.Item onClick={e => this.changePage(e, page - 5)}>
-								...
-							</Menu.Item>
-						: null }
-						{ _.map(_.range(Math.max(0, page - 4), Math.min(maxPage, page + 5)), p => (
-							<Menu.Item key={p} onClick={e => this.changePage(e, p)} active={p === page}>
-								{p + 1}
-							</Menu.Item>
-						))}
-						{ page < maxPage - 6 ?
-							<Menu.Item onClick={e => this.changePage(e, page + 5)}>
-								...
-							</Menu.Item>
-						: null }
-						{ page < maxPage - 5 ?
-							<Menu.Item onClick={e => this.changePage(e, maxPage - 1)}>
-								{maxPage}
-							</Menu.Item>
-						: null }
-					</Menu>
-				: null }
-			</div>
-		)
-	}
-
-	renderEdit(obj: T, col: DataFieldRaw<T>) {
-		if (col.options) {
-			return (
-				<Form.Field
-					fluid
-					selection
-					search
-					control={Dropdown}
-					name={col.name}
-					placeholder={col.label}
-					options={col.options}
-					value={this.state.newData[col.name]}
-					onChange={this.handleChange}
+				<Pagination
+					page={page}
+					maxPage={maxPage}
+					changePage={(e, p) => this.changePage(e, p)}
 				/>
-			)
-		}
-
-		return (
-			<Form.Input
-				name={col.name}
-				type={col.type ? col.type : "text"}
-				placeholder={col.label}
-				value={this.state.newData[col.name]}
-				onChange={this.handleChange}
-			/>
+			</div>
 		)
 	}
 }

@@ -1,4 +1,3 @@
-import * as _ from "lodash"
 import * as React from "react"
 import { Line } from "react-chartjs-2"
 import { Trans, translate } from "react-i18next"
@@ -7,9 +6,9 @@ import { Card, Grid, Message, Segment, SemanticCOLORS } from "semantic-ui-react"
 
 import { AppAction } from "../../actions"
 import { InfoRequestAction, requestInfo } from "../../actions/dashboard"
-import { checkPermissions, PermissionTree } from "../../components/Util"
+import { checkPermissions } from "../../components/Util"
 import { ServerInfo, ServerStats } from "../../fetch"
-import { AppState } from "../../types"
+import { AppState, PermissionTree } from "../../types"
 
 import graphConfig from "./chart"
 
@@ -71,24 +70,24 @@ class Dashboard extends React.Component<Props, {}> {
 			)
 		}
 
-		this.lineInfo.datasets[0].data = _.map(this.props.tps, p => ({
+		this.lineInfo.datasets[0].data = this.props.tps.map(p => ({
 			x: new Date(p.timestamp * 1000),
 			y: p.value,
 		}))
-		this.lineInfo.datasets[1].data = _.map(this.props.players, p => ({
+		this.lineInfo.datasets[1].data = this.props.players.map(p => ({
 			x: new Date(p.timestamp * 1000),
 			y: p.value,
 		}))
 
-		this.lineStats.datasets[0].data = _.map(this.props.cpu, p => ({
+		this.lineStats.datasets[0].data = this.props.cpu.map(p => ({
 			x: new Date(p.timestamp * 1000),
 			y: p.value * 100,
 		}))
-		this.lineStats.datasets[1].data = _.map(this.props.memory, p => ({
+		this.lineStats.datasets[1].data = this.props.memory.map(p => ({
 			x: new Date(p.timestamp * 1000),
 			y: p.value * 100,
 		}))
-		this.lineStats.datasets[2].data = _.map(this.props.disk, p => ({
+		this.lineStats.datasets[2].data = this.props.disk.map(p => ({
 			x: new Date(p.timestamp * 1000),
 			y: p.value * 100,
 		}))

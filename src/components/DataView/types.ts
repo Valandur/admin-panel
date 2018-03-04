@@ -2,8 +2,7 @@ import { SemanticICONS } from "semantic-ui-react"
 
 import { ChangeRequestAction, CreateRequestAction, DeleteRequestAction, DetailsRequestAction,
 	ListRequestAction, SetFilterAction } from "../../actions/dataview"
-import { DataField, DataFieldViewFunc, DataViewRef, IdFunction } from "../../types"
-import { PermissionTree } from "../Util"
+import { DataField, DataFieldViewFunc, DataViewRef, IdFunction, PermissionTree } from "../../types"
 
 export interface OwnProps<T> {
 	title?: string

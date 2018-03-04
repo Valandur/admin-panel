@@ -25,13 +25,6 @@ export default (state = initialState, action: AppAction) => {
 				configs: _.assign({}, action.configs),
 			})
 
-		case TypeKeys.CONFIG_SET:
-			return _.assign({}, state, {
-				configs: _.assign({}, state.configs, {
-					[action.name]: action.conf,
-				})
-			})
-
 		default:
 			return state
 	}

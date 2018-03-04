@@ -7,9 +7,9 @@ import { Icon, Menu, Progress, Sidebar } from "semantic-ui-react"
 
 import { AppAction, requestServlets, ServletsRequestAction } from "../../actions"
 
-import { checkPermissions, PermissionTree } from "../../components/Util"
+import { checkPermissions } from "../../components/Util"
 import { ServerStatDouble } from "../../fetch"
-import { AppState, ViewDefinition } from "../../types"
+import { AppState, PermissionTree, ViewDefinition } from "../../types"
 
 export interface Props extends reactI18Next.InjectedTranslateProps {
 	// State

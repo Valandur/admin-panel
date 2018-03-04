@@ -1,4 +1,3 @@
-import * as _ from "lodash"
 import * as React from "react"
 import { Button, ButtonProps, Label, Progress } from "semantic-ui-react"
 
@@ -63,7 +62,7 @@ class ItemStackComp extends React.Component<AppProps> {
 							</Label>}
 						{item.enchantments &&
 							<div>
-								{_.map(item.enchantments, enchant =>
+								{item.enchantments.map(enchant =>
 									<Label color="purple" size="tiny" key={enchant.id}>
 										{enchant.name}
 										<Label.Detail>{enchant.level}</Label.Detail>
@@ -75,7 +74,7 @@ class ItemStackComp extends React.Component<AppProps> {
 								{item.spawn.name}
 							</Label>}
 						{item.potionEffects &&
-							_.map(item.potionEffects, effect =>
+							item.potionEffects.map(effect =>
 								<Label size="tiny" color="brown" key={effect.type.id}>
 									{effect.type.name} {getAmplifier(effect)}
 								</Label>

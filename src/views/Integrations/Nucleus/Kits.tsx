@@ -1,4 +1,3 @@
-import * as _ from "lodash"
 import * as React from "react"
 import { translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
@@ -6,14 +5,12 @@ import { Button, Dropdown, Form, Input, Label, Popup } from "semantic-ui-react"
 
 import { AppAction, CatalogRequestAction, requestCatalog } from "../../../actions"
 import ItemStack from "../../../components/ItemStack"
-import { handleChange, HandleChangeFunc } from "../../../components/Util"
+import { handleChange, HandleChangeFunc, renderCatalogTypeOptions } from "../../../components/Util"
 import { CatalogType, NucleusKit } from "../../../fetch"
-import { AppState, DataViewRef } from "../../../types"
+import { AppState, CatalogTypeKeys, DataViewRef } from "../../../types"
 
 import DataViewFunc from "../../../components/DataView"
 const DataView = DataViewFunc("nucleus/kit", "name")
-
-const ITEM_TYPES = "item.ItemType"
 
 interface Props extends reactI18Next.InjectedTranslateProps {
 	itemTypes: CatalogType[]
@@ -45,23 +42,23 @@ class Kits extends React.Component<Props, OwnState> {
 	}
 
 	componentDidMount() {
-		this.props.requestCatalog(ITEM_TYPES)
+		this.props.requestCatalog(CatalogTypeKeys.Item)
 	}
 
 	addCmd(view: DataViewRef<NucleusKit>, kit: NucleusKit) {
 		let cmd = this.state.newKitCmd
-		if (_.startsWith(cmd, "/")) {
+		if (cmd.startsWith("/")) {
 			cmd = cmd.substring(1)
 		}
 
 		view.save(kit, {
-			commands: _.concat(kit.commands, cmd)
+			commands: kit.commands.concat(cmd)
 		})
 	}
 
 	removeCmd(view: DataViewRef<NucleusKit>, kit: NucleusKit, cmdIndex: number) {
 		view.save(kit, {
-			commands: _.filter(kit.commands, (__, i) => i !== cmdIndex)
+			commands: kit.commands.filter((__, i) => i !== cmdIndex)
 		})
 	}
 
@@ -79,7 +76,7 @@ class Kits extends React.Component<Props, OwnState> {
 
 	removeStack(view: DataViewRef<NucleusKit>, kit: NucleusKit, index: number) {
 		view.save(kit, {
-			stacks: _.filter(kit.stacks, (__, i) => i !== index)
+			stacks: kit.stacks.filter((__, i) => i !== index)
 		})
 	}
 
@@ -135,7 +132,7 @@ class Kits extends React.Component<Props, OwnState> {
 
 		return (
 			<div>
-				{_.map(kit.commands, (cmd, i) =>
+				{kit.commands.map((cmd, i) =>
 					<Label
 						key={i}
 						color="blue"
@@ -170,7 +167,7 @@ class Kits extends React.Component<Props, OwnState> {
 
 		return (
 			<div>
-				{_.map(kit.stacks, (item, i) =>
+				{kit.stacks.map((item, i) =>
 					<ItemStack
 						key={i}
 						item={item}
@@ -191,9 +188,7 @@ class Kits extends React.Component<Props, OwnState> {
 							control={Dropdown}
 							placeholder={_t("Type")}
 							onChange={this.handleChange}
-							options={_.map(this.props.itemTypes, type =>
-								({ value: type.id, text: type.name + " (" + type.id + ")" })
-							)}
+							options={renderCatalogTypeOptions(this.props.itemTypes)}
 						/>
 						<Form.Input
 							name="newItemAmount"
@@ -215,7 +210,7 @@ class Kits extends React.Component<Props, OwnState> {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		itemTypes: state.api.types[ITEM_TYPES],
+		itemTypes: state.api.types[CatalogTypeKeys.Item],
 	}
 }
 

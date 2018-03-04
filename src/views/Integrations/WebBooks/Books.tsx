@@ -1,5 +1,4 @@
 import * as copy from "copy-to-clipboard"
-import * as _ from "lodash"
 import * as React from "react"
 import { translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
@@ -31,14 +30,14 @@ class Books extends React.Component<Props, OwnState> {
 
 	addLine(view: DataViewRef<WebBooksBook>) {
 		view.setState({
-			lines: _.concat(view.state.lines, view.state.newItem),
+			lines: view.state.lines.concat(view.state.newItem),
 			newItem: "",
 		})
 	}
 
 	moveLineUp(view: DataViewRef<WebBooksBook>, index: number) {
 		view.setState({
-			lines: _.map(view.state.lines, (line, i) =>
+			lines: view.state.lines.map((line: string, i: number) =>
 				i === index ? view.state.lines[index - 1] :
 				(i === index - 1 ? view.state.lines[index] : line)),
 		})
@@ -46,7 +45,7 @@ class Books extends React.Component<Props, OwnState> {
 
 	moveLineDown(view: DataViewRef<WebBooksBook>, index: number) {
 		view.setState({
-			lines: _.map(view.state.lines, (line, i) =>
+			lines: view.state.lines.map((line: string, i: number) =>
 				i === index ? view.state.lines[index + 1] :
 				(i === index + 1 ? view.state.lines[index] : line)),
 		})
@@ -54,13 +53,13 @@ class Books extends React.Component<Props, OwnState> {
 
 	deleteLine(view: DataViewRef<WebBooksBook>, index: number) {
 		view.setState({
-			lines: _.filter(view.state.lines, (line: string, i: number) => i !== index),
+			lines: view.state.lines.filter((line: string, i: number) => i !== index),
 			newItem: "",
 		})
 	}
 
 	copy(book: WebBooksBook) {
-		copy(this.props.apiUrl + "/web-books/book/" + book.id + "/html")
+		copy(this.props.apiUrl + "/api/v5/web-books/book/" + book.id + "/html")
 	}
 
 	render() {
@@ -106,7 +105,7 @@ class Books extends React.Component<Props, OwnState> {
 								fluid
 								onFocus={(e: React.SyntheticEvent<HTMLInputElement>) => (e.target as any).select()}
 								action={{ color: "teal", icon: "linkify", onClick: () => this.copy(book) }}
-								value={this.props.apiUrl + "/api/web-books/book/" + book.id + "/html"}
+								value={this.props.apiUrl + "/api/v5/web-books/book/" + book.id + "/html"}
 							/>,
 					},
 				}}
@@ -127,7 +126,7 @@ class Books extends React.Component<Props, OwnState> {
 		return (
 			<div>
 				<List size="large">
-					{_.map(view.state.lines, (line, index) =>
+					{view.state.lines.map((line: string, index: number) =>
 						<List.Item key={index}>
 							<Button
 								compact

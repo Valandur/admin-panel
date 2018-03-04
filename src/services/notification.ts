@@ -16,10 +16,10 @@ const showNotif = (level: "error" | "warning" | "info" | "success", title: strin
 		level: level,
 		title: title,
 		message: message,
-		position: "tr",
+		position: "br",
 	})
 
-const persist: ExtendedMiddleware<AppState> = ({ dispatch, getState }: MiddlewareAPI<AppState>) =>
+const notif: ExtendedMiddleware<AppState> = ({ dispatch, getState }: MiddlewareAPI<AppState>) =>
 		(next: Dispatch<Action>) => (action: AppAction): any => {
 	next(action)
 
@@ -44,7 +44,7 @@ const persist: ExtendedMiddleware<AppState> = ({ dispatch, getState }: Middlewar
 					showNotif(
 						"error",
 						"Login error",
-						action.error.error)
+						action.error.text)
 				}
 			}
 			break
@@ -54,7 +54,7 @@ const persist: ExtendedMiddleware<AppState> = ({ dispatch, getState }: Middlewar
 				showNotif(
 					"error",
 					"Could not run command: " + action.command,
-					action.error ? action.error.error : "General error")
+					action.error ? action.error.text : "General error")
 			} else {
 				showNotif(
 					"success",
@@ -68,7 +68,7 @@ const persist: ExtendedMiddleware<AppState> = ({ dispatch, getState }: Middlewar
 				showNotif(
 					"error",
 					_.upperFirst(action.endpoint),
-					action.err ? action.err.error : "No response data")
+					action.err ? action.err.text : "No response data")
 			} else {
 				showNotif(
 					"success",
@@ -82,7 +82,7 @@ const persist: ExtendedMiddleware<AppState> = ({ dispatch, getState }: Middlewar
 					showNotif(
 						"error",
 						_.upperFirst(action.endpoint),
-						action.err.error)
+						action.err.text)
 			} else {
 				showNotif(
 					"success",
@@ -96,7 +96,7 @@ const persist: ExtendedMiddleware<AppState> = ({ dispatch, getState }: Middlewar
 					showNotif(
 						"error",
 						_.upperFirst(action.endpoint),
-						action.err.error)
+						action.err.text)
 			} else {
 				showNotif(
 					"success",
@@ -124,4 +124,4 @@ const persist: ExtendedMiddleware<AppState> = ({ dispatch, getState }: Middlewar
 	}
 }
 
-export default persist
+export default notif

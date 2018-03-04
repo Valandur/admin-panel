@@ -76,7 +76,7 @@ class Inventory extends React.Component<AppProps, AppState> {
 					/>,
 					<br key="newline" />
 				]}
-				{_.map(items, (item, i) =>
+				{items.map((item, i) =>
 					<ItemStackComp key={i} item={item} />
 				)}
 			</div>

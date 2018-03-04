@@ -1,4 +1,3 @@
-import * as _ from "lodash"
 import * as React from "react"
 import * as enhanceWithClickOutside from "react-click-outside"
 
@@ -82,7 +81,7 @@ class Autosuggest extends React.Component<AppProps, AppState> {
 				/>
 				{ this.state.suggestions.length ?
 					<div className="autosuggest-list">
-						{_.map(this.state.suggestions, (sugg, index) =>
+						{this.state.suggestions.map((sugg, index) =>
 							<div key={index} onClick={event => this.handleClick(event, sugg)}>
 								{sugg.content}
 							</div>

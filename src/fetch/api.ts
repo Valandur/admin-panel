@@ -389,12 +389,6 @@ export interface BeaconData {
  */
 export interface BlockOperation {
     /**
-     * The cause which is used for updating the blocks
-     * @type {CachedCause}
-     * @memberof BlockOperation
-     */
-    cause: CachedCause;
-    /**
      * The error message, if any
      * @type {string}
      * @memberof BlockOperation
@@ -546,150 +540,6 @@ export interface BrewingStandData {
 /**
  * 
  * @export
- * @interface CachedCause
- */
-export interface CachedCause {
-    /**
-     * The direct sources of this cause
-     * @type {Array&lt;any&gt;}
-     * @memberof CachedCause
-     */
-    causes: Array<any>;
-    /**
-     * The context surrounding the cause
-     * @type {{ [key: string]: any; }}
-     * @memberof CachedCause
-     */
-    context: { [key: string]: any; };
-}
-
-/**
- * 
- * @export
- * @interface CachedChunk
- */
-export interface CachedChunk {
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof CachedChunk
-     */
-    link: string;
-    /**
-     * True if this chunk is currently loaded, false otherwise
-     * @type {boolean}
-     * @memberof CachedChunk
-     */
-    loaded: boolean;
-    /**
-     * The position of this chunk (in chunk coordinates)
-     * @type {Vector3i}
-     * @memberof CachedChunk
-     */
-    position: Vector3i;
-    /**
-     * The unique id of this chunk
-     * @type {string}
-     * @memberof CachedChunk
-     */
-    uuid: string;
-    /**
-     * The bock with the largest coordinates that is still part of this chunk
-     * @type {Vector3i}
-     * @memberof CachedChunk
-     */
-    blockMax?: Vector3i;
-    /**
-     * The bock with the smallest coordinates that is still part of this chunk
-     * @type {Vector3i}
-     * @memberof CachedChunk
-     */
-    blockMin?: Vector3i;
-    /**
-     * The total amount of time (in server ticks) this chunk has been inhabited by players.
-     * @type {number}
-     * @memberof CachedChunk
-     */
-    inhabitedTime?: number;
-    /**
-     * The increase in difficulty due to the presence of players in the chunk
-     * @type {number}
-     * @memberof CachedChunk
-     */
-    regionalDifficultyFactor?: number;
-    /**
-     * The increase in difficulty due to the presence of players in the chunk as a percentage
-     * @type {number}
-     * @memberof CachedChunk
-     */
-    regionalDifficultyPercentage?: number;
-    /**
-     * The world the chunk is in
-     * @type {World}
-     * @memberof CachedChunk
-     */
-    world?: World;
-}
-
-/**
- * 
- * @export
- * @interface CachedEntity
- */
-export interface CachedEntity {
-    /**
-     * The type of entity
-     * @type {CatalogType}
-     * @memberof CachedEntity
-     */
-    type: CatalogType;
-    /**
-     * The unique UUID of the entity
-     * @type {string}
-     * @memberof CachedEntity
-     */
-    uuid: string;
-    /**
-     * The current location of the entity
-     * @type {Location}
-     * @memberof CachedEntity
-     */
-    location: Location;
-    /**
-     * The current rotation of the entity
-     * @type {Vector3d}
-     * @memberof CachedEntity
-     */
-    rotation: Vector3d;
-    /**
-     * The current velocity of the entity
-     * @type {Vector3d}
-     * @memberof CachedEntity
-     */
-    velocity: Vector3d;
-    /**
-     * The current scale of the entity
-     * @type {Vector3d}
-     * @memberof CachedEntity
-     */
-    scale: Vector3d;
-    /**
-     * The current inventory of the entity (if any)
-     * @type {Inventory}
-     * @memberof CachedEntity
-     */
-    inventory?: Inventory;
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof CachedEntity
-     */
-    link: string;
-}
-
-/**
- * 
- * @export
  * @interface CachedObject
  */
 export interface CachedObject {
@@ -699,62 +549,6 @@ export interface CachedObject {
      * @memberof CachedObject
      */
     link: string;
-}
-
-/**
- * 
- * @export
- * @interface CachedPluginContainer
- */
-export interface CachedPluginContainer {
-    /**
-     * A list of authors that created this plugin
-     * @type {Array&lt;string&gt;}
-     * @memberof CachedPluginContainer
-     */
-    authors: Array<string>;
-    /**
-     * Other plugins that this plugin depends on
-     * @type {Array&lt;PluginDependency&gt;}
-     * @memberof CachedPluginContainer
-     */
-    dependencies: Array<PluginDependency>;
-    /**
-     * The unique id of this plugin
-     * @type {string}
-     * @memberof CachedPluginContainer
-     */
-    id: string;
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof CachedPluginContainer
-     */
-    link: string;
-    /**
-     * The name of this plugin
-     * @type {string}
-     * @memberof CachedPluginContainer
-     */
-    name: string;
-    /**
-     * A description describing what this plugin does (hopefully)
-     * @type {string}
-     * @memberof CachedPluginContainer
-     */
-    description?: string;
-    /**
-     * The url that was added to the plugin (probably the homepage)
-     * @type {string}
-     * @memberof CachedPluginContainer
-     */
-    url?: string;
-    /**
-     * The current version of the plugin
-     * @type {string}
-     * @memberof CachedPluginContainer
-     */
-    version?: string;
 }
 
 /**
@@ -1035,6 +829,74 @@ export interface ChatMessage {
      * @memberof ChatMessage
      */
     timestamp: number;
+}
+
+/**
+ * 
+ * @export
+ * @interface Chunk
+ */
+export interface Chunk {
+    /**
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
+     * @memberof Chunk
+     */
+    link: string;
+    /**
+     * True if this chunk is currently loaded, false otherwise
+     * @type {boolean}
+     * @memberof Chunk
+     */
+    loaded: boolean;
+    /**
+     * The position of this chunk (in chunk coordinates)
+     * @type {Vector3i}
+     * @memberof Chunk
+     */
+    position: Vector3i;
+    /**
+     * The unique id of this chunk
+     * @type {string}
+     * @memberof Chunk
+     */
+    uuid: string;
+    /**
+     * The bock with the largest coordinates that is still part of this chunk
+     * @type {Vector3i}
+     * @memberof Chunk
+     */
+    blockMax?: Vector3i;
+    /**
+     * The bock with the smallest coordinates that is still part of this chunk
+     * @type {Vector3i}
+     * @memberof Chunk
+     */
+    blockMin?: Vector3i;
+    /**
+     * The total amount of time (in server ticks) this chunk has been inhabited by players.
+     * @type {number}
+     * @memberof Chunk
+     */
+    inhabitedTime?: number;
+    /**
+     * The increase in difficulty due to the presence of players in the chunk
+     * @type {number}
+     * @memberof Chunk
+     */
+    regionalDifficultyFactor?: number;
+    /**
+     * The increase in difficulty due to the presence of players in the chunk as a percentage
+     * @type {number}
+     * @memberof Chunk
+     */
+    regionalDifficultyPercentage?: number;
+    /**
+     * The world the chunk is in
+     * @type {World}
+     * @memberof Chunk
+     */
+    world?: World;
 }
 
 /**
@@ -1601,29 +1463,11 @@ export interface EndGatewayData {
  */
 export interface Entity {
     /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof Entity
-     */
-    link: string;
-    /**
      * The current location of the entity
      * @type {Location}
      * @memberof Entity
      */
     location: Location;
-    /**
-     * The current rotation of the entity
-     * @type {Vector3d}
-     * @memberof Entity
-     */
-    rotation: Vector3d;
-    /**
-     * The current scale of the entity
-     * @type {Vector3d}
-     * @memberof Entity
-     */
-    scale: Vector3d;
     /**
      * The type of entity
      * @type {CatalogType}
@@ -1637,17 +1481,35 @@ export interface Entity {
      */
     uuid: string;
     /**
+     * 
+     * @type {Inventory}
+     * @memberof Entity
+     */
+    inventory?: Inventory;
+    /**
+     * The current rotation of the entity
+     * @type {Vector3d}
+     * @memberof Entity
+     */
+    rotation: Vector3d;
+    /**
+     * The current scale of the entity
+     * @type {Vector3d}
+     * @memberof Entity
+     */
+    scale: Vector3d;
+    /**
      * The current velocity of the entity
      * @type {Vector3d}
      * @memberof Entity
      */
     velocity: Vector3d;
     /**
-     * 
-     * @type {Inventory}
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
      * @memberof Entity
      */
-    inventory?: Inventory;
+    link: string;
     /**
      * 
      * @type {number}
@@ -4748,6 +4610,18 @@ export interface HorseData {
  */
 export interface HuskyCratesCrate {
     /**
+     * True if this crate is free to open, false otherwise
+     * @type {boolean}
+     * @memberof HuskyCratesCrate
+     */
+    free: boolean;
+    /**
+     * In case this crate is free, this interval specifies the time (in seconds) after which this crate can be opened again
+     * @type {number}
+     * @memberof HuskyCratesCrate
+     */
+    freeDelay: number;
+    /**
      * The unique id of this crate
      * @type {string}
      * @memberof HuskyCratesCrate
@@ -4766,35 +4640,23 @@ export interface HuskyCratesCrate {
      */
     name: string;
     /**
-     * The type of crate
-     * @type {string}
-     * @memberof HuskyCratesCrate
-     */
-    type: HuskyCratesCrate.TypeEnum;
-    /**
-     * True if this crate is free to open, false otherwise
-     * @type {boolean}
-     * @memberof HuskyCratesCrate
-     */
-    free?: boolean;
-    /**
-     * In case this crate is free, this interval specifies the time (in seconds) after which this crate can be opened again
-     * @type {number}
-     * @memberof HuskyCratesCrate
-     */
-    freeDelay?: number;
-    /**
      * The possible rewards awarded for opening this crate
      * @type {Array&lt;HuskyCratesCrateReward&gt;}
      * @memberof HuskyCratesCrate
      */
-    rewards?: Array<HuskyCratesCrateReward>;
+    rewards: Array<HuskyCratesCrateReward>;
     /**
      * True if the rewards are scrambled, false otherwise
      * @type {boolean}
      * @memberof HuskyCratesCrate
      */
-    scrambleRewards?: boolean;
+    scrambleRewards: boolean;
+    /**
+     * The type of crate
+     * @type {string}
+     * @memberof HuskyCratesCrate
+     */
+    type: HuskyCratesCrate.TypeEnum;
 }
 
 /**
@@ -5086,11 +4948,11 @@ export interface Inventory {
      */
     type: CatalogType;
     /**
-     * The maximum capacity of the inventory (maximum number of stacks)
-     * @type {number}
+     * Gets a list of item stacks in the inventory
+     * @type {Array&lt;ItemStack&gt;}
      * @memberof Inventory
      */
-    capacity: number;
+    itemStacks: Array<ItemStack>;
     /**
      * The total amount of items currently in the inventory
      * @type {number}
@@ -5098,11 +4960,17 @@ export interface Inventory {
      */
     totalItems: number;
     /**
-     * Gets a list of item stacks in the inventory
-     * @type {Array&lt;ItemStack&gt;}
+     * The maximum capacity of the inventory (maximum number of stacks)
+     * @type {number}
      * @memberof Inventory
      */
-    itemStacks: Array<ItemStack>;
+    capacity: number;
+    /**
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
+     * @memberof Inventory
+     */
+    link: string;
 }
 
 /**
@@ -5180,13 +5048,13 @@ export interface InventoryDimension {
      * @type {number}
      * @memberof InventoryDimension
      */
-    rows?: number;
+    columns?: number;
     /**
      * 
      * @type {number}
      * @memberof InventoryDimension
      */
-    columns?: number;
+    rows?: number;
 }
 
 /**
@@ -6594,10 +6462,10 @@ export interface JoinData {
 export interface LeashData {
     /**
      * The holder of this entity's leash
-     * @type {CachedEntity}
+     * @type {Entity}
      * @memberof LeashData
      */
-    holder: CachedEntity;
+    holder: Entity;
 }
 
 /**
@@ -7393,16 +7261,16 @@ export interface RedProtectRegion {
 export interface ServerInfo {
     /**
      * 
-     * @type {CachedPluginContainer}
+     * @type {PluginContainer}
      * @memberof ServerInfo
      */
-    api: CachedPluginContainer;
+    api: PluginContainer;
     /**
      * 
-     * @type {CachedPluginContainer}
+     * @type {PluginContainer}
      * @memberof ServerInfo
      */
-    game: CachedPluginContainer;
+    game: PluginContainer;
     /**
      * True if the server has activated the whitelist, false otherwise
      * @type {boolean}
@@ -7411,10 +7279,10 @@ export interface ServerInfo {
     hasWhitelist: boolean;
     /**
      * 
-     * @type {CachedPluginContainer}
+     * @type {PluginContainer}
      * @memberof ServerInfo
      */
-    implementation: CachedPluginContainer;
+    implementation: PluginContainer;
     /**
      * The maximum amount of players allowed on the server
      * @type {number}
@@ -9702,13 +9570,13 @@ export interface Vector2i {
      * @type {number}
      * @memberof Vector2i
      */
-    maxAxis?: number;
+    minAxis?: number;
     /**
      * 
      * @type {number}
      * @memberof Vector2i
      */
-    minAxis?: number;
+    maxAxis?: number;
 }
 
 /**
@@ -9892,23 +9760,17 @@ export interface World {
  */
 export interface WorldBorder {
     /**
-     * The maximum amount of damage done to a player
-     * @type {number}
-     * @memberof WorldBorder
-     */
-    damageThreshold: number;
-    /**
      * The amount of distance from the border a player will receive a warning at
      * @type {number}
      * @memberof WorldBorder
      */
     warningDistance: number;
     /**
-     * The new diameter of the border, in case it is collapsing/expanding
+     * The maximum amount of damage done to a player
      * @type {number}
      * @memberof WorldBorder
      */
-    newDiameter: number;
+    damageThreshold: number;
     /**
      * The time remaining until the border reaches it's new size
      * @type {number}
@@ -9916,17 +9778,23 @@ export interface WorldBorder {
      */
     timeRemaining: number;
     /**
+     * The new diameter of the border, in case it is collapsing/expanding
+     * @type {number}
+     * @memberof WorldBorder
+     */
+    newDiameter: number;
+    /**
      * The amount of time near a border before a warning is shown for players
      * @type {number}
      * @memberof WorldBorder
      */
     warningTime: number;
     /**
-     * The amount of damage done to players outside the border
+     * The diameter of the border
      * @type {number}
      * @memberof WorldBorder
      */
-    damageAmount: number;
+    diameter: number;
     /**
      * The center of the world border
      * @type {Vector3d}
@@ -9934,11 +9802,11 @@ export interface WorldBorder {
      */
     center: Vector3d;
     /**
-     * The diameter of the border
+     * The amount of damage done to players outside the border
      * @type {number}
      * @memberof WorldBorder
      */
-    diameter: number;
+    damageAmount: number;
     /**
      * The API link that can be used to obtain more information about this object
      * @type {string}
@@ -10032,17 +9900,41 @@ export interface PlayerFull {
      */
     location: Location;
     /**
+     * A list of all unlocked advancements of this player
+     * @type {Array&lt;Advancement&gt;}
+     * @memberof PlayerFull
+     */
+    unlockedAdvancements: Array<Advancement>;
+    /**
      * The latency (in milliseconds) of the player
      * @type {number}
      * @memberof PlayerFull
      */
     latency: number;
     /**
-     * A list of all unlocked advancements of this player
-     * @type {Array&lt;Advancement&gt;}
+     * The item stack that the player is wearing as leggings
+     * @type {ItemStack}
      * @memberof PlayerFull
      */
-    unlockedAdvancements: Array<Advancement>;
+    leggings?: ItemStack;
+    /**
+     * The item stack that the player is wearing as boots
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    boots?: ItemStack;
+    /**
+     * The item stack that the player is wearing as a helmet
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    helmet?: ItemStack;
+    /**
+     * The item stack that the player is wearing as chestplate
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    chestplate?: ItemStack;
     /**
      * 
      * @type {Inventory}
@@ -10056,41 +9948,17 @@ export interface PlayerFull {
      */
     rotation: Vector3d;
     /**
-     * The current velocity of the player
-     * @type {Vector3d}
-     * @memberof PlayerFull
-     */
-    velocity: Vector3d;
-    /**
      * The current scale of the player
      * @type {Vector3d}
      * @memberof PlayerFull
      */
     scale: Vector3d;
     /**
-     * The item stack that the player is wearing as chestplate
-     * @type {ItemStack}
+     * The current velocity of the player
+     * @type {Vector3d}
      * @memberof PlayerFull
      */
-    chestplate?: ItemStack;
-    /**
-     * The item stack that the player is wearing as leggings
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    leggings?: ItemStack;
-    /**
-     * The item stack that the player is wearing as a helmet
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    helmet?: ItemStack;
-    /**
-     * The item stack that the player is wearing as boots
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    boots?: ItemStack;
+    velocity: Vector3d;
     /**
      * 
      * @type {number}
@@ -11369,11 +11237,11 @@ export interface WorldFull {
      */
     time: number;
     /**
-     * The seed of the world
-     * @type {number}
+     * True if bonus chests are generated for this world, false otherwise
+     * @type {boolean}
      * @memberof WorldFull
      */
-    seed: number;
+    generateBonusChests: boolean;
     /**
      * True if map specific features are enabled for this world, false otherwise
      * @type {boolean}
@@ -11387,17 +11255,11 @@ export interface WorldFull {
      */
     keepSpawnLoaded: boolean;
     /**
-     * True if bonus chests are generated for this world, false otherwise
+     * True if commands are allowed to be executed in this world, false otherwise
      * @type {boolean}
      * @memberof WorldFull
      */
-    generateBonusChests: boolean;
-    /**
-     * The generator type used for this world
-     * @type {CatalogTypeGeneratorType}
-     * @memberof WorldFull
-     */
-    generatorType: CatalogTypeGeneratorType;
+    allowCommands: boolean;
     /**
      * True if this world is loaded when the server starts, false otherwise
      * @type {boolean}
@@ -11405,17 +11267,17 @@ export interface WorldFull {
      */
     loadOnStartup: boolean;
     /**
+     * The seed of the world
+     * @type {number}
+     * @memberof WorldFull
+     */
+    seed: number;
+    /**
      * The border of the world
      * @type {WorldBorder}
      * @memberof WorldFull
      */
     border: WorldBorder;
-    /**
-     * True if commands are allowed to be executed in this world, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    allowCommands: boolean;
     /**
      * 
      * @type {CatalogType}
@@ -11429,17 +11291,23 @@ export interface WorldFull {
      */
     dimensionType: CatalogTypeDimensionType;
     /**
+     * The generator type used for this world
+     * @type {CatalogTypeGeneratorType}
+     * @memberof WorldFull
+     */
+    generatorType: CatalogTypeGeneratorType;
+    /**
+     * 
+     * @type {GameMode}
+     * @memberof WorldFull
+     */
+    gameMode?: GameMode;
+    /**
      * A map of world rule names to values
      * @type {{ [key: string]: string; }}
      * @memberof WorldFull
      */
     gameRules: { [key: string]: string; };
-    /**
-     * The difficulty of the world
-     * @type {CatalogTypeDifficulty}
-     * @memberof WorldFull
-     */
-    difficulty: CatalogTypeDifficulty;
     /**
      * The current weather in the world
      * @type {CatalogTypeWeather}
@@ -11447,11 +11315,11 @@ export interface WorldFull {
      */
     weather: CatalogTypeWeather;
     /**
-     * 
-     * @type {GameMode}
+     * The difficulty of the world
+     * @type {CatalogTypeDifficulty}
      * @memberof WorldFull
      */
-    gameMode?: GameMode;
+    difficulty: CatalogTypeDifficulty;
     /**
      * 
      * @type {number}
@@ -13647,7 +13515,7 @@ export const ChunkApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createChunkAt(world: string, x: number, z: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CachedChunk> {
+        createChunkAt(world: string, x: number, z: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Chunk> {
             const localVarFetchArgs = ChunkApiFetchParamCreator(configuration).createChunkAt(world, x, z, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -13668,7 +13536,7 @@ export const ChunkApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getChunkAt(world: string, x: number, z: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CachedChunk> {
+        getChunkAt(world: string, x: number, z: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Chunk> {
             const localVarFetchArgs = ChunkApiFetchParamCreator(configuration).getChunkAt(world, x, z, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -13687,7 +13555,7 @@ export const ChunkApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listChunks(world: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<CachedChunk>> {
+        listChunks(world: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Chunk>> {
             const localVarFetchArgs = ChunkApiFetchParamCreator(configuration).listChunks(world, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {

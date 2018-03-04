@@ -1,5 +1,5 @@
 import { Action } from "redux"
-import { Error } from "../types"
+import { ResponseError } from "superagent"
 
 export enum TypeKeys {
 	EXECUTE_REQUEST = "EXECUTE_REQUEST",
@@ -26,9 +26,10 @@ export interface ExecuteResponseAction extends Action {
 	ok: boolean
 	command: string
 	result: string[]
-	error?: Error
+	error?: ResponseError
 }
-export function respondExecute(ok: boolean, command: string, result: string[], error?: Error): ExecuteResponseAction {
+export function respondExecute(ok: boolean, command: string, result: string[], error?: ResponseError):
+		ExecuteResponseAction {
 	return {
 		type: TypeKeys.EXECUTE_RESPONSE,
 		ok,

@@ -8,7 +8,7 @@ import { Button, Dropdown, DropdownProps, Form, Header, Icon, Label, Modal, Radi
 import { AppAction, CatalogRequestAction, requestCatalog } from "../../../actions"
 import ItemStack from "../../../components/ItemStack"
 import { handleChange, HandleChangeFunc } from "../../../components/Util"
-import { AppState, DataViewRef } from "../../../types"
+import { AppState, CatalogTypeKeys, DataViewRef } from "../../../types"
 
 import CrateReward from "./CrateReward"
 
@@ -16,8 +16,6 @@ import DataViewFunc from "../../../components/DataView"
 import { CatalogType, HuskyCratesCommandReward, HuskyCratesCrate, HuskyCratesCrateReward,
 	HuskyCratesCrateRewardObject, HuskyCratesItemReward } from "../../../fetch"
 const DataView = DataViewFunc("husky-crates/crate", "id")
-
-const ITEM_TYPES = "item.ItemType"
 
 interface Props extends reactI18Next.InjectedTranslateProps {
 	objectTypes: { value: string, text: string }[]
@@ -33,7 +31,7 @@ interface OwnState {
 	free?: boolean
 	freeDelay?: number
 	crate?: HuskyCratesCrate
-	rewards?: HuskyCratesCrateReward[]
+	rewards: HuskyCratesCrateReward[]
 }
 
 class Crates extends React.Component<Props, OwnState> {
@@ -46,6 +44,7 @@ class Crates extends React.Component<Props, OwnState> {
 
 		this.state = {
 			modal: false,
+			rewards: [],
 		}
 
 		this.toggleModal = this.toggleModal.bind(this)
@@ -61,7 +60,7 @@ class Crates extends React.Component<Props, OwnState> {
 	}
 
 	componentDidMount() {
-		this.props.requestCatalog(ITEM_TYPES)
+		this.props.requestCatalog(CatalogTypeKeys.Item)
 	}
 
 	handleEdit(crate: HuskyCratesCrate, view: DataViewRef<HuskyCratesCrate>) {
@@ -86,7 +85,7 @@ class Crates extends React.Component<Props, OwnState> {
 			type: crate ? crate.type : undefined,
 			free: crate ? crate.free : undefined,
 			freeDelay: crate ? crate.freeDelay : undefined,
-			rewards: crate ? _.map(crate.rewards, r => _.assign({}, r)) : undefined,
+			rewards: crate ? crate.rewards.map(r => _.assign({}, r)) : [],
 		})
 	}
 
@@ -105,7 +104,7 @@ class Crates extends React.Component<Props, OwnState> {
 			_.set(newReward, name, value)
 
 			this.setState({
-				rewards: _.map(this.state.rewards, r => r === reward ? newReward : r)
+				rewards: this.state.rewards.map(r => r === reward ? newReward : r)
 			})
 		}, event, data)
 	}
@@ -133,18 +132,18 @@ class Crates extends React.Component<Props, OwnState> {
 
 	removeReward(reward: HuskyCratesCrateReward) {
 		this.setState({
-			rewards: _.filter(this.state.rewards, r => r !== reward)
+			rewards: this.state.rewards.filter(r => r !== reward)
 		})
 	}
 
 	addRewardObject(reward: HuskyCratesCrateReward, object: HuskyCratesCrateRewardObject) {
 		this.setState({
-			rewards: _.map(this.state.rewards, r => {
+			rewards: this.state.rewards.map(r => {
 				if (r !== reward) {
 					return r
 				}
 				return _.assign({}, reward, {
-					objects: _.concat(reward.objects, object),
+					objects: reward.objects.concat(object),
 				})
 			}),
 		})
@@ -152,12 +151,12 @@ class Crates extends React.Component<Props, OwnState> {
 
 	removeRewardObject(reward: HuskyCratesCrateReward, index: number) {
 		this.setState({
-			rewards: _.map(this.state.rewards, r => {
+			rewards: this.state.rewards.map(r => {
 				if (r !== reward) {
 					return r
 				}
 				return _.assign({}, reward, {
-					objects: _.filter(reward.objects, (__, i) => i !== index),
+					objects: reward.objects.filter((__, i) => i !== index),
 				})
 			}),
 		})
@@ -233,7 +232,7 @@ class Crates extends React.Component<Props, OwnState> {
 		return (
 			<Table compact size="small">
 				<Table.Body>
-					{_.map(crate.rewards, (reward, i) =>
+					{crate.rewards.map((reward, i) =>
 						<Table.Row key={i}>
 							<Table.Cell collapsing>{fmt(reward.chance)}</Table.Cell>
 							<Table.Cell collapsing>{reward.name}</Table.Cell>
@@ -241,7 +240,7 @@ class Crates extends React.Component<Props, OwnState> {
 								{reward.announce && <Icon name="bullhorn" />}
 							</Table.Cell>
 							<Table.Cell>
-								{_.map(reward.objects, (obj: HuskyCratesCrateRewardObject, j: number) => {
+								{reward.objects.map((obj: HuskyCratesCrateRewardObject, j: number) => {
 									if (obj.type === HuskyCratesCrateRewardObject.TypeEnum.COMMAND &&
 											(obj as HuskyCratesCommandReward).command) {
 										return <Label key={j} color="blue">/{(obj as HuskyCratesCommandReward).command}</Label>
@@ -260,9 +259,7 @@ class Crates extends React.Component<Props, OwnState> {
 	}
 
 	renderModal() {
-		let totalChance = _.sum(_.map(this.state.rewards, r => r.chance ? r.chance : 0))
-		const format = (chance: number) => ((chance / totalChance) * 100).toFixed(3) + "%"
-
+		const totalChance = _.sum(this.state.rewards.map(r => r.chance ? r.chance : 0))
 		const _t = this.props.t
 
 		return (
@@ -349,11 +346,11 @@ class Crates extends React.Component<Props, OwnState> {
 								</Table.Row>
 							</Table.Header>
 							<Table.Body>
-								{_.map(this.state.rewards, (reward, i) =>
+								{this.state.rewards.map((reward, i) =>
 									<CrateReward
 										key={i}
 										reward={reward}
-										format={format}
+										totalChance={totalChance}
 										handleRewardChange={this.handleRewardChange}
 										addRewardObject={this.addRewardObject}
 										removeRewardObject={this.removeRewardObject}
@@ -388,7 +385,7 @@ class Crates extends React.Component<Props, OwnState> {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		itemTypes: state.api.types[ITEM_TYPES],
+		itemTypes: state.api.types[CatalogTypeKeys.Item],
 		crateTypes: [{
 			value: "Spinner",
 			text: "Spinner",

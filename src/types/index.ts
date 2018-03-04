@@ -13,7 +13,34 @@ import { PluginState } from "../reducers/plugin"
 import { SettingsState } from "../reducers/settings"
 
 // Lang
-export type Lang = "en" | "de" | "fr" | "ru"
+export enum Lang {
+	EN = "en",
+	DE = "de",
+	FR = "fr",
+	RU = "ru",
+}
+export interface LangEntry {
+	text: string
+	value: Lang
+	flag: string
+}
+export const langArray: LangEntry[] = [{
+	text: "English",
+	value: Lang.EN,
+	flag: "us",
+}, {
+	text: "Deutsch",
+	value: Lang.DE,
+	flag: "de",
+}, {
+	text: "Français",
+	value: Lang.FR,
+	flag: "fr",
+}, {
+	text: "русский",
+	value: Lang.RU,
+	flag: "ru",
+}]
 
 // Reducers
 export interface AppState {
@@ -110,152 +137,22 @@ export interface Server {
 	apiUrl: string
 }
 
-export class Error {
-	status: number
-	error: string
-}
-
 export interface EServerProperty extends ServerProperty {
 	edit?: boolean
 }
 
-/*
-export interface PluginContainer {
-	id: string
-	name: string
-	version: string
+export interface PermissionTree {
+	[x: string]: boolean | string | PermissionTree
 }
 
-export interface CatalogType {
-	id: string
-	name: string
+// CatalogType keys
+export enum CatalogTypeKeys {
+	Block = "block.BlockType",
+	Difficulty = "world.difficulty.Difficulty",
+	Dimension = "world.DimensionType",
+	Entity = "entity.EntityType",
+	GameMode = "entity.living.player.gamemode.GameMode",
+	Generator = "world.GeneratorType",
+	Item = "item.ItemType",
+	TileEntity = "block.tileentity.TileEntityType",
 }
-
-export interface ItemStack {
-	type: CatalogType
-	quantity: number
-	data: ItemData
-}
-
-export interface ItemData {
-	potionEffects?: ItemPotionEffect[]
-	durability?: ItemDurability
-	enchantments?: ItemEnchantment[]
-	spawn?: CatalogType
-	foodRestoration?: number
-	burningFuel?: number
-}
-
-export interface ItemDurability {
-	unbreakable: boolean
-	durability: number
-	useLimit: number
-}
-
-export interface ItemEnchantment extends CatalogType {
-	level: number
-}
-
-export interface ItemPotionEffect extends CatalogType {
-	amplifier: number
-}
-
-export interface Player extends DataObject {
-	uuid: string
-	name: string
-}
-
-export interface ServerProp extends DataObject {
-	key: string
-	value: string
-	edit?: boolean
-}
-
-export interface World extends DataObject {
-	uuid: string
-	name: string
-	dimensionType: CatalogType
-}
-
-export interface BlockState {
-
-}
-
-export enum BlockOpType {
-	GET,
-	CHANGE,
-}
-export enum BlockOpStatus {
-	DONE,
-	PAUSED,
-	ERRORED,
-	RUNNING,
-}
-
-export interface BlockOp extends DataObject {
-	uuid: string
-	type: BlockOpType
-	status: BlockOpStatus
-	estimatedSecondsRemaining: number
-	progress: number
-	error?: string
-	blocks?: BlockState[][][]
-}
-
-export interface ChatMessage extends DataObject {
-	timestamp: number
-	message: string
-	sender: Player
-}
-
-export interface Command extends DataObject {
-	name: string
-	description: string
-	usage: string
-}
-
-export interface CommandCall extends DataObject {
-	timestamp: number
-	command: string
-	args: string
-	cause: Cause
-}
-
-export interface Cause {
-	causes: any[]
-	source: any
-}
-
-export interface Entity extends DataObject {
-	uuid: string
-	type: CatalogType
-	location: Location
-	health?: {
-		current: number
-		max: number
-	}
-	aiEnabled?: boolean
-	age?: {
-		adult: boolean
-		age: number
-	}
-	breedable?: boolean
-	career?: CatalogType
-	flying: boolean
-	glowing: boolean
-	silent: boolean
-	sneaking: boolean
-	sprinting: boolean
-}
-
-export interface Vector3 {
-	x: number
-	y: number
-	z: number
-}
-
-export interface Location {
-	world: World
-	position: Vector3
-}
-*/

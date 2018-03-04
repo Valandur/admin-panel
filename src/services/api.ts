@@ -14,58 +14,16 @@ import { respondPluginConfig, respondPluginConfigSave, TypeKeys as PluginTypeKey
 import { respondSaveProperty, TypeKeys as SettingTypeKeys } from "../actions/settings"
 
 import { ExecuteMethodParam } from "../fetch"
-import { AppState, Error, ExtendedMiddleware } from "../types"
-
-const call = (state: AppState, dispatch: Dispatch<Action>) => (method: string) => (
-	path: string,
-	callback: (body: any | null, error?: Error) => void,
-	data?: object | null,
-	handleErrors: boolean = true) => {
-
-	const url = state.api.server.apiUrl + "/api/v5/" + path +
-		(path.indexOf("?") >= 0 ? "&" : "?") + (state.api.key ? "key=" + state.api.key : "")
-	const req = request(method, url)
-		.timeout({ response: 3000, deadline: 30000 })
-
-	if (data) {
-		req.send(data)
-	}
-
-	req.end((err: request.ResponseError, res: request.Response) => {
-		if (!res) {
-			if (handleErrors) {
-				dispatch(showNotification("error", "API Error", err.text))
-			} else {
-				callback(null, { status: err.status, error: err.text })
-			}
-			return
-		}
-
-		if (res.status === 200 || res.status === 201) {
-			callback(res.body)
-			return
-		}
-
-		if (handleErrors) {
-			dispatch(showNotification("error", "API Error", res.text))
-			return
-		}
-
-		callback(null, { status: res.status, error: res.body ? res.body.error : res.text })
-	})
-}
+import { AppState, ExtendedMiddleware } from "../types"
 
 const api: ExtendedMiddleware<AppState> = ({ getState, dispatch }: MiddlewareAPI<AppState>) =>
 		(next: Dispatch<Action>) => (action: AppAction): any => {
 	next(action)
 
 	const state = getState()
-	const callTemp = call(state, dispatch)
 
-	const get = callTemp("GET")
-	const post = callTemp("POST")
-	const put = callTemp("PUT")
-	const del = callTemp("DELETE")
+	const makeUrl = (path: string) => state.api.server.apiUrl + "/api/v5/" + path +
+		(path.indexOf("?") >= 0 ? "&" : "?") + (state.api.key ? "key=" + state.api.key : "")
 
 	const errorHandler = (err: Response) => dispatch(showNotification("error", "API Error", err.statusText))
 
@@ -161,7 +119,7 @@ const api: ExtendedMiddleware<AppState> = ({ getState, dispatch }: MiddlewareAPI
 
 		case PluginTypeKeys.CONFIG_REQUEST:
 			state.api.apis.plugin.getPluginConfig(action.id)
-				.then(configs => respondPluginConfig(configs))
+				.then(configs => next(respondPluginConfig(configs)))
 				.catch(errorHandler)
 			break
 
@@ -192,57 +150,35 @@ const api: ExtendedMiddleware<AppState> = ({ getState, dispatch }: MiddlewareAPI
 			break
 
 		case DataViewTypeKeys.LIST_REQUEST:
-			get(action.endpoint + (action.details ? "?details" : ""), (data, err) => {
-				if (err) {
-					next(respondList(action.endpoint, undefined, err))
-					return
-				}
-
-				next(respondList(action.endpoint, data))
-			}, null, false)
+			request.get(makeUrl(action.endpoint + (action.details ? "?details" : "")))
+				.then(resp => next(respondList(action.endpoint, resp.body)))
+				.catch(err => next(respondList(action.endpoint, undefined, err)))
 			break
 
 		case DataViewTypeKeys.DETAILS_REQUEST:
-			get(action.endpoint + "/" + action.id(action.data), (data, err) => {
-				if (err) {
-					next(respondDetails(action.endpoint, action.id, action.data, err))
-				}
-
-				next(respondDetails(action.endpoint, action.id, data))
-			})
+			request.get(makeUrl(action.endpoint + "/" + action.id(action.data)))
+				.then(resp => next(respondDetails(action.endpoint, action.id, resp.body)))
+				.catch(err => next(respondDetails(action.endpoint, action.id, action.data, err)))
 			break
 
 		case DataViewTypeKeys.CREATE_REQUEST:
-			post(action.endpoint, (data, err) => {
-				if (err) {
-					next(respondCreate(action.endpoint, action.id, undefined, err))
-					return
-				}
-
-				next(respondCreate(action.endpoint, action.id, data))
-			}, action.data, false)
+			request.post(makeUrl(action.endpoint))
+				.send(action.data)
+				.then(resp => next(respondCreate(action.endpoint, action.id, resp.body)))
+				.catch(err => next(respondCreate(action.endpoint, action.id, undefined, err)))
 			break
 
 		case DataViewTypeKeys.CHANGE_REQUEST:
-			put(action.endpoint + "/" + action.id(action.data), (data, err) => {
-				if (err) {
-					next(respondChange(action.endpoint, action.id, action.data, err))
-					return
-				}
-
-				next(respondChange(action.endpoint, action.id, data))
-			}, action.newData, false)
+			request.put(makeUrl(action.endpoint + "/" + action.id(action.data)))
+				.send(action.newData)
+				.then(resp => next(respondChange(action.endpoint, action.id, resp.body)))
+				.catch(err => next(respondChange(action.endpoint, action.id, action.data, err)))
 			break
 
 		case DataViewTypeKeys.DELETE_REQUEST:
-			del(action.endpoint + "/" + action.id(action.data), (data, err) => {
-				if (err) {
-					next(respondDelete(action.endpoint, action.id, action.data, err))
-					return
-				}
-
-				next(respondDelete(action.endpoint, action.id, data))
-			}, null, false)
+			request.delete(makeUrl(action.endpoint + "/" + action.id(action.data)))
+				.then(resp => next(respondDelete(action.endpoint, action.id, resp.body)))
+				.catch(err => next(respondDelete(action.endpoint, action.id, action.data, err)))
 			break
 
 		default:

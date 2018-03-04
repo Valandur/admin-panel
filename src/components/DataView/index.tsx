@@ -5,7 +5,7 @@ import { Dispatch } from "redux"
 import { Grid, Segment } from "semantic-ui-react"
 
 import CreateForm from "../CreateForm"
-import DataTable, { DataTableProps } from "../DataTable"
+import DataTable, { Props as DataTableProps } from "../DataTable"
 import FilterForm from "../FilterForm"
 import { checkPermissions } from "../Util"
 
@@ -54,6 +54,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 	shouldComponentUpdate(nextProps: FullProps<T>, nextState: OwnState<T>) {
 		return nextProps.creating !== this.props.creating ||
 			nextProps.filter !== this.props.filter ||
+			nextProps.fields !== this.props.fields ||
 			nextProps.list !== this.props.list ||
 			nextState.data !== this.state.data
 	}

@@ -1,4 +1,3 @@
-import * as _ from "lodash"
 import * as React from "react"
 import { translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
@@ -8,7 +7,7 @@ import { Button, Dropdown, DropdownProps, Form, Grid, Image, Segment } from "sem
 import { AppAction, changeLanguage, ChangeLanguageAction, changeServer, ChangeServerAction,
 	LoginRequestAction, requestLogin } from "../../actions"
 import { handleChange, HandleChangeFunc } from "../../components/Util"
-import { AppState, Lang, Server } from "../../types"
+import { AppState, Lang, langArray, Server } from "../../types"
 
 const imageUrl = require("../../assets/logo.png")
 
@@ -53,7 +52,7 @@ class Login extends React.Component<Props, OwnState> {
 
 	handleChangeServer(key: string, value: string) {
 		if (key === "server") {
-			const server = _.find(this.props.servers, { apiUrl: value })
+			const server = this.props.servers.find(s => s.apiUrl === value)
 			if (server == null) {
 				return
 			}
@@ -94,30 +93,17 @@ class Login extends React.Component<Props, OwnState> {
 									name="server"
 									control={Dropdown}
 									placeholder={_t("Server")}
-									value={this.props.server ? this.props.server.apiUrl : null}
+									value={this.props.server ? this.props.server.apiUrl : undefined}
 									onChange={this.handleChange}
-									options={_.map(this.props.servers, s => ({ value: s.apiUrl, text: s.name }))}
+									options={this.props.servers.map(s => ({ value: s.apiUrl, text: s.name }))}
 								/>
 							: null}
 
 							<Form.Field
 								selection
 								control={Dropdown}
-								placeholder="Change language"
-								options={[{
-
-									value: "en",
-									flag: "us",
-									text: "English",
-								}, {
-									text: "Deutsch",
-									value: "de",
-									flag: "de",
-								}, {
-									text: "русский",
-									value: "ru",
-									flag: "ru",
-								}]}
+								placeholder={_t("ChangeLanguage")}
+								options={langArray}
 								value={this.props.lang}
 								onChange={(e: Event, data: DropdownProps) => this.props.changeLanguage(data.value as string)}
 							/>

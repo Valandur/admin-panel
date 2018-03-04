@@ -4,7 +4,6 @@ import { PluginContainer } from "../fetch"
 export enum TypeKeys {
 	CONFIG_REQUEST = "PLUGIN_CONFIG_REQUEST",
 	CONFIG_RESPONSE = "PLUGIN_CONFIG_RESPONSE",
-	CONFIG_SET = "PLUGIN_CONFIG_SET",
 	CONFIG_SAVE_REQUEST = "PLUGIN_CONFIG_SAVE_REQUEST",
 	CONFIG_SAVE_RESPONSE = "PLUGIN_CONFIG_SAVE_RESPONSE",
 }
@@ -30,19 +29,6 @@ export function respondPluginConfig(configs: { [x: string]: any }): PluginConfig
 	return {
 		type: TypeKeys.CONFIG_RESPONSE,
 		configs,
-	}
-}
-
-export interface SetPluginConfigAction extends Action {
-	type: TypeKeys.CONFIG_SET
-	name: string
-	conf: any
-}
-export function setPluginConfig(name: string, conf: any): SetPluginConfigAction {
-	return {
-		type: TypeKeys.CONFIG_SET,
-		name: name,
-		conf: conf,
 	}
 }
 
@@ -77,5 +63,5 @@ export function respondPluginConfigSave(configs: { [x: string]: any }): PluginCo
 	}
 }
 
-export type PluginAction = PluginConfigRequestAction | PluginConfigResponseAction | SetPluginConfigAction |
+export type PluginAction = PluginConfigRequestAction | PluginConfigResponseAction |
 	PluginConfigSaveRequestAction | PluginConfigSaveResponseAction

@@ -1,6 +1,9 @@
 export default {
 	WIPTitle: "Work in progress!",
-	WIPText: "The Web-API AdminPanel is still a work in progress, and not all of it's functionality has been fully implemented yet. This means there may be bugs and other issues when using the AdminPanel!<1 />Please report any bugs you find <3>over on github</3>",
+	WIPText: `The Web-API AdminPanel is still a work in progress,
+		and not all of it's functionality has been fully implemented yet.
+		This means there may be bugs and other issues when using the AdminPanel!<1 />
+		Please report any bugs you find <3>over on github</3>`,
 	PlayersOnline: "Online players",
 	CurrentTPS: "Current TPS",
 	UptimeTicks: "Uptime ticks",
