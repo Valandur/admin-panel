@@ -1,6 +1,7 @@
 import { createBrowserHistory } from "history"
 import * as createRavenMiddleware from "raven-for-redux"
 import * as Raven from "raven-js"
+import "rc-slider/assets/index.css"
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 import * as NotificationSystem from "react-notification-system"
@@ -10,25 +11,15 @@ import { ConnectedRouter, routerMiddleware } from "react-router-redux"
 import { applyMiddleware, compose, createStore } from "redux"
 import { Message, Segment } from "semantic-ui-react"
 
+import { requestCheckUser } from "./actions"
+import { saveNotifRef } from "./actions/notification"
+import Full from "./containers/Full/"
+import Login from "./containers/Login"
 import "./locales/i18n"
-
-// CSS
-import "rc-slider/assets/index.css"
-import "react-select/dist/react-select.css"
-
-// Redux
 import App from "./reducers"
 import api from "./services/api"
 import notification from "./services/notification"
 import persist from "./services/persist"
-
-// Containers
-import Full from "./containers/Full/"
-import Login from "./containers/Login"
-
-// Actions
-import { requestCheckUser } from "./actions"
-import { saveNotifRef } from "./actions/notification"
 import { AppState, Server } from "./types"
 
 const pkg = require("../package.json")

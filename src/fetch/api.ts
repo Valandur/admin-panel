@@ -802,38 +802,6 @@ export interface Cause {
 /**
  * 
  * @export
- * @interface ChatMessage
- */
-export interface ChatMessage {
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof ChatMessage
-     */
-    link: string;
-    /**
-     * The content of the message
-     * @type {string}
-     * @memberof ChatMessage
-     */
-    message: string;
-    /**
-     * The sender of the message
-     * @type {Player}
-     * @memberof ChatMessage
-     */
-    sender: Player;
-    /**
-     * The timestamp at which the chat message was sent
-     * @type {number}
-     * @memberof ChatMessage
-     */
-    timestamp: number;
-}
-
-/**
- * 
- * @export
  * @interface Chunk
  */
 export interface Chunk {
@@ -1200,10 +1168,10 @@ export interface CreateWorldRequest {
     allowCommands?: boolean;
     /**
      * Which difficulty the world is set to
-     * @type {string}
+     * @type {CatalogType}
      * @memberof CreateWorldRequest
      */
-    difficulty?: string;
+    difficulty?: CatalogType;
     /**
      * The the dimension that this world belongs to
      * @type {string}
@@ -1212,16 +1180,16 @@ export interface CreateWorldRequest {
     dimension?: string;
     /**
      * Which game mode the world defaults to
-     * @type {string}
+     * @type {GameMode}
      * @memberof CreateWorldRequest
      */
-    gameMode?: string;
+    gameMode?: GameMode;
     /**
      * Which generator to use for the world
-     * @type {string}
+     * @type {CatalogType}
      * @memberof CreateWorldRequest
      */
-    generator?: string;
+    generator?: CatalogType;
     /**
      * 
      * @type {boolean}
@@ -1475,6 +1443,24 @@ export interface Entity {
      */
     type: CatalogType;
     /**
+     * The current scale of the entity
+     * @type {Vector3d}
+     * @memberof Entity
+     */
+    scale: Vector3d;
+    /**
+     * The current rotation of the entity
+     * @type {Vector3d}
+     * @memberof Entity
+     */
+    rotation: Vector3d;
+    /**
+     * The current velocity of the entity
+     * @type {Vector3d}
+     * @memberof Entity
+     */
+    velocity: Vector3d;
+    /**
      * The unique UUID of the entity
      * @type {string}
      * @memberof Entity
@@ -1486,24 +1472,6 @@ export interface Entity {
      * @memberof Entity
      */
     inventory?: Inventory;
-    /**
-     * The current rotation of the entity
-     * @type {Vector3d}
-     * @memberof Entity
-     */
-    rotation: Vector3d;
-    /**
-     * The current scale of the entity
-     * @type {Vector3d}
-     * @memberof Entity
-     */
-    scale: Vector3d;
-    /**
-     * The current velocity of the entity
-     * @type {Vector3d}
-     * @memberof Entity
-     */
-    velocity: Vector3d;
     /**
      * The API link that can be used to obtain more information about this object
      * @type {string}
@@ -2328,10 +2296,10 @@ export interface Entity {
     stairShape?: CatalogType;
     /**
      * 
-     * @type {{ [key: string]: number; }}
+     * @type {Array&lt;Stat&gt;}
      * @memberof Entity
      */
-    statistics?: { [key: string]: number; };
+    statistics?: Array<Stat>;
     /**
      * 
      * @type {CatalogType}
@@ -3938,10 +3906,10 @@ export interface FluidStack {
     stairShape?: CatalogType;
     /**
      * 
-     * @type {{ [key: string]: number; }}
+     * @type {Array&lt;Stat&gt;}
      * @memberof FluidStack
      */
-    statistics?: { [key: string]: number; };
+    statistics?: Array<Stat>;
     /**
      * 
      * @type {CatalogType}
@@ -4932,6 +4900,82 @@ export interface InlineResponse501 {
 /**
  * 
  * @export
+ * @interface InteractiveMessage
+ */
+export interface InteractiveMessage {
+    /**
+     * The id of the message. Used for sender of the message to identify responses.
+     * @type {string}
+     * @memberof InteractiveMessage
+     */
+    id: string;
+    /**
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
+     * @memberof InteractiveMessage
+     */
+    link: string;
+    /**
+     * The target of the message, usually this is a player UUID
+     * @type {string}
+     * @memberof InteractiveMessage
+     */
+    target: string;
+    /**
+     * The unique UUID of this message
+     * @type {string}
+     * @memberof InteractiveMessage
+     */
+    uuid: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InteractiveMessage
+     */
+    message?: string;
+    /**
+     * True if this message can only be replied to once per target, false otherwise
+     * @type {boolean}
+     * @memberof InteractiveMessage
+     */
+    once?: boolean;
+    /**
+     * Clickable options that the player can select from
+     * @type {Array&lt;InteractiveMessageOption&gt;}
+     * @memberof InteractiveMessage
+     */
+    options?: Array<InteractiveMessageOption>;
+    /**
+     * A list of targets that will receive the message. Usually a list of player UUIDs
+     * @type {Array&lt;string&gt;}
+     * @memberof InteractiveMessage
+     */
+    targets?: Array<string>;
+}
+
+/**
+ * 
+ * @export
+ * @interface InteractiveMessageOption
+ */
+export interface InteractiveMessageOption {
+    /**
+     * The key of the option (this is sent to the webhook)
+     * @type {string}
+     * @memberof InteractiveMessageOption
+     */
+    key: string;
+    /**
+     * The value of the option (this is displayed to the player)
+     * @type {string}
+     * @memberof InteractiveMessageOption
+     */
+    value: string;
+}
+
+/**
+ * 
+ * @export
  * @interface Inventory
  */
 export interface Inventory {
@@ -4948,11 +4992,11 @@ export interface Inventory {
      */
     type: CatalogType;
     /**
-     * Gets a list of item stacks in the inventory
-     * @type {Array&lt;ItemStack&gt;}
+     * The maximum capacity of the inventory (maximum number of stacks)
+     * @type {number}
      * @memberof Inventory
      */
-    itemStacks: Array<ItemStack>;
+    capacity: number;
     /**
      * The total amount of items currently in the inventory
      * @type {number}
@@ -4960,11 +5004,11 @@ export interface Inventory {
      */
     totalItems: number;
     /**
-     * The maximum capacity of the inventory (maximum number of stacks)
-     * @type {number}
+     * Gets a list of item stacks in the inventory
+     * @type {Array&lt;ItemStack&gt;}
      * @memberof Inventory
      */
-    capacity: number;
+    itemStacks: Array<ItemStack>;
     /**
      * The API link that can be used to obtain more information about this object
      * @type {string}
@@ -6011,10 +6055,10 @@ export interface ItemStack {
     stairShape?: CatalogType;
     /**
      * 
-     * @type {{ [key: string]: number; }}
+     * @type {Array&lt;Stat&gt;}
      * @memberof ItemStack
      */
-    statistics?: { [key: string]: number; };
+    statistics?: Array<Stat>;
     /**
      * 
      * @type {CatalogType}
@@ -6668,11 +6712,11 @@ export namespace MMCTicketsTicket {
  */
 export interface Message {
     /**
-     * The id of the message. Used for sender of the message to identify responses.
+     * The content of the message
      * @type {string}
      * @memberof Message
      */
-    id: string;
+    content: string;
     /**
      * The API link that can be used to obtain more information about this object
      * @type {string}
@@ -6680,61 +6724,17 @@ export interface Message {
      */
     link: string;
     /**
-     * The target of the message, usually this is a player UUID
-     * @type {string}
+     * The receivers of this message
+     * @type {Array&lt;any&gt;}
      * @memberof Message
      */
-    target: string;
+    receivers: Array<any>;
     /**
-     * The unique UUID of this message
-     * @type {string}
+     * The timestamp at which the chat message was sent
+     * @type {number}
      * @memberof Message
      */
-    uuid: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Message
-     */
-    message?: string;
-    /**
-     * True if this message can only be replied to once per target, false otherwise
-     * @type {boolean}
-     * @memberof Message
-     */
-    once?: boolean;
-    /**
-     * Clickable options that the player can select from
-     * @type {Array&lt;MessageOption&gt;}
-     * @memberof Message
-     */
-    options?: Array<MessageOption>;
-    /**
-     * A list of targets that will receive the message. Usually a list of player UUIDs
-     * @type {Array&lt;string&gt;}
-     * @memberof Message
-     */
-    targets?: Array<string>;
-}
-
-/**
- * 
- * @export
- * @interface MessageOption
- */
-export interface MessageOption {
-    /**
-     * The key of the option (this is sent to the webhook)
-     * @type {string}
-     * @memberof MessageOption
-     */
-    key: string;
-    /**
-     * The value of the option (this is displayed to the player)
-     * @type {string}
-     * @memberof MessageOption
-     */
-    value: string;
+    timestamp: number;
 }
 
 /**
@@ -7693,6 +7693,26 @@ export namespace SlotSide {
 /**
  * 
  * @export
+ * @interface Stat
+ */
+export interface Stat {
+    /**
+     * 
+     * @type {string}
+     * @memberof Stat
+     */
+    stat?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Stat
+     */
+    value?: number;
+}
+
+/**
+ * 
+ * @export
  * @interface StructureData
  */
 export interface StructureData {
@@ -7771,17 +7791,17 @@ export interface Subject {
      */
     id: string;
     /**
-     * The permissions that are assigned to this subject
-     * @type {{ [key: string]: boolean; }}
-     * @memberof Subject
-     */
-    permissions: { [key: string]: boolean; };
-    /**
      * The friendly id of this subject (often a 'name'
      * @type {string}
      * @memberof Subject
      */
     friendlyId?: string;
+    /**
+     * The permissions that are assigned to this subject
+     * @type {{ [key: string]: boolean; }}
+     * @memberof Subject
+     */
+    permissions?: { [key: string]: boolean; };
 }
 
 /**
@@ -8700,10 +8720,10 @@ export interface TileEntity {
     stairShape?: CatalogType;
     /**
      * 
-     * @type {{ [key: string]: number; }}
+     * @type {Array&lt;Stat&gt;}
      * @memberof TileEntity
      */
-    statistics?: { [key: string]: number; };
+    statistics?: Array<Stat>;
     /**
      * 
      * @type {CatalogType}
@@ -9437,16 +9457,16 @@ export interface UpdateWorldRequest {
     allowCommands?: boolean;
     /**
      * Which difficulty the world is set to
-     * @type {string}
+     * @type {CatalogType}
      * @memberof UpdateWorldRequest
      */
-    difficulty?: string;
+    difficulty?: CatalogType;
     /**
      * Which game mode the world defaults to
-     * @type {string}
+     * @type {GameMode}
      * @memberof UpdateWorldRequest
      */
-    gameMode?: string;
+    gameMode?: GameMode;
     /**
      * The game rule settings of this world
      * @type {{ [key: string]: string; }}
@@ -9455,10 +9475,10 @@ export interface UpdateWorldRequest {
     gameRules?: { [key: string]: string; };
     /**
      * Which generator to use for the world
-     * @type {string}
+     * @type {CatalogType}
      * @memberof UpdateWorldRequest
      */
-    generator?: string;
+    generator?: CatalogType;
     /**
      * 
      * @type {boolean}
@@ -9570,13 +9590,13 @@ export interface Vector2i {
      * @type {number}
      * @memberof Vector2i
      */
-    minAxis?: number;
+    maxAxis?: number;
     /**
      * 
      * @type {number}
      * @memberof Vector2i
      */
-    maxAxis?: number;
+    minAxis?: number;
 }
 
 /**
@@ -9760,17 +9780,41 @@ export interface World {
  */
 export interface WorldBorder {
     /**
+     * The maximum amount of damage done to a player
+     * @type {number}
+     * @memberof WorldBorder
+     */
+    damageThreshold: number;
+    /**
      * The amount of distance from the border a player will receive a warning at
      * @type {number}
      * @memberof WorldBorder
      */
     warningDistance: number;
     /**
-     * The maximum amount of damage done to a player
+     * The center of the world border
+     * @type {Vector3d}
+     * @memberof WorldBorder
+     */
+    center: Vector3d;
+    /**
+     * The amount of time near a border before a warning is shown for players
      * @type {number}
      * @memberof WorldBorder
      */
-    damageThreshold: number;
+    warningTime: number;
+    /**
+     * The amount of damage done to players outside the border
+     * @type {number}
+     * @memberof WorldBorder
+     */
+    damageAmount: number;
+    /**
+     * The diameter of the border
+     * @type {number}
+     * @memberof WorldBorder
+     */
+    diameter: number;
     /**
      * The time remaining until the border reaches it's new size
      * @type {number}
@@ -9784,35 +9828,49 @@ export interface WorldBorder {
      */
     newDiameter: number;
     /**
-     * The amount of time near a border before a warning is shown for players
-     * @type {number}
-     * @memberof WorldBorder
-     */
-    warningTime: number;
-    /**
-     * The diameter of the border
-     * @type {number}
-     * @memberof WorldBorder
-     */
-    diameter: number;
-    /**
-     * The center of the world border
-     * @type {Vector3d}
-     * @memberof WorldBorder
-     */
-    center: Vector3d;
-    /**
-     * The amount of damage done to players outside the border
-     * @type {number}
-     * @memberof WorldBorder
-     */
-    damageAmount: number;
-    /**
      * The API link that can be used to obtain more information about this object
      * @type {string}
      * @memberof WorldBorder
      */
     link: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface ChatMessage
+ */
+export interface ChatMessage {
+    /**
+     * The content of the message
+     * @type {string}
+     * @memberof ChatMessage
+     */
+    content: string;
+    /**
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
+     * @memberof ChatMessage
+     */
+    link: string;
+    /**
+     * The receivers of this message
+     * @type {Array&lt;any&gt;}
+     * @memberof ChatMessage
+     */
+    receivers: Array<any>;
+    /**
+     * The timestamp at which the chat message was sent
+     * @type {number}
+     * @memberof ChatMessage
+     */
+    timestamp: number;
+    /**
+     * The sender of the message
+     * @type {Player}
+     * @memberof ChatMessage
+     */
+    sender: Player;
 }
 
 /**
@@ -9900,53 +9958,11 @@ export interface PlayerFull {
      */
     location: Location;
     /**
-     * A list of all unlocked advancements of this player
-     * @type {Array&lt;Advancement&gt;}
-     * @memberof PlayerFull
-     */
-    unlockedAdvancements: Array<Advancement>;
-    /**
      * The latency (in milliseconds) of the player
      * @type {number}
      * @memberof PlayerFull
      */
     latency: number;
-    /**
-     * The item stack that the player is wearing as leggings
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    leggings?: ItemStack;
-    /**
-     * The item stack that the player is wearing as boots
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    boots?: ItemStack;
-    /**
-     * The item stack that the player is wearing as a helmet
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    helmet?: ItemStack;
-    /**
-     * The item stack that the player is wearing as chestplate
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    chestplate?: ItemStack;
-    /**
-     * 
-     * @type {Inventory}
-     * @memberof PlayerFull
-     */
-    inventory?: Inventory;
-    /**
-     * The current rotation of the player
-     * @type {Vector3d}
-     * @memberof PlayerFull
-     */
-    rotation: Vector3d;
     /**
      * The current scale of the player
      * @type {Vector3d}
@@ -9954,11 +9970,53 @@ export interface PlayerFull {
      */
     scale: Vector3d;
     /**
+     * The current rotation of the player
+     * @type {Vector3d}
+     * @memberof PlayerFull
+     */
+    rotation: Vector3d;
+    /**
      * The current velocity of the player
      * @type {Vector3d}
      * @memberof PlayerFull
      */
     velocity: Vector3d;
+    /**
+     * A list of all unlocked advancements of this player
+     * @type {Array&lt;Advancement&gt;}
+     * @memberof PlayerFull
+     */
+    unlockedAdvancements: Array<Advancement>;
+    /**
+     * The item stack that the player is wearing as chestplate
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    chestplate?: ItemStack;
+    /**
+     * The item stack that the player is wearing as boots
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    boots?: ItemStack;
+    /**
+     * The item stack that the player is wearing as leggings
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    leggings?: ItemStack;
+    /**
+     * The item stack that the player is wearing as a helmet
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    helmet?: ItemStack;
+    /**
+     * 
+     * @type {Inventory}
+     * @memberof PlayerFull
+     */
+    inventory?: Inventory;
     /**
      * 
      * @type {number}
@@ -10777,10 +10835,10 @@ export interface PlayerFull {
     stairShape?: CatalogType;
     /**
      * 
-     * @type {{ [key: string]: number; }}
+     * @type {Array&lt;Stat&gt;}
      * @memberof PlayerFull
      */
-    statistics?: { [key: string]: number; };
+    statistics?: Array<Stat>;
     /**
      * 
      * @type {CatalogType}
@@ -11237,65 +11295,11 @@ export interface WorldFull {
      */
     time: number;
     /**
-     * True if bonus chests are generated for this world, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    generateBonusChests: boolean;
-    /**
-     * True if map specific features are enabled for this world, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    mapFeaturesEnabled: boolean;
-    /**
-     * True if the spawn of this world is always kept loaded, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    keepSpawnLoaded: boolean;
-    /**
-     * True if commands are allowed to be executed in this world, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    allowCommands: boolean;
-    /**
-     * True if this world is loaded when the server starts, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    loadOnStartup: boolean;
-    /**
      * The seed of the world
      * @type {number}
      * @memberof WorldFull
      */
     seed: number;
-    /**
-     * The border of the world
-     * @type {WorldBorder}
-     * @memberof WorldFull
-     */
-    border: WorldBorder;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    spawn?: CatalogType;
-    /**
-     * The dimension of the world
-     * @type {CatalogTypeDimensionType}
-     * @memberof WorldFull
-     */
-    dimensionType: CatalogTypeDimensionType;
-    /**
-     * The generator type used for this world
-     * @type {CatalogTypeGeneratorType}
-     * @memberof WorldFull
-     */
-    generatorType: CatalogTypeGeneratorType;
     /**
      * 
      * @type {GameMode}
@@ -11303,11 +11307,41 @@ export interface WorldFull {
      */
     gameMode?: GameMode;
     /**
-     * A map of world rule names to values
-     * @type {{ [key: string]: string; }}
+     * The generator type used for this world
+     * @type {CatalogTypeGeneratorType}
      * @memberof WorldFull
      */
-    gameRules: { [key: string]: string; };
+    generatorType: CatalogTypeGeneratorType;
+    /**
+     * True if this world is loaded when the server starts, false otherwise
+     * @type {boolean}
+     * @memberof WorldFull
+     */
+    loadOnStartup: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof WorldFull
+     */
+    spawn?: CatalogType;
+    /**
+     * The border of the world
+     * @type {WorldBorder}
+     * @memberof WorldFull
+     */
+    border: WorldBorder;
+    /**
+     * True if commands are allowed to be executed in this world, false otherwise
+     * @type {boolean}
+     * @memberof WorldFull
+     */
+    allowCommands: boolean;
+    /**
+     * The dimension of the world
+     * @type {CatalogTypeDimensionType}
+     * @memberof WorldFull
+     */
+    dimensionType: CatalogTypeDimensionType;
     /**
      * The current weather in the world
      * @type {CatalogTypeWeather}
@@ -11320,6 +11354,30 @@ export interface WorldFull {
      * @memberof WorldFull
      */
     difficulty: CatalogTypeDifficulty;
+    /**
+     * A map of world rule names to values
+     * @type {{ [key: string]: string; }}
+     * @memberof WorldFull
+     */
+    gameRules: { [key: string]: string; };
+    /**
+     * True if the spawn of this world is always kept loaded, false otherwise
+     * @type {boolean}
+     * @memberof WorldFull
+     */
+    keepSpawnLoaded: boolean;
+    /**
+     * True if bonus chests are generated for this world, false otherwise
+     * @type {boolean}
+     * @memberof WorldFull
+     */
+    generateBonusChests: boolean;
+    /**
+     * True if map specific features are enabled for this world, false otherwise
+     * @type {boolean}
+     * @memberof WorldFull
+     */
+    mapFeaturesEnabled: boolean;
     /**
      * 
      * @type {number}
@@ -12132,10 +12190,10 @@ export interface WorldFull {
     stairShape?: CatalogType;
     /**
      * 
-     * @type {{ [key: string]: number; }}
+     * @type {Array&lt;Stat&gt;}
      * @memberof WorldFull
      */
-    statistics?: { [key: string]: number; };
+    statistics?: Array<Stat>;
     /**
      * 
      * @type {CatalogType}
@@ -12565,10 +12623,13 @@ export const ActiveTimeApiFetchParamCreator = function (configuration?: Configur
         /**
          * Generates a report for the whole server from week ago until now     **Required permissions:**    - **active-time.report.server**   
          * @summary Server report
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getServerReport(options: any = {}): FetchArgs {
+        getServerReport(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/active-time`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -12591,6 +12652,18 @@ export const ActiveTimeApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -12605,10 +12678,13 @@ export const ActiveTimeApiFetchParamCreator = function (configuration?: Configur
          * Generates a report for a specific user from a week ago until now     **Required permissions:**    - **active-time.report.user**   
          * @summary User report
          * @param {string} uuid 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserReport(uuid: string, options: any = {}): FetchArgs {
+        getUserReport(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'uuid' is not null or undefined
             if (uuid === null || uuid === undefined) {
                 throw new RequiredError('uuid','Required parameter uuid was null or undefined when calling getUserReport.');
@@ -12636,6 +12712,18 @@ export const ActiveTimeApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -12658,11 +12746,14 @@ export const ActiveTimeApiFp = function(configuration?: Configuration) {
         /**
          * Generates a report for the whole server from week ago until now     **Required permissions:**    - **active-time.report.server**   
          * @summary Server report
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getServerReport(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ServerReport> {
-            const localVarFetchArgs = ActiveTimeApiFetchParamCreator(configuration).getServerReport(options);
+        getServerReport(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ServerReport> {
+            const localVarFetchArgs = ActiveTimeApiFetchParamCreator(configuration).getServerReport(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -12677,11 +12768,14 @@ export const ActiveTimeApiFp = function(configuration?: Configuration) {
          * Generates a report for a specific user from a week ago until now     **Required permissions:**    - **active-time.report.user**   
          * @summary User report
          * @param {string} uuid 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserReport(uuid: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UserReport> {
-            const localVarFetchArgs = ActiveTimeApiFetchParamCreator(configuration).getUserReport(uuid, options);
+        getUserReport(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UserReport> {
+            const localVarFetchArgs = ActiveTimeApiFetchParamCreator(configuration).getUserReport(uuid, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -12704,21 +12798,27 @@ export const ActiveTimeApiFactory = function (configuration?: Configuration, fet
         /**
          * Generates a report for the whole server from week ago until now     **Required permissions:**    - **active-time.report.server**   
          * @summary Server report
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getServerReport(options?: any) {
-            return ActiveTimeApiFp(configuration).getServerReport(options)(fetch, basePath);
+        getServerReport(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return ActiveTimeApiFp(configuration).getServerReport(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Generates a report for a specific user from a week ago until now     **Required permissions:**    - **active-time.report.user**   
          * @summary User report
          * @param {string} uuid 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserReport(uuid: string, options?: any) {
-            return ActiveTimeApiFp(configuration).getUserReport(uuid, options)(fetch, basePath);
+        getUserReport(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return ActiveTimeApiFp(configuration).getUserReport(uuid, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -12733,24 +12833,30 @@ export class ActiveTimeApi extends BaseAPI {
     /**
      * Generates a report for the whole server from week ago until now     **Required permissions:**    - **active-time.report.server**   
      * @summary Server report
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ActiveTimeApi
      */
-    public getServerReport(options?: any) {
-        return ActiveTimeApiFp(this.configuration).getServerReport(options)(this.fetch, this.basePath);
+    public getServerReport(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return ActiveTimeApiFp(this.configuration).getServerReport(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Generates a report for a specific user from a week ago until now     **Required permissions:**    - **active-time.report.user**   
      * @summary User report
      * @param {} uuid 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ActiveTimeApi
      */
-    public getUserReport(uuid: string, options?: any) {
-        return ActiveTimeApiFp(this.configuration).getUserReport(uuid, options)(this.fetch, this.basePath);
+    public getUserReport(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return ActiveTimeApiFp(this.configuration).getUserReport(uuid, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -12765,10 +12871,13 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
          * Start a request to get or change blocks on the server.     **Required permissions:**    - **block.op.create**   
          * @summary Create a block operation
          * @param {CreateBlockOperationRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createBlockOperation(body?: CreateBlockOperationRequest, options: any = {}): FetchArgs {
+        createBlockOperation(body?: CreateBlockOperationRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/block/op`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -12791,6 +12900,18 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -12809,10 +12930,13 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
          * Cancel a pending or running block operation. **THIS DOES NOT UNDO THE BLOCK CHANGES**     **Required permissions:**    - **block.op.delete**   
          * @summary Stop a block operation
          * @param {string} uuid The uuid of the block operation
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteBlockOperation(uuid: string, options: any = {}): FetchArgs {
+        deleteBlockOperation(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'uuid' is not null or undefined
             if (uuid === null || uuid === undefined) {
                 throw new RequiredError('uuid','Required parameter uuid was null or undefined when calling deleteBlockOperation.');
@@ -12840,6 +12964,18 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -12857,10 +12993,13 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
          * @param {number} x The x-coordinate of the block
          * @param {number} y The y-coordinate of the block
          * @param {number} z The z-coordinate of the block
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBlock(world: string, x: number, y: number, z: number, options: any = {}): FetchArgs {
+        getBlock(world: string, x: number, y: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'world' is not null or undefined
             if (world === null || world === undefined) {
                 throw new RequiredError('world','Required parameter world was null or undefined when calling getBlock.');
@@ -12903,6 +13042,18 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -12917,10 +13068,13 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
          * Gets details about a specific block operation     **Required permissions:**    - **block.op.one**   
          * @summary Get a block operation
          * @param {string} uuid The uuid of the block operation
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBlockOperation(uuid: string, options: any = {}): FetchArgs {
+        getBlockOperation(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'uuid' is not null or undefined
             if (uuid === null || uuid === undefined) {
                 throw new RequiredError('uuid','Required parameter uuid was null or undefined when calling getBlockOperation.');
@@ -12948,6 +13102,18 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -12961,10 +13127,13 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
         /**
          * Returns a list of all the currently running block operations.     **Required permissions:**    - **block.op.list**   
          * @summary List block operations
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listBlockOperations(options: any = {}): FetchArgs {
+        listBlockOperations(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/block/op`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -12987,6 +13156,18 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -13002,10 +13183,13 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
          * @summary Modify a block operation
          * @param {string} uuid The uuid of the block operation
          * @param {ModifyBlockOperationRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyBlockOperation(uuid: string, body?: ModifyBlockOperationRequest, options: any = {}): FetchArgs {
+        modifyBlockOperation(uuid: string, body?: ModifyBlockOperationRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'uuid' is not null or undefined
             if (uuid === null || uuid === undefined) {
                 throw new RequiredError('uuid','Required parameter uuid was null or undefined when calling modifyBlockOperation.');
@@ -13031,6 +13215,18 @@ export const BlockApiFetchParamCreator = function (configuration?: Configuration
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -13060,11 +13256,14 @@ export const BlockApiFp = function(configuration?: Configuration) {
          * Start a request to get or change blocks on the server.     **Required permissions:**    - **block.op.create**   
          * @summary Create a block operation
          * @param {CreateBlockOperationRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createBlockOperation(body?: CreateBlockOperationRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<BlockOperation> {
-            const localVarFetchArgs = BlockApiFetchParamCreator(configuration).createBlockOperation(body, options);
+        createBlockOperation(body?: CreateBlockOperationRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<BlockOperation> {
+            const localVarFetchArgs = BlockApiFetchParamCreator(configuration).createBlockOperation(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -13079,11 +13278,14 @@ export const BlockApiFp = function(configuration?: Configuration) {
          * Cancel a pending or running block operation. **THIS DOES NOT UNDO THE BLOCK CHANGES**     **Required permissions:**    - **block.op.delete**   
          * @summary Stop a block operation
          * @param {string} uuid The uuid of the block operation
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteBlockOperation(uuid: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<BlockOperation> {
-            const localVarFetchArgs = BlockApiFetchParamCreator(configuration).deleteBlockOperation(uuid, options);
+        deleteBlockOperation(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<BlockOperation> {
+            const localVarFetchArgs = BlockApiFetchParamCreator(configuration).deleteBlockOperation(uuid, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -13101,11 +13303,14 @@ export const BlockApiFp = function(configuration?: Configuration) {
          * @param {number} x The x-coordinate of the block
          * @param {number} y The y-coordinate of the block
          * @param {number} z The z-coordinate of the block
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBlock(world: string, x: number, y: number, z: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<BlockState> {
-            const localVarFetchArgs = BlockApiFetchParamCreator(configuration).getBlock(world, x, y, z, options);
+        getBlock(world: string, x: number, y: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<BlockState> {
+            const localVarFetchArgs = BlockApiFetchParamCreator(configuration).getBlock(world, x, y, z, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -13120,11 +13325,14 @@ export const BlockApiFp = function(configuration?: Configuration) {
          * Gets details about a specific block operation     **Required permissions:**    - **block.op.one**   
          * @summary Get a block operation
          * @param {string} uuid The uuid of the block operation
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBlockOperation(uuid: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<BlockOperation> {
-            const localVarFetchArgs = BlockApiFetchParamCreator(configuration).getBlockOperation(uuid, options);
+        getBlockOperation(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<BlockOperation> {
+            const localVarFetchArgs = BlockApiFetchParamCreator(configuration).getBlockOperation(uuid, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -13138,11 +13346,14 @@ export const BlockApiFp = function(configuration?: Configuration) {
         /**
          * Returns a list of all the currently running block operations.     **Required permissions:**    - **block.op.list**   
          * @summary List block operations
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listBlockOperations(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<BlockOperation>> {
-            const localVarFetchArgs = BlockApiFetchParamCreator(configuration).listBlockOperations(options);
+        listBlockOperations(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<BlockOperation>> {
+            const localVarFetchArgs = BlockApiFetchParamCreator(configuration).listBlockOperations(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -13158,11 +13369,14 @@ export const BlockApiFp = function(configuration?: Configuration) {
          * @summary Modify a block operation
          * @param {string} uuid The uuid of the block operation
          * @param {ModifyBlockOperationRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyBlockOperation(uuid: string, body?: ModifyBlockOperationRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<BlockOperation> {
-            const localVarFetchArgs = BlockApiFetchParamCreator(configuration).modifyBlockOperation(uuid, body, options);
+        modifyBlockOperation(uuid: string, body?: ModifyBlockOperationRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<BlockOperation> {
+            const localVarFetchArgs = BlockApiFetchParamCreator(configuration).modifyBlockOperation(uuid, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -13186,21 +13400,27 @@ export const BlockApiFactory = function (configuration?: Configuration, fetch?: 
          * Start a request to get or change blocks on the server.     **Required permissions:**    - **block.op.create**   
          * @summary Create a block operation
          * @param {CreateBlockOperationRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createBlockOperation(body?: CreateBlockOperationRequest, options?: any) {
-            return BlockApiFp(configuration).createBlockOperation(body, options)(fetch, basePath);
+        createBlockOperation(body?: CreateBlockOperationRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return BlockApiFp(configuration).createBlockOperation(body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Cancel a pending or running block operation. **THIS DOES NOT UNDO THE BLOCK CHANGES**     **Required permissions:**    - **block.op.delete**   
          * @summary Stop a block operation
          * @param {string} uuid The uuid of the block operation
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteBlockOperation(uuid: string, options?: any) {
-            return BlockApiFp(configuration).deleteBlockOperation(uuid, options)(fetch, basePath);
+        deleteBlockOperation(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return BlockApiFp(configuration).deleteBlockOperation(uuid, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Gets information about one block in the world.     **Required permissions:**    - **block.one**   
@@ -13209,41 +13429,53 @@ export const BlockApiFactory = function (configuration?: Configuration, fetch?: 
          * @param {number} x The x-coordinate of the block
          * @param {number} y The y-coordinate of the block
          * @param {number} z The z-coordinate of the block
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBlock(world: string, x: number, y: number, z: number, options?: any) {
-            return BlockApiFp(configuration).getBlock(world, x, y, z, options)(fetch, basePath);
+        getBlock(world: string, x: number, y: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return BlockApiFp(configuration).getBlock(world, x, y, z, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Gets details about a specific block operation     **Required permissions:**    - **block.op.one**   
          * @summary Get a block operation
          * @param {string} uuid The uuid of the block operation
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBlockOperation(uuid: string, options?: any) {
-            return BlockApiFp(configuration).getBlockOperation(uuid, options)(fetch, basePath);
+        getBlockOperation(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return BlockApiFp(configuration).getBlockOperation(uuid, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Returns a list of all the currently running block operations.     **Required permissions:**    - **block.op.list**   
          * @summary List block operations
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listBlockOperations(options?: any) {
-            return BlockApiFp(configuration).listBlockOperations(options)(fetch, basePath);
+        listBlockOperations(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return BlockApiFp(configuration).listBlockOperations(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Modify an existing block operation to either pause or continue it.     **Required permissions:**    - **block.op.modify**   
          * @summary Modify a block operation
          * @param {string} uuid The uuid of the block operation
          * @param {ModifyBlockOperationRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyBlockOperation(uuid: string, body?: ModifyBlockOperationRequest, options?: any) {
-            return BlockApiFp(configuration).modifyBlockOperation(uuid, body, options)(fetch, basePath);
+        modifyBlockOperation(uuid: string, body?: ModifyBlockOperationRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return BlockApiFp(configuration).modifyBlockOperation(uuid, body, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -13259,24 +13491,30 @@ export class BlockApi extends BaseAPI {
      * Start a request to get or change blocks on the server.     **Required permissions:**    - **block.op.create**   
      * @summary Create a block operation
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlockApi
      */
-    public createBlockOperation(body?: CreateBlockOperationRequest, options?: any) {
-        return BlockApiFp(this.configuration).createBlockOperation(body, options)(this.fetch, this.basePath);
+    public createBlockOperation(body?: CreateBlockOperationRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return BlockApiFp(this.configuration).createBlockOperation(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Cancel a pending or running block operation. **THIS DOES NOT UNDO THE BLOCK CHANGES**     **Required permissions:**    - **block.op.delete**   
      * @summary Stop a block operation
      * @param {} uuid The uuid of the block operation
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlockApi
      */
-    public deleteBlockOperation(uuid: string, options?: any) {
-        return BlockApiFp(this.configuration).deleteBlockOperation(uuid, options)(this.fetch, this.basePath);
+    public deleteBlockOperation(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return BlockApiFp(this.configuration).deleteBlockOperation(uuid, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -13286,35 +13524,44 @@ export class BlockApi extends BaseAPI {
      * @param {} x The x-coordinate of the block
      * @param {} y The y-coordinate of the block
      * @param {} z The z-coordinate of the block
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlockApi
      */
-    public getBlock(world: string, x: number, y: number, z: number, options?: any) {
-        return BlockApiFp(this.configuration).getBlock(world, x, y, z, options)(this.fetch, this.basePath);
+    public getBlock(world: string, x: number, y: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return BlockApiFp(this.configuration).getBlock(world, x, y, z, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Gets details about a specific block operation     **Required permissions:**    - **block.op.one**   
      * @summary Get a block operation
      * @param {} uuid The uuid of the block operation
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlockApi
      */
-    public getBlockOperation(uuid: string, options?: any) {
-        return BlockApiFp(this.configuration).getBlockOperation(uuid, options)(this.fetch, this.basePath);
+    public getBlockOperation(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return BlockApiFp(this.configuration).getBlockOperation(uuid, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Returns a list of all the currently running block operations.     **Required permissions:**    - **block.op.list**   
      * @summary List block operations
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlockApi
      */
-    public listBlockOperations(options?: any) {
-        return BlockApiFp(this.configuration).listBlockOperations(options)(this.fetch, this.basePath);
+    public listBlockOperations(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return BlockApiFp(this.configuration).listBlockOperations(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -13322,12 +13569,15 @@ export class BlockApi extends BaseAPI {
      * @summary Modify a block operation
      * @param {} uuid The uuid of the block operation
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlockApi
      */
-    public modifyBlockOperation(uuid: string, body?: ModifyBlockOperationRequest, options?: any) {
-        return BlockApiFp(this.configuration).modifyBlockOperation(uuid, body, options)(this.fetch, this.basePath);
+    public modifyBlockOperation(uuid: string, body?: ModifyBlockOperationRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return BlockApiFp(this.configuration).modifyBlockOperation(uuid, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -13344,10 +13594,13 @@ export const ChunkApiFetchParamCreator = function (configuration?: Configuration
          * @param {string} world The uuid of the world in which to create the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
          * @param {number} z The z-coordinate of the chunk (in chunk coordinates)
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createChunkAt(world: string, x: number, z: number, options: any = {}): FetchArgs {
+        createChunkAt(world: string, x: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'world' is not null or undefined
             if (world === null || world === undefined) {
                 throw new RequiredError('world','Required parameter world was null or undefined when calling createChunkAt.');
@@ -13385,6 +13638,18 @@ export const ChunkApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -13401,10 +13666,13 @@ export const ChunkApiFetchParamCreator = function (configuration?: Configuration
          * @param {string} world The uuid of the world in which to get the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
          * @param {number} z The z-coordinate of the chunk (in chunk coordinates)
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getChunkAt(world: string, x: number, z: number, options: any = {}): FetchArgs {
+        getChunkAt(world: string, x: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'world' is not null or undefined
             if (world === null || world === undefined) {
                 throw new RequiredError('world','Required parameter world was null or undefined when calling getChunkAt.');
@@ -13442,6 +13710,18 @@ export const ChunkApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -13456,10 +13736,13 @@ export const ChunkApiFetchParamCreator = function (configuration?: Configuration
          * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**   
          * @summary List chunks
          * @param {string} world The uuid of the for which to get all chunks
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listChunks(world: string, options: any = {}): FetchArgs {
+        listChunks(world: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'world' is not null or undefined
             if (world === null || world === undefined) {
                 throw new RequiredError('world','Required parameter world was null or undefined when calling listChunks.');
@@ -13487,6 +13770,18 @@ export const ChunkApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -13512,11 +13807,14 @@ export const ChunkApiFp = function(configuration?: Configuration) {
          * @param {string} world The uuid of the world in which to create the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
          * @param {number} z The z-coordinate of the chunk (in chunk coordinates)
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createChunkAt(world: string, x: number, z: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Chunk> {
-            const localVarFetchArgs = ChunkApiFetchParamCreator(configuration).createChunkAt(world, x, z, options);
+        createChunkAt(world: string, x: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Chunk> {
+            const localVarFetchArgs = ChunkApiFetchParamCreator(configuration).createChunkAt(world, x, z, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -13533,11 +13831,14 @@ export const ChunkApiFp = function(configuration?: Configuration) {
          * @param {string} world The uuid of the world in which to get the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
          * @param {number} z The z-coordinate of the chunk (in chunk coordinates)
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getChunkAt(world: string, x: number, z: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Chunk> {
-            const localVarFetchArgs = ChunkApiFetchParamCreator(configuration).getChunkAt(world, x, z, options);
+        getChunkAt(world: string, x: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Chunk> {
+            const localVarFetchArgs = ChunkApiFetchParamCreator(configuration).getChunkAt(world, x, z, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -13552,11 +13853,14 @@ export const ChunkApiFp = function(configuration?: Configuration) {
          * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**   
          * @summary List chunks
          * @param {string} world The uuid of the for which to get all chunks
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listChunks(world: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Chunk>> {
-            const localVarFetchArgs = ChunkApiFetchParamCreator(configuration).listChunks(world, options);
+        listChunks(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Chunk>> {
+            const localVarFetchArgs = ChunkApiFetchParamCreator(configuration).listChunks(world, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -13582,11 +13886,14 @@ export const ChunkApiFactory = function (configuration?: Configuration, fetch?: 
          * @param {string} world The uuid of the world in which to create the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
          * @param {number} z The z-coordinate of the chunk (in chunk coordinates)
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createChunkAt(world: string, x: number, z: number, options?: any) {
-            return ChunkApiFp(configuration).createChunkAt(world, x, z, options)(fetch, basePath);
+        createChunkAt(world: string, x: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return ChunkApiFp(configuration).createChunkAt(world, x, z, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get detailed information about a chunk     **Required permissions:**    - **chunk.chunk.one **   
@@ -13594,21 +13901,27 @@ export const ChunkApiFactory = function (configuration?: Configuration, fetch?: 
          * @param {string} world The uuid of the world in which to get the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
          * @param {number} z The z-coordinate of the chunk (in chunk coordinates)
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getChunkAt(world: string, x: number, z: number, options?: any) {
-            return ChunkApiFp(configuration).getChunkAt(world, x, z, options)(fetch, basePath);
+        getChunkAt(world: string, x: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return ChunkApiFp(configuration).getChunkAt(world, x, z, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**   
          * @summary List chunks
          * @param {string} world The uuid of the for which to get all chunks
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listChunks(world: string, options?: any) {
-            return ChunkApiFp(configuration).listChunks(world, options)(fetch, basePath);
+        listChunks(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return ChunkApiFp(configuration).listChunks(world, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -13626,12 +13939,15 @@ export class ChunkApi extends BaseAPI {
      * @param {} world The uuid of the world in which to create the chunk
      * @param {} x The x-coordinate of the chunk (in chunk coordinates)
      * @param {} z The z-coordinate of the chunk (in chunk coordinates)
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ChunkApi
      */
-    public createChunkAt(world: string, x: number, z: number, options?: any) {
-        return ChunkApiFp(this.configuration).createChunkAt(world, x, z, options)(this.fetch, this.basePath);
+    public createChunkAt(world: string, x: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return ChunkApiFp(this.configuration).createChunkAt(world, x, z, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -13640,24 +13956,30 @@ export class ChunkApi extends BaseAPI {
      * @param {} world The uuid of the world in which to get the chunk
      * @param {} x The x-coordinate of the chunk (in chunk coordinates)
      * @param {} z The z-coordinate of the chunk (in chunk coordinates)
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ChunkApi
      */
-    public getChunkAt(world: string, x: number, z: number, options?: any) {
-        return ChunkApiFp(this.configuration).getChunkAt(world, x, z, options)(this.fetch, this.basePath);
+    public getChunkAt(world: string, x: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return ChunkApiFp(this.configuration).getChunkAt(world, x, z, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**   
      * @summary List chunks
      * @param {} world The uuid of the for which to get all chunks
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ChunkApi
      */
-    public listChunks(world: string, options?: any) {
-        return ChunkApiFp(this.configuration).listChunks(world, options)(this.fetch, this.basePath);
+    public listChunks(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return ChunkApiFp(this.configuration).listChunks(world, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -13672,10 +13994,13 @@ export const CommandApiFetchParamCreator = function (configuration?: Configurati
          * Get detailed information about a command.     **Required permissions:**    - **cmd.one**   
          * @summary Get a command
          * @param {string} cmd The id of the command
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCommand(cmd: string, options: any = {}): FetchArgs {
+        getCommand(cmd: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'cmd' is not null or undefined
             if (cmd === null || cmd === undefined) {
                 throw new RequiredError('cmd','Required parameter cmd was null or undefined when calling getCommand.');
@@ -13703,6 +14028,18 @@ export const CommandApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -13716,10 +14053,13 @@ export const CommandApiFetchParamCreator = function (configuration?: Configurati
         /**
          * Gets a list of all the commands available on the server.     **Required permissions:**    - **cmd.list**   
          * @summary List commands
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listCommands(options: any = {}): FetchArgs {
+        listCommands(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/cmd`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -13742,6 +14082,18 @@ export const CommandApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -13756,10 +14108,13 @@ export const CommandApiFetchParamCreator = function (configuration?: Configurati
          * Execute a command on the server. (Almost the same as running it from the console).   Pass an array of commands to execute them in succession, you can also just pass a list with only one command if that's all you want to execute.  Returns a list with each response corresponding to a command.     **Required permissions:**    - **cmd.run**   - **cmd.run.[command]**   
          * @summary Execute a command
          * @param {Array&lt;ExecuteCommandRequest&gt;} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        runCommands(body?: Array<ExecuteCommandRequest>, options: any = {}): FetchArgs {
+        runCommands(body?: Array<ExecuteCommandRequest>, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/cmd`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -13780,6 +14135,18 @@ export const CommandApiFetchParamCreator = function (configuration?: Configurati
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -13809,11 +14176,14 @@ export const CommandApiFp = function(configuration?: Configuration) {
          * Get detailed information about a command.     **Required permissions:**    - **cmd.one**   
          * @summary Get a command
          * @param {string} cmd The id of the command
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCommand(cmd: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Command> {
-            const localVarFetchArgs = CommandApiFetchParamCreator(configuration).getCommand(cmd, options);
+        getCommand(cmd: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Command> {
+            const localVarFetchArgs = CommandApiFetchParamCreator(configuration).getCommand(cmd, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -13827,11 +14197,14 @@ export const CommandApiFp = function(configuration?: Configuration) {
         /**
          * Gets a list of all the commands available on the server.     **Required permissions:**    - **cmd.list**   
          * @summary List commands
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listCommands(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Command>> {
-            const localVarFetchArgs = CommandApiFetchParamCreator(configuration).listCommands(options);
+        listCommands(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Command>> {
+            const localVarFetchArgs = CommandApiFetchParamCreator(configuration).listCommands(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -13846,11 +14219,14 @@ export const CommandApiFp = function(configuration?: Configuration) {
          * Execute a command on the server. (Almost the same as running it from the console).   Pass an array of commands to execute them in succession, you can also just pass a list with only one command if that's all you want to execute.  Returns a list with each response corresponding to a command.     **Required permissions:**    - **cmd.run**   - **cmd.run.[command]**   
          * @summary Execute a command
          * @param {Array&lt;ExecuteCommandRequest&gt;} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        runCommands(body?: Array<ExecuteCommandRequest>, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<any>> {
-            const localVarFetchArgs = CommandApiFetchParamCreator(configuration).runCommands(body, options);
+        runCommands(body?: Array<ExecuteCommandRequest>, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<any>> {
+            const localVarFetchArgs = CommandApiFetchParamCreator(configuration).runCommands(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -13874,30 +14250,39 @@ export const CommandApiFactory = function (configuration?: Configuration, fetch?
          * Get detailed information about a command.     **Required permissions:**    - **cmd.one**   
          * @summary Get a command
          * @param {string} cmd The id of the command
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCommand(cmd: string, options?: any) {
-            return CommandApiFp(configuration).getCommand(cmd, options)(fetch, basePath);
+        getCommand(cmd: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return CommandApiFp(configuration).getCommand(cmd, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Gets a list of all the commands available on the server.     **Required permissions:**    - **cmd.list**   
          * @summary List commands
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listCommands(options?: any) {
-            return CommandApiFp(configuration).listCommands(options)(fetch, basePath);
+        listCommands(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return CommandApiFp(configuration).listCommands(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Execute a command on the server. (Almost the same as running it from the console).   Pass an array of commands to execute them in succession, you can also just pass a list with only one command if that's all you want to execute.  Returns a list with each response corresponding to a command.     **Required permissions:**    - **cmd.run**   - **cmd.run.[command]**   
          * @summary Execute a command
          * @param {Array&lt;ExecuteCommandRequest&gt;} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        runCommands(body?: Array<ExecuteCommandRequest>, options?: any) {
-            return CommandApiFp(configuration).runCommands(body, options)(fetch, basePath);
+        runCommands(body?: Array<ExecuteCommandRequest>, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return CommandApiFp(configuration).runCommands(body, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -13913,35 +14298,44 @@ export class CommandApi extends BaseAPI {
      * Get detailed information about a command.     **Required permissions:**    - **cmd.one**   
      * @summary Get a command
      * @param {} cmd The id of the command
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CommandApi
      */
-    public getCommand(cmd: string, options?: any) {
-        return CommandApiFp(this.configuration).getCommand(cmd, options)(this.fetch, this.basePath);
+    public getCommand(cmd: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return CommandApiFp(this.configuration).getCommand(cmd, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Gets a list of all the commands available on the server.     **Required permissions:**    - **cmd.list**   
      * @summary List commands
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CommandApi
      */
-    public listCommands(options?: any) {
-        return CommandApiFp(this.configuration).listCommands(options)(this.fetch, this.basePath);
+    public listCommands(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return CommandApiFp(this.configuration).listCommands(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Execute a command on the server. (Almost the same as running it from the console).   Pass an array of commands to execute them in succession, you can also just pass a list with only one command if that's all you want to execute.  Returns a list with each response corresponding to a command.     **Required permissions:**    - **cmd.run**   - **cmd.run.[command]**   
      * @summary Execute a command
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CommandApi
      */
-    public runCommands(body?: Array<ExecuteCommandRequest>, options?: any) {
-        return CommandApiFp(this.configuration).runCommands(body, options)(this.fetch, this.basePath);
+    public runCommands(body?: Array<ExecuteCommandRequest>, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return CommandApiFp(this.configuration).runCommands(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -13956,10 +14350,13 @@ export const EconomyApiFetchParamCreator = function (configuration?: Configurati
          * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.account.one**   
          * @summary List currencies
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccount(id: string, options: any = {}): FetchArgs {
+        getAccount(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling getAccount.');
@@ -13987,6 +14384,18 @@ export const EconomyApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -14000,10 +14409,13 @@ export const EconomyApiFetchParamCreator = function (configuration?: Configurati
         /**
          * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.currency.list**   
          * @summary List currencies
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrencies(options: any = {}): FetchArgs {
+        getCurrencies(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/economy/currency`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -14024,6 +14436,18 @@ export const EconomyApiFetchParamCreator = function (configuration?: Configurati
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -14049,11 +14473,14 @@ export const EconomyApiFp = function(configuration?: Configuration) {
          * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.account.one**   
          * @summary List currencies
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccount(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Account> {
-            const localVarFetchArgs = EconomyApiFetchParamCreator(configuration).getAccount(id, options);
+        getAccount(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Account> {
+            const localVarFetchArgs = EconomyApiFetchParamCreator(configuration).getAccount(id, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -14067,11 +14494,14 @@ export const EconomyApiFp = function(configuration?: Configuration) {
         /**
          * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.currency.list**   
          * @summary List currencies
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrencies(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Currency>> {
-            const localVarFetchArgs = EconomyApiFetchParamCreator(configuration).getCurrencies(options);
+        getCurrencies(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Currency>> {
+            const localVarFetchArgs = EconomyApiFetchParamCreator(configuration).getCurrencies(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -14095,20 +14525,26 @@ export const EconomyApiFactory = function (configuration?: Configuration, fetch?
          * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.account.one**   
          * @summary List currencies
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccount(id: string, options?: any) {
-            return EconomyApiFp(configuration).getAccount(id, options)(fetch, basePath);
+        getAccount(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return EconomyApiFp(configuration).getAccount(id, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.currency.list**   
          * @summary List currencies
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrencies(options?: any) {
-            return EconomyApiFp(configuration).getCurrencies(options)(fetch, basePath);
+        getCurrencies(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return EconomyApiFp(configuration).getCurrencies(details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -14124,23 +14560,29 @@ export class EconomyApi extends BaseAPI {
      * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.account.one**   
      * @summary List currencies
      * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EconomyApi
      */
-    public getAccount(id: string, options?: any) {
-        return EconomyApiFp(this.configuration).getAccount(id, options)(this.fetch, this.basePath);
+    public getAccount(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return EconomyApiFp(this.configuration).getAccount(id, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Lists all the currencies that the current economy supports.     **Required permissions:**    - **economy.currency.list**   
      * @summary List currencies
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EconomyApi
      */
-    public getCurrencies(options?: any) {
-        return EconomyApiFp(this.configuration).getCurrencies(options)(this.fetch, this.basePath);
+    public getCurrencies(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return EconomyApiFp(this.configuration).getCurrencies(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -14155,10 +14597,13 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
          * Creates & Spawns a new entity with the specified properties.     **Required permissions:**    - **entity.create**   
          * @summary Spawn an entity
          * @param {CreateEntityRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createEntity(body?: CreateEntityRequest, options: any = {}): FetchArgs {
+        createEntity(body?: CreateEntityRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/entity`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -14181,6 +14626,18 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -14200,10 +14657,13 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
          * @summary Execute a method
          * @param {string} entity The uuid of the entity
          * @param {ExecuteMethodRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        executeMethod(entity: string, body?: ExecuteMethodRequest, options: any = {}): FetchArgs {
+        executeMethod(entity: string, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'entity' is not null or undefined
             if (entity === null || entity === undefined) {
                 throw new RequiredError('entity','Required parameter entity was null or undefined when calling executeMethod.');
@@ -14231,6 +14691,18 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -14249,10 +14721,13 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
          * Get detailed information about an entity.     **Required permissions:**    - **entity.one**   
          * @summary Get entity
          * @param {string} entity The uuid of the entity
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getEntity(entity: string, options: any = {}): FetchArgs {
+        getEntity(entity: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'entity' is not null or undefined
             if (entity === null || entity === undefined) {
                 throw new RequiredError('entity','Required parameter entity was null or undefined when calling getEntity.');
@@ -14280,6 +14755,18 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -14296,10 +14783,13 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
          * @param {string} [world] The world to filter the entities by
          * @param {string} [type] The type id of the entities to filter by
          * @param {number} [limit] The maximum amount of entities returned
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listEntities(world?: string, type?: string, limit?: number, options: any = {}): FetchArgs {
+        listEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/entity`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -14334,6 +14824,18 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['limit'] = limit;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -14349,10 +14851,13 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
          * @summary Modify an entity
          * @param {string} entity The uuid of the entity
          * @param {UpdateEntityRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyEntity(entity: string, body?: UpdateEntityRequest, options: any = {}): FetchArgs {
+        modifyEntity(entity: string, body?: UpdateEntityRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'entity' is not null or undefined
             if (entity === null || entity === undefined) {
                 throw new RequiredError('entity','Required parameter entity was null or undefined when calling modifyEntity.');
@@ -14380,6 +14885,18 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -14398,10 +14915,13 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
          * Destroys an entity.     **Required permissions:**    - **entity.delete**   
          * @summary Destroy an entity
          * @param {string} entity The uuid of the entity
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        removeEntity(entity: string, options: any = {}): FetchArgs {
+        removeEntity(entity: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'entity' is not null or undefined
             if (entity === null || entity === undefined) {
                 throw new RequiredError('entity','Required parameter entity was null or undefined when calling removeEntity.');
@@ -14429,6 +14949,18 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -14452,11 +14984,14 @@ export const EntityApiFp = function(configuration?: Configuration) {
          * Creates & Spawns a new entity with the specified properties.     **Required permissions:**    - **entity.create**   
          * @summary Spawn an entity
          * @param {CreateEntityRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createEntity(body?: CreateEntityRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Entity> {
-            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).createEntity(body, options);
+        createEntity(body?: CreateEntityRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Entity> {
+            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).createEntity(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -14472,11 +15007,14 @@ export const EntityApiFp = function(configuration?: Configuration) {
          * @summary Execute a method
          * @param {string} entity The uuid of the entity
          * @param {ExecuteMethodRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        executeMethod(entity: string, body?: ExecuteMethodRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ExecuteMethodResponse> {
-            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).executeMethod(entity, body, options);
+        executeMethod(entity: string, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ExecuteMethodResponse> {
+            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).executeMethod(entity, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -14491,11 +15029,14 @@ export const EntityApiFp = function(configuration?: Configuration) {
          * Get detailed information about an entity.     **Required permissions:**    - **entity.one**   
          * @summary Get entity
          * @param {string} entity The uuid of the entity
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getEntity(entity: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Entity> {
-            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).getEntity(entity, options);
+        getEntity(entity: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Entity> {
+            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).getEntity(entity, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -14512,11 +15053,14 @@ export const EntityApiFp = function(configuration?: Configuration) {
          * @param {string} [world] The world to filter the entities by
          * @param {string} [type] The type id of the entities to filter by
          * @param {number} [limit] The maximum amount of entities returned
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listEntities(world?: string, type?: string, limit?: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Entity>> {
-            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).listEntities(world, type, limit, options);
+        listEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Entity>> {
+            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).listEntities(world, type, limit, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -14532,11 +15076,14 @@ export const EntityApiFp = function(configuration?: Configuration) {
          * @summary Modify an entity
          * @param {string} entity The uuid of the entity
          * @param {UpdateEntityRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyEntity(entity: string, body?: UpdateEntityRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Entity> {
-            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).modifyEntity(entity, body, options);
+        modifyEntity(entity: string, body?: UpdateEntityRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Entity> {
+            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).modifyEntity(entity, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -14551,11 +15098,14 @@ export const EntityApiFp = function(configuration?: Configuration) {
          * Destroys an entity.     **Required permissions:**    - **entity.delete**   
          * @summary Destroy an entity
          * @param {string} entity The uuid of the entity
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        removeEntity(entity: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Entity> {
-            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).removeEntity(entity, options);
+        removeEntity(entity: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Entity> {
+            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).removeEntity(entity, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -14579,32 +15129,41 @@ export const EntityApiFactory = function (configuration?: Configuration, fetch?:
          * Creates & Spawns a new entity with the specified properties.     **Required permissions:**    - **entity.create**   
          * @summary Spawn an entity
          * @param {CreateEntityRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createEntity(body?: CreateEntityRequest, options?: any) {
-            return EntityApiFp(configuration).createEntity(body, options)(fetch, basePath);
+        createEntity(body?: CreateEntityRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return EntityApiFp(configuration).createEntity(body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Provides direct access to the underlaying entity object and can execute any method on it.     **Required permissions:**    - **entity.method**   
          * @summary Execute a method
          * @param {string} entity The uuid of the entity
          * @param {ExecuteMethodRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        executeMethod(entity: string, body?: ExecuteMethodRequest, options?: any) {
-            return EntityApiFp(configuration).executeMethod(entity, body, options)(fetch, basePath);
+        executeMethod(entity: string, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return EntityApiFp(configuration).executeMethod(entity, body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get detailed information about an entity.     **Required permissions:**    - **entity.one**   
          * @summary Get entity
          * @param {string} entity The uuid of the entity
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getEntity(entity: string, options?: any) {
-            return EntityApiFp(configuration).getEntity(entity, options)(fetch, basePath);
+        getEntity(entity: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return EntityApiFp(configuration).getEntity(entity, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get a list of all entities on the server (in all worlds).     **Required permissions:**    - **entity.list**   
@@ -14612,32 +15171,41 @@ export const EntityApiFactory = function (configuration?: Configuration, fetch?:
          * @param {string} [world] The world to filter the entities by
          * @param {string} [type] The type id of the entities to filter by
          * @param {number} [limit] The maximum amount of entities returned
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listEntities(world?: string, type?: string, limit?: number, options?: any) {
-            return EntityApiFp(configuration).listEntities(world, type, limit, options)(fetch, basePath);
+        listEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return EntityApiFp(configuration).listEntities(world, type, limit, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Modify the properties of an existing entity.     **Required permissions:**    - **entity.modify**   
          * @summary Modify an entity
          * @param {string} entity The uuid of the entity
          * @param {UpdateEntityRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyEntity(entity: string, body?: UpdateEntityRequest, options?: any) {
-            return EntityApiFp(configuration).modifyEntity(entity, body, options)(fetch, basePath);
+        modifyEntity(entity: string, body?: UpdateEntityRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return EntityApiFp(configuration).modifyEntity(entity, body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Destroys an entity.     **Required permissions:**    - **entity.delete**   
          * @summary Destroy an entity
          * @param {string} entity The uuid of the entity
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        removeEntity(entity: string, options?: any) {
-            return EntityApiFp(configuration).removeEntity(entity, options)(fetch, basePath);
+        removeEntity(entity: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return EntityApiFp(configuration).removeEntity(entity, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -14653,12 +15221,15 @@ export class EntityApi extends BaseAPI {
      * Creates & Spawns a new entity with the specified properties.     **Required permissions:**    - **entity.create**   
      * @summary Spawn an entity
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EntityApi
      */
-    public createEntity(body?: CreateEntityRequest, options?: any) {
-        return EntityApiFp(this.configuration).createEntity(body, options)(this.fetch, this.basePath);
+    public createEntity(body?: CreateEntityRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return EntityApiFp(this.configuration).createEntity(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -14666,24 +15237,30 @@ export class EntityApi extends BaseAPI {
      * @summary Execute a method
      * @param {} entity The uuid of the entity
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EntityApi
      */
-    public executeMethod(entity: string, body?: ExecuteMethodRequest, options?: any) {
-        return EntityApiFp(this.configuration).executeMethod(entity, body, options)(this.fetch, this.basePath);
+    public executeMethod(entity: string, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return EntityApiFp(this.configuration).executeMethod(entity, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get detailed information about an entity.     **Required permissions:**    - **entity.one**   
      * @summary Get entity
      * @param {} entity The uuid of the entity
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EntityApi
      */
-    public getEntity(entity: string, options?: any) {
-        return EntityApiFp(this.configuration).getEntity(entity, options)(this.fetch, this.basePath);
+    public getEntity(entity: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return EntityApiFp(this.configuration).getEntity(entity, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -14692,12 +15269,15 @@ export class EntityApi extends BaseAPI {
      * @param {} [world] The world to filter the entities by
      * @param {} [type] The type id of the entities to filter by
      * @param {} [limit] The maximum amount of entities returned
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EntityApi
      */
-    public listEntities(world?: string, type?: string, limit?: number, options?: any) {
-        return EntityApiFp(this.configuration).listEntities(world, type, limit, options)(this.fetch, this.basePath);
+    public listEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return EntityApiFp(this.configuration).listEntities(world, type, limit, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -14705,24 +15285,30 @@ export class EntityApi extends BaseAPI {
      * @summary Modify an entity
      * @param {} entity The uuid of the entity
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EntityApi
      */
-    public modifyEntity(entity: string, body?: UpdateEntityRequest, options?: any) {
-        return EntityApiFp(this.configuration).modifyEntity(entity, body, options)(this.fetch, this.basePath);
+    public modifyEntity(entity: string, body?: UpdateEntityRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return EntityApiFp(this.configuration).modifyEntity(entity, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Destroys an entity.     **Required permissions:**    - **entity.delete**   
      * @summary Destroy an entity
      * @param {} entity The uuid of the entity
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EntityApi
      */
-    public removeEntity(entity: string, options?: any) {
-        return EntityApiFp(this.configuration).removeEntity(entity, options)(this.fetch, this.basePath);
+    public removeEntity(entity: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return EntityApiFp(this.configuration).removeEntity(entity, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -14734,13 +15320,16 @@ export class EntityApi extends BaseAPI {
 export const HistoryApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * View a history of the server chat.     **Required permissions:**    - **history.chat**   
-         * @summary Get chat history
+         * View a history of the server messages.     **Required permissions:**    - **history.message**   
+         * @summary Get message history
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getChat(options: any = {}): FetchArgs {
-            const localVarPath = `/history/chat`;
+        getChat(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            const localVarPath = `/history/message`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
@@ -14762,6 +15351,18 @@ export const HistoryApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -14775,10 +15376,13 @@ export const HistoryApiFetchParamCreator = function (configuration?: Configurati
         /**
          * View a history of the server commands.     **Required permissions:**    - **history.cmd**   
          * @summary Get command history
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCommands(options: any = {}): FetchArgs {
+        getCommands(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/history/cmd`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -14801,6 +15405,18 @@ export const HistoryApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -14821,13 +15437,16 @@ export const HistoryApiFetchParamCreator = function (configuration?: Configurati
 export const HistoryApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * View a history of the server chat.     **Required permissions:**    - **history.chat**   
-         * @summary Get chat history
+         * View a history of the server messages.     **Required permissions:**    - **history.message**   
+         * @summary Get message history
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getChat(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<ChatMessage>> {
-            const localVarFetchArgs = HistoryApiFetchParamCreator(configuration).getChat(options);
+        getChat(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Message>> {
+            const localVarFetchArgs = HistoryApiFetchParamCreator(configuration).getChat(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -14841,11 +15460,14 @@ export const HistoryApiFp = function(configuration?: Configuration) {
         /**
          * View a history of the server commands.     **Required permissions:**    - **history.cmd**   
          * @summary Get command history
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCommands(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<CommandCall>> {
-            const localVarFetchArgs = HistoryApiFetchParamCreator(configuration).getCommands(options);
+        getCommands(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<CommandCall>> {
+            const localVarFetchArgs = HistoryApiFetchParamCreator(configuration).getCommands(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -14866,22 +15488,28 @@ export const HistoryApiFp = function(configuration?: Configuration) {
 export const HistoryApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * View a history of the server chat.     **Required permissions:**    - **history.chat**   
-         * @summary Get chat history
+         * View a history of the server messages.     **Required permissions:**    - **history.message**   
+         * @summary Get message history
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getChat(options?: any) {
-            return HistoryApiFp(configuration).getChat(options)(fetch, basePath);
+        getChat(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return HistoryApiFp(configuration).getChat(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * View a history of the server commands.     **Required permissions:**    - **history.cmd**   
          * @summary Get command history
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCommands(options?: any) {
-            return HistoryApiFp(configuration).getCommands(options)(fetch, basePath);
+        getCommands(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return HistoryApiFp(configuration).getCommands(details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -14894,25 +15522,31 @@ export const HistoryApiFactory = function (configuration?: Configuration, fetch?
  */
 export class HistoryApi extends BaseAPI {
     /**
-     * View a history of the server chat.     **Required permissions:**    - **history.chat**   
-     * @summary Get chat history
+     * View a history of the server messages.     **Required permissions:**    - **history.message**   
+     * @summary Get message history
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HistoryApi
      */
-    public getChat(options?: any) {
-        return HistoryApiFp(this.configuration).getChat(options)(this.fetch, this.basePath);
+    public getChat(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return HistoryApiFp(this.configuration).getChat(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * View a history of the server commands.     **Required permissions:**    - **history.cmd**   
      * @summary Get command history
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HistoryApi
      */
-    public getCommands(options?: any) {
-        return HistoryApiFp(this.configuration).getCommands(options)(this.fetch, this.basePath);
+    public getCommands(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return HistoryApiFp(this.configuration).getCommands(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -14927,10 +15561,13 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
          * Creates a new crate.     **Required permissions:**    - **husky-crates.crate.create **   
          * @summary Create a crate
          * @param {HuskyCratesCrate} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCrate(body?: HuskyCratesCrate, options: any = {}): FetchArgs {
+        createCrate(body?: HuskyCratesCrate, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/husky-crates/crate`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -14953,6 +15590,18 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -14971,10 +15620,13 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
          * Delete a crate.     **Required permissions:**    - **husky-crates.crate.delete**   
          * @summary Delete a crate
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteCrate(id: string, options: any = {}): FetchArgs {
+        deleteCrate(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling deleteCrate.');
@@ -15002,6 +15654,18 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -15016,10 +15680,13 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
          * Get detailed information about a crate.     **Required permissions:**    - **husky-crates.crate.one**   
          * @summary Get a crate
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCrate(id: string, options: any = {}): FetchArgs {
+        getCrate(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling getCrate.');
@@ -15047,6 +15714,18 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -15060,10 +15739,13 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
         /**
          * Get a list of all the crates on the server.     **Required permissions:**    - **husky-crates.crate.list**   
          * @summary List crates
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listCrates(options: any = {}): FetchArgs {
+        listCrates(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/husky-crates/crate`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -15086,6 +15768,18 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -15101,10 +15795,13 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
          * @summary Change a crate
          * @param {string} id 
          * @param {HuskyCratesCrate} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyCrate(id: string, body?: HuskyCratesCrate, options: any = {}): FetchArgs {
+        modifyCrate(id: string, body?: HuskyCratesCrate, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling modifyCrate.');
@@ -15130,6 +15827,18 @@ export const HuskyCratesApiFetchParamCreator = function (configuration?: Configu
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -15159,11 +15868,14 @@ export const HuskyCratesApiFp = function(configuration?: Configuration) {
          * Creates a new crate.     **Required permissions:**    - **husky-crates.crate.create **   
          * @summary Create a crate
          * @param {HuskyCratesCrate} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCrate(body?: HuskyCratesCrate, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<HuskyCratesCrate> {
-            const localVarFetchArgs = HuskyCratesApiFetchParamCreator(configuration).createCrate(body, options);
+        createCrate(body?: HuskyCratesCrate, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<HuskyCratesCrate> {
+            const localVarFetchArgs = HuskyCratesApiFetchParamCreator(configuration).createCrate(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15178,11 +15890,14 @@ export const HuskyCratesApiFp = function(configuration?: Configuration) {
          * Delete a crate.     **Required permissions:**    - **husky-crates.crate.delete**   
          * @summary Delete a crate
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteCrate(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<HuskyCratesCrate> {
-            const localVarFetchArgs = HuskyCratesApiFetchParamCreator(configuration).deleteCrate(id, options);
+        deleteCrate(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<HuskyCratesCrate> {
+            const localVarFetchArgs = HuskyCratesApiFetchParamCreator(configuration).deleteCrate(id, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15197,11 +15912,14 @@ export const HuskyCratesApiFp = function(configuration?: Configuration) {
          * Get detailed information about a crate.     **Required permissions:**    - **husky-crates.crate.one**   
          * @summary Get a crate
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCrate(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<HuskyCratesCrate> {
-            const localVarFetchArgs = HuskyCratesApiFetchParamCreator(configuration).getCrate(id, options);
+        getCrate(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<HuskyCratesCrate> {
+            const localVarFetchArgs = HuskyCratesApiFetchParamCreator(configuration).getCrate(id, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15215,11 +15933,14 @@ export const HuskyCratesApiFp = function(configuration?: Configuration) {
         /**
          * Get a list of all the crates on the server.     **Required permissions:**    - **husky-crates.crate.list**   
          * @summary List crates
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listCrates(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<HuskyCratesCrate>> {
-            const localVarFetchArgs = HuskyCratesApiFetchParamCreator(configuration).listCrates(options);
+        listCrates(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<HuskyCratesCrate>> {
+            const localVarFetchArgs = HuskyCratesApiFetchParamCreator(configuration).listCrates(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15235,11 +15956,14 @@ export const HuskyCratesApiFp = function(configuration?: Configuration) {
          * @summary Change a crate
          * @param {string} id 
          * @param {HuskyCratesCrate} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyCrate(id: string, body?: HuskyCratesCrate, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<HuskyCratesCrate> {
-            const localVarFetchArgs = HuskyCratesApiFetchParamCreator(configuration).modifyCrate(id, body, options);
+        modifyCrate(id: string, body?: HuskyCratesCrate, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<HuskyCratesCrate> {
+            const localVarFetchArgs = HuskyCratesApiFetchParamCreator(configuration).modifyCrate(id, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15263,51 +15987,66 @@ export const HuskyCratesApiFactory = function (configuration?: Configuration, fe
          * Creates a new crate.     **Required permissions:**    - **husky-crates.crate.create **   
          * @summary Create a crate
          * @param {HuskyCratesCrate} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCrate(body?: HuskyCratesCrate, options?: any) {
-            return HuskyCratesApiFp(configuration).createCrate(body, options)(fetch, basePath);
+        createCrate(body?: HuskyCratesCrate, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return HuskyCratesApiFp(configuration).createCrate(body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Delete a crate.     **Required permissions:**    - **husky-crates.crate.delete**   
          * @summary Delete a crate
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteCrate(id: string, options?: any) {
-            return HuskyCratesApiFp(configuration).deleteCrate(id, options)(fetch, basePath);
+        deleteCrate(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return HuskyCratesApiFp(configuration).deleteCrate(id, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get detailed information about a crate.     **Required permissions:**    - **husky-crates.crate.one**   
          * @summary Get a crate
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCrate(id: string, options?: any) {
-            return HuskyCratesApiFp(configuration).getCrate(id, options)(fetch, basePath);
+        getCrate(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return HuskyCratesApiFp(configuration).getCrate(id, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get a list of all the crates on the server.     **Required permissions:**    - **husky-crates.crate.list**   
          * @summary List crates
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listCrates(options?: any) {
-            return HuskyCratesApiFp(configuration).listCrates(options)(fetch, basePath);
+        listCrates(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return HuskyCratesApiFp(configuration).listCrates(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Modify a crate.     **Required permissions:**    - **husky-crates.crate.modify**   
          * @summary Change a crate
          * @param {string} id 
          * @param {HuskyCratesCrate} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyCrate(id: string, body?: HuskyCratesCrate, options?: any) {
-            return HuskyCratesApiFp(configuration).modifyCrate(id, body, options)(fetch, basePath);
+        modifyCrate(id: string, body?: HuskyCratesCrate, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return HuskyCratesApiFp(configuration).modifyCrate(id, body, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -15323,47 +16062,59 @@ export class HuskyCratesApi extends BaseAPI {
      * Creates a new crate.     **Required permissions:**    - **husky-crates.crate.create **   
      * @summary Create a crate
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HuskyCratesApi
      */
-    public createCrate(body?: HuskyCratesCrate, options?: any) {
-        return HuskyCratesApiFp(this.configuration).createCrate(body, options)(this.fetch, this.basePath);
+    public createCrate(body?: HuskyCratesCrate, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return HuskyCratesApiFp(this.configuration).createCrate(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Delete a crate.     **Required permissions:**    - **husky-crates.crate.delete**   
      * @summary Delete a crate
      * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HuskyCratesApi
      */
-    public deleteCrate(id: string, options?: any) {
-        return HuskyCratesApiFp(this.configuration).deleteCrate(id, options)(this.fetch, this.basePath);
+    public deleteCrate(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return HuskyCratesApiFp(this.configuration).deleteCrate(id, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get detailed information about a crate.     **Required permissions:**    - **husky-crates.crate.one**   
      * @summary Get a crate
      * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HuskyCratesApi
      */
-    public getCrate(id: string, options?: any) {
-        return HuskyCratesApiFp(this.configuration).getCrate(id, options)(this.fetch, this.basePath);
+    public getCrate(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return HuskyCratesApiFp(this.configuration).getCrate(id, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get a list of all the crates on the server.     **Required permissions:**    - **husky-crates.crate.list**   
      * @summary List crates
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HuskyCratesApi
      */
-    public listCrates(options?: any) {
-        return HuskyCratesApiFp(this.configuration).listCrates(options)(this.fetch, this.basePath);
+    public listCrates(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return HuskyCratesApiFp(this.configuration).listCrates(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -15371,12 +16122,15 @@ export class HuskyCratesApi extends BaseAPI {
      * @summary Change a crate
      * @param {} id 
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HuskyCratesApi
      */
-    public modifyCrate(id: string, body?: HuskyCratesCrate, options?: any) {
-        return HuskyCratesApiFp(this.configuration).modifyCrate(id, body, options)(this.fetch, this.basePath);
+    public modifyCrate(id: string, body?: HuskyCratesCrate, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return HuskyCratesApiFp(this.configuration).modifyCrate(id, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -15390,10 +16144,13 @@ export const InfoApiFetchParamCreator = function (configuration?: Configuration)
         /**
          * Get general information about the Minecraft server.     **Required permissions:**    - **info.info**   
          * @summary Server info
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInfo(options: any = {}): FetchArgs {
+        getInfo(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/info`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -15416,6 +16173,18 @@ export const InfoApiFetchParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -15429,10 +16198,13 @@ export const InfoApiFetchParamCreator = function (configuration?: Configuration)
         /**
          * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**   
          * @summary Server stats
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStats(options: any = {}): FetchArgs {
+        getStats(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/info/stats`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -15455,6 +16227,18 @@ export const InfoApiFetchParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -15468,10 +16252,13 @@ export const InfoApiFetchParamCreator = function (configuration?: Configuration)
         /**
          * Lists all the active servlets running in the Web-API     **Required permissions:**    - **info.servlets**   
          * @summary List servlets
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listServlets(options: any = {}): FetchArgs {
+        listServlets(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/info/servlets`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -15492,6 +16279,18 @@ export const InfoApiFetchParamCreator = function (configuration?: Configuration)
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -15516,11 +16315,14 @@ export const InfoApiFp = function(configuration?: Configuration) {
         /**
          * Get general information about the Minecraft server.     **Required permissions:**    - **info.info**   
          * @summary Server info
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInfo(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ServerInfo> {
-            const localVarFetchArgs = InfoApiFetchParamCreator(configuration).getInfo(options);
+        getInfo(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ServerInfo> {
+            const localVarFetchArgs = InfoApiFetchParamCreator(configuration).getInfo(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15534,11 +16336,14 @@ export const InfoApiFp = function(configuration?: Configuration) {
         /**
          * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**   
          * @summary Server stats
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStats(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ServerStats> {
-            const localVarFetchArgs = InfoApiFetchParamCreator(configuration).getStats(options);
+        getStats(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ServerStats> {
+            const localVarFetchArgs = InfoApiFetchParamCreator(configuration).getStats(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15552,11 +16357,14 @@ export const InfoApiFp = function(configuration?: Configuration) {
         /**
          * Lists all the active servlets running in the Web-API     **Required permissions:**    - **info.servlets**   
          * @summary List servlets
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listServlets(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{ [key: string]: string; }> {
-            const localVarFetchArgs = InfoApiFetchParamCreator(configuration).listServlets(options);
+        listServlets(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{ [key: string]: string; }> {
+            const localVarFetchArgs = InfoApiFetchParamCreator(configuration).listServlets(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15579,29 +16387,38 @@ export const InfoApiFactory = function (configuration?: Configuration, fetch?: F
         /**
          * Get general information about the Minecraft server.     **Required permissions:**    - **info.info**   
          * @summary Server info
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInfo(options?: any) {
-            return InfoApiFp(configuration).getInfo(options)(fetch, basePath);
+        getInfo(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return InfoApiFp(configuration).getInfo(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**   
          * @summary Server stats
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStats(options?: any) {
-            return InfoApiFp(configuration).getStats(options)(fetch, basePath);
+        getStats(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return InfoApiFp(configuration).getStats(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Lists all the active servlets running in the Web-API     **Required permissions:**    - **info.servlets**   
          * @summary List servlets
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listServlets(options?: any) {
-            return InfoApiFp(configuration).listServlets(options)(fetch, basePath);
+        listServlets(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return InfoApiFp(configuration).listServlets(details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -15616,34 +16433,399 @@ export class InfoApi extends BaseAPI {
     /**
      * Get general information about the Minecraft server.     **Required permissions:**    - **info.info**   
      * @summary Server info
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InfoApi
      */
-    public getInfo(options?: any) {
-        return InfoApiFp(this.configuration).getInfo(options)(this.fetch, this.basePath);
+    public getInfo(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return InfoApiFp(this.configuration).getInfo(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**   
      * @summary Server stats
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InfoApi
      */
-    public getStats(options?: any) {
-        return InfoApiFp(this.configuration).getStats(options)(this.fetch, this.basePath);
+    public getStats(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return InfoApiFp(this.configuration).getStats(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Lists all the active servlets running in the Web-API     **Required permissions:**    - **info.servlets**   
      * @summary List servlets
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InfoApi
      */
-    public listServlets(options?: any) {
-        return InfoApiFp(this.configuration).listServlets(options)(this.fetch, this.basePath);
+    public listServlets(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return InfoApiFp(this.configuration).listServlets(details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+}
+
+/**
+ * InteractiveMessageApi - fetch parameter creator
+ * @export
+ */
+export const InteractiveMessageApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Get detailed information about a message.     **Required permissions:**    - **interactive-message.one**   
+         * @summary Get a message
+         * @param {string} uuid The uuid of the sent message
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMessage(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'uuid' is not null or undefined
+            if (uuid === null || uuid === undefined) {
+                throw new RequiredError('uuid','Required parameter uuid was null or undefined when calling getMessage.');
+            }
+            const localVarPath = `/interactive-message/{uuid}`
+                .replace(`{${"uuid"}}`, encodeURIComponent(String(uuid)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **interactive-message.list**   
+         * @summary List messages
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listMessages(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            const localVarPath = `/interactive-message`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **interactive-message.create**   
+         * @summary Send a message
+         * @param {InteractiveMessage} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendMessage(body?: InteractiveMessage, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            const localVarPath = `/interactive-message`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"InteractiveMessage" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * InteractiveMessageApi - functional programming interface
+ * @export
+ */
+export const InteractiveMessageApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * Get detailed information about a message.     **Required permissions:**    - **interactive-message.one**   
+         * @summary Get a message
+         * @param {string} uuid The uuid of the sent message
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMessage(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<InteractiveMessage> {
+            const localVarFetchArgs = InteractiveMessageApiFetchParamCreator(configuration).getMessage(uuid, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **interactive-message.list**   
+         * @summary List messages
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listMessages(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<InteractiveMessage>> {
+            const localVarFetchArgs = InteractiveMessageApiFetchParamCreator(configuration).listMessages(details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **interactive-message.create**   
+         * @summary Send a message
+         * @param {InteractiveMessage} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendMessage(body?: InteractiveMessage, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<InteractiveMessage> {
+            const localVarFetchArgs = InteractiveMessageApiFetchParamCreator(configuration).sendMessage(body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * InteractiveMessageApi - factory interface
+ * @export
+ */
+export const InteractiveMessageApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * Get detailed information about a message.     **Required permissions:**    - **interactive-message.one**   
+         * @summary Get a message
+         * @param {string} uuid The uuid of the sent message
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMessage(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return InteractiveMessageApiFp(configuration).getMessage(uuid, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **interactive-message.list**   
+         * @summary List messages
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listMessages(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return InteractiveMessageApiFp(configuration).listMessages(details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **interactive-message.create**   
+         * @summary Send a message
+         * @param {InteractiveMessage} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendMessage(body?: InteractiveMessage, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return InteractiveMessageApiFp(configuration).sendMessage(body, details, accept, pretty, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * InteractiveMessageApi - object-oriented interface
+ * @export
+ * @class InteractiveMessageApi
+ * @extends {BaseAPI}
+ */
+export class InteractiveMessageApi extends BaseAPI {
+    /**
+     * Get detailed information about a message.     **Required permissions:**    - **interactive-message.one**   
+     * @summary Get a message
+     * @param {} uuid The uuid of the sent message
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InteractiveMessageApi
+     */
+    public getMessage(uuid: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return InteractiveMessageApiFp(this.configuration).getMessage(uuid, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **interactive-message.list**   
+     * @summary List messages
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InteractiveMessageApi
+     */
+    public listMessages(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return InteractiveMessageApiFp(this.configuration).listMessages(details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **interactive-message.create**   
+     * @summary Send a message
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InteractiveMessageApi
+     */
+    public sendMessage(body?: InteractiveMessage, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return InteractiveMessageApiFp(this.configuration).sendMessage(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -15658,10 +16840,13 @@ export const MMCRestrictApiFetchParamCreator = function (configuration?: Configu
          * Adds a new item to the restricted item list.     **Required permissions:**    - **mmc-restrict.item.create**   
          * @summary Add an item
          * @param {MMCRestrictItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addItem(body?: MMCRestrictItem, options: any = {}): FetchArgs {
+        addItem(body?: MMCRestrictItem, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/mmc-restrict/item`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -15684,6 +16869,18 @@ export const MMCRestrictApiFetchParamCreator = function (configuration?: Configu
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -15702,10 +16899,13 @@ export const MMCRestrictApiFetchParamCreator = function (configuration?: Configu
          * Delete an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.delete**   
          * @summary Delete an item
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteItem(id: string, options: any = {}): FetchArgs {
+        deleteItem(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling deleteItem.');
@@ -15733,6 +16933,18 @@ export const MMCRestrictApiFetchParamCreator = function (configuration?: Configu
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -15746,10 +16958,13 @@ export const MMCRestrictApiFetchParamCreator = function (configuration?: Configu
         /**
          * Gets the list of restricted items on the server.     **Required permissions:**    - **mmc-restrict.item.list**   
          * @summary List items
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listItems(options: any = {}): FetchArgs {
+        listItems(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/mmc-restrict/item`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -15772,6 +16987,18 @@ export const MMCRestrictApiFetchParamCreator = function (configuration?: Configu
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -15787,10 +17014,13 @@ export const MMCRestrictApiFetchParamCreator = function (configuration?: Configu
          * @summary Modify an item
          * @param {string} id 
          * @param {MMCRestrictItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyItem(id: string, body?: MMCRestrictItem, options: any = {}): FetchArgs {
+        modifyItem(id: string, body?: MMCRestrictItem, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling modifyItem.');
@@ -15816,6 +17046,18 @@ export const MMCRestrictApiFetchParamCreator = function (configuration?: Configu
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -15845,11 +17087,14 @@ export const MMCRestrictApiFp = function(configuration?: Configuration) {
          * Adds a new item to the restricted item list.     **Required permissions:**    - **mmc-restrict.item.create**   
          * @summary Add an item
          * @param {MMCRestrictItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addItem(body?: MMCRestrictItem, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<MMCRestrictItem> {
-            const localVarFetchArgs = MMCRestrictApiFetchParamCreator(configuration).addItem(body, options);
+        addItem(body?: MMCRestrictItem, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<MMCRestrictItem> {
+            const localVarFetchArgs = MMCRestrictApiFetchParamCreator(configuration).addItem(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15864,11 +17109,14 @@ export const MMCRestrictApiFp = function(configuration?: Configuration) {
          * Delete an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.delete**   
          * @summary Delete an item
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteItem(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<MMCRestrictItem> {
-            const localVarFetchArgs = MMCRestrictApiFetchParamCreator(configuration).deleteItem(id, options);
+        deleteItem(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<MMCRestrictItem> {
+            const localVarFetchArgs = MMCRestrictApiFetchParamCreator(configuration).deleteItem(id, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15882,11 +17130,14 @@ export const MMCRestrictApiFp = function(configuration?: Configuration) {
         /**
          * Gets the list of restricted items on the server.     **Required permissions:**    - **mmc-restrict.item.list**   
          * @summary List items
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listItems(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<MMCRestrictItem>> {
-            const localVarFetchArgs = MMCRestrictApiFetchParamCreator(configuration).listItems(options);
+        listItems(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<MMCRestrictItem>> {
+            const localVarFetchArgs = MMCRestrictApiFetchParamCreator(configuration).listItems(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15902,11 +17153,14 @@ export const MMCRestrictApiFp = function(configuration?: Configuration) {
          * @summary Modify an item
          * @param {string} id 
          * @param {MMCRestrictItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyItem(id: string, body?: MMCRestrictItem, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<MMCRestrictItem> {
-            const localVarFetchArgs = MMCRestrictApiFetchParamCreator(configuration).modifyItem(id, body, options);
+        modifyItem(id: string, body?: MMCRestrictItem, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<MMCRestrictItem> {
+            const localVarFetchArgs = MMCRestrictApiFetchParamCreator(configuration).modifyItem(id, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15930,41 +17184,53 @@ export const MMCRestrictApiFactory = function (configuration?: Configuration, fe
          * Adds a new item to the restricted item list.     **Required permissions:**    - **mmc-restrict.item.create**   
          * @summary Add an item
          * @param {MMCRestrictItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addItem(body?: MMCRestrictItem, options?: any) {
-            return MMCRestrictApiFp(configuration).addItem(body, options)(fetch, basePath);
+        addItem(body?: MMCRestrictItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return MMCRestrictApiFp(configuration).addItem(body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Delete an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.delete**   
          * @summary Delete an item
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteItem(id: string, options?: any) {
-            return MMCRestrictApiFp(configuration).deleteItem(id, options)(fetch, basePath);
+        deleteItem(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return MMCRestrictApiFp(configuration).deleteItem(id, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Gets the list of restricted items on the server.     **Required permissions:**    - **mmc-restrict.item.list**   
          * @summary List items
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listItems(options?: any) {
-            return MMCRestrictApiFp(configuration).listItems(options)(fetch, basePath);
+        listItems(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return MMCRestrictApiFp(configuration).listItems(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Modify an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.modify**   
          * @summary Modify an item
          * @param {string} id 
          * @param {MMCRestrictItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyItem(id: string, body?: MMCRestrictItem, options?: any) {
-            return MMCRestrictApiFp(configuration).modifyItem(id, body, options)(fetch, basePath);
+        modifyItem(id: string, body?: MMCRestrictItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return MMCRestrictApiFp(configuration).modifyItem(id, body, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -15980,35 +17246,44 @@ export class MMCRestrictApi extends BaseAPI {
      * Adds a new item to the restricted item list.     **Required permissions:**    - **mmc-restrict.item.create**   
      * @summary Add an item
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MMCRestrictApi
      */
-    public addItem(body?: MMCRestrictItem, options?: any) {
-        return MMCRestrictApiFp(this.configuration).addItem(body, options)(this.fetch, this.basePath);
+    public addItem(body?: MMCRestrictItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return MMCRestrictApiFp(this.configuration).addItem(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Delete an existing restricted item.     **Required permissions:**    - **mmc-restrict.item.delete**   
      * @summary Delete an item
      * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MMCRestrictApi
      */
-    public deleteItem(id: string, options?: any) {
-        return MMCRestrictApiFp(this.configuration).deleteItem(id, options)(this.fetch, this.basePath);
+    public deleteItem(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return MMCRestrictApiFp(this.configuration).deleteItem(id, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Gets the list of restricted items on the server.     **Required permissions:**    - **mmc-restrict.item.list**   
      * @summary List items
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MMCRestrictApi
      */
-    public listItems(options?: any) {
-        return MMCRestrictApiFp(this.configuration).listItems(options)(this.fetch, this.basePath);
+    public listItems(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return MMCRestrictApiFp(this.configuration).listItems(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -16016,12 +17291,15 @@ export class MMCRestrictApi extends BaseAPI {
      * @summary Modify an item
      * @param {} id 
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MMCRestrictApi
      */
-    public modifyItem(id: string, body?: MMCRestrictItem, options?: any) {
-        return MMCRestrictApiFp(this.configuration).modifyItem(id, body, options)(this.fetch, this.basePath);
+    public modifyItem(id: string, body?: MMCRestrictItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return MMCRestrictApiFp(this.configuration).modifyItem(id, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -16036,10 +17314,13 @@ export const MMCTicketsApiFetchParamCreator = function (configuration?: Configur
          * Get detailed information about a ticket.     **Required permissions:**    - **mmc-tickets.ticket.one**   
          * @summary Get a ticket
          * @param {number} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTicket(id: number, options: any = {}): FetchArgs {
+        getTicket(id: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling getTicket.');
@@ -16067,6 +17348,18 @@ export const MMCTicketsApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -16080,10 +17373,13 @@ export const MMCTicketsApiFetchParamCreator = function (configuration?: Configur
         /**
          * Get a list of all the tickets on the server.     **Required permissions:**    - **mmc-tickets.ticket.list**   
          * @summary List tickets
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTickets(options: any = {}): FetchArgs {
+        listTickets(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/mmc-tickets/ticket`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -16106,6 +17402,18 @@ export const MMCTicketsApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -16121,10 +17429,13 @@ export const MMCTicketsApiFetchParamCreator = function (configuration?: Configur
          * @summary Modify a ticket
          * @param {number} id 
          * @param {MMCTicketsTicket} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyTicket(id: number, body?: MMCTicketsTicket, options: any = {}): FetchArgs {
+        modifyTicket(id: number, body?: MMCTicketsTicket, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling modifyTicket.');
@@ -16150,6 +17461,18 @@ export const MMCTicketsApiFetchParamCreator = function (configuration?: Configur
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -16179,11 +17502,14 @@ export const MMCTicketsApiFp = function(configuration?: Configuration) {
          * Get detailed information about a ticket.     **Required permissions:**    - **mmc-tickets.ticket.one**   
          * @summary Get a ticket
          * @param {number} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTicket(id: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<MMCTicketsTicket> {
-            const localVarFetchArgs = MMCTicketsApiFetchParamCreator(configuration).getTicket(id, options);
+        getTicket(id: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<MMCTicketsTicket> {
+            const localVarFetchArgs = MMCTicketsApiFetchParamCreator(configuration).getTicket(id, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -16197,11 +17523,14 @@ export const MMCTicketsApiFp = function(configuration?: Configuration) {
         /**
          * Get a list of all the tickets on the server.     **Required permissions:**    - **mmc-tickets.ticket.list**   
          * @summary List tickets
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTickets(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<MMCTicketsTicket>> {
-            const localVarFetchArgs = MMCTicketsApiFetchParamCreator(configuration).listTickets(options);
+        listTickets(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<MMCTicketsTicket>> {
+            const localVarFetchArgs = MMCTicketsApiFetchParamCreator(configuration).listTickets(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -16217,11 +17546,14 @@ export const MMCTicketsApiFp = function(configuration?: Configuration) {
          * @summary Modify a ticket
          * @param {number} id 
          * @param {MMCTicketsTicket} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyTicket(id: number, body?: MMCTicketsTicket, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<MMCTicketsTicket> {
-            const localVarFetchArgs = MMCTicketsApiFetchParamCreator(configuration).modifyTicket(id, body, options);
+        modifyTicket(id: number, body?: MMCTicketsTicket, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<MMCTicketsTicket> {
+            const localVarFetchArgs = MMCTicketsApiFetchParamCreator(configuration).modifyTicket(id, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -16245,31 +17577,40 @@ export const MMCTicketsApiFactory = function (configuration?: Configuration, fet
          * Get detailed information about a ticket.     **Required permissions:**    - **mmc-tickets.ticket.one**   
          * @summary Get a ticket
          * @param {number} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTicket(id: number, options?: any) {
-            return MMCTicketsApiFp(configuration).getTicket(id, options)(fetch, basePath);
+        getTicket(id: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return MMCTicketsApiFp(configuration).getTicket(id, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get a list of all the tickets on the server.     **Required permissions:**    - **mmc-tickets.ticket.list**   
          * @summary List tickets
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTickets(options?: any) {
-            return MMCTicketsApiFp(configuration).listTickets(options)(fetch, basePath);
+        listTickets(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return MMCTicketsApiFp(configuration).listTickets(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Modify the properties of an existing ticket.     **Required permissions:**    - **mmc-tickets.ticket.modify**   
          * @summary Modify a ticket
          * @param {number} id 
          * @param {MMCTicketsTicket} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyTicket(id: number, body?: MMCTicketsTicket, options?: any) {
-            return MMCTicketsApiFp(configuration).modifyTicket(id, body, options)(fetch, basePath);
+        modifyTicket(id: number, body?: MMCTicketsTicket, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return MMCTicketsApiFp(configuration).modifyTicket(id, body, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -16285,23 +17626,29 @@ export class MMCTicketsApi extends BaseAPI {
      * Get detailed information about a ticket.     **Required permissions:**    - **mmc-tickets.ticket.one**   
      * @summary Get a ticket
      * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MMCTicketsApi
      */
-    public getTicket(id: number, options?: any) {
-        return MMCTicketsApiFp(this.configuration).getTicket(id, options)(this.fetch, this.basePath);
+    public getTicket(id: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return MMCTicketsApiFp(this.configuration).getTicket(id, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get a list of all the tickets on the server.     **Required permissions:**    - **mmc-tickets.ticket.list**   
      * @summary List tickets
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MMCTicketsApi
      */
-    public listTickets(options?: any) {
-        return MMCTicketsApiFp(this.configuration).listTickets(options)(this.fetch, this.basePath);
+    public listTickets(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return MMCTicketsApiFp(this.configuration).listTickets(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -16309,12 +17656,15 @@ export class MMCTicketsApi extends BaseAPI {
      * @summary Modify a ticket
      * @param {} id 
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MMCTicketsApi
      */
-    public modifyTicket(id: number, body?: MMCTicketsTicket, options?: any) {
-        return MMCTicketsApiFp(this.configuration).modifyTicket(id, body, options)(this.fetch, this.basePath);
+    public modifyTicket(id: number, body?: MMCTicketsTicket, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return MMCTicketsApiFp(this.configuration).modifyTicket(id, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -16331,10 +17681,13 @@ export const MapApiFetchParamCreator = function (configuration?: Configuration) 
          * @param {string} world The world to get the map tile from
          * @param {number} x The x-coordinate of the tile (is multiplied by the TILE_SIZE)
          * @param {number} z The z-coordinate of the tile (is multiplied by the TILE_SIZE)
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMap(world: string, x: number, z: number, options: any = {}): FetchArgs {
+        getMap(world: string, x: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'world' is not null or undefined
             if (world === null || world === undefined) {
                 throw new RequiredError('world','Required parameter world was null or undefined when calling getMap.');
@@ -16372,6 +17725,18 @@ export const MapApiFetchParamCreator = function (configuration?: Configuration) 
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -16397,11 +17762,14 @@ export const MapApiFp = function(configuration?: Configuration) {
          * @param {string} world The world to get the map tile from
          * @param {number} x The x-coordinate of the tile (is multiplied by the TILE_SIZE)
          * @param {number} z The z-coordinate of the tile (is multiplied by the TILE_SIZE)
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMap(world: string, x: number, z: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
-            const localVarFetchArgs = MapApiFetchParamCreator(configuration).getMap(world, x, z, options);
+        getMap(world: string, x: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = MapApiFetchParamCreator(configuration).getMap(world, x, z, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -16427,11 +17795,14 @@ export const MapApiFactory = function (configuration?: Configuration, fetch?: Fe
          * @param {string} world The world to get the map tile from
          * @param {number} x The x-coordinate of the tile (is multiplied by the TILE_SIZE)
          * @param {number} z The z-coordinate of the tile (is multiplied by the TILE_SIZE)
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMap(world: string, x: number, z: number, options?: any) {
-            return MapApiFp(configuration).getMap(world, x, z, options)(fetch, basePath);
+        getMap(world: string, x: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return MapApiFp(configuration).getMap(world, x, z, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -16449,296 +17820,15 @@ export class MapApi extends BaseAPI {
      * @param {} world The world to get the map tile from
      * @param {} x The x-coordinate of the tile (is multiplied by the TILE_SIZE)
      * @param {} z The z-coordinate of the tile (is multiplied by the TILE_SIZE)
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MapApi
      */
-    public getMap(world: string, x: number, z: number, options?: any) {
-        return MapApiFp(this.configuration).getMap(world, x, z, options)(this.fetch, this.basePath);
-    }
-
-}
-
-/**
- * MessageApi - fetch parameter creator
- * @export
- */
-export const MessageApiFetchParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * Get detailed information about a message.     **Required permissions:**    - **message.one**   
-         * @summary Get a message
-         * @param {string} uuid The uuid of the sent message
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getMessage(uuid: string, options: any = {}): FetchArgs {
-            // verify required parameter 'uuid' is not null or undefined
-            if (uuid === null || uuid === undefined) {
-                throw new RequiredError('uuid','Required parameter uuid was null or undefined when calling getMessage.');
-            }
-            const localVarPath = `/message/{uuid}`
-                .replace(`{${"uuid"}}`, encodeURIComponent(String(uuid)));
-            const localVarUrlObj = url.parse(localVarPath, true);
-            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyHeader required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-					? configuration.apiKey("X-WebAPI-Key")
-					: configuration.apiKey;
-                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
-            }
-
-            // authentication ApiKeyQuery required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-					? configuration.apiKey("key")
-					: configuration.apiKey;
-                localVarQueryParameter["key"] = localVarApiKeyValue;
-            }
-
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **message.list**   
-         * @summary List messages
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listMessages(options: any = {}): FetchArgs {
-            const localVarPath = `/message`;
-            const localVarUrlObj = url.parse(localVarPath, true);
-            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyHeader required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-					? configuration.apiKey("X-WebAPI-Key")
-					: configuration.apiKey;
-                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
-            }
-
-            // authentication ApiKeyQuery required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-					? configuration.apiKey("key")
-					: configuration.apiKey;
-                localVarQueryParameter["key"] = localVarApiKeyValue;
-            }
-
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **message.create**   
-         * @summary Send a message
-         * @param {Message} [body] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sendMessage(body?: Message, options: any = {}): FetchArgs {
-            const localVarPath = `/message`;
-            const localVarUrlObj = url.parse(localVarPath, true);
-            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyHeader required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-					? configuration.apiKey("X-WebAPI-Key")
-					: configuration.apiKey;
-                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
-            }
-
-            // authentication ApiKeyQuery required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-					? configuration.apiKey("key")
-					: configuration.apiKey;
-                localVarQueryParameter["key"] = localVarApiKeyValue;
-            }
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            const needsSerialization = (<any>"Message" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
-
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * MessageApi - functional programming interface
- * @export
- */
-export const MessageApiFp = function(configuration?: Configuration) {
-    return {
-        /**
-         * Get detailed information about a message.     **Required permissions:**    - **message.one**   
-         * @summary Get a message
-         * @param {string} uuid The uuid of the sent message
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getMessage(uuid: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Message> {
-            const localVarFetchArgs = MessageApiFetchParamCreator(configuration).getMessage(uuid, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **message.list**   
-         * @summary List messages
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listMessages(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Message>> {
-            const localVarFetchArgs = MessageApiFetchParamCreator(configuration).listMessages(options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **message.create**   
-         * @summary Send a message
-         * @param {Message} [body] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sendMessage(body?: Message, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Message> {
-            const localVarFetchArgs = MessageApiFetchParamCreator(configuration).sendMessage(body, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                });
-            };
-        },
-    }
-};
-
-/**
- * MessageApi - factory interface
- * @export
- */
-export const MessageApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
-    return {
-        /**
-         * Get detailed information about a message.     **Required permissions:**    - **message.one**   
-         * @summary Get a message
-         * @param {string} uuid The uuid of the sent message
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getMessage(uuid: string, options?: any) {
-            return MessageApiFp(configuration).getMessage(uuid, options)(fetch, basePath);
-        },
-        /**
-         * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **message.list**   
-         * @summary List messages
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listMessages(options?: any) {
-            return MessageApiFp(configuration).listMessages(options)(fetch, basePath);
-        },
-        /**
-         * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **message.create**   
-         * @summary Send a message
-         * @param {Message} [body] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        sendMessage(body?: Message, options?: any) {
-            return MessageApiFp(configuration).sendMessage(body, options)(fetch, basePath);
-        },
-    };
-};
-
-/**
- * MessageApi - object-oriented interface
- * @export
- * @class MessageApi
- * @extends {BaseAPI}
- */
-export class MessageApi extends BaseAPI {
-    /**
-     * Get detailed information about a message.     **Required permissions:**    - **message.one**   
-     * @summary Get a message
-     * @param {} uuid The uuid of the sent message
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof MessageApi
-     */
-    public getMessage(uuid: string, options?: any) {
-        return MessageApiFp(this.configuration).getMessage(uuid, options)(this.fetch, this.basePath);
-    }
-
-    /**
-     * Get a list of all the messages that were sent through the message endpoint since the server started.     **Required permissions:**    - **message.list**   
-     * @summary List messages
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof MessageApi
-     */
-    public listMessages(options?: any) {
-        return MessageApiFp(this.configuration).listMessages(options)(this.fetch, this.basePath);
-    }
-
-    /**
-     * Send an interactive message to a player. Make sure to have an event hook for \"custom_message\" to receive the response.     **Required permissions:**    - **message.create**   
-     * @summary Send a message
-     * @param {} [body] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof MessageApi
-     */
-    public sendMessage(body?: Message, options?: any) {
-        return MessageApiFp(this.configuration).sendMessage(body, options)(this.fetch, this.basePath);
+    public getMap(world: string, x: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return MapApiFp(this.configuration).getMap(world, x, z, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -16753,10 +17843,13 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
          * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**   
          * @summary Create a jail
          * @param {NucleusJail} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createJail(body?: NucleusJail, options: any = {}): FetchArgs {
+        createJail(body?: NucleusJail, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/nucleus/jail`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -16779,6 +17872,18 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -16797,10 +17902,13 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
          * Creates a new kit.     **Required permissions:**    - **nucleus.kit.create**   
          * @summary Create a kit
          * @param {NucleusKit} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createKit(body?: NucleusKit, options: any = {}): FetchArgs {
+        createKit(body?: NucleusKit, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/nucleus/kit`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -16823,6 +17931,18 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -16841,10 +17961,13 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
          * Delete an existing jail.     **Required permissions:**    - **nucleus.jail.delete**   
          * @summary Delete a jail
          * @param {string} name 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteJail(name: string, options: any = {}): FetchArgs {
+        deleteJail(name: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'name' is not null or undefined
             if (name === null || name === undefined) {
                 throw new RequiredError('name','Required parameter name was null or undefined when calling deleteJail.');
@@ -16872,6 +17995,18 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -16886,10 +18021,13 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
          * Delete an existing kit.     **Required permissions:**    - **nucleus.kit.delete**   
          * @summary Delete a kit
          * @param {string} name 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteKit(name: string, options: any = {}): FetchArgs {
+        deleteKit(name: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'name' is not null or undefined
             if (name === null || name === undefined) {
                 throw new RequiredError('name','Required parameter name was null or undefined when calling deleteKit.');
@@ -16917,6 +18055,18 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -16931,10 +18081,13 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
          * Get detailed information about a jail.     **Required permissions:**    - **nucleus.jail.one**   
          * @summary Get a jail
          * @param {string} name 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getJail(name: string, options: any = {}): FetchArgs {
+        getJail(name: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'name' is not null or undefined
             if (name === null || name === undefined) {
                 throw new RequiredError('name','Required parameter name was null or undefined when calling getJail.');
@@ -16962,6 +18115,18 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -16976,10 +18141,13 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
          * Get detailed information about a kit.     **Required permissions:**    - **nucleus.kit.one**   
          * @summary Get a kit
          * @param {string} name 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getKit(name: string, options: any = {}): FetchArgs {
+        getKit(name: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'name' is not null or undefined
             if (name === null || name === undefined) {
                 throw new RequiredError('name','Required parameter name was null or undefined when calling getKit.');
@@ -17007,6 +18175,18 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -17020,10 +18200,13 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
         /**
          * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**   
          * @summary List jails
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listJails(options: any = {}): FetchArgs {
+        listJails(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/nucleus/jail`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -17046,6 +18229,18 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -17059,10 +18254,13 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
         /**
          * Get a list of all the kits on the server.     **Required permissions:**    - **nucleus.kit.list**   
          * @summary List kits
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listKits(options: any = {}): FetchArgs {
+        listKits(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/nucleus/kit`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -17085,6 +18283,18 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -17098,10 +18308,13 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
         /**
          * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**   
          * @summary Modify a jail
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyJail(options: any = {}): FetchArgs {
+        modifyJail(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/nucleus/jail/{name}`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
@@ -17124,6 +18337,18 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -17139,10 +18364,13 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
          * @summary Modify a kit
          * @param {string} name 
          * @param {NucleusKit} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyKit(name: string, body?: NucleusKit, options: any = {}): FetchArgs {
+        modifyKit(name: string, body?: NucleusKit, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'name' is not null or undefined
             if (name === null || name === undefined) {
                 throw new RequiredError('name','Required parameter name was null or undefined when calling modifyKit.');
@@ -17168,6 +18396,18 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -17197,11 +18437,14 @@ export const NucleusApiFp = function(configuration?: Configuration) {
          * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**   
          * @summary Create a jail
          * @param {NucleusJail} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createJail(body?: NucleusJail, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusJail> {
-            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).createJail(body, options);
+        createJail(body?: NucleusJail, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusJail> {
+            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).createJail(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17216,11 +18459,14 @@ export const NucleusApiFp = function(configuration?: Configuration) {
          * Creates a new kit.     **Required permissions:**    - **nucleus.kit.create**   
          * @summary Create a kit
          * @param {NucleusKit} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createKit(body?: NucleusKit, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusKit> {
-            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).createKit(body, options);
+        createKit(body?: NucleusKit, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusKit> {
+            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).createKit(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17235,11 +18481,14 @@ export const NucleusApiFp = function(configuration?: Configuration) {
          * Delete an existing jail.     **Required permissions:**    - **nucleus.jail.delete**   
          * @summary Delete a jail
          * @param {string} name 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteJail(name: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusJail> {
-            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).deleteJail(name, options);
+        deleteJail(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusJail> {
+            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).deleteJail(name, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17254,11 +18503,14 @@ export const NucleusApiFp = function(configuration?: Configuration) {
          * Delete an existing kit.     **Required permissions:**    - **nucleus.kit.delete**   
          * @summary Delete a kit
          * @param {string} name 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteKit(name: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusKit> {
-            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).deleteKit(name, options);
+        deleteKit(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusKit> {
+            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).deleteKit(name, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17273,11 +18525,14 @@ export const NucleusApiFp = function(configuration?: Configuration) {
          * Get detailed information about a jail.     **Required permissions:**    - **nucleus.jail.one**   
          * @summary Get a jail
          * @param {string} name 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getJail(name: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusJail> {
-            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).getJail(name, options);
+        getJail(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusJail> {
+            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).getJail(name, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17292,11 +18547,14 @@ export const NucleusApiFp = function(configuration?: Configuration) {
          * Get detailed information about a kit.     **Required permissions:**    - **nucleus.kit.one**   
          * @summary Get a kit
          * @param {string} name 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getKit(name: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusKit> {
-            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).getKit(name, options);
+        getKit(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusKit> {
+            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).getKit(name, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17310,11 +18568,14 @@ export const NucleusApiFp = function(configuration?: Configuration) {
         /**
          * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**   
          * @summary List jails
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listJails(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<NucleusJail>> {
-            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).listJails(options);
+        listJails(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<NucleusJail>> {
+            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).listJails(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17328,11 +18589,14 @@ export const NucleusApiFp = function(configuration?: Configuration) {
         /**
          * Get a list of all the kits on the server.     **Required permissions:**    - **nucleus.kit.list**   
          * @summary List kits
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listKits(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<NucleusKit>> {
-            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).listKits(options);
+        listKits(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<NucleusKit>> {
+            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).listKits(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17346,11 +18610,14 @@ export const NucleusApiFp = function(configuration?: Configuration) {
         /**
          * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**   
          * @summary Modify a jail
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyJail(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusJail> {
-            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).modifyJail(options);
+        modifyJail(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusJail> {
+            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).modifyJail(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17366,11 +18633,14 @@ export const NucleusApiFp = function(configuration?: Configuration) {
          * @summary Modify a kit
          * @param {string} name 
          * @param {NucleusKit} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyKit(name: string, body?: NucleusKit, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusKit> {
-            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).modifyKit(name, body, options);
+        modifyKit(name: string, body?: NucleusKit, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusKit> {
+            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).modifyKit(name, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17394,99 +18664,129 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
          * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**   
          * @summary Create a jail
          * @param {NucleusJail} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createJail(body?: NucleusJail, options?: any) {
-            return NucleusApiFp(configuration).createJail(body, options)(fetch, basePath);
+        createJail(body?: NucleusJail, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return NucleusApiFp(configuration).createJail(body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Creates a new kit.     **Required permissions:**    - **nucleus.kit.create**   
          * @summary Create a kit
          * @param {NucleusKit} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createKit(body?: NucleusKit, options?: any) {
-            return NucleusApiFp(configuration).createKit(body, options)(fetch, basePath);
+        createKit(body?: NucleusKit, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return NucleusApiFp(configuration).createKit(body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Delete an existing jail.     **Required permissions:**    - **nucleus.jail.delete**   
          * @summary Delete a jail
          * @param {string} name 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteJail(name: string, options?: any) {
-            return NucleusApiFp(configuration).deleteJail(name, options)(fetch, basePath);
+        deleteJail(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return NucleusApiFp(configuration).deleteJail(name, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Delete an existing kit.     **Required permissions:**    - **nucleus.kit.delete**   
          * @summary Delete a kit
          * @param {string} name 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteKit(name: string, options?: any) {
-            return NucleusApiFp(configuration).deleteKit(name, options)(fetch, basePath);
+        deleteKit(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return NucleusApiFp(configuration).deleteKit(name, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get detailed information about a jail.     **Required permissions:**    - **nucleus.jail.one**   
          * @summary Get a jail
          * @param {string} name 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getJail(name: string, options?: any) {
-            return NucleusApiFp(configuration).getJail(name, options)(fetch, basePath);
+        getJail(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return NucleusApiFp(configuration).getJail(name, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get detailed information about a kit.     **Required permissions:**    - **nucleus.kit.one**   
          * @summary Get a kit
          * @param {string} name 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getKit(name: string, options?: any) {
-            return NucleusApiFp(configuration).getKit(name, options)(fetch, basePath);
+        getKit(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return NucleusApiFp(configuration).getKit(name, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**   
          * @summary List jails
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listJails(options?: any) {
-            return NucleusApiFp(configuration).listJails(options)(fetch, basePath);
+        listJails(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return NucleusApiFp(configuration).listJails(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get a list of all the kits on the server.     **Required permissions:**    - **nucleus.kit.list**   
          * @summary List kits
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listKits(options?: any) {
-            return NucleusApiFp(configuration).listKits(options)(fetch, basePath);
+        listKits(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return NucleusApiFp(configuration).listKits(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**   
          * @summary Modify a jail
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyJail(options?: any) {
-            return NucleusApiFp(configuration).modifyJail(options)(fetch, basePath);
+        modifyJail(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return NucleusApiFp(configuration).modifyJail(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Modify an existing kit.     **Required permissions:**    - **nucleus.kit.modify**   
          * @summary Modify a kit
          * @param {string} name 
          * @param {NucleusKit} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyKit(name: string, body?: NucleusKit, options?: any) {
-            return NucleusApiFp(configuration).modifyKit(name, body, options)(fetch, basePath);
+        modifyKit(name: string, body?: NucleusKit, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return NucleusApiFp(configuration).modifyKit(name, body, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -17502,105 +18802,132 @@ export class NucleusApi extends BaseAPI {
      * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**   
      * @summary Create a jail
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
      */
-    public createJail(body?: NucleusJail, options?: any) {
-        return NucleusApiFp(this.configuration).createJail(body, options)(this.fetch, this.basePath);
+    public createJail(body?: NucleusJail, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return NucleusApiFp(this.configuration).createJail(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Creates a new kit.     **Required permissions:**    - **nucleus.kit.create**   
      * @summary Create a kit
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
      */
-    public createKit(body?: NucleusKit, options?: any) {
-        return NucleusApiFp(this.configuration).createKit(body, options)(this.fetch, this.basePath);
+    public createKit(body?: NucleusKit, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return NucleusApiFp(this.configuration).createKit(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Delete an existing jail.     **Required permissions:**    - **nucleus.jail.delete**   
      * @summary Delete a jail
      * @param {} name 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
      */
-    public deleteJail(name: string, options?: any) {
-        return NucleusApiFp(this.configuration).deleteJail(name, options)(this.fetch, this.basePath);
+    public deleteJail(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return NucleusApiFp(this.configuration).deleteJail(name, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Delete an existing kit.     **Required permissions:**    - **nucleus.kit.delete**   
      * @summary Delete a kit
      * @param {} name 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
      */
-    public deleteKit(name: string, options?: any) {
-        return NucleusApiFp(this.configuration).deleteKit(name, options)(this.fetch, this.basePath);
+    public deleteKit(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return NucleusApiFp(this.configuration).deleteKit(name, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get detailed information about a jail.     **Required permissions:**    - **nucleus.jail.one**   
      * @summary Get a jail
      * @param {} name 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
      */
-    public getJail(name: string, options?: any) {
-        return NucleusApiFp(this.configuration).getJail(name, options)(this.fetch, this.basePath);
+    public getJail(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return NucleusApiFp(this.configuration).getJail(name, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get detailed information about a kit.     **Required permissions:**    - **nucleus.kit.one**   
      * @summary Get a kit
      * @param {} name 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
      */
-    public getKit(name: string, options?: any) {
-        return NucleusApiFp(this.configuration).getKit(name, options)(this.fetch, this.basePath);
+    public getKit(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return NucleusApiFp(this.configuration).getKit(name, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**   
      * @summary List jails
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
      */
-    public listJails(options?: any) {
-        return NucleusApiFp(this.configuration).listJails(options)(this.fetch, this.basePath);
+    public listJails(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return NucleusApiFp(this.configuration).listJails(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get a list of all the kits on the server.     **Required permissions:**    - **nucleus.kit.list**   
      * @summary List kits
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
      */
-    public listKits(options?: any) {
-        return NucleusApiFp(this.configuration).listKits(options)(this.fetch, this.basePath);
+    public listKits(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return NucleusApiFp(this.configuration).listKits(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**   
      * @summary Modify a jail
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
      */
-    public modifyJail(options?: any) {
-        return NucleusApiFp(this.configuration).modifyJail(options)(this.fetch, this.basePath);
+    public modifyJail(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return NucleusApiFp(this.configuration).modifyJail(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -17608,12 +18935,15 @@ export class NucleusApi extends BaseAPI {
      * @summary Modify a kit
      * @param {} name 
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NucleusApi
      */
-    public modifyKit(name: string, body?: NucleusKit, options?: any) {
-        return NucleusApiFp(this.configuration).modifyKit(name, body, options)(this.fetch, this.basePath);
+    public modifyKit(name: string, body?: NucleusKit, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return NucleusApiFp(this.configuration).modifyKit(name, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -17628,10 +18958,13 @@ export const PermissionApiFetchParamCreator = function (configuration?: Configur
          * Gets a specific subject collection     **Required permissions:**    - **permission.collection.one**   
          * @summary Get collection
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCollection(id: string, options: any = {}): FetchArgs {
+        getCollection(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling getCollection.');
@@ -17659,6 +18992,18 @@ export const PermissionApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -17674,10 +19019,13 @@ export const PermissionApiFetchParamCreator = function (configuration?: Configur
          * @summary Get subject
          * @param {string} id 
          * @param {string} subId 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSubject(id: string, subId: string, options: any = {}): FetchArgs {
+        getSubject(id: string, subId: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling getSubject.');
@@ -17710,6 +19058,18 @@ export const PermissionApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -17723,10 +19083,13 @@ export const PermissionApiFetchParamCreator = function (configuration?: Configur
         /**
          * Gets a list of all the subject collections, for example groups, users, etc.     **Required permissions:**    - **permission.collection.list**   
          * @summary List collections
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listCollections(options: any = {}): FetchArgs {
+        listCollections(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/permission/collection`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -17749,6 +19112,18 @@ export const PermissionApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -17763,10 +19138,13 @@ export const PermissionApiFetchParamCreator = function (configuration?: Configur
          * List all subjects belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
          * @summary List subjects
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listSubjects(id: string, options: any = {}): FetchArgs {
+        listSubjects(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling listSubjects.');
@@ -17794,6 +19172,18 @@ export const PermissionApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -17817,11 +19207,14 @@ export const PermissionApiFp = function(configuration?: Configuration) {
          * Gets a specific subject collection     **Required permissions:**    - **permission.collection.one**   
          * @summary Get collection
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCollection(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SubjectCollection> {
-            const localVarFetchArgs = PermissionApiFetchParamCreator(configuration).getCollection(id, options);
+        getCollection(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SubjectCollection> {
+            const localVarFetchArgs = PermissionApiFetchParamCreator(configuration).getCollection(id, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17837,11 +19230,14 @@ export const PermissionApiFp = function(configuration?: Configuration) {
          * @summary Get subject
          * @param {string} id 
          * @param {string} subId 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSubject(id: string, subId: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Subject> {
-            const localVarFetchArgs = PermissionApiFetchParamCreator(configuration).getSubject(id, subId, options);
+        getSubject(id: string, subId: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Subject> {
+            const localVarFetchArgs = PermissionApiFetchParamCreator(configuration).getSubject(id, subId, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17855,11 +19251,14 @@ export const PermissionApiFp = function(configuration?: Configuration) {
         /**
          * Gets a list of all the subject collections, for example groups, users, etc.     **Required permissions:**    - **permission.collection.list**   
          * @summary List collections
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listCollections(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<SubjectCollection>> {
-            const localVarFetchArgs = PermissionApiFetchParamCreator(configuration).listCollections(options);
+        listCollections(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<SubjectCollection>> {
+            const localVarFetchArgs = PermissionApiFetchParamCreator(configuration).listCollections(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17874,11 +19273,14 @@ export const PermissionApiFp = function(configuration?: Configuration) {
          * List all subjects belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
          * @summary List subjects
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listSubjects(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Subject>> {
-            const localVarFetchArgs = PermissionApiFetchParamCreator(configuration).listSubjects(id, options);
+        listSubjects(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Subject>> {
+            const localVarFetchArgs = PermissionApiFetchParamCreator(configuration).listSubjects(id, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -17902,41 +19304,53 @@ export const PermissionApiFactory = function (configuration?: Configuration, fet
          * Gets a specific subject collection     **Required permissions:**    - **permission.collection.one**   
          * @summary Get collection
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCollection(id: string, options?: any) {
-            return PermissionApiFp(configuration).getCollection(id, options)(fetch, basePath);
+        getCollection(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PermissionApiFp(configuration).getCollection(id, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
          * @summary Get subject
          * @param {string} id 
          * @param {string} subId 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSubject(id: string, subId: string, options?: any) {
-            return PermissionApiFp(configuration).getSubject(id, subId, options)(fetch, basePath);
+        getSubject(id: string, subId: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PermissionApiFp(configuration).getSubject(id, subId, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Gets a list of all the subject collections, for example groups, users, etc.     **Required permissions:**    - **permission.collection.list**   
          * @summary List collections
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listCollections(options?: any) {
-            return PermissionApiFp(configuration).listCollections(options)(fetch, basePath);
+        listCollections(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PermissionApiFp(configuration).listCollections(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * List all subjects belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
          * @summary List subjects
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listSubjects(id: string, options?: any) {
-            return PermissionApiFp(configuration).listSubjects(id, options)(fetch, basePath);
+        listSubjects(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PermissionApiFp(configuration).listSubjects(id, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -17952,12 +19366,15 @@ export class PermissionApi extends BaseAPI {
      * Gets a specific subject collection     **Required permissions:**    - **permission.collection.one**   
      * @summary Get collection
      * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PermissionApi
      */
-    public getCollection(id: string, options?: any) {
-        return PermissionApiFp(this.configuration).getCollection(id, options)(this.fetch, this.basePath);
+    public getCollection(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PermissionApiFp(this.configuration).getCollection(id, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -17965,35 +19382,44 @@ export class PermissionApi extends BaseAPI {
      * @summary Get subject
      * @param {} id 
      * @param {} subId 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PermissionApi
      */
-    public getSubject(id: string, subId: string, options?: any) {
-        return PermissionApiFp(this.configuration).getSubject(id, subId, options)(this.fetch, this.basePath);
+    public getSubject(id: string, subId: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PermissionApiFp(this.configuration).getSubject(id, subId, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Gets a list of all the subject collections, for example groups, users, etc.     **Required permissions:**    - **permission.collection.list**   
      * @summary List collections
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PermissionApi
      */
-    public listCollections(options?: any) {
-        return PermissionApiFp(this.configuration).listCollections(options)(this.fetch, this.basePath);
+    public listCollections(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PermissionApiFp(this.configuration).listCollections(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * List all subjects belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
      * @summary List subjects
      * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PermissionApi
      */
-    public listSubjects(id: string, options?: any) {
-        return PermissionApiFp(this.configuration).listSubjects(id, options)(this.fetch, this.basePath);
+    public listSubjects(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PermissionApiFp(this.configuration).listSubjects(id, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -18009,10 +19435,13 @@ export const PlayerApiFetchParamCreator = function (configuration?: Configuratio
          * @summary Execute a method
          * @param {string} player The uuid of the player
          * @param {ExecuteMethodRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        executeMethod(player: string, body?: ExecuteMethodRequest, options: any = {}): FetchArgs {
+        executeMethod(player: string, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'player' is not null or undefined
             if (player === null || player === undefined) {
                 throw new RequiredError('player','Required parameter player was null or undefined when calling executeMethod.');
@@ -18040,6 +19469,18 @@ export const PlayerApiFetchParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -18058,10 +19499,13 @@ export const PlayerApiFetchParamCreator = function (configuration?: Configuratio
          * Get detailed information about a player.     **Required permissions:**    - **player.one**   
          * @summary Get a player
          * @param {string} player The uuid of the player
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlayer(player: string, options: any = {}): FetchArgs {
+        getPlayer(player: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'player' is not null or undefined
             if (player === null || player === undefined) {
                 throw new RequiredError('player','Required parameter player was null or undefined when calling getPlayer.');
@@ -18089,6 +19533,18 @@ export const PlayerApiFetchParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -18102,10 +19558,13 @@ export const PlayerApiFetchParamCreator = function (configuration?: Configuratio
         /**
          * Get a list of all the players on the server.     **Required permissions:**    - **player.list**   
          * @summary List players
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listPlayers(options: any = {}): FetchArgs {
+        listPlayers(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/player`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -18128,6 +19587,18 @@ export const PlayerApiFetchParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -18143,10 +19614,13 @@ export const PlayerApiFetchParamCreator = function (configuration?: Configuratio
          * @summary Modify a player
          * @param {string} player The uuid of the player
          * @param {UpdatePlayerRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyPlayer(player: string, body?: UpdatePlayerRequest, options: any = {}): FetchArgs {
+        modifyPlayer(player: string, body?: UpdatePlayerRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'player' is not null or undefined
             if (player === null || player === undefined) {
                 throw new RequiredError('player','Required parameter player was null or undefined when calling modifyPlayer.');
@@ -18172,6 +19646,18 @@ export const PlayerApiFetchParamCreator = function (configuration?: Configuratio
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -18202,11 +19688,14 @@ export const PlayerApiFp = function(configuration?: Configuration) {
          * @summary Execute a method
          * @param {string} player The uuid of the player
          * @param {ExecuteMethodRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        executeMethod(player: string, body?: ExecuteMethodRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ExecuteMethodResponse> {
-            const localVarFetchArgs = PlayerApiFetchParamCreator(configuration).executeMethod(player, body, options);
+        executeMethod(player: string, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ExecuteMethodResponse> {
+            const localVarFetchArgs = PlayerApiFetchParamCreator(configuration).executeMethod(player, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -18221,11 +19710,14 @@ export const PlayerApiFp = function(configuration?: Configuration) {
          * Get detailed information about a player.     **Required permissions:**    - **player.one**   
          * @summary Get a player
          * @param {string} player The uuid of the player
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlayer(player: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PlayerFull> {
-            const localVarFetchArgs = PlayerApiFetchParamCreator(configuration).getPlayer(player, options);
+        getPlayer(player: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PlayerFull> {
+            const localVarFetchArgs = PlayerApiFetchParamCreator(configuration).getPlayer(player, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -18239,11 +19731,14 @@ export const PlayerApiFp = function(configuration?: Configuration) {
         /**
          * Get a list of all the players on the server.     **Required permissions:**    - **player.list**   
          * @summary List players
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listPlayers(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<PlayerFull>> {
-            const localVarFetchArgs = PlayerApiFetchParamCreator(configuration).listPlayers(options);
+        listPlayers(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<PlayerFull>> {
+            const localVarFetchArgs = PlayerApiFetchParamCreator(configuration).listPlayers(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -18259,11 +19754,14 @@ export const PlayerApiFp = function(configuration?: Configuration) {
          * @summary Modify a player
          * @param {string} player The uuid of the player
          * @param {UpdatePlayerRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyPlayer(player: string, body?: UpdatePlayerRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PlayerFull> {
-            const localVarFetchArgs = PlayerApiFetchParamCreator(configuration).modifyPlayer(player, body, options);
+        modifyPlayer(player: string, body?: UpdatePlayerRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PlayerFull> {
+            const localVarFetchArgs = PlayerApiFetchParamCreator(configuration).modifyPlayer(player, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -18288,41 +19786,53 @@ export const PlayerApiFactory = function (configuration?: Configuration, fetch?:
          * @summary Execute a method
          * @param {string} player The uuid of the player
          * @param {ExecuteMethodRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        executeMethod(player: string, body?: ExecuteMethodRequest, options?: any) {
-            return PlayerApiFp(configuration).executeMethod(player, body, options)(fetch, basePath);
+        executeMethod(player: string, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PlayerApiFp(configuration).executeMethod(player, body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get detailed information about a player.     **Required permissions:**    - **player.one**   
          * @summary Get a player
          * @param {string} player The uuid of the player
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlayer(player: string, options?: any) {
-            return PlayerApiFp(configuration).getPlayer(player, options)(fetch, basePath);
+        getPlayer(player: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PlayerApiFp(configuration).getPlayer(player, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get a list of all the players on the server.     **Required permissions:**    - **player.list**   
          * @summary List players
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listPlayers(options?: any) {
-            return PlayerApiFp(configuration).listPlayers(options)(fetch, basePath);
+        listPlayers(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PlayerApiFp(configuration).listPlayers(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Modify the properties of an existing player.     **Required permissions:**    - **player.modify**   
          * @summary Modify a player
          * @param {string} player The uuid of the player
          * @param {UpdatePlayerRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyPlayer(player: string, body?: UpdatePlayerRequest, options?: any) {
-            return PlayerApiFp(configuration).modifyPlayer(player, body, options)(fetch, basePath);
+        modifyPlayer(player: string, body?: UpdatePlayerRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PlayerApiFp(configuration).modifyPlayer(player, body, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -18339,35 +19849,44 @@ export class PlayerApi extends BaseAPI {
      * @summary Execute a method
      * @param {} player The uuid of the player
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PlayerApi
      */
-    public executeMethod(player: string, body?: ExecuteMethodRequest, options?: any) {
-        return PlayerApiFp(this.configuration).executeMethod(player, body, options)(this.fetch, this.basePath);
+    public executeMethod(player: string, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PlayerApiFp(this.configuration).executeMethod(player, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get detailed information about a player.     **Required permissions:**    - **player.one**   
      * @summary Get a player
      * @param {} player The uuid of the player
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PlayerApi
      */
-    public getPlayer(player: string, options?: any) {
-        return PlayerApiFp(this.configuration).getPlayer(player, options)(this.fetch, this.basePath);
+    public getPlayer(player: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PlayerApiFp(this.configuration).getPlayer(player, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get a list of all the players on the server.     **Required permissions:**    - **player.list**   
      * @summary List players
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PlayerApi
      */
-    public listPlayers(options?: any) {
-        return PlayerApiFp(this.configuration).listPlayers(options)(this.fetch, this.basePath);
+    public listPlayers(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PlayerApiFp(this.configuration).listPlayers(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -18375,12 +19894,15 @@ export class PlayerApi extends BaseAPI {
      * @summary Modify a player
      * @param {} player The uuid of the player
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PlayerApi
      */
-    public modifyPlayer(player: string, body?: UpdatePlayerRequest, options?: any) {
-        return PlayerApiFp(this.configuration).modifyPlayer(player, body, options)(this.fetch, this.basePath);
+    public modifyPlayer(player: string, body?: UpdatePlayerRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PlayerApiFp(this.configuration).modifyPlayer(player, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -18396,10 +19918,13 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
          * @summary Change plugin configs
          * @param {string} plugin The id of the plugin
          * @param {any} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        changePluginConfig(plugin: string, body?: any, options: any = {}): FetchArgs {
+        changePluginConfig(plugin: string, body?: any, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'plugin' is not null or undefined
             if (plugin === null || plugin === undefined) {
                 throw new RequiredError('plugin','Required parameter plugin was null or undefined when calling changePluginConfig.');
@@ -18427,6 +19952,18 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -18445,10 +19982,13 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
          * Gets detailed information about a plugin.     **Required permissions:**    - **plugin.one**   
          * @summary Get a plugin
          * @param {string} plugin The id of the plugin
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlugin(plugin: string, options: any = {}): FetchArgs {
+        getPlugin(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'plugin' is not null or undefined
             if (plugin === null || plugin === undefined) {
                 throw new RequiredError('plugin','Required parameter plugin was null or undefined when calling getPlugin.');
@@ -18476,6 +20016,18 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -18490,10 +20042,13 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
          * Gets a map containing the plugin config file names as keys, and their config file contents as their values.     **Required permissions:**    - **plugin.config.get**   
          * @summary Get plugin configs
          * @param {string} plugin The id of the plugin
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPluginConfig(plugin: string, options: any = {}): FetchArgs {
+        getPluginConfig(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'plugin' is not null or undefined
             if (plugin === null || plugin === undefined) {
                 throw new RequiredError('plugin','Required parameter plugin was null or undefined when calling getPluginConfig.');
@@ -18521,6 +20076,18 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -18534,10 +20101,13 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
         /**
          * Get a list of all the plugins running on the server.     **Required permissions:**    - **plugin.list**   
          * @summary List plugins
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listPlugins(options: any = {}): FetchArgs {
+        listPlugins(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/plugin`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -18558,6 +20128,18 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -18584,11 +20166,14 @@ export const PluginApiFp = function(configuration?: Configuration) {
          * @summary Change plugin configs
          * @param {string} plugin The id of the plugin
          * @param {any} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        changePluginConfig(plugin: string, body?: any, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{ [key: string]: any; }> {
-            const localVarFetchArgs = PluginApiFetchParamCreator(configuration).changePluginConfig(plugin, body, options);
+        changePluginConfig(plugin: string, body?: any, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{ [key: string]: any; }> {
+            const localVarFetchArgs = PluginApiFetchParamCreator(configuration).changePluginConfig(plugin, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -18603,11 +20188,14 @@ export const PluginApiFp = function(configuration?: Configuration) {
          * Gets detailed information about a plugin.     **Required permissions:**    - **plugin.one**   
          * @summary Get a plugin
          * @param {string} plugin The id of the plugin
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlugin(plugin: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PluginContainer> {
-            const localVarFetchArgs = PluginApiFetchParamCreator(configuration).getPlugin(plugin, options);
+        getPlugin(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PluginContainer> {
+            const localVarFetchArgs = PluginApiFetchParamCreator(configuration).getPlugin(plugin, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -18622,11 +20210,14 @@ export const PluginApiFp = function(configuration?: Configuration) {
          * Gets a map containing the plugin config file names as keys, and their config file contents as their values.     **Required permissions:**    - **plugin.config.get**   
          * @summary Get plugin configs
          * @param {string} plugin The id of the plugin
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPluginConfig(plugin: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{ [key: string]: any; }> {
-            const localVarFetchArgs = PluginApiFetchParamCreator(configuration).getPluginConfig(plugin, options);
+        getPluginConfig(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{ [key: string]: any; }> {
+            const localVarFetchArgs = PluginApiFetchParamCreator(configuration).getPluginConfig(plugin, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -18640,11 +20231,14 @@ export const PluginApiFp = function(configuration?: Configuration) {
         /**
          * Get a list of all the plugins running on the server.     **Required permissions:**    - **plugin.list**   
          * @summary List plugins
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listPlugins(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<PluginContainer>> {
-            const localVarFetchArgs = PluginApiFetchParamCreator(configuration).listPlugins(options);
+        listPlugins(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<PluginContainer>> {
+            const localVarFetchArgs = PluginApiFetchParamCreator(configuration).listPlugins(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -18669,40 +20263,52 @@ export const PluginApiFactory = function (configuration?: Configuration, fetch?:
          * @summary Change plugin configs
          * @param {string} plugin The id of the plugin
          * @param {any} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        changePluginConfig(plugin: string, body?: any, options?: any) {
-            return PluginApiFp(configuration).changePluginConfig(plugin, body, options)(fetch, basePath);
+        changePluginConfig(plugin: string, body?: any, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PluginApiFp(configuration).changePluginConfig(plugin, body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Gets detailed information about a plugin.     **Required permissions:**    - **plugin.one**   
          * @summary Get a plugin
          * @param {string} plugin The id of the plugin
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlugin(plugin: string, options?: any) {
-            return PluginApiFp(configuration).getPlugin(plugin, options)(fetch, basePath);
+        getPlugin(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PluginApiFp(configuration).getPlugin(plugin, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Gets a map containing the plugin config file names as keys, and their config file contents as their values.     **Required permissions:**    - **plugin.config.get**   
          * @summary Get plugin configs
          * @param {string} plugin The id of the plugin
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPluginConfig(plugin: string, options?: any) {
-            return PluginApiFp(configuration).getPluginConfig(plugin, options)(fetch, basePath);
+        getPluginConfig(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PluginApiFp(configuration).getPluginConfig(plugin, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get a list of all the plugins running on the server.     **Required permissions:**    - **plugin.list**   
          * @summary List plugins
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listPlugins(options?: any) {
-            return PluginApiFp(configuration).listPlugins(options)(fetch, basePath);
+        listPlugins(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PluginApiFp(configuration).listPlugins(details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -18719,47 +20325,59 @@ export class PluginApi extends BaseAPI {
      * @summary Change plugin configs
      * @param {} plugin The id of the plugin
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PluginApi
      */
-    public changePluginConfig(plugin: string, body?: any, options?: any) {
-        return PluginApiFp(this.configuration).changePluginConfig(plugin, body, options)(this.fetch, this.basePath);
+    public changePluginConfig(plugin: string, body?: any, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PluginApiFp(this.configuration).changePluginConfig(plugin, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Gets detailed information about a plugin.     **Required permissions:**    - **plugin.one**   
      * @summary Get a plugin
      * @param {} plugin The id of the plugin
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PluginApi
      */
-    public getPlugin(plugin: string, options?: any) {
-        return PluginApiFp(this.configuration).getPlugin(plugin, options)(this.fetch, this.basePath);
+    public getPlugin(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PluginApiFp(this.configuration).getPlugin(plugin, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Gets a map containing the plugin config file names as keys, and their config file contents as their values.     **Required permissions:**    - **plugin.config.get**   
      * @summary Get plugin configs
      * @param {} plugin The id of the plugin
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PluginApi
      */
-    public getPluginConfig(plugin: string, options?: any) {
-        return PluginApiFp(this.configuration).getPluginConfig(plugin, options)(this.fetch, this.basePath);
+    public getPluginConfig(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PluginApiFp(this.configuration).getPluginConfig(plugin, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get a list of all the plugins running on the server.     **Required permissions:**    - **plugin.list**   
      * @summary List plugins
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PluginApi
      */
-    public listPlugins(options?: any) {
-        return PluginApiFp(this.configuration).listPlugins(options)(this.fetch, this.basePath);
+    public listPlugins(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PluginApiFp(this.configuration).listPlugins(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -18773,10 +20391,13 @@ export const RecipeApiFetchParamCreator = function (configuration?: Configuratio
         /**
          *      **Required permissions:**    - **recipe.list**   
          * @summary List recipes
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listRecipes(options: any = {}): FetchArgs {
+        listRecipes(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/recipe`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -18797,6 +20418,18 @@ export const RecipeApiFetchParamCreator = function (configuration?: Configuratio
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -18821,11 +20454,14 @@ export const RecipeApiFp = function(configuration?: Configuration) {
         /**
          *      **Required permissions:**    - **recipe.list**   
          * @summary List recipes
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listRecipes(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<any> {
-            const localVarFetchArgs = RecipeApiFetchParamCreator(configuration).listRecipes(options);
+        listRecipes(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<any> {
+            const localVarFetchArgs = RecipeApiFetchParamCreator(configuration).listRecipes(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -18848,11 +20484,14 @@ export const RecipeApiFactory = function (configuration?: Configuration, fetch?:
         /**
          *      **Required permissions:**    - **recipe.list**   
          * @summary List recipes
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listRecipes(options?: any) {
-            return RecipeApiFp(configuration).listRecipes(options)(fetch, basePath);
+        listRecipes(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return RecipeApiFp(configuration).listRecipes(details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -18867,12 +20506,15 @@ export class RecipeApi extends BaseAPI {
     /**
      *      **Required permissions:**    - **recipe.list**   
      * @summary List recipes
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RecipeApi
      */
-    public listRecipes(options?: any) {
-        return RecipeApiFp(this.configuration).listRecipes(options)(this.fetch, this.basePath);
+    public listRecipes(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return RecipeApiFp(this.configuration).listRecipes(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -18887,10 +20529,13 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
          * Create a new region at a specified location     **Required permissions:**    - **red-protect.region.create**   
          * @summary Create a region
          * @param {RedProtectRegion} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createRegion(body?: RedProtectRegion, options: any = {}): FetchArgs {
+        createRegion(body?: RedProtectRegion, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/red-protect/region`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -18913,6 +20558,18 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -18931,10 +20588,13 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
          * Remove the specified protected region     **Required permissions:**    - **red-protect.region.delete**   
          * @summary Delete a region
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteRegion(id: string, options: any = {}): FetchArgs {
+        deleteRegion(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling deleteRegion.');
@@ -18962,6 +20622,18 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -18976,10 +20648,13 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
          * Get details for a specific protected region     **Required permissions:**    - **red-protect.region.one**   
          * @summary Get a region
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRegion(id: string, options: any = {}): FetchArgs {
+        getRegion(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling getRegion.');
@@ -19007,6 +20682,18 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -19021,10 +20708,13 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
          * Lists all the regions being protected     **Required permissions:**    - **red-protect.region.list**   
          * @summary List regions
          * @param {string} [world] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listRegions(world?: string, options: any = {}): FetchArgs {
+        listRegions(world?: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/red-protect/region`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -19051,6 +20741,18 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter['world'] = world;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -19066,10 +20768,13 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
          * @summary Modify a region
          * @param {string} id 
          * @param {RedProtectRegion} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyRegion(id: string, body?: RedProtectRegion, options: any = {}): FetchArgs {
+        modifyRegion(id: string, body?: RedProtectRegion, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling modifyRegion.');
@@ -19095,6 +20800,18 @@ export const RedProtectApiFetchParamCreator = function (configuration?: Configur
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -19124,11 +20841,14 @@ export const RedProtectApiFp = function(configuration?: Configuration) {
          * Create a new region at a specified location     **Required permissions:**    - **red-protect.region.create**   
          * @summary Create a region
          * @param {RedProtectRegion} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createRegion(body?: RedProtectRegion, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<RedProtectRegion> {
-            const localVarFetchArgs = RedProtectApiFetchParamCreator(configuration).createRegion(body, options);
+        createRegion(body?: RedProtectRegion, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<RedProtectRegion> {
+            const localVarFetchArgs = RedProtectApiFetchParamCreator(configuration).createRegion(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -19143,11 +20863,14 @@ export const RedProtectApiFp = function(configuration?: Configuration) {
          * Remove the specified protected region     **Required permissions:**    - **red-protect.region.delete**   
          * @summary Delete a region
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteRegion(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<RedProtectRegion> {
-            const localVarFetchArgs = RedProtectApiFetchParamCreator(configuration).deleteRegion(id, options);
+        deleteRegion(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<RedProtectRegion> {
+            const localVarFetchArgs = RedProtectApiFetchParamCreator(configuration).deleteRegion(id, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -19162,11 +20885,14 @@ export const RedProtectApiFp = function(configuration?: Configuration) {
          * Get details for a specific protected region     **Required permissions:**    - **red-protect.region.one**   
          * @summary Get a region
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRegion(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<RedProtectRegion> {
-            const localVarFetchArgs = RedProtectApiFetchParamCreator(configuration).getRegion(id, options);
+        getRegion(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<RedProtectRegion> {
+            const localVarFetchArgs = RedProtectApiFetchParamCreator(configuration).getRegion(id, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -19181,11 +20907,14 @@ export const RedProtectApiFp = function(configuration?: Configuration) {
          * Lists all the regions being protected     **Required permissions:**    - **red-protect.region.list**   
          * @summary List regions
          * @param {string} [world] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listRegions(world?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<RedProtectRegion>> {
-            const localVarFetchArgs = RedProtectApiFetchParamCreator(configuration).listRegions(world, options);
+        listRegions(world?: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<RedProtectRegion>> {
+            const localVarFetchArgs = RedProtectApiFetchParamCreator(configuration).listRegions(world, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -19201,11 +20930,14 @@ export const RedProtectApiFp = function(configuration?: Configuration) {
          * @summary Modify a region
          * @param {string} id 
          * @param {RedProtectRegion} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyRegion(id: string, body?: RedProtectRegion, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<RedProtectRegion> {
-            const localVarFetchArgs = RedProtectApiFetchParamCreator(configuration).modifyRegion(id, body, options);
+        modifyRegion(id: string, body?: RedProtectRegion, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<RedProtectRegion> {
+            const localVarFetchArgs = RedProtectApiFetchParamCreator(configuration).modifyRegion(id, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -19229,52 +20961,67 @@ export const RedProtectApiFactory = function (configuration?: Configuration, fet
          * Create a new region at a specified location     **Required permissions:**    - **red-protect.region.create**   
          * @summary Create a region
          * @param {RedProtectRegion} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createRegion(body?: RedProtectRegion, options?: any) {
-            return RedProtectApiFp(configuration).createRegion(body, options)(fetch, basePath);
+        createRegion(body?: RedProtectRegion, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return RedProtectApiFp(configuration).createRegion(body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Remove the specified protected region     **Required permissions:**    - **red-protect.region.delete**   
          * @summary Delete a region
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteRegion(id: string, options?: any) {
-            return RedProtectApiFp(configuration).deleteRegion(id, options)(fetch, basePath);
+        deleteRegion(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return RedProtectApiFp(configuration).deleteRegion(id, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get details for a specific protected region     **Required permissions:**    - **red-protect.region.one**   
          * @summary Get a region
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRegion(id: string, options?: any) {
-            return RedProtectApiFp(configuration).getRegion(id, options)(fetch, basePath);
+        getRegion(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return RedProtectApiFp(configuration).getRegion(id, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Lists all the regions being protected     **Required permissions:**    - **red-protect.region.list**   
          * @summary List regions
          * @param {string} [world] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listRegions(world?: string, options?: any) {
-            return RedProtectApiFp(configuration).listRegions(world, options)(fetch, basePath);
+        listRegions(world?: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return RedProtectApiFp(configuration).listRegions(world, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Update the details for a specific protected region     **Required permissions:**    - **red-protect.region.modify**   
          * @summary Modify a region
          * @param {string} id 
          * @param {RedProtectRegion} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyRegion(id: string, body?: RedProtectRegion, options?: any) {
-            return RedProtectApiFp(configuration).modifyRegion(id, body, options)(fetch, basePath);
+        modifyRegion(id: string, body?: RedProtectRegion, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return RedProtectApiFp(configuration).modifyRegion(id, body, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -19290,48 +21037,60 @@ export class RedProtectApi extends BaseAPI {
      * Create a new region at a specified location     **Required permissions:**    - **red-protect.region.create**   
      * @summary Create a region
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RedProtectApi
      */
-    public createRegion(body?: RedProtectRegion, options?: any) {
-        return RedProtectApiFp(this.configuration).createRegion(body, options)(this.fetch, this.basePath);
+    public createRegion(body?: RedProtectRegion, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return RedProtectApiFp(this.configuration).createRegion(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Remove the specified protected region     **Required permissions:**    - **red-protect.region.delete**   
      * @summary Delete a region
      * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RedProtectApi
      */
-    public deleteRegion(id: string, options?: any) {
-        return RedProtectApiFp(this.configuration).deleteRegion(id, options)(this.fetch, this.basePath);
+    public deleteRegion(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return RedProtectApiFp(this.configuration).deleteRegion(id, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get details for a specific protected region     **Required permissions:**    - **red-protect.region.one**   
      * @summary Get a region
      * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RedProtectApi
      */
-    public getRegion(id: string, options?: any) {
-        return RedProtectApiFp(this.configuration).getRegion(id, options)(this.fetch, this.basePath);
+    public getRegion(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return RedProtectApiFp(this.configuration).getRegion(id, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Lists all the regions being protected     **Required permissions:**    - **red-protect.region.list**   
      * @summary List regions
      * @param {} [world] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RedProtectApi
      */
-    public listRegions(world?: string, options?: any) {
-        return RedProtectApiFp(this.configuration).listRegions(world, options)(this.fetch, this.basePath);
+    public listRegions(world?: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return RedProtectApiFp(this.configuration).listRegions(world, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -19339,12 +21098,15 @@ export class RedProtectApi extends BaseAPI {
      * @summary Modify a region
      * @param {} id 
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RedProtectApi
      */
-    public modifyRegion(id: string, body?: RedProtectRegion, options?: any) {
-        return RedProtectApiFp(this.configuration).modifyRegion(id, body, options)(this.fetch, this.basePath);
+    public modifyRegion(id: string, body?: RedProtectRegion, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return RedProtectApiFp(this.configuration).modifyRegion(id, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -19359,10 +21121,13 @@ export const RegistryApiFetchParamCreator = function (configuration?: Configurat
          * Lists all the catalog values of a specified CatalogType.     **Required permissions:**    - **registry.one**   
          * @summary Get a catalog type
          * @param {string} _class The fully qualified classname of the catalog type
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRegistry(_class: string, options: any = {}): FetchArgs {
+        getRegistry(_class: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter '_class' is not null or undefined
             if (_class === null || _class === undefined) {
                 throw new RequiredError('_class','Required parameter _class was null or undefined when calling getRegistry.');
@@ -19390,6 +21155,18 @@ export const RegistryApiFetchParamCreator = function (configuration?: Configurat
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -19413,11 +21190,14 @@ export const RegistryApiFp = function(configuration?: Configuration) {
          * Lists all the catalog values of a specified CatalogType.     **Required permissions:**    - **registry.one**   
          * @summary Get a catalog type
          * @param {string} _class The fully qualified classname of the catalog type
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRegistry(_class: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<CatalogType>> {
-            const localVarFetchArgs = RegistryApiFetchParamCreator(configuration).getRegistry(_class, options);
+        getRegistry(_class: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<CatalogType>> {
+            const localVarFetchArgs = RegistryApiFetchParamCreator(configuration).getRegistry(_class, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -19441,11 +21221,14 @@ export const RegistryApiFactory = function (configuration?: Configuration, fetch
          * Lists all the catalog values of a specified CatalogType.     **Required permissions:**    - **registry.one**   
          * @summary Get a catalog type
          * @param {string} _class The fully qualified classname of the catalog type
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getRegistry(_class: string, options?: any) {
-            return RegistryApiFp(configuration).getRegistry(_class, options)(fetch, basePath);
+        getRegistry(_class: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return RegistryApiFp(configuration).getRegistry(_class, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -19461,12 +21244,15 @@ export class RegistryApi extends BaseAPI {
      * Lists all the catalog values of a specified CatalogType.     **Required permissions:**    - **registry.one**   
      * @summary Get a catalog type
      * @param {} _class The fully qualified classname of the catalog type
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RegistryApi
      */
-    public getRegistry(_class: string, options?: any) {
-        return RegistryApiFp(this.configuration).getRegistry(_class, options)(this.fetch, this.basePath);
+    public getRegistry(_class: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return RegistryApiFp(this.configuration).getRegistry(_class, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -19480,10 +21266,13 @@ export const ServerApiFetchParamCreator = function (configuration?: Configuratio
         /**
          * Get the main server properties (server.properties file).     **Required permissions:**    - **server.properties.list**   
          * @summary List server properties
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listProperties(options: any = {}): FetchArgs {
+        listProperties(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/server/properties`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -19506,6 +21295,18 @@ export const ServerApiFetchParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -19520,10 +21321,13 @@ export const ServerApiFetchParamCreator = function (configuration?: Configuratio
          * Modify settings in the server.properties file. **Note that these settings don't take effect until you restart the server.     **Required permissions:**    - **server.properties.modify**   - **server.properties.modify.[property]**   
          * @summary Modify server properties
          * @param {any} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyProperties(body?: any, options: any = {}): FetchArgs {
+        modifyProperties(body?: any, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/server/properties`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
@@ -19544,6 +21348,18 @@ export const ServerApiFetchParamCreator = function (configuration?: Configuratio
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -19572,11 +21388,14 @@ export const ServerApiFp = function(configuration?: Configuration) {
         /**
          * Get the main server properties (server.properties file).     **Required permissions:**    - **server.properties.list**   
          * @summary List server properties
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listProperties(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<ServerProperty>> {
-            const localVarFetchArgs = ServerApiFetchParamCreator(configuration).listProperties(options);
+        listProperties(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<ServerProperty>> {
+            const localVarFetchArgs = ServerApiFetchParamCreator(configuration).listProperties(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -19591,11 +21410,14 @@ export const ServerApiFp = function(configuration?: Configuration) {
          * Modify settings in the server.properties file. **Note that these settings don't take effect until you restart the server.     **Required permissions:**    - **server.properties.modify**   - **server.properties.modify.[property]**   
          * @summary Modify server properties
          * @param {any} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyProperties(body?: any, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<ServerProperty>> {
-            const localVarFetchArgs = ServerApiFetchParamCreator(configuration).modifyProperties(body, options);
+        modifyProperties(body?: any, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<ServerProperty>> {
+            const localVarFetchArgs = ServerApiFetchParamCreator(configuration).modifyProperties(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -19618,21 +21440,27 @@ export const ServerApiFactory = function (configuration?: Configuration, fetch?:
         /**
          * Get the main server properties (server.properties file).     **Required permissions:**    - **server.properties.list**   
          * @summary List server properties
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listProperties(options?: any) {
-            return ServerApiFp(configuration).listProperties(options)(fetch, basePath);
+        listProperties(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return ServerApiFp(configuration).listProperties(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Modify settings in the server.properties file. **Note that these settings don't take effect until you restart the server.     **Required permissions:**    - **server.properties.modify**   - **server.properties.modify.[property]**   
          * @summary Modify server properties
          * @param {any} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyProperties(body?: any, options?: any) {
-            return ServerApiFp(configuration).modifyProperties(body, options)(fetch, basePath);
+        modifyProperties(body?: any, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return ServerApiFp(configuration).modifyProperties(body, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -19647,137 +21475,30 @@ export class ServerApi extends BaseAPI {
     /**
      * Get the main server properties (server.properties file).     **Required permissions:**    - **server.properties.list**   
      * @summary List server properties
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ServerApi
      */
-    public listProperties(options?: any) {
-        return ServerApiFp(this.configuration).listProperties(options)(this.fetch, this.basePath);
+    public listProperties(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return ServerApiFp(this.configuration).listProperties(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Modify settings in the server.properties file. **Note that these settings don't take effect until you restart the server.     **Required permissions:**    - **server.properties.modify**   - **server.properties.modify.[property]**   
      * @summary Modify server properties
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ServerApi
      */
-    public modifyProperties(body?: any, options?: any) {
-        return ServerApiFp(this.configuration).modifyProperties(body, options)(this.fetch, this.basePath);
-    }
-
-}
-
-/**
- * ServletApi - fetch parameter creator
- * @export
- */
-export const ServletApiFetchParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * Lists all the active servlets running in the Web-API     **Required permissions:**    - **servlet.list**   
-         * @summary List servlets
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listServlets(options: any = {}): FetchArgs {
-            const localVarPath = `/servlet`;
-            const localVarUrlObj = url.parse(localVarPath, true);
-            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyHeader required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-					? configuration.apiKey("X-WebAPI-Key")
-					: configuration.apiKey;
-                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
-            }
-
-            // authentication ApiKeyQuery required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-					? configuration.apiKey("key")
-					: configuration.apiKey;
-                localVarQueryParameter["key"] = localVarApiKeyValue;
-            }
-
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * ServletApi - functional programming interface
- * @export
- */
-export const ServletApiFp = function(configuration?: Configuration) {
-    return {
-        /**
-         * Lists all the active servlets running in the Web-API     **Required permissions:**    - **servlet.list**   
-         * @summary List servlets
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listServlets(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<{ [key: string]: string; }> {
-            const localVarFetchArgs = ServletApiFetchParamCreator(configuration).listServlets(options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                });
-            };
-        },
-    }
-};
-
-/**
- * ServletApi - factory interface
- * @export
- */
-export const ServletApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
-    return {
-        /**
-         * Lists all the active servlets running in the Web-API     **Required permissions:**    - **servlet.list**   
-         * @summary List servlets
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        listServlets(options?: any) {
-            return ServletApiFp(configuration).listServlets(options)(fetch, basePath);
-        },
-    };
-};
-
-/**
- * ServletApi - object-oriented interface
- * @export
- * @class ServletApi
- * @extends {BaseAPI}
- */
-export class ServletApi extends BaseAPI {
-    /**
-     * Lists all the active servlets running in the Web-API     **Required permissions:**    - **servlet.list**   
-     * @summary List servlets
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ServletApi
-     */
-    public listServlets(options?: any) {
-        return ServletApiFp(this.configuration).listServlets(options)(this.fetch, this.basePath);
+    public modifyProperties(body?: any, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return ServerApiFp(this.configuration).modifyProperties(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -19796,10 +21517,13 @@ export const TileEntityApiFetchParamCreator = function (configuration?: Configur
          * @param {number} y The x-coordinate of the tile-entity
          * @param {number} z The x-coordinate of the tile-entity
          * @param {ExecuteMethodRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        executeMethod(world: string, x: number, y: number, z: number, body?: ExecuteMethodRequest, options: any = {}): FetchArgs {
+        executeMethod(world: string, x: number, y: number, z: number, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'world' is not null or undefined
             if (world === null || world === undefined) {
                 throw new RequiredError('world','Required parameter world was null or undefined when calling executeMethod.');
@@ -19842,6 +21566,18 @@ export const TileEntityApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -19863,10 +21599,13 @@ export const TileEntityApiFetchParamCreator = function (configuration?: Configur
          * @param {number} x The x-coordinate of the tile-entity
          * @param {number} y The y-coordinate of the tile-entity
          * @param {number} z The z-coordinate of the tile-entity
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTileEntity(world: string, x: number, y: number, z: number, options: any = {}): FetchArgs {
+        getTileEntity(world: string, x: number, y: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'world' is not null or undefined
             if (world === null || world === undefined) {
                 throw new RequiredError('world','Required parameter world was null or undefined when calling getTileEntity.');
@@ -19909,6 +21648,18 @@ export const TileEntityApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -19925,10 +21676,13 @@ export const TileEntityApiFetchParamCreator = function (configuration?: Configur
          * @param {string} [world] The world to filter tile entities by
          * @param {string} [type] The type if of tile entities to filter by
          * @param {number} [limit] The maximum amount of tile entities returned
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTileEntities(world?: string, type?: string, limit?: number, options: any = {}): FetchArgs {
+        listTileEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/tile-entity`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -19963,6 +21717,18 @@ export const TileEntityApiFetchParamCreator = function (configuration?: Configur
                 localVarQueryParameter['limit'] = limit;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -19990,11 +21756,14 @@ export const TileEntityApiFp = function(configuration?: Configuration) {
          * @param {number} y The x-coordinate of the tile-entity
          * @param {number} z The x-coordinate of the tile-entity
          * @param {ExecuteMethodRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        executeMethod(world: string, x: number, y: number, z: number, body?: ExecuteMethodRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ExecuteMethodResponse> {
-            const localVarFetchArgs = TileEntityApiFetchParamCreator(configuration).executeMethod(world, x, y, z, body, options);
+        executeMethod(world: string, x: number, y: number, z: number, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ExecuteMethodResponse> {
+            const localVarFetchArgs = TileEntityApiFetchParamCreator(configuration).executeMethod(world, x, y, z, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -20012,11 +21781,14 @@ export const TileEntityApiFp = function(configuration?: Configuration) {
          * @param {number} x The x-coordinate of the tile-entity
          * @param {number} y The y-coordinate of the tile-entity
          * @param {number} z The z-coordinate of the tile-entity
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTileEntity(world: string, x: number, y: number, z: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<TileEntity> {
-            const localVarFetchArgs = TileEntityApiFetchParamCreator(configuration).getTileEntity(world, x, y, z, options);
+        getTileEntity(world: string, x: number, y: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<TileEntity> {
+            const localVarFetchArgs = TileEntityApiFetchParamCreator(configuration).getTileEntity(world, x, y, z, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -20033,11 +21805,14 @@ export const TileEntityApiFp = function(configuration?: Configuration) {
          * @param {string} [world] The world to filter tile entities by
          * @param {string} [type] The type if of tile entities to filter by
          * @param {number} [limit] The maximum amount of tile entities returned
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTileEntities(world?: string, type?: string, limit?: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<TileEntity>> {
-            const localVarFetchArgs = TileEntityApiFetchParamCreator(configuration).listTileEntities(world, type, limit, options);
+        listTileEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<TileEntity>> {
+            const localVarFetchArgs = TileEntityApiFetchParamCreator(configuration).listTileEntities(world, type, limit, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -20065,11 +21840,14 @@ export const TileEntityApiFactory = function (configuration?: Configuration, fet
          * @param {number} y The x-coordinate of the tile-entity
          * @param {number} z The x-coordinate of the tile-entity
          * @param {ExecuteMethodRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        executeMethod(world: string, x: number, y: number, z: number, body?: ExecuteMethodRequest, options?: any) {
-            return TileEntityApiFp(configuration).executeMethod(world, x, y, z, body, options)(fetch, basePath);
+        executeMethod(world: string, x: number, y: number, z: number, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return TileEntityApiFp(configuration).executeMethod(world, x, y, z, body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get detailed information about a tile entity.     **Required permissions:**    - **tile-entity.one**   
@@ -20078,11 +21856,14 @@ export const TileEntityApiFactory = function (configuration?: Configuration, fet
          * @param {number} x The x-coordinate of the tile-entity
          * @param {number} y The y-coordinate of the tile-entity
          * @param {number} z The z-coordinate of the tile-entity
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTileEntity(world: string, x: number, y: number, z: number, options?: any) {
-            return TileEntityApiFp(configuration).getTileEntity(world, x, y, z, options)(fetch, basePath);
+        getTileEntity(world: string, x: number, y: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return TileEntityApiFp(configuration).getTileEntity(world, x, y, z, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get a list of all tile entities on the server (in all worlds, unless specified).     **Required permissions:**    - **tile-entity.list**   
@@ -20090,11 +21871,14 @@ export const TileEntityApiFactory = function (configuration?: Configuration, fet
          * @param {string} [world] The world to filter tile entities by
          * @param {string} [type] The type if of tile entities to filter by
          * @param {number} [limit] The maximum amount of tile entities returned
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTileEntities(world?: string, type?: string, limit?: number, options?: any) {
-            return TileEntityApiFp(configuration).listTileEntities(world, type, limit, options)(fetch, basePath);
+        listTileEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return TileEntityApiFp(configuration).listTileEntities(world, type, limit, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -20114,12 +21898,15 @@ export class TileEntityApi extends BaseAPI {
      * @param {} y The x-coordinate of the tile-entity
      * @param {} z The x-coordinate of the tile-entity
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TileEntityApi
      */
-    public executeMethod(world: string, x: number, y: number, z: number, body?: ExecuteMethodRequest, options?: any) {
-        return TileEntityApiFp(this.configuration).executeMethod(world, x, y, z, body, options)(this.fetch, this.basePath);
+    public executeMethod(world: string, x: number, y: number, z: number, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return TileEntityApiFp(this.configuration).executeMethod(world, x, y, z, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -20129,12 +21916,15 @@ export class TileEntityApi extends BaseAPI {
      * @param {} x The x-coordinate of the tile-entity
      * @param {} y The y-coordinate of the tile-entity
      * @param {} z The z-coordinate of the tile-entity
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TileEntityApi
      */
-    public getTileEntity(world: string, x: number, y: number, z: number, options?: any) {
-        return TileEntityApiFp(this.configuration).getTileEntity(world, x, y, z, options)(this.fetch, this.basePath);
+    public getTileEntity(world: string, x: number, y: number, z: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return TileEntityApiFp(this.configuration).getTileEntity(world, x, y, z, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -20143,12 +21933,15 @@ export class TileEntityApi extends BaseAPI {
      * @param {} [world] The world to filter tile entities by
      * @param {} [type] The type if of tile entities to filter by
      * @param {} [limit] The maximum amount of tile entities returned
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TileEntityApi
      */
-    public listTileEntities(world?: string, type?: string, limit?: number, options?: any) {
-        return TileEntityApiFp(this.configuration).listTileEntities(world, type, limit, options)(this.fetch, this.basePath);
+    public listTileEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return TileEntityApiFp(this.configuration).listTileEntities(world, type, limit, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -20162,10 +21955,13 @@ export const UniversalMarketApiFetchParamCreator = function (configuration?: Con
         /**
          * Lists all the items in the market currently available for sale     **Required permissions:**    - **universal-market.item.list**   
          * @summary List items
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listMarketItems(options: any = {}): FetchArgs {
+        listMarketItems(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/universal-market/item`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -20186,6 +21982,18 @@ export const UniversalMarketApiFetchParamCreator = function (configuration?: Con
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -20210,11 +22018,14 @@ export const UniversalMarketApiFp = function(configuration?: Configuration) {
         /**
          * Lists all the items in the market currently available for sale     **Required permissions:**    - **universal-market.item.list**   
          * @summary List items
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listMarketItems(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<UniversalMarketItem>> {
-            const localVarFetchArgs = UniversalMarketApiFetchParamCreator(configuration).listMarketItems(options);
+        listMarketItems(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<UniversalMarketItem>> {
+            const localVarFetchArgs = UniversalMarketApiFetchParamCreator(configuration).listMarketItems(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -20237,11 +22048,14 @@ export const UniversalMarketApiFactory = function (configuration?: Configuration
         /**
          * Lists all the items in the market currently available for sale     **Required permissions:**    - **universal-market.item.list**   
          * @summary List items
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listMarketItems(options?: any) {
-            return UniversalMarketApiFp(configuration).listMarketItems(options)(fetch, basePath);
+        listMarketItems(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return UniversalMarketApiFp(configuration).listMarketItems(details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -20256,12 +22070,15 @@ export class UniversalMarketApi extends BaseAPI {
     /**
      * Lists all the items in the market currently available for sale     **Required permissions:**    - **universal-market.item.list**   
      * @summary List items
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UniversalMarketApi
      */
-    public listMarketItems(options?: any) {
-        return UniversalMarketApiFp(this.configuration).listMarketItems(options)(this.fetch, this.basePath);
+    public listMarketItems(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return UniversalMarketApiFp(this.configuration).listMarketItems(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -20276,15 +22093,30 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
          * Tries to acquire an api key with the passed credentials.
          * @summary Login
          * @param {AuthenticationRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authUser(body?: AuthenticationRequest, options: any = {}): FetchArgs {
+        authUser(body?: AuthenticationRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/user`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
@@ -20303,10 +22135,13 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
         /**
          * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.info**   
          * @summary Check info
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserDetails(options: any = {}): FetchArgs {
+        getUserDetails(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/user`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -20327,6 +22162,18 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -20352,11 +22199,14 @@ export const UserApiFp = function(configuration?: Configuration) {
          * Tries to acquire an api key with the passed credentials.
          * @summary Login
          * @param {AuthenticationRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authUser(body?: AuthenticationRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PermissionStruct> {
-            const localVarFetchArgs = UserApiFetchParamCreator(configuration).authUser(body, options);
+        authUser(body?: AuthenticationRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PermissionStruct> {
+            const localVarFetchArgs = UserApiFetchParamCreator(configuration).authUser(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -20370,11 +22220,14 @@ export const UserApiFp = function(configuration?: Configuration) {
         /**
          * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.info**   
          * @summary Check info
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserDetails(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PermissionStruct> {
-            const localVarFetchArgs = UserApiFetchParamCreator(configuration).getUserDetails(options);
+        getUserDetails(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PermissionStruct> {
+            const localVarFetchArgs = UserApiFetchParamCreator(configuration).getUserDetails(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -20398,20 +22251,26 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
          * Tries to acquire an api key with the passed credentials.
          * @summary Login
          * @param {AuthenticationRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authUser(body?: AuthenticationRequest, options?: any) {
-            return UserApiFp(configuration).authUser(body, options)(fetch, basePath);
+        authUser(body?: AuthenticationRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return UserApiFp(configuration).authUser(body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.info**   
          * @summary Check info
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserDetails(options?: any) {
-            return UserApiFp(configuration).getUserDetails(options)(fetch, basePath);
+        getUserDetails(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return UserApiFp(configuration).getUserDetails(details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -20427,23 +22286,29 @@ export class UserApi extends BaseAPI {
      * Tries to acquire an api key with the passed credentials.
      * @summary Login
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public authUser(body?: AuthenticationRequest, options?: any) {
-        return UserApiFp(this.configuration).authUser(body, options)(this.fetch, this.basePath);
+    public authUser(body?: AuthenticationRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return UserApiFp(this.configuration).authUser(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.info**   
      * @summary Check info
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public getUserDetails(options?: any) {
-        return UserApiFp(this.configuration).getUserDetails(options)(this.fetch, this.basePath);
+    public getUserDetails(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return UserApiFp(this.configuration).getUserDetails(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -20458,10 +22323,13 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
          * Create a new web book from the specified data.     **Required permissions:**    - **web-books.book.create**   
          * @summary Create a book
          * @param {WebBooksBook} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWebBook(body?: WebBooksBook, options: any = {}): FetchArgs {
+        createWebBook(body?: WebBooksBook, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/web-books/book`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -20484,6 +22352,18 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -20502,10 +22382,13 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
          * Delete a web book.     **Required permissions:**    - **web-books.book.delete**   
          * @summary Delete a book
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteWebBook(id: string, options: any = {}): FetchArgs {
+        deleteWebBook(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling deleteWebBook.');
@@ -20533,6 +22416,18 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -20547,10 +22442,13 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
          * Get detailed information about a web book.     **Required permissions:**    - **web-books.book.one**   
          * @summary Get a book
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebBook(id: string, options: any = {}): FetchArgs {
+        getWebBook(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling getWebBook.');
@@ -20578,6 +22476,18 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -20592,10 +22502,13 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
          * Get the web book content as HTML.
          * @summary Book HTML
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebBookContent(id: string, options: any = {}): FetchArgs {
+        getWebBookContent(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling getWebBookContent.');
@@ -20606,6 +22519,62 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get the web book content as HTML.
+         * @summary Book HTML
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getWebBookContentPost(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getWebBookContentPost.');
+            }
+            const localVarPath = `/web-books/book/{id}/html`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -20620,10 +22589,13 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
         /**
          * Get a list of all the web books on the server.     **Required permissions:**    - **web-books.book.list**   
          * @summary List books
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listWebBooks(options: any = {}): FetchArgs {
+        listWebBooks(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/web-books/book`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -20646,6 +22618,18 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -20661,10 +22645,13 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
          * @summary Modify a book
          * @param {string} id 
          * @param {WebBooksBook} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyWebBook(id: string, body?: WebBooksBook, options: any = {}): FetchArgs {
+        modifyWebBook(id: string, body?: WebBooksBook, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling modifyWebBook.');
@@ -20690,6 +22677,18 @@ export const WebBooksApiFetchParamCreator = function (configuration?: Configurat
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -20719,11 +22718,14 @@ export const WebBooksApiFp = function(configuration?: Configuration) {
          * Create a new web book from the specified data.     **Required permissions:**    - **web-books.book.create**   
          * @summary Create a book
          * @param {WebBooksBook} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWebBook(body?: WebBooksBook, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WebBooksBook> {
-            const localVarFetchArgs = WebBooksApiFetchParamCreator(configuration).createWebBook(body, options);
+        createWebBook(body?: WebBooksBook, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WebBooksBook> {
+            const localVarFetchArgs = WebBooksApiFetchParamCreator(configuration).createWebBook(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -20738,11 +22740,14 @@ export const WebBooksApiFp = function(configuration?: Configuration) {
          * Delete a web book.     **Required permissions:**    - **web-books.book.delete**   
          * @summary Delete a book
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteWebBook(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WebBooksBook> {
-            const localVarFetchArgs = WebBooksApiFetchParamCreator(configuration).deleteWebBook(id, options);
+        deleteWebBook(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WebBooksBook> {
+            const localVarFetchArgs = WebBooksApiFetchParamCreator(configuration).deleteWebBook(id, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -20757,11 +22762,14 @@ export const WebBooksApiFp = function(configuration?: Configuration) {
          * Get detailed information about a web book.     **Required permissions:**    - **web-books.book.one**   
          * @summary Get a book
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebBook(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WebBooksBook> {
-            const localVarFetchArgs = WebBooksApiFetchParamCreator(configuration).getWebBook(id, options);
+        getWebBook(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WebBooksBook> {
+            const localVarFetchArgs = WebBooksApiFetchParamCreator(configuration).getWebBook(id, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -20776,11 +22784,36 @@ export const WebBooksApiFp = function(configuration?: Configuration) {
          * Get the web book content as HTML.
          * @summary Book HTML
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebBookContent(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
-            const localVarFetchArgs = WebBooksApiFetchParamCreator(configuration).getWebBookContent(id, options);
+        getWebBookContent(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+            const localVarFetchArgs = WebBooksApiFetchParamCreator(configuration).getWebBookContent(id, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Get the web book content as HTML.
+         * @summary Book HTML
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getWebBookContentPost(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+            const localVarFetchArgs = WebBooksApiFetchParamCreator(configuration).getWebBookContentPost(id, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -20794,11 +22827,14 @@ export const WebBooksApiFp = function(configuration?: Configuration) {
         /**
          * Get a list of all the web books on the server.     **Required permissions:**    - **web-books.book.list**   
          * @summary List books
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listWebBooks(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<WebBooksBook>> {
-            const localVarFetchArgs = WebBooksApiFetchParamCreator(configuration).listWebBooks(options);
+        listWebBooks(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<WebBooksBook>> {
+            const localVarFetchArgs = WebBooksApiFetchParamCreator(configuration).listWebBooks(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -20814,11 +22850,14 @@ export const WebBooksApiFp = function(configuration?: Configuration) {
          * @summary Modify a book
          * @param {string} id 
          * @param {WebBooksBook} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyWebBook(id: string, body?: WebBooksBook, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WebBooksBook> {
-            const localVarFetchArgs = WebBooksApiFetchParamCreator(configuration).modifyWebBook(id, body, options);
+        modifyWebBook(id: string, body?: WebBooksBook, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WebBooksBook> {
+            const localVarFetchArgs = WebBooksApiFetchParamCreator(configuration).modifyWebBook(id, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -20842,61 +22881,92 @@ export const WebBooksApiFactory = function (configuration?: Configuration, fetch
          * Create a new web book from the specified data.     **Required permissions:**    - **web-books.book.create**   
          * @summary Create a book
          * @param {WebBooksBook} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWebBook(body?: WebBooksBook, options?: any) {
-            return WebBooksApiFp(configuration).createWebBook(body, options)(fetch, basePath);
+        createWebBook(body?: WebBooksBook, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return WebBooksApiFp(configuration).createWebBook(body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Delete a web book.     **Required permissions:**    - **web-books.book.delete**   
          * @summary Delete a book
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteWebBook(id: string, options?: any) {
-            return WebBooksApiFp(configuration).deleteWebBook(id, options)(fetch, basePath);
+        deleteWebBook(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return WebBooksApiFp(configuration).deleteWebBook(id, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get detailed information about a web book.     **Required permissions:**    - **web-books.book.one**   
          * @summary Get a book
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebBook(id: string, options?: any) {
-            return WebBooksApiFp(configuration).getWebBook(id, options)(fetch, basePath);
+        getWebBook(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return WebBooksApiFp(configuration).getWebBook(id, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get the web book content as HTML.
          * @summary Book HTML
          * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebBookContent(id: string, options?: any) {
-            return WebBooksApiFp(configuration).getWebBookContent(id, options)(fetch, basePath);
+        getWebBookContent(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return WebBooksApiFp(configuration).getWebBookContent(id, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Get the web book content as HTML.
+         * @summary Book HTML
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getWebBookContentPost(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return WebBooksApiFp(configuration).getWebBookContentPost(id, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get a list of all the web books on the server.     **Required permissions:**    - **web-books.book.list**   
          * @summary List books
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listWebBooks(options?: any) {
-            return WebBooksApiFp(configuration).listWebBooks(options)(fetch, basePath);
+        listWebBooks(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return WebBooksApiFp(configuration).listWebBooks(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Modify an existing book.     **Required permissions:**    - **web-books.book.modify**   
          * @summary Modify a book
          * @param {string} id 
          * @param {WebBooksBook} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyWebBook(id: string, body?: WebBooksBook, options?: any) {
-            return WebBooksApiFp(configuration).modifyWebBook(id, body, options)(fetch, basePath);
+        modifyWebBook(id: string, body?: WebBooksBook, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return WebBooksApiFp(configuration).modifyWebBook(id, body, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -20912,59 +22982,89 @@ export class WebBooksApi extends BaseAPI {
      * Create a new web book from the specified data.     **Required permissions:**    - **web-books.book.create**   
      * @summary Create a book
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebBooksApi
      */
-    public createWebBook(body?: WebBooksBook, options?: any) {
-        return WebBooksApiFp(this.configuration).createWebBook(body, options)(this.fetch, this.basePath);
+    public createWebBook(body?: WebBooksBook, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return WebBooksApiFp(this.configuration).createWebBook(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Delete a web book.     **Required permissions:**    - **web-books.book.delete**   
      * @summary Delete a book
      * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebBooksApi
      */
-    public deleteWebBook(id: string, options?: any) {
-        return WebBooksApiFp(this.configuration).deleteWebBook(id, options)(this.fetch, this.basePath);
+    public deleteWebBook(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return WebBooksApiFp(this.configuration).deleteWebBook(id, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get detailed information about a web book.     **Required permissions:**    - **web-books.book.one**   
      * @summary Get a book
      * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebBooksApi
      */
-    public getWebBook(id: string, options?: any) {
-        return WebBooksApiFp(this.configuration).getWebBook(id, options)(this.fetch, this.basePath);
+    public getWebBook(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return WebBooksApiFp(this.configuration).getWebBook(id, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get the web book content as HTML.
      * @summary Book HTML
      * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebBooksApi
      */
-    public getWebBookContent(id: string, options?: any) {
-        return WebBooksApiFp(this.configuration).getWebBookContent(id, options)(this.fetch, this.basePath);
+    public getWebBookContent(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return WebBooksApiFp(this.configuration).getWebBookContent(id, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Get the web book content as HTML.
+     * @summary Book HTML
+     * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WebBooksApi
+     */
+    public getWebBookContentPost(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return WebBooksApiFp(this.configuration).getWebBookContentPost(id, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get a list of all the web books on the server.     **Required permissions:**    - **web-books.book.list**   
      * @summary List books
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebBooksApi
      */
-    public listWebBooks(options?: any) {
-        return WebBooksApiFp(this.configuration).listWebBooks(options)(this.fetch, this.basePath);
+    public listWebBooks(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return WebBooksApiFp(this.configuration).listWebBooks(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -20972,12 +23072,15 @@ export class WebBooksApi extends BaseAPI {
      * @summary Modify a book
      * @param {} id 
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebBooksApi
      */
-    public modifyWebBook(id: string, body?: WebBooksBook, options?: any) {
-        return WebBooksApiFp(this.configuration).modifyWebBook(id, body, options)(this.fetch, this.basePath);
+    public modifyWebBook(id: string, body?: WebBooksBook, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return WebBooksApiFp(this.configuration).modifyWebBook(id, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -20992,10 +23095,13 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
          * Creates a new world with the specified settings. This does not yet load the world.     **Required permissions:**    - **world.create**   
          * @summary Create a world
          * @param {CreateWorldRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWorld(body?: CreateWorldRequest, options: any = {}): FetchArgs {
+        createWorld(body?: CreateWorldRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/world`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -21018,6 +23124,18 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -21036,10 +23154,13 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
          * Deletes an existing world. **The world must be unloaded before deleting it**     **Required permissions:**    - **world.delete**   
          * @summary Delete a world
          * @param {string} world The uuid of the world to delete
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteWorld(world: string, options: any = {}): FetchArgs {
+        deleteWorld(world: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'world' is not null or undefined
             if (world === null || world === undefined) {
                 throw new RequiredError('world','Required parameter world was null or undefined when calling deleteWorld.');
@@ -21067,6 +23188,18 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -21082,10 +23215,13 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
          * @summary Execute a method
          * @param {string} world The uuid of the world on which to execute the method
          * @param {ExecuteMethodRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        executeMethod(world: string, body?: ExecuteMethodRequest, options: any = {}): FetchArgs {
+        executeMethod(world: string, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'world' is not null or undefined
             if (world === null || world === undefined) {
                 throw new RequiredError('world','Required parameter world was null or undefined when calling executeMethod.');
@@ -21113,6 +23249,18 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -21131,10 +23279,13 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
          * Get detailed information about a world.     **Required permissions:**    - **world.one**   
          * @summary Get a world
          * @param {string} world The uuid of the world for which to get details
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWorld(world: string, options: any = {}): FetchArgs {
+        getWorld(world: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'world' is not null or undefined
             if (world === null || world === undefined) {
                 throw new RequiredError('world','Required parameter world was null or undefined when calling getWorld.');
@@ -21162,6 +23313,18 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -21175,10 +23338,13 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
         /**
          * Get a list of all the worlds on the server.     **Required permissions:**    - **world.list**   
          * @summary List worlds
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listWorlds(options: any = {}): FetchArgs {
+        listWorlds(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/world`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -21201,6 +23367,18 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter["key"] = localVarApiKeyValue;
             }
 
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -21216,10 +23394,13 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
          * @summary Modify a world
          * @param {string} world The uuid of the world which to update
          * @param {UpdateWorldRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyWorld(world: string, body?: UpdateWorldRequest, options: any = {}): FetchArgs {
+        modifyWorld(world: string, body?: UpdateWorldRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'world' is not null or undefined
             if (world === null || world === undefined) {
                 throw new RequiredError('world','Required parameter world was null or undefined when calling modifyWorld.');
@@ -21245,6 +23426,18 @@ export const WorldApiFetchParamCreator = function (configuration?: Configuration
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
             }
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -21274,11 +23467,14 @@ export const WorldApiFp = function(configuration?: Configuration) {
          * Creates a new world with the specified settings. This does not yet load the world.     **Required permissions:**    - **world.create**   
          * @summary Create a world
          * @param {CreateWorldRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWorld(body?: CreateWorldRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WorldFull> {
-            const localVarFetchArgs = WorldApiFetchParamCreator(configuration).createWorld(body, options);
+        createWorld(body?: CreateWorldRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WorldFull> {
+            const localVarFetchArgs = WorldApiFetchParamCreator(configuration).createWorld(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -21293,11 +23489,14 @@ export const WorldApiFp = function(configuration?: Configuration) {
          * Deletes an existing world. **The world must be unloaded before deleting it**     **Required permissions:**    - **world.delete**   
          * @summary Delete a world
          * @param {string} world The uuid of the world to delete
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteWorld(world: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WorldFull> {
-            const localVarFetchArgs = WorldApiFetchParamCreator(configuration).deleteWorld(world, options);
+        deleteWorld(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WorldFull> {
+            const localVarFetchArgs = WorldApiFetchParamCreator(configuration).deleteWorld(world, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -21313,11 +23512,14 @@ export const WorldApiFp = function(configuration?: Configuration) {
          * @summary Execute a method
          * @param {string} world The uuid of the world on which to execute the method
          * @param {ExecuteMethodRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        executeMethod(world: string, body?: ExecuteMethodRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ExecuteMethodResponse> {
-            const localVarFetchArgs = WorldApiFetchParamCreator(configuration).executeMethod(world, body, options);
+        executeMethod(world: string, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ExecuteMethodResponse> {
+            const localVarFetchArgs = WorldApiFetchParamCreator(configuration).executeMethod(world, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -21332,11 +23534,14 @@ export const WorldApiFp = function(configuration?: Configuration) {
          * Get detailed information about a world.     **Required permissions:**    - **world.one**   
          * @summary Get a world
          * @param {string} world The uuid of the world for which to get details
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWorld(world: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WorldFull> {
-            const localVarFetchArgs = WorldApiFetchParamCreator(configuration).getWorld(world, options);
+        getWorld(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WorldFull> {
+            const localVarFetchArgs = WorldApiFetchParamCreator(configuration).getWorld(world, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -21350,11 +23555,14 @@ export const WorldApiFp = function(configuration?: Configuration) {
         /**
          * Get a list of all the worlds on the server.     **Required permissions:**    - **world.list**   
          * @summary List worlds
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listWorlds(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<WorldFull>> {
-            const localVarFetchArgs = WorldApiFetchParamCreator(configuration).listWorlds(options);
+        listWorlds(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<WorldFull>> {
+            const localVarFetchArgs = WorldApiFetchParamCreator(configuration).listWorlds(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -21370,11 +23578,14 @@ export const WorldApiFp = function(configuration?: Configuration) {
          * @summary Modify a world
          * @param {string} world The uuid of the world which to update
          * @param {UpdateWorldRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyWorld(world: string, body?: UpdateWorldRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WorldFull> {
-            const localVarFetchArgs = WorldApiFetchParamCreator(configuration).modifyWorld(world, body, options);
+        modifyWorld(world: string, body?: UpdateWorldRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WorldFull> {
+            const localVarFetchArgs = WorldApiFetchParamCreator(configuration).modifyWorld(world, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -21398,62 +23609,80 @@ export const WorldApiFactory = function (configuration?: Configuration, fetch?: 
          * Creates a new world with the specified settings. This does not yet load the world.     **Required permissions:**    - **world.create**   
          * @summary Create a world
          * @param {CreateWorldRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWorld(body?: CreateWorldRequest, options?: any) {
-            return WorldApiFp(configuration).createWorld(body, options)(fetch, basePath);
+        createWorld(body?: CreateWorldRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return WorldApiFp(configuration).createWorld(body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Deletes an existing world. **The world must be unloaded before deleting it**     **Required permissions:**    - **world.delete**   
          * @summary Delete a world
          * @param {string} world The uuid of the world to delete
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteWorld(world: string, options?: any) {
-            return WorldApiFp(configuration).deleteWorld(world, options)(fetch, basePath);
+        deleteWorld(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return WorldApiFp(configuration).deleteWorld(world, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Provides direct access to the underlaying world object and can execute any method on it.     **Required permissions:**    - **world.method**   
          * @summary Execute a method
          * @param {string} world The uuid of the world on which to execute the method
          * @param {ExecuteMethodRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        executeMethod(world: string, body?: ExecuteMethodRequest, options?: any) {
-            return WorldApiFp(configuration).executeMethod(world, body, options)(fetch, basePath);
+        executeMethod(world: string, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return WorldApiFp(configuration).executeMethod(world, body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get detailed information about a world.     **Required permissions:**    - **world.one**   
          * @summary Get a world
          * @param {string} world The uuid of the world for which to get details
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWorld(world: string, options?: any) {
-            return WorldApiFp(configuration).getWorld(world, options)(fetch, basePath);
+        getWorld(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return WorldApiFp(configuration).getWorld(world, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Get a list of all the worlds on the server.     **Required permissions:**    - **world.list**   
          * @summary List worlds
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listWorlds(options?: any) {
-            return WorldApiFp(configuration).listWorlds(options)(fetch, basePath);
+        listWorlds(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return WorldApiFp(configuration).listWorlds(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Modify the properties of an existing world.     **Required permissions:**    - **world.modify**   
          * @summary Modify a world
          * @param {string} world The uuid of the world which to update
          * @param {UpdateWorldRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyWorld(world: string, body?: UpdateWorldRequest, options?: any) {
-            return WorldApiFp(configuration).modifyWorld(world, body, options)(fetch, basePath);
+        modifyWorld(world: string, body?: UpdateWorldRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return WorldApiFp(configuration).modifyWorld(world, body, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -21469,24 +23698,30 @@ export class WorldApi extends BaseAPI {
      * Creates a new world with the specified settings. This does not yet load the world.     **Required permissions:**    - **world.create**   
      * @summary Create a world
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorldApi
      */
-    public createWorld(body?: CreateWorldRequest, options?: any) {
-        return WorldApiFp(this.configuration).createWorld(body, options)(this.fetch, this.basePath);
+    public createWorld(body?: CreateWorldRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return WorldApiFp(this.configuration).createWorld(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Deletes an existing world. **The world must be unloaded before deleting it**     **Required permissions:**    - **world.delete**   
      * @summary Delete a world
      * @param {} world The uuid of the world to delete
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorldApi
      */
-    public deleteWorld(world: string, options?: any) {
-        return WorldApiFp(this.configuration).deleteWorld(world, options)(this.fetch, this.basePath);
+    public deleteWorld(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return WorldApiFp(this.configuration).deleteWorld(world, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -21494,35 +23729,44 @@ export class WorldApi extends BaseAPI {
      * @summary Execute a method
      * @param {} world The uuid of the world on which to execute the method
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorldApi
      */
-    public executeMethod(world: string, body?: ExecuteMethodRequest, options?: any) {
-        return WorldApiFp(this.configuration).executeMethod(world, body, options)(this.fetch, this.basePath);
+    public executeMethod(world: string, body?: ExecuteMethodRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return WorldApiFp(this.configuration).executeMethod(world, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get detailed information about a world.     **Required permissions:**    - **world.one**   
      * @summary Get a world
      * @param {} world The uuid of the world for which to get details
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorldApi
      */
-    public getWorld(world: string, options?: any) {
-        return WorldApiFp(this.configuration).getWorld(world, options)(this.fetch, this.basePath);
+    public getWorld(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return WorldApiFp(this.configuration).getWorld(world, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
      * Get a list of all the worlds on the server.     **Required permissions:**    - **world.list**   
      * @summary List worlds
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorldApi
      */
-    public listWorlds(options?: any) {
-        return WorldApiFp(this.configuration).listWorlds(options)(this.fetch, this.basePath);
+    public listWorlds(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return WorldApiFp(this.configuration).listWorlds(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -21530,12 +23774,15 @@ export class WorldApi extends BaseAPI {
      * @summary Modify a world
      * @param {} world The uuid of the world which to update
      * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorldApi
      */
-    public modifyWorld(world: string, body?: UpdateWorldRequest, options?: any) {
-        return WorldApiFp(this.configuration).modifyWorld(world, body, options)(this.fetch, this.basePath);
+    public modifyWorld(world: string, body?: UpdateWorldRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return WorldApiFp(this.configuration).modifyWorld(world, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }

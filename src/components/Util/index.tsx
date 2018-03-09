@@ -108,3 +108,18 @@ export function renderWorldOptions(worlds: WorldFull[] | undefined): { value: st
 
 // Get a property according to a path
 export const get = (o: any, path: string) => path.split(".").reduce((obj: any = {}, key) => obj[key], o)
+
+// Format source
+export const formatSource = (source: any): string => {
+	if (!source) {
+		return ""
+	} else if (source === "valandur.webapi.command.CommandSource") {
+		return "Web-API"
+	} else if (source === "net.minecraft.server.dedicated.DedicatedServer") {
+		return "Console"
+	} else if (typeof source === "string") {
+		return source
+	} else {
+		return source.name
+	}
+}

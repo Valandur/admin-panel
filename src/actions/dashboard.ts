@@ -1,4 +1,5 @@
 import { Action } from "redux"
+
 import { ServerInfo, ServerStats } from "../fetch"
 
 export enum TypeKeys {

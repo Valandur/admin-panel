@@ -1,4 +1,5 @@
 import { Action } from "redux"
+
 import { Subject, SubjectCollection } from "../fetch"
 
 export enum TypeKeys {

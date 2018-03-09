@@ -1,5 +1,8 @@
 import { routerReducer } from "react-router-redux"
 
+import { AppAction, initAction } from "../actions"
+import { AppState } from "../types"
+
 import api from "./api"
 import cmd from "./command"
 import dashboard from "./dashboard"
@@ -8,9 +11,6 @@ import permission from "./permission"
 import player from "./player"
 import plugin from "./plugin"
 import settings from "./settings"
-
-import { AppAction, initAction } from "../actions"
-import { AppState } from "../types"
 
 const initAcc = initAction()
 

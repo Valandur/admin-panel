@@ -1,6 +1,7 @@
 import * as React from "react"
 import * as Loadable from "react-loadable"
 import { Loader, Message } from "semantic-ui-react"
+
 import { ViewDefinition } from "../../types"
 
 function load(func: () => Promise<React.ComponentType | { default: React.ComponentType }>): React.ComponentType {

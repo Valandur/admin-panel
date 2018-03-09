@@ -1,6 +1,9 @@
 import { Action } from "redux"
 import { ResponseError } from "superagent"
 
+import { CatalogType, PermissionStruct } from "../fetch"
+import { Server } from "../types"
+
 import { CommandAction } from "./command"
 import { DashboardAction } from "./dashboard"
 import { DataViewAction } from "./dataview"
@@ -9,9 +12,6 @@ import { PermissionAction } from "./permission"
 import { PlayerAction } from "./player"
 import { PluginAction } from "./plugin"
 import { SettingsAction } from "./settings"
-
-import { CatalogType, PermissionStruct } from "../fetch"
-import { Server } from "../types"
 
 export enum TypeKeys {
 	INIT = "@@__INIT__@@",

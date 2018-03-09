@@ -2,9 +2,9 @@ import * as _ from "lodash"
 
 import { AppAction } from "../actions"
 import { TypeKeys } from "../actions/player"
-import { DataViewState } from "./dataview"
-
 import { PlayerFull } from "../fetch"
+
+import { DataViewState } from "./dataview"
 
 const initialState: DataViewState<PlayerFull> = {
 	creating: false,

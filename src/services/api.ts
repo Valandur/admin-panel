@@ -86,13 +86,13 @@ const api: ExtendedMiddleware<AppState> = ({ getState, dispatch }: MiddlewareAPI
 			break
 
 		case PermissionTypeKeys.COLLECTIONS_LIST_REQUEST:
-			state.api.apis.permission.listCollections()
+			state.api.apis.permission.listCollections(true)
 				.then(collections => next(respondCollections(collections)))
 				.catch(errorHandler)
 			break
 
 		case PermissionTypeKeys.SUBJECTS_LIST_REQUEST:
-			state.api.apis.permission.listSubjects(action.collection.id)
+			state.api.apis.permission.listSubjects(action.collection.id, true)
 				.then(subjects => next(respondSubjects(action.collection, subjects)))
 				.catch(errorHandler)
 			break

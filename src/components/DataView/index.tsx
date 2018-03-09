@@ -4,18 +4,17 @@ import { connect } from "react-redux"
 import { Dispatch } from "redux"
 import { Grid, Segment } from "semantic-ui-react"
 
+import { AppAction } from "../../actions"
+import { requestChange, requestCreate, requestDelete, requestDetails, requestList,
+	setFilter } from "../../actions/dataview"
+import { DataViewState } from "../../reducers/dataview"
+import { AppState, DataFieldRaw, DataTableRef, DataViewRef, IdFunction } from "../../types"
 import CreateForm from "../CreateForm"
 import DataTable, { Props as DataTableProps } from "../DataTable"
 import FilterForm from "../FilterForm"
 import { checkPermissions } from "../Util"
 
-import { AppState, DataFieldRaw, DataTableRef, DataViewRef, IdFunction } from "../../types"
 import { DispatchProps, FullProps, OwnProps, OwnState, StateProps } from "./types"
-
-import { AppAction } from "../../actions"
-import { requestChange, requestCreate, requestDelete, requestDetails, requestList,
-	setFilter } from "../../actions/dataview"
-import { DataViewState } from "../../reducers/dataview"
 
 class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 

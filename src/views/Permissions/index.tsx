@@ -1,8 +1,8 @@
 import * as _ from "lodash"
 import * as React from "react"
-import { translate } from "react-i18next"
+import { Trans, translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
-import { Icon, Label, Menu, Segment, Tab, Table, TabProps } from "semantic-ui-react"
+import { Button, Icon, Label, Menu, Modal, Segment, Tab, Table, TabProps } from "semantic-ui-react"
 
 import DataTable from "../../components/DataTable"
 
@@ -20,12 +20,18 @@ interface Props extends reactI18Next.InjectedTranslateProps {
 }
 
 interface OwnState {
+	modal: boolean
+	subject?: Subject
 }
 
 class Permissions extends React.Component<Props, OwnState> {
 
 	constructor(props: Props) {
 		super(props)
+
+		this.state = {
+			modal: false,
+		}
 
 		this.onTabChange = this.onTabChange.bind(this)
 	}
@@ -43,8 +49,22 @@ class Permissions extends React.Component<Props, OwnState> {
 		this.props.requestSubjects(coll)
 	}
 
+	showSubject(subject: Subject) {
+		this.setState({
+			modal: true,
+			subject,
+		})
+	}
+
+	toggleModal() {
+		this.setState({
+			modal: !this.state.modal
+		})
+	}
+
 	render() {
 		const _t = this.props.t
+		const { modal, subject } = this.state
 
 		return (
 			<Segment basic>
@@ -77,28 +97,14 @@ class Permissions extends React.Component<Props, OwnState> {
 										permissions: {
 											name: "permissions",
 											label: _t("Permissions"),
-											view: (subject: Subject) => {
-												if (!subject.permissions) {
-													return
+											view: (subj: Subject) => {
+												if (!subj.permissions || !Object.keys(subj.permissions).length) {
+													return _t("No permissions")
 												}
 
-												return (<Table basic compact>
-													<Table.Body>
-														{Object.keys(subject.permissions).map(key =>
-															<Table.Row key={key}>
-																<Table.Cell>
-																	{key}
-																</Table.Cell>
-																<Table.Cell>
-																	<Icon
-																		color={subject.permissions[key] ? "green" : "red"}
-																		name={subject.permissions[key] ? "check" : "delete"}
-																	/>
-																</Table.Cell>
-															</Table.Row>
-														)}
-													</Table.Body>
-												</Table>)
+												return (
+													<Button primary content="View" onClick={() => this.showSubject(subj)} />
+												)
 											}
 										}
 									}}
@@ -107,6 +113,38 @@ class Permissions extends React.Component<Props, OwnState> {
 						}
 					}))}
 				/>
+
+				{subject && subject.permissions &&
+					<Modal open={modal} onClose={() => this.toggleModal()}>
+						<Modal.Header>
+							<Trans i18nKey="GameRulesTitle">
+								Permissions for '{subject.id}'
+							</Trans>
+						</Modal.Header>
+						<Modal.Content>
+							<Table basic compact>
+								<Table.Body>
+									{ Object.keys(subject.permissions).map(key =>
+										<Table.Row key={key}>
+											<Table.Cell>
+												{key}
+											</Table.Cell>
+											<Table.Cell>
+												<Icon
+													color={(subject.permissions as any)[key] ? "green" : "red"}
+													name={(subject.permissions as any)[key] ? "check" : "delete"}
+												/>
+											</Table.Cell>
+										</Table.Row>
+									)}
+								</Table.Body>
+							</Table>
+						</Modal.Content>
+						<Modal.Actions>
+							<Button color="blue" onClick={() => this.toggleModal()}>{_t("OK")}</Button>
+						</Modal.Actions>
+					</Modal>
+				}
 			</Segment>
 		)
 	}

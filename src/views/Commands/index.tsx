@@ -8,17 +8,20 @@ import { Form } from "semantic-ui-react"
 import { AppAction } from "../../actions"
 import { ExecuteRequestAction, requestExecute } from "../../actions/command"
 import { ListRequestAction, requestList } from "../../actions/dataview"
+import { NotifLevel, showNotification, ShowNotificationAction } from "../../actions/notification"
 import Autosuggest from "../../components/Autosuggest"
+import DataViewFunc from "../../components/DataView"
+import { formatSource } from "../../components/Util"
 import { Command, CommandCall } from "../../fetch"
 import { AppState } from "../../types"
 
-import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("history/cmd", "timestamp")
 
 interface Props extends reactI18Next.InjectedTranslateProps {
 	commands: Command[]
 	requestCommands: () => ListRequestAction
 	requestExecute: (cmd: string, waitLines: number, waitTime: number) => ExecuteRequestAction
+	showNotification: (level: NotifLevel, title: string, message: string) => ShowNotificationAction
 }
 
 interface ExtendedCommand extends Command {
@@ -103,6 +106,19 @@ class Commands extends React.Component<Props, {}> {
 		this.props.requestCommands()
 	}
 
+	getCause(cmd: CommandCall) {
+		if (cmd.cause.causes) {
+			return formatSource(cmd.cause.causes[0])
+		} else {
+			const c = (cmd as any)
+			if (c.cause.source && c.cause.source.name) {
+				return c.cause.source.name
+			} else {
+				return c.cause.source
+			}
+		}
+	}
+
 	render() {
 		const _t = this.props.t
 
@@ -121,12 +137,8 @@ class Commands extends React.Component<Props, {}> {
 					source: {
 						label: _t("Source"),
 						filter: true,
-						filterValue: (cmd: CommandCall) => cmd.cause.causes ? (cmd.cause.causes[0]) :
-							((cmd as any).cause.source && (cmd as any).cause.source.name ?
-							(cmd as any).cause.source.name : (cmd as any).cause.source),
-						view: (cmd: CommandCall) => cmd.cause.causes ? (cmd.cause.causes[0]) :
-							((cmd as any).cause.source && (cmd as any).cause.source.name ?
-							(cmd as any).cause.source.name : (cmd as any).cause.source),
+						filterValue: this.getCause,
+						view: this.getCause,
 					},
 					command: {
 						label: _t("Command"),
@@ -168,9 +180,13 @@ class Commands extends React.Component<Props, {}> {
 							</div>,
 					},
 				}}
-				onCreate={(obj, view) =>
+				onCreate={(obj, view) => {
+					if (!obj.execCmd) {
+						this.props.showNotification("error", "Command", "You must enter a command")
+						return
+					}
 					this.props.requestExecute(obj.execCmd.trim(), obj.waitLines, obj.waitTime)
-				}
+				}}
 			/>
 		)
 	}
@@ -187,6 +203,8 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 		requestCommands: () => dispatch(requestList("cmd", true)),
 		requestExecute: (cmd: string, waitLines: number, waitTime: number) =>
 			dispatch(requestExecute(cmd, waitLines, waitTime)),
+		showNotification: (level: NotifLevel, title: string, message: string) =>
+			dispatch(showNotification(level, title, message))
 	}
 }
 

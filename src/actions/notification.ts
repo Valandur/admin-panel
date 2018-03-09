@@ -23,8 +23,9 @@ export interface ShowNotificationAction extends Action {
 	title: string
 	message: string
 }
+export type NotifLevel = "error" | "warning" | "info" | "success"
 export function showNotification(
-		level: "error" | "warning" | "info" | "success",
+		level: NotifLevel,
 		title: string,
 		message: string): ShowNotificationAction {
 

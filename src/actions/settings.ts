@@ -1,4 +1,5 @@
 import { Action } from "redux"
+
 import { EServerProperty } from "../types"
 
 export enum TypeKeys {

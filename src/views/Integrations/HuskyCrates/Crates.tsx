@@ -6,15 +6,15 @@ import { connect, Dispatch } from "react-redux"
 import { Button, Dropdown, DropdownProps, Form, Header, Icon, Label, Modal, Radio, Table } from "semantic-ui-react"
 
 import { AppAction, CatalogRequestAction, requestCatalog } from "../../../actions"
+import DataViewFunc from "../../../components/DataView"
 import ItemStack from "../../../components/ItemStack"
 import { handleChange, HandleChangeFunc } from "../../../components/Util"
+import { CatalogType, HuskyCratesCommandReward, HuskyCratesCrate, HuskyCratesCrateReward,
+	HuskyCratesCrateRewardObject, HuskyCratesItemReward } from "../../../fetch"
 import { AppState, CatalogTypeKeys, DataViewRef } from "../../../types"
 
 import CrateReward from "./CrateReward"
 
-import DataViewFunc from "../../../components/DataView"
-import { CatalogType, HuskyCratesCommandReward, HuskyCratesCrate, HuskyCratesCrateReward,
-	HuskyCratesCrateRewardObject, HuskyCratesItemReward } from "../../../fetch"
 const DataView = DataViewFunc("husky-crates/crate", "id")
 
 interface Props extends reactI18Next.InjectedTranslateProps {

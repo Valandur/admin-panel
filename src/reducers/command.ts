@@ -2,9 +2,9 @@ import * as _ from "lodash"
 
 import { AppAction } from "../actions"
 import { TypeKeys } from "../actions/command"
-import { DataViewState } from "./dataview"
-
 import { Command } from "../fetch"
+
+import { DataViewState } from "./dataview"
 
 export interface CommandState extends DataViewState<Command> {
 	executing: boolean
