@@ -114,7 +114,7 @@ const notif: ExtendedMiddleware<AppState> = ({ dispatch, getState }: MiddlewareA
 
 		case PlayerTypeKeys.BAN_RESPONSE:
 			showNotif(
-				"success",
+				"warning",
 				"Ban " + action.player.name,
 				action.response)
 			break

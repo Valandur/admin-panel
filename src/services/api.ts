@@ -101,7 +101,7 @@ const api: ExtendedMiddleware<AppState> = ({ getState, dispatch }: MiddlewareAPI
 			state.api.apis.player.executeMethod(action.player.uuid, {
 				"method": "kick",
 				"parameters": [{
-					"type": ExecuteMethodParam.TypeEnum.STRING,
+					"type": ExecuteMethodParam.TypeEnum.TEXT,
 					"value": "Bye",
 				}],
 			})

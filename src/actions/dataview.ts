@@ -26,13 +26,17 @@ export interface ListRequestAction extends Action {
 	type: TypeKeys.LIST_REQUEST
 	endpoint: string
 	details: boolean
+	query: {
+		[x: string]: string
+	}
 }
 export function requestList(
-		endpoint: string, details: boolean = false): ListRequestAction {
+		endpoint: string, details: boolean = false, query: { [x: string]: string } = {}): ListRequestAction {
 	return {
 		type: TypeKeys.LIST_REQUEST,
 		endpoint,
 		details,
+		query,
 	}
 }
 
