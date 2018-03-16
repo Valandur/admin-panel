@@ -150,7 +150,8 @@ const api: ExtendedMiddleware<AppState> = ({ getState, dispatch }: MiddlewareAPI
 			break
 
 		case DataViewTypeKeys.LIST_REQUEST:
-			request.get(makeUrl(action.endpoint + (action.details ? "?details" : "")))
+			const params = toQueryParams(action.query)
+			request.get(makeUrl(action.endpoint + "?" + (action.details ? "details&" : "") + params))
 				.then(resp => next(respondList(action.endpoint, resp.body)))
 				.catch(err => next(respondList(action.endpoint, undefined, err)))
 			break
@@ -184,6 +185,10 @@ const api: ExtendedMiddleware<AppState> = ({ getState, dispatch }: MiddlewareAPI
 		default:
 			break
 	}
+}
+
+function toQueryParams(query: { [x: string]: string }) {
+	return Object.keys(query).map(k => k + "=" + query[k]).join("&")
 }
 
 export default api

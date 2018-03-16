@@ -1,13 +1,12 @@
-import { Stage } from "konva"
 import * as _ from "lodash"
 import Slider from "rc-slider"
 import * as React from "react"
-import { Circle, Image, KonvaContainerComponent, Layer, Line, StageProps } from "react-konva"
+import { Circle, Image, Layer, Line, Stage } from "react-konva"
 import { connect, Dispatch } from "react-redux"
 import { Button, Dropdown, DropdownProps, Header, Progress, Segment } from "semantic-ui-react"
 
 import { AppAction } from "../../actions"
-import { ListRequestAction, requestList } from "../../actions/dataview"
+import { requestDelete, requestList } from "../../actions/dataview"
 import Inventory from "../../components/Inventory"
 import { formatRange, renderWorldOptions } from "../../components/Util"
 import { Entity, PlayerFull, TileEntity, WorldFull } from "../../fetch"
@@ -15,7 +14,7 @@ import { AppState } from "../../types"
 
 const TILE_SIZE = 512
 const HALF_TILE = TILE_SIZE / 2
-const ZOOM_SPEED = 0.01
+// const ZOOM_SPEED = 0.01
 const MIN_ZOOM = 0.1
 const MAX_ZOOM = 16.0
 
@@ -46,14 +45,6 @@ const marks = {
 	2: <strong>MAX</strong>,
 }
 
-// TODO: Temporary react-konva fix, until it supports "onContentWheel" event
-interface CustomStageProps extends StageProps {
-	onContentWheel?(evt: any): void
-}
-class CustomStage extends KonvaContainerComponent<Stage, CustomStageProps> {
-	// getStage(): Stage
-}
-
 interface OwnProps {
 	entities: Entity[],
 	worlds: WorldFull[],
@@ -63,10 +54,11 @@ interface OwnProps {
 	apiUrl: string,
 }
 interface DispatchProps {
-	requestWorlds: () => ListRequestAction
-	requestEntities: () => ListRequestAction
-	requestPlayers: () => ListRequestAction
-	requestTileEntities: () => ListRequestAction
+	requestWorlds: () => AppAction
+	requestPlayers: () => AppAction
+	requestEntities: (query: { [x: string]: string }) => AppAction
+	requestTileEntities: (query: { [x: string]: string }) => AppAction
+	requestDeleteEntity: (entity: Entity) => AppAction,
 }
 interface Props extends OwnProps, DispatchProps, reactI18Next.InjectedTranslateProps {}
 
@@ -87,8 +79,14 @@ interface OwnState {
 class Map extends React.Component<Props, OwnState> {
 
 	wrapper: HTMLDivElement
-	stage: CustomStage
 	timeouts: NodeJS.Timer[]
+
+	x: number = 0
+	y: number = 0
+
+	objClicked: boolean = false
+
+	playerInterval: NodeJS.Timer
 
 	constructor(props: Props) {
 		super(props)
@@ -114,7 +112,7 @@ class Map extends React.Component<Props, OwnState> {
 		this.handleMouseDown = this.handleMouseDown.bind(this)
 		this.handleMouseMove = this.handleMouseMove.bind(this)
 		this.handleMouseOutUp = this.handleMouseOutUp.bind(this)
-		this.handleWheel = this.handleWheel.bind(this)
+		// this.handleWheel = this.handleWheel.bind(this)
 		this.handleWorldChange = this.handleWorldChange.bind(this)
 
 		this.updateDimensions = _.debounce(this.updateDimensions.bind(this), 500)
@@ -125,16 +123,16 @@ class Map extends React.Component<Props, OwnState> {
 	}
 
 	componentDidMount() {
-		this.props.requestEntities()
 		this.props.requestPlayers()
-		this.props.requestTileEntities()
 		this.props.requestWorlds()
+		this.playerInterval = setInterval(() => this.props.requestPlayers(), 10000)
 
 		window.addEventListener("resize", this.updateDimensions)
 		this.updateDimensions()
 	}
 
 	componentWillUnmount() {
+		clearInterval(this.playerInterval)
 		window.removeEventListener("resize", this.updateDimensions)
 	}
 
@@ -162,9 +160,9 @@ class Map extends React.Component<Props, OwnState> {
 		_.each(this.timeouts, timeout => clearTimeout(timeout))
 
 		this.setState({
-			biomes: _.filter(this.state.biomes, biome =>
+			biomes: _.uniqBy(_.filter(this.state.biomes, biome =>
 				biome.x + HALF_TILE >= min.x && biome.x - HALF_TILE <= max.x &&
-				biome.z + HALF_TILE >= min.z && biome.z - HALF_TILE <= max.z)
+				biome.z + HALF_TILE >= min.z && biome.z - HALF_TILE <= max.z), b => b.x + "+" + b.z)
 		}, () => {
 			min.x = min.x - min.x % TILE_SIZE - TILE_SIZE
 			min.z = min.z - min.z % TILE_SIZE - TILE_SIZE
@@ -211,45 +209,81 @@ class Map extends React.Component<Props, OwnState> {
 		}, () => this.getAllBiomes())
 	}
 
-	handleObjMouseDown(event: React.MouseEvent<HTMLElement>, obj: Entity | PlayerFull | TileEntity) {
-		event.nativeEvent.cancelBubble = true
+	handleObjMouseDown(
+			{ evt }: { evt: React.MouseEvent<HTMLElement> },
+			type: "player" | "entity" | "tile-entity",
+			obj: Entity | PlayerFull | TileEntity) {
 
+		this.objClicked = true
 		const loc = this.worldToScreen(obj.location.position)
+
+		let content
+		if (type === "player") {
+			content = this.renderPlayerInfo(obj as PlayerFull)
+		} else if (type === "entity") {
+			content = this.renderEntityInfo(obj as Entity)
+		} else if (type === "tile-entity") {
+			content = this.renderTileEntityInfo(obj as TileEntity)
+		}
 
 		this.setState({
 			left: loc.x,
 			top: loc.z,
 			display: "block",
-			content: (
-				<Segment>
-						<Header>
-							{ _.has(obj, "name") ? (obj as PlayerFull).name :
-								(obj as Entity).type ? (obj as Entity).type : (_.has(obj, "uuid") ? (obj as Entity).uuid : null) }
-						</Header>
-						{obj.inventory &&
-							<Inventory items={obj.inventory.itemStacks} />}
-						{obj.health &&
-							<Progress
-								progress
-								color="red"
-								percent={formatRange(obj.health.current, obj.health.max)}
-							/>}
-						{obj.food &&
-							<Progress
-								progress
-								color="green"
-								percent={formatRange(obj.food.foodLevel, 20)}
-							/>}
-						<Button color="red" onClick={() => this.deleteEntity(obj)}>
-							Destroy
-						</Button>
-					</Segment>
-			),
+			content: content,
 		})
 	}
 
-	handleMouseDown(event: React.MouseEvent<HTMLElement>) {
-		if (event.nativeEvent.cancelBubble) {
+	renderPlayerInfo(player: PlayerFull) {
+		return (
+			<Segment>
+				<Header>
+					{player.name}
+				</Header>
+				{player.inventory &&
+					<Inventory items={player.inventory.itemStacks} />}
+				{player.health &&
+					<Progress
+						progress
+						color="red"
+						percent={formatRange(player.health.current, player.health.max)}
+					/>}
+				{player.food &&
+					<Progress
+						progress
+						color="green"
+						percent={formatRange(player.food.foodLevel, 20)}
+					/>}
+			</Segment>
+		)
+	}
+
+	renderEntityInfo(entity: Entity) {
+		return (
+			<Segment>
+				<Header>
+					{entity.type ? entity.type.name : (entity.uuid ? entity.uuid : null)}
+				</Header>
+				<Button color="red" onClick={() => this.deleteEntity(entity)}>
+					Destroy
+				</Button>
+			</Segment>
+		)
+	}
+
+	renderTileEntityInfo(te: TileEntity) {
+		return (
+			<Segment>
+				<Header>
+					{te.type ? te.type.name : null}
+				</Header>
+			</Segment>
+		)
+	}
+
+	handleMouseDown({ evt }: { evt: React.MouseEvent<HTMLElement> }) {
+		if (this.objClicked) {
+			this.objClicked = false
 			return
 		}
 
@@ -259,29 +293,31 @@ class Map extends React.Component<Props, OwnState> {
 		})
 	}
 
-	handleMouseMove(event: React.MouseEvent<HTMLElement>) {
+	handleMouseMove({ evt }: { evt: React.MouseEvent<HTMLElement> }) {
 		if (!this.state.dragging) {
+			this.x = evt.screenX
+			this.y = evt.screenY
 			return
 		}
 
 		this.setState({
 			center: {
-				x: this.state.center.x + event.nativeEvent.movementX / this.state.zoom,
-				z: this.state.center.z - event.nativeEvent.movementY / this.state.zoom,
+				x: this.state.center.x - (this.x - evt.screenX) / this.state.zoom,
+				z: this.state.center.z + (this.y - evt.screenY) / this.state.zoom,
 			}
 		}, () => this.getAllBiomes())
+
+		this.x = evt.screenX
+		this.y = evt.screenY
 	}
 
 	handleMouseOutUp(event: React.MouseEvent<HTMLElement>) {
-		if (event.nativeEvent.cancelBubble) {
-			return
-		}
-
 		this.setState({
 			dragging: false,
 		})
 	}
 
+	/* waiting for event to be added to typescript
 	handleWheel(event: React.WheelEvent<HTMLElement>) {
 		const d = event.nativeEvent.deltaY
 		const diff = Math.abs(d * ZOOM_SPEED)
@@ -290,7 +326,7 @@ class Map extends React.Component<Props, OwnState> {
 		this.setState({
 			zoom: Math.min(Math.max(newValue, MIN_ZOOM), MAX_ZOOM),
 		}, () => this.getAllBiomes())
-	}
+	}*/
 
 	handleZoomChange(value: number) {
 		this.setState({
@@ -298,8 +334,12 @@ class Map extends React.Component<Props, OwnState> {
 		}, () => this.getAllBiomes())
 	}
 
-	deleteEntity(entity: Entity | PlayerFull | TileEntity) {
-		console.log(entity)
+	deleteEntity(entity: Entity) {
+		this.props.requestDeleteEntity(entity)
+		this.setState({
+			display: "none",
+			content: undefined,
+		})
 	}
 
 	center() {
@@ -325,6 +365,29 @@ class Map extends React.Component<Props, OwnState> {
 		}
 	}
 
+	loadEntities() {
+		if (!this.state.worldId) {
+			return
+		}
+
+		const min = this.screenToWorld({ x: 0, z: this.state.height })
+		const max = this.screenToWorld({ x: this.state.width, z: 0 })
+
+		const minStr = min.x.toFixed(0) + "|0|" + min.z.toFixed(0)
+		const maxStr =  max.x.toFixed(0) + "|255|" + max.z.toFixed(0)
+
+		this.props.requestEntities({
+			world: this.state.worldId,
+			min: minStr,
+			max: maxStr,
+		})
+		this.props.requestTileEntities({
+			world: this.state.worldId,
+			min: minStr,
+			max: maxStr,
+		})
+	}
+
 	render() {
 		const center = this.center()
 		const cX = center.x
@@ -336,15 +399,14 @@ class Map extends React.Component<Props, OwnState> {
 					style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
 					ref={w => { if (w != null) { this.wrapper = w }}}
 				>
-					<CustomStage
+					<Stage
 						width={this.state.width}
 						height={this.state.height}
-						ref={s => { if (s != null) { this.stage = s }}}
 						onContentMouseDown={e => this.handleMouseDown(e)}
 						onContentMouseUp={e => this.handleMouseOutUp(e)}
 						onContentMouseOut={e => this.handleMouseOutUp(e)}
 						onContentMouseMove={e => this.handleMouseMove(e)}
-						onContentWheel={e => this.handleWheel(e)}
+						/*onContentWheel={e => this.handleWheel(e)}*/
 					>
 						<Layer>
 						{ _.map(this.state.biomes, biome => {
@@ -377,7 +439,7 @@ class Map extends React.Component<Props, OwnState> {
 										width={8}
 										height={8}
 										fill={"Red"}
-										onMouseDown={e => this.handleObjMouseDown(e, ent)}
+										onMouseDown={e => this.handleObjMouseDown(e, "entity", ent)}
 									/>
 								)
 							})}
@@ -393,7 +455,7 @@ class Map extends React.Component<Props, OwnState> {
 										width={8}
 										height={8}
 										fill={"Gold"}
-										onMouseDown={e => this.handleObjMouseDown(e, player)}
+										onMouseDown={e => this.handleObjMouseDown(e, "player", player)}
 									/>
 								)
 							})}
@@ -409,12 +471,12 @@ class Map extends React.Component<Props, OwnState> {
 										width={8}
 										height={8}
 										fill={"Green"}
-										onMouseDown={e => this.handleObjMouseDown(e, te)}
+										onMouseDown={e => this.handleObjMouseDown(e, "tile-entity", te)}
 									/>
 								)
 							})}
 						</Layer>
-					</CustomStage>
+					</Stage>
 					<div
 						style={{
 							display: this.state.display,
@@ -449,6 +511,14 @@ class Map extends React.Component<Props, OwnState> {
 						handleStyle={{ borderColor: "blue" }}
 					/>
 				</Segment>
+				<Segment style={{ position: "absolute", "top": 0, "right": 10 }}>
+					<Button
+						primary
+						content="Refresh entities"
+						onClick={() => this.loadEntities()}
+						disabled={!this.state.worldId}
+					/>
+				</Segment>
 			</Segment>
 		)
 	}
@@ -459,7 +529,7 @@ const mapStateToProps = (state: AppState): OwnProps => {
 		entities: state.entity.list,
 		worlds: state.world.list,
 		players: state.player.list,
-		tileEntities: (state["tile-entity"].list as TileEntity[]),
+		tileEntities: state.tileentity.list,
 		apiKey: state.api.key,
 		apiUrl: state.api.server.apiUrl,
 	}
@@ -468,9 +538,10 @@ const mapStateToProps = (state: AppState): OwnProps => {
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>): DispatchProps => {
 	return {
 		requestWorlds: () => dispatch(requestList("world", true)),
-		requestEntities: () => dispatch(requestList("entity", true)),
 		requestPlayers: () => dispatch(requestList("player", true)),
-		requestTileEntities: () => dispatch(requestList("tile-entity", true)),
+		requestEntities: (query) => dispatch(requestList("entity", false, query)),
+		requestTileEntities: (query) => dispatch(requestList("tile-entity", false, query)),
+		requestDeleteEntity: (entity: Entity) => dispatch(requestDelete("entity", ent => ent.uuid, entity)),
 	}
 }
 

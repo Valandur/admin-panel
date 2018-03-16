@@ -3,7 +3,7 @@ import * as _ from "lodash"
 
 import { AppAction, TypeKeys } from "../actions"
 import { CatalogType, CommandApi, InfoApi, PermissionApi, PlayerApi, PluginApi, RegistryApi, ServerApi,
-		UserApi } from "../fetch"
+	UserApi } from "../fetch"
 import { CatalogTypeKeys, Lang, PermissionTree, Server } from "../types"
 
 export interface ApiCollection {
