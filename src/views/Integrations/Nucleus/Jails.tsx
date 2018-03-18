@@ -58,14 +58,21 @@ class Jails extends React.Component<Props, OwnState> {
 						label: _t("Location"),
 						isGroup: true,
 						wide: true,
-						view: (jail: NucleusJail) =>
-							<Button color="blue">
-								<Icon name="globe" />
-								{jail.location.world.name}&nbsp; &nbsp;
-								{jail.location.position.x.toFixed(0)} |&nbsp;
-								{jail.location.position.y.toFixed(0)} |&nbsp;
-								{jail.location.position.z.toFixed(0)}
-							</Button>,
+						view: (jail: NucleusJail) => {
+							if (!jail.location) {
+								return <Button color="red">Invalid location</Button>
+							}
+
+							return (
+								<Button color="blue">
+									<Icon name="globe" />
+									{jail.location.world.name}&nbsp; &nbsp;
+									{jail.location.position.x.toFixed(0)} |&nbsp;
+									{jail.location.position.y.toFixed(0)} |&nbsp;
+									{jail.location.position.z.toFixed(0)}
+								</Button>
+							)
+						},
 						create: (view) =>
 							<Form.Group inline>
 								<label>Position</label>
