@@ -60,7 +60,7 @@ class Inventory extends React.Component<AppProps, AppState> {
 			const itemGroups = _.groupBy(items, "type.id")
 			items = _.map(itemGroups, itemGroup => {
 				let item = _.merge({}, _.first(itemGroup))
-				_.each(_.tail(itemGroup), newItem => item = _.mergeWith(item, newItem, customizer))
+				_.tail(itemGroup).forEach(newItem => item = _.mergeWith(item, newItem, customizer))
 				return _.merge(item, { quantity: _.sumBy(itemGroup, "quantity") })
 			})
 		}

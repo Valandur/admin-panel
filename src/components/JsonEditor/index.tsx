@@ -63,9 +63,9 @@ export class ReactJSONEditor extends React.Component<Props, State> {
 
 	public constructor(props: Props, ...args: any[]) {
 		super(props, ...args)
-		const {json} = this.props
+		const { json } = this.props
 		this.state = {
-			json: (_.cloneDeep(json) as any),
+			json: JSON.parse(JSON.stringify(json)),
 			editorCreated: false
 		}
 		this.editor = undefined
@@ -85,7 +85,7 @@ export class ReactJSONEditor extends React.Component<Props, State> {
 		const json = this.json
 		if (!_.isEqual(json, nextProps.json)) {
 			this.setState({
-				json: (_.cloneDeep(nextProps.json) as any)
+				json: JSON.parse(JSON.stringify(nextProps.json))
 			})
 		}
 	}
@@ -97,7 +97,7 @@ export class ReactJSONEditor extends React.Component<Props, State> {
 	}
 
 	public componentWillUnmount() {
-		const {editorCreated} = this.state
+		const { editorCreated } = this.state
 		if (editorCreated) {
 			this.editor.destroy()
 			this.setState({
@@ -107,13 +107,13 @@ export class ReactJSONEditor extends React.Component<Props, State> {
 	}
 
 	public render() {
-		const {className, height, width} = this.props
+		const { className, height, width } = this.props
 		return (
 			<div
 				id="jsonEditor"
 				className={className}
 				ref={this.getEditorRef}
-				style={{height, width}}
+				style={{ height, width }}
 			/>
 		)
 	}
@@ -126,14 +126,14 @@ export class ReactJSONEditor extends React.Component<Props, State> {
 		if (!container) {
 			return
 		}
-		const {editorCreated} = this.state
+		const { editorCreated } = this.state
 		if (editorCreated) {
 			return
 		}
-		const {onChange, onEditable, onError, onModeChange} = this.props
-		const {escapeUnicode, sortObjectKeys, history} = this.props
-		const {mode} = this.props
-		const {name, schema, search, indentation, theme} = this.props
+		const { onChange, onEditable, onError, onModeChange } = this.props
+		const { escapeUnicode, sortObjectKeys, history } = this.props
+		const { mode } = this.props
+		const { name, schema, search, indentation, theme } = this.props
 
 		let onChangeWrapper
 		if (onChange) {

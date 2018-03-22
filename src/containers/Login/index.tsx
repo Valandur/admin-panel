@@ -4,8 +4,10 @@ import { connect, Dispatch } from "react-redux"
 import { Redirect } from "react-router-dom"
 import { Button, Dropdown, DropdownProps, Form, Grid, Image, Segment } from "semantic-ui-react"
 
-import { AppAction, changeLanguage, ChangeLanguageAction, changeServer, ChangeServerAction,
-	LoginRequestAction, requestLogin } from "../../actions"
+import {
+	AppAction, changeLanguage, ChangeLanguageAction, changeServer, ChangeServerAction,
+	LoginRequestAction, requestLogin
+} from "../../actions"
 import { handleChange, HandleChangeFunc } from "../../components/Util"
 import { AppState, Lang, langArray, Server } from "../../types"
 
@@ -69,7 +71,7 @@ class Login extends React.Component<Props, OwnState> {
 
 	render() {
 		if (this.props.ok) {
-			return <Redirect to={{ pathname: "/", state: { from: this.props.path }}} />
+			return <Redirect to={{ pathname: "/", state: { from: this.props.path } }} />
 		}
 
 		const _t = this.props.t
@@ -97,7 +99,7 @@ class Login extends React.Component<Props, OwnState> {
 									onChange={this.handleChange}
 									options={this.props.servers.map(s => ({ value: s.apiUrl, text: s.name }))}
 								/>
-							: null}
+								: null}
 
 							<Form.Field
 								selection
@@ -156,7 +158,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		onLoginClick: (username: string, password: string) => dispatch(requestLogin(username, password)),
 		changeServer: (server: Server) => dispatch(changeServer(server)),
-		changeLanguage: (lang: string) => dispatch(changeLanguage(lang)),
+		changeLanguage: (lang: Lang) => dispatch(changeLanguage(lang)),
 	}
 }
 

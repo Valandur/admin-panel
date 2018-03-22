@@ -2,8 +2,10 @@ import * as i18next from "i18next"
 import * as _ from "lodash"
 
 import { AppAction, TypeKeys } from "../actions"
-import { CatalogType, CommandApi, InfoApi, PermissionApi, PlayerApi, PluginApi, RegistryApi, ServerApi,
-	UserApi } from "../fetch"
+import {
+	CatalogType, CommandApi, InfoApi, PermissionApi, PlayerApi, PluginApi, RegistryApi, ServerApi,
+	UserApi
+} from "../fetch"
 import { CatalogTypeKeys, Lang, PermissionTree, Server } from "../types"
 
 export interface ApiCollection {
@@ -68,7 +70,7 @@ if (window.localStorage) {
 	const str = window.localStorage.getItem("api")
 	const prevApi: ApiState | undefined = str ? JSON.parse(str) : undefined
 	if (prevApi && prevApi.version === initialState.version && prevApi.loggedIn) {
-		initialState = _.assign({}, initialState, prevApi)
+		initialState = { ...initialState, ...prevApi }
 		// If the servers changed we need to reload them
 		if (!_.isEqual(initialState.servers, window.config.servers)) {
 			initialState.server = window.config.servers[0]
@@ -82,67 +84,75 @@ export default (state = initialState, action: AppAction) => {
 
 	switch (action.type) {
 		case TypeKeys.CHANGE_SERVER:
-			return _.assign({}, state, {
+			return {
+				...state,
 				server: action.server,
 				apis: setupApis(action.server.apiUrl),
-			})
+			}
 
 		case TypeKeys.SERVLETS_RESPONSE:
 			if (!action.ok) {
 				return state
 			}
 
-			return _.assign({}, state, {
+			return {
+				...state,
 				servlets: action.servlets,
-			})
+			}
 
 		case TypeKeys.CHANGE_LANGUAGE:
 			i18next.changeLanguage(action.lang)
-			return _.assign({}, state, {
+			return {
+				...state,
 				lang: action.lang,
-			})
+			}
 
 		case TypeKeys.LOGIN_REQUEST:
-			return _.assign({}, state, {
+			return {
+				...state,
 				loggingIn: true,
-			})
+			}
 
 		case TypeKeys.LOGIN_RESPONSE:
 			if (action.error || !action.data) {
-				return _.assign({}, state, {
+				return {
+					...state,
 					loggingIn: false,
 					loggedIn: false,
-					key: null,
-					permissions: null,
-					rateLimit: null,
-				})
+					key: undefined,
+					permissions: undefined,
+					rateLimit: undefined,
+				}
 			}
-			return _.assign({}, state, {
+			return {
+				...state,
 				loggingIn: false,
 				loggedIn: true,
 				key: action.data.key,
 				permissions: action.data.permissions,
 				rateLimit: action.data.rateLimit,
 				apis: setupApis(state.server.apiUrl, action.data.key)
-			})
+			}
 
 		case TypeKeys.LOGOUT_REQUEST:
-			return _.assign({}, state, {
+			return {
+				...state,
 				loggedIn: false,
-				key: null,
-				permissions: null,
-				rateLimit: null,
-			})
+				key: undefined,
+				permissions: undefined,
+				rateLimit: undefined,
+			}
 
 		case TypeKeys.CHECK_USER_RESPONSE:
 			if (!action.ok) {
 				return state
 			}
 
-			return _.assign({}, state, {
+			return {
+				...state,
 				permissions: action.data.permissions,
 				rateLimit: action.data.rateLimit,
-			})
+			}
 
 		case TypeKeys.CATALOG_RESPONSE:
 			return {

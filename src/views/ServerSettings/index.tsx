@@ -4,12 +4,15 @@ import { connect, Dispatch } from "react-redux"
 import { Message, Segment } from "semantic-ui-react"
 
 import { AppAction } from "../../actions"
-import { AppState } from "../../types"
+import { AppState, EServerProperty } from "../../types"
 
+import { requestSaveProperty } from "../../actions/settings"
 import DataViewFunc from "../../components/DataView"
+
 const DataView = DataViewFunc("server/properties", "key")
 
 interface Props extends reactI18Next.InjectedTranslateProps {
+	requestSaveProperty: (prop: EServerProperty) => AppAction,
 }
 
 interface OwnState {
@@ -42,6 +45,15 @@ class ServerSettings extends React.Component<Props, OwnState> {
 							edit: true,
 						}
 					}}
+					onSave={(data: EServerProperty, newData, view) => {
+						this.props.requestSaveProperty({
+							...data,
+							value: newData.value,
+						})
+						view.setState({
+							data: null,
+						})
+					}}
 				/>
 			</div>
 		)
@@ -53,7 +65,9 @@ const mapStateToProps = (state: AppState) => {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
-	return {}
+	return {
+		requestSaveProperty: (prop: EServerProperty): AppAction => dispatch(requestSaveProperty(prop)),
+	}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(translate("ServerSettings")(ServerSettings))

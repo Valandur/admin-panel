@@ -5,8 +5,10 @@ import { Dispatch } from "redux"
 import { Grid, Segment } from "semantic-ui-react"
 
 import { AppAction } from "../../actions"
-import { requestChange, requestCreate, requestDelete, requestDetails, requestList,
-	setFilter } from "../../actions/dataview"
+import {
+	requestChange, requestCreate, requestDelete, requestDetails, requestList,
+	setFilter
+} from "../../actions/dataview"
 import { DataViewState } from "../../reducers/dataview"
 import { AppState, DataFieldRaw, DataTableRef, DataViewRef, IdFunction } from "../../types"
 import CreateForm from "../CreateForm"
@@ -94,7 +96,8 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 
 		// Reference that we pass to our various functions
 		const expandRef = (tableRef: DataTableRef): DataViewRef<T> =>
-			_.assign({}, tableRef, {
+			({
+				...tableRef,
 				create: this.create,
 				details: this.details,
 				save: this.save,
@@ -103,7 +106,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 			})
 
 		// Get all the fields of the table
-		const fields: { [x: string]:  DataFieldRaw<T> } = _.mapValues(this.props.fields, (value, name) => {
+		const fields: { [x: string]: DataFieldRaw<T> } = _.mapValues(this.props.fields, (value, name) => {
 			let val: DataFieldRaw<T> = {
 				name: name,
 				view: true
@@ -117,7 +120,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 			} else if (typeof value === "function") {
 				val.view = (obj: T, tableRef: DataTableRef) => value(obj, expandRef(tableRef))
 			} else if (typeof value === "object") {
-				_.assign(val, value)
+				val = { ...val, ...value }
 				if (typeof value.view === "function") {
 					const func = value.view
 					val.view = (obj: T, tableRef: DataTableRef) => func(obj, expandRef(tableRef))
@@ -131,16 +134,19 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 		// Get all the fields for the filter form
 		const createFields: { [x: string]: DataFieldRaw<T> } = {}
 		const filterFields: { [x: string]: DataFieldRaw<T> } = {}
-		_.each(fields, (f, key) => {
-			if (f.create) { createFields[key] = f }
-			if (f.filter) { filterFields[key] = f }
+		Object.keys(fields).forEach(f => {
+			if (fields[f].create) { createFields[f] = fields[f] }
+			if (fields[f].filter) { filterFields[f] = fields[f] }
 		})
 
 		try {
-			_.each(this.props.filter, (value, name) => {
+			Object.keys(this.props.filter).forEach(name => {
+				const value = this.props.filter[name]
+
 				// Get the filter field according to the filterName if specified,
 				// otherwise just the name
-				const ff = _.find(filterFields, { filterName: name }) || filterFields[name]
+				const ff = Object.keys(filterFields).map(f => filterFields[f]).find(f => f.filterName === name)
+					|| filterFields[name]
 
 				// If we have a filterValue function then use that as the value for the check
 				let val = (dataVal: T) => _.get(dataVal, name)
@@ -170,8 +176,8 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 
 		// Filter out the values according to the filters
 		// If the regex isn't valid then we don't want to filter
-		const list = _.filter(this.props.list, data => {
-			return !regsValid || _.every(checks, check => check(data))
+		const list = this.props.list.filter(data => {
+			return !regsValid || checks.every(check => check(data))
 		})
 
 		// Check how many columns we need for the create and filter form
@@ -202,7 +208,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 								onCreate={(obj: any, tableRef: DataTableRef) =>
 									this.props.onCreate ?
 										this.props.onCreate(obj, expandRef(tableRef))
-									:
+										:
 										this.create(obj)
 								}
 							/>
@@ -232,19 +238,19 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 					onEdit={(obj, tableRef) =>
 						this.props.onEdit ?
 							this.props.onEdit(obj, expandRef(tableRef))
-						:
+							:
 							this.edit(obj)
 					}
 					onSave={(obj, newObj, tableRef) =>
 						this.props.onSave ?
 							this.props.onSave(obj, newObj, expandRef(tableRef))
-						:
+							:
 							this.save(obj, newObj)
 					}
 					onDelete={(obj, tableRef) =>
 						this.props.onDelete ?
 							this.props.onDelete(obj, expandRef(tableRef))
-						:
+							:
 							this.delete(obj)
 					}
 					canEdit={checkPermissions(this.props.perms, this.props.perm.concat("change"))

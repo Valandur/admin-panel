@@ -1,4 +1,3 @@
-import * as _ from "lodash"
 import { CheckboxProps, InputProps } from "semantic-ui-react"
 
 import { CatalogType, WorldFull } from "../../fetch"
@@ -62,7 +61,7 @@ export function checkPermissions(_perms: PermissionTree | boolean | undefined, p
 		return false
 	}
 
-	let perms = _.cloneDeep(_perms)
+	let perms = JSON.parse(JSON.stringify(_perms))
 
 	for (let i = 0; i < path.length; i++) {
 		// Get the specific permission node for this level, if we have one

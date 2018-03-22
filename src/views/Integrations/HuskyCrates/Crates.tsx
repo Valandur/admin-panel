@@ -9,8 +9,10 @@ import { AppAction, CatalogRequestAction, requestCatalog } from "../../../action
 import DataViewFunc from "../../../components/DataView"
 import ItemStack from "../../../components/ItemStack"
 import { handleChange, HandleChangeFunc } from "../../../components/Util"
-import { CatalogType, HuskyCratesCommandReward, HuskyCratesCrate, HuskyCratesCrateReward,
-	HuskyCratesCrateRewardObject, HuskyCratesItemReward } from "../../../fetch"
+import {
+	CatalogType, HuskyCratesCommandReward, HuskyCratesCrate, HuskyCratesCrateReward,
+	HuskyCratesCrateRewardObject, HuskyCratesItemReward
+} from "../../../fetch"
 import { AppState, CatalogTypeKeys, DataViewRef } from "../../../types"
 
 import CrateReward from "./CrateReward"
@@ -96,8 +98,8 @@ class Crates extends React.Component<Props, OwnState> {
 	}
 
 	handleRewardChange(
-			reward: HuskyCratesCrateReward,
-			event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+		reward: HuskyCratesCrateReward,
+		event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
 
 		handleChange.call(this, (name: string, value: string) => {
 			const newReward = _.assign({}, reward)
@@ -124,7 +126,7 @@ class Crates extends React.Component<Props, OwnState> {
 			},
 		}
 
-		const rewards = this.state.rewards ? this.state.rewards.concat(newReward) : [ newReward ]
+		const rewards = this.state.rewards ? this.state.rewards.concat(newReward) : [newReward]
 		this.setState({
 			rewards: rewards,
 		})
@@ -142,9 +144,10 @@ class Crates extends React.Component<Props, OwnState> {
 				if (r !== reward) {
 					return r
 				}
-				return _.assign({}, reward, {
+				return {
+					...reward,
 					objects: reward.objects.concat(object),
-				})
+				}
 			}),
 		})
 	}
@@ -155,9 +158,10 @@ class Crates extends React.Component<Props, OwnState> {
 				if (r !== reward) {
 					return r
 				}
-				return _.assign({}, reward, {
+				return {
+					...reward,
 					objects: reward.objects.filter((__, i) => i !== index),
-				})
+				}
 			}),
 		})
 	}
@@ -208,7 +212,7 @@ class Crates extends React.Component<Props, OwnState> {
 										<Icon name="repeat" />
 										{moment.duration(crate.freeDelay, "second").humanize()}
 									</div>
-								: null}
+									: null}
 							</div>,
 						},
 						rewards: {
@@ -242,7 +246,7 @@ class Crates extends React.Component<Props, OwnState> {
 							<Table.Cell>
 								{reward.objects.map((obj: HuskyCratesCrateRewardObject, j: number) => {
 									if (obj.type === HuskyCratesCrateRewardObject.TypeEnum.COMMAND &&
-											(obj as HuskyCratesCommandReward).command) {
+										(obj as HuskyCratesCommandReward).command) {
 										return <Label key={j} color="blue">/{(obj as HuskyCratesCommandReward).command}</Label>
 									}
 									if (obj.type === HuskyCratesCrateRewardObject.TypeEnum.ITEM && (obj as HuskyCratesItemReward).item) {

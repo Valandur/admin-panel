@@ -139,6 +139,7 @@ export interface Server {
 
 export interface EServerProperty extends ServerProperty {
 	edit?: boolean
+	saving?: boolean
 }
 
 export interface PermissionTree {

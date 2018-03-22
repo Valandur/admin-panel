@@ -38,9 +38,10 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 
 	doHandleChange(key: string, value: string) {
 		this.setState({
-			newData: _.assign({}, this.state.newData, {
+			newData: {
+				...this.state.newData,
 				[key]: value
-			})
+			}
 		})
 	}
 
@@ -79,9 +80,10 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 		const fieldGroups: DataFieldGroup<T>[] = []
 		Object.keys(fields).forEach(name => {
 			const field = fields[name]
-			const newField: DataFieldRaw<T> = _.assign({}, field, {
+			const newField: DataFieldRaw<T> = {
+				...field,
 				name: field.createName ? field.createName : name,
-			})
+			}
 
 			if (newField.isGroup) {
 				fieldGroups.push({ only: newField })
@@ -95,7 +97,7 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 		return (
 			<Segment>
 				<Header>
-					<Icon fitted name="plus"/> {title}
+					<Icon fitted name="plus" /> {title}
 				</Header>
 
 				<Form loading={creating}>
