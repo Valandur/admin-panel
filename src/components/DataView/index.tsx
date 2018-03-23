@@ -33,6 +33,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 		this.details = this.details.bind(this)
 		this.create = this.create.bind(this)
 		this.edit = this.edit.bind(this)
+		this.endEdit = this.endEdit.bind(this)
 		this.save = this.save.bind(this)
 		this.delete = this.delete.bind(this)
 	}
@@ -80,6 +81,11 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 	// Save/Update an existing data entry
 	save(data: T, newData: any) {
 		this.props.requestChange(data, newData)
+		this.endEdit()
+	}
+
+	// End editing an entry
+	endEdit() {
 		this.setState({
 			data: null,
 		})
@@ -102,6 +108,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 				details: this.details,
 				save: this.save,
 				edit: this.edit,
+				endEdit: this.endEdit,
 				delete: this.delete,
 			})
 
@@ -253,10 +260,8 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 							:
 							this.delete(obj)
 					}
-					canEdit={checkPermissions(this.props.perms, this.props.perm.concat("change"))
-						&& this.props.canEdit}
-					canDelete={checkPermissions(this.props.perms, this.props.perm.concat("delete"))
-						&& this.props.canDelete}
+					canEdit={this.props.canEdit && checkPermissions(this.props.perms, this.props.perm.concat("change"))}
+					canDelete={this.props.canDelete && checkPermissions(this.props.perms, this.props.perm.concat("delete"))}
 					actions={actions}
 					isEditing={obj => this.props.equals(obj, this.state.data)}
 				/>

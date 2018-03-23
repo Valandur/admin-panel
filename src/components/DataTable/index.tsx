@@ -71,14 +71,15 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 	onEdit(obj: T | null, view: DataTableRef): void {
 		const newData = {}
 		if (obj) {
-			Object.keys(this.props.fields).forEach((field, name) => {
-				if (!this.props.fields[field].edit) {
+			Object.keys(this.props.fields).forEach(name => {
+				if (!this.props.fields[name].edit) {
 					return
 				}
 				newData[name] = _.get(obj, name)
 			})
 		}
 
+		console.log(newData)
 		this.setState({
 			newData: newData,
 		})
