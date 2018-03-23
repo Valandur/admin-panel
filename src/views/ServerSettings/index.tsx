@@ -26,9 +26,9 @@ class ServerSettings extends React.Component<Props, OwnState> {
 		return (
 			<div>
 				<Segment basic>
-					<Message negative>
-						<Message.Header>{_t("WIPTitle")}</Message.Header>
-						<p>{_t("WIPText")}</p>
+					<Message info>
+						<Message.Header>{_t("InfoTitle")}</Message.Header>
+						<p>{_t("InfoText")}</p>
 					</Message>
 				</Segment>
 
@@ -50,9 +50,7 @@ class ServerSettings extends React.Component<Props, OwnState> {
 							...data,
 							value: newData.value,
 						})
-						view.setState({
-							data: null,
-						})
+						view.endEdit()
 					}}
 				/>
 			</div>

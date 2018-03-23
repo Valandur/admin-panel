@@ -137,7 +137,12 @@ const api: ExtendedMiddleware<AppState> = ({ getState, dispatch }: MiddlewareAPI
 				state.api.apis.server.modifyProperties({
 					[action.prop.key]: action.prop.value
 				})
-					.then(properties => next(respondSaveProperty(action.prop.key, action.prop.value)))
+					.then(properties => {
+						const prop = properties.find(p => p.key === action.prop.key)
+						if (prop) {
+							next(respondSaveProperty(prop))
+						}
+					})
 					.catch(errorHandler)
 				break
 

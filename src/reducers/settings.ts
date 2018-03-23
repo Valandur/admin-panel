@@ -1,72 +1,77 @@
-import * as _ from "lodash"
-
 import { AppAction } from "../actions"
 import { TypeKeys } from "../actions/settings"
 import { EServerProperty } from "../types"
 
 import { DataViewState } from "./dataview"
 
-export interface SettingsState extends DataViewState<EServerProperty> {
-	properties: EServerProperty[]
-}
+export interface SettingsState extends DataViewState<EServerProperty> { }
 
 const initialState: SettingsState = {
 	creating: false,
 	filter: {},
 	list: [],
-	properties: [],
 }
 
 export default (state = initialState, action: AppAction) => {
 	switch (action.type) {
 		case TypeKeys.EDIT_PROPERTY:
-			return _.assign({}, state, {
-				properties: _.map(state.properties, prop => {
+			return {
+				...state,
+				list: state.list.map(prop => {
 					if (prop.key !== action.prop.key) {
 						return prop
 					}
-					return _.assign({}, prop, {
+					return {
+						...prop,
 						edit: !prop.edit,
-					})
+					}
 				})
-			})
+			}
 
 		case TypeKeys.SET_PROPERTY:
-			return _.assign({}, state, {
-				properties: _.map(state.properties, prop => {
+			return {
+				...state,
+				list: state.list.map(prop => {
 					if (prop.key !== action.prop.key) {
 						return prop
 					}
-					return _.assign({}, prop, {
+					return {
+						...prop,
 						value: action.value,
-					})
+					}
 				})
-			})
+			}
 
 		case TypeKeys.SAVE_PROPERTY_REQUEST:
-			return _.assign({}, state, {
-				properties: _.map(state.properties, prop => {
+			return {
+				...state,
+				list: state.list.map(prop => {
 					if (prop.key !== action.prop.key) {
 						return prop
 					}
-					return _.assign({}, prop, {
-						saving: true,
-					})
+					return {
+						...prop,
+						edit: false,
+						updating: true,
+					}
 				})
-			})
+			}
 
 		case TypeKeys.SAVE_PROPERTY_RESPONSE:
-			return _.assign({}, state, {
-				properties: _.map(state.properties, prop => {
-					if (prop.key !== action.key) {
+			return {
+				...state,
+				list: state.list.map(prop => {
+					if (prop.key !== action.prop.key) {
 						return prop
 					}
-					return _.assign({}, prop, {
-						saving: false,
+					return {
+						...prop,
+						value: action.prop.value,
 						edit: false,
-					})
+						updating: false,
+					}
 				})
-			})
+			}
 
 		default:
 			return state
