@@ -19,19 +19,19 @@ const MIN_ZOOM = 0.1
 const MAX_ZOOM = 16.0
 
 const totalOffset = (element: HTMLElement) => {
-		let top = 0
-		let left = 0
+	let top = 0
+	let left = 0
 
-		do {
-				top += element.offsetTop  || 0
-				left += element.offsetLeft || 0
-				element = (element.offsetParent as HTMLElement)
-		} while (element)
+	do {
+		top += element.offsetTop || 0
+		left += element.offsetLeft || 0
+		element = (element.offsetParent as HTMLElement)
+	} while (element)
 
-		return {
-				top: top,
-				left: left
-		}
+	return {
+		top: top,
+		left: left
+	}
 }
 
 const marks = {
@@ -60,7 +60,7 @@ interface DispatchProps {
 	requestTileEntities: (query: { [x: string]: string }) => AppAction
 	requestDeleteEntity: (entity: Entity) => AppAction,
 }
-interface Props extends OwnProps, DispatchProps, reactI18Next.InjectedTranslateProps {}
+interface Props extends OwnProps, DispatchProps, reactI18Next.InjectedTranslateProps { }
 
 interface OwnState {
 	biomes: { x: number, z: number, image: any }[]
@@ -157,10 +157,10 @@ class Map extends React.Component<Props, OwnState> {
 		const min = this.screenToWorld({ x: 0, z: this.state.height })
 		const max = this.screenToWorld({ x: this.state.width, z: 0 })
 
-		_.each(this.timeouts, timeout => clearTimeout(timeout))
+		this.timeouts.forEach(timeout => clearTimeout(timeout))
 
 		this.setState({
-			biomes: _.uniqBy(_.filter(this.state.biomes, biome =>
+			biomes: _.uniqBy(this.state.biomes.filter(biome =>
 				biome.x + HALF_TILE >= min.x && biome.x - HALF_TILE <= max.x &&
 				biome.z + HALF_TILE >= min.z && biome.z - HALF_TILE <= max.z), b => b.x + "+" + b.z)
 		}, () => {
@@ -174,7 +174,7 @@ class Map extends React.Component<Props, OwnState> {
 			this.timeouts = []
 			for (let x = min.x; x <= max.x; x += TILE_SIZE) {
 				for (let z = min.z; z <= max.z; z += TILE_SIZE) {
-					if (_.find(this.state.biomes, { x: x, z: z })) {
+					if (this.state.biomes.find(b => b.x === x && b.z === z)) {
 						continue
 					}
 
@@ -193,11 +193,10 @@ class Map extends React.Component<Props, OwnState> {
 			"/" + (x / TILE_SIZE) + "/" + (z / TILE_SIZE) + "?key=" + this.props.apiKey
 		image.onload = () => {
 			this.setState({
-				biomes: _.concat(this.state.biomes, {
-					x: x,
-					z: z,
-					image,
-				})
+				biomes: [
+					...this.state.biomes,
+					{ x: x, z: z, image }
+				]
 			})
 		}
 	}
@@ -210,9 +209,9 @@ class Map extends React.Component<Props, OwnState> {
 	}
 
 	handleObjMouseDown(
-			{ evt }: { evt: React.MouseEvent<HTMLElement> },
-			type: "player" | "entity" | "tile-entity",
-			obj: Entity | PlayerFull | TileEntity) {
+		{ evt }: { evt: React.MouseEvent<HTMLElement> },
+		type: "player" | "entity" | "tile-entity",
+		obj: Entity | PlayerFull | TileEntity) {
 
 		this.objClicked = true
 		const loc = this.worldToScreen(obj.location.position)
@@ -349,7 +348,7 @@ class Map extends React.Component<Props, OwnState> {
 		}
 	}
 
-	worldToScreen({ x, z }: { x: number, z: number}) {
+	worldToScreen({ x, z }: { x: number, z: number }) {
 		const center = this.center()
 		return {
 			x: center.x + x * this.state.zoom,
@@ -374,7 +373,7 @@ class Map extends React.Component<Props, OwnState> {
 		const max = this.screenToWorld({ x: this.state.width, z: 0 })
 
 		const minStr = min.x.toFixed(0) + "|0|" + min.z.toFixed(0)
-		const maxStr =  max.x.toFixed(0) + "|255|" + max.z.toFixed(0)
+		const maxStr = max.x.toFixed(0) + "|255|" + max.z.toFixed(0)
 
 		this.props.requestEntities({
 			world: this.state.worldId,
@@ -397,7 +396,7 @@ class Map extends React.Component<Props, OwnState> {
 			<Segment basic style={{ position: "relative" }}>
 				<div
 					style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
-					ref={w => { if (w != null) { this.wrapper = w }}}
+					ref={w => { if (w != null) { this.wrapper = w } }}
 				>
 					<Stage
 						width={this.state.width}
@@ -406,10 +405,10 @@ class Map extends React.Component<Props, OwnState> {
 						onContentMouseUp={e => this.handleMouseOutUp(e)}
 						onContentMouseOut={e => this.handleMouseOutUp(e)}
 						onContentMouseMove={e => this.handleMouseMove(e)}
-						/*onContentWheel={e => this.handleWheel(e)}*/
+					/*onContentWheel={e => this.handleWheel(e)}*/
 					>
 						<Layer>
-						{ _.map(this.state.biomes, biome => {
+							{this.state.biomes.map(biome => {
 								const pos = this.worldToScreen(biome)
 
 								return <Image
@@ -420,14 +419,14 @@ class Map extends React.Component<Props, OwnState> {
 									width={TILE_SIZE * this.state.zoom}
 									height={TILE_SIZE * this.state.zoom}
 								/>
-						})}
+							})}
 						</Layer>
 						<Layer>
 							<Line points={[0, cZ, 2000, cZ]} stroke="Black" strokeWidth={1} />
 							<Line points={[cX, 0, cX, 2000]} stroke="Black" strokeWidth={1} />
 						</Layer>
 						<Layer>
-							{ _.map(_.filter(this.props.entities, e => e.location.world.uuid === this.state.worldId), ent => {
+							{this.props.entities.filter(e => e.location.world.uuid === this.state.worldId).map(ent => {
 								const pos = this.worldToScreen(ent.location.position)
 
 								return (
@@ -443,7 +442,7 @@ class Map extends React.Component<Props, OwnState> {
 									/>
 								)
 							})}
-							{ _.map(_.filter(this.props.players, p => p.location.world.uuid === this.state.worldId), player => {
+							{this.props.players.filter(p => p.location.world.uuid === this.state.worldId).map(player => {
 								const pos = this.worldToScreen(player.location.position)
 
 								return (
@@ -459,7 +458,7 @@ class Map extends React.Component<Props, OwnState> {
 									/>
 								)
 							})}
-							{ _.map(_.filter(this.props.tileEntities, te => te.location.world.uuid === this.state.worldId), te => {
+							{this.props.tileEntities.filter(te => te.location.world.uuid === this.state.worldId).map(te => {
 								const pos = this.worldToScreen(te.location.position)
 
 								return (

@@ -39,9 +39,10 @@ class FilterForm<T> extends React.Component<Props<T>> {
 		const fieldGroups: DataFieldGroup<T>[] = []
 		Object.keys(fields).forEach(name => {
 			const field = fields[name]
-			const newField: DataFieldRaw<T> = _.assign({}, field, {
+			const newField: DataFieldRaw<T> = {
+				...field,
 				name: field.filterName ? field.filterName : name,
-			})
+			}
 
 			if (newField.isGroup) {
 				fieldGroups.push({ only: newField })

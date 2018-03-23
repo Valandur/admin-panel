@@ -25,13 +25,14 @@ export default (state = defaultState, action: AppAction) => {
 			})
 
 		case TypeKeys.STATS_RESPONSE:
-			return _.assign({}, state, {
+			return {
+				...state,
 				tps: action.tps,
 				players: action.players,
 				cpu: action.cpu,
 				memory: action.memory,
 				disk: action.disk,
-			})
+			}
 
 		default:
 			return state

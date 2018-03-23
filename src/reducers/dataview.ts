@@ -1,5 +1,3 @@
-import * as _ from "lodash"
-
 import { AppAction } from "../actions"
 import { DataViewAction, TypeKeys } from "../actions/dataview"
 import { AppState, IdFunction } from "../types"
@@ -26,14 +24,15 @@ export default (state: AppState, action: AppAction) => {
 	const path = normalizePath(action.endpoint)
 
 	const changeObjectStatus = (id: IdFunction<any>, data: any, updating: boolean) =>
-		_.assign({}, state, {
+		({
+			...state,
 			[path]: {
 				...state[path],
-				list: _.map(state[path].list, obj => {
+				list: state[path].list.map((obj: any) => {
 					if (id(obj) !== id(data)) {
 						return obj
 					}
-					return _.assign({}, obj, data, { updating })
+					return { ...obj, ...data, updating }
 				})
 			}
 		})
@@ -44,38 +43,42 @@ export default (state: AppState, action: AppAction) => {
 				return state
 			}
 
-			return _.assign({}, state, {
+			return {
+				...state,
 				[path]: {
 					...state[path],
 					list: action.list,
 				}
-			})
+			}
 
 		case TypeKeys.CREATE_REQUEST:
-			return _.assign({}, state, {
+			return {
+				...state,
 				[path]: {
 					...state[path],
 					creating: true,
 				},
-			})
+			}
 
 		case TypeKeys.CREATE_RESPONSE:
 			if (action.err) {
-				return _.assign({}, state, {
+				return {
+					...state,
 					[path]: {
 						...state[path],
 						creating: false,
 					}
-				})
+				}
 			}
 
-			return _.assign({}, state, {
+			return {
+				...state,
 				[path]: {
 					...state[path],
 					creating: false,
 					list: [...state[path].list, action.data],
 				}
-			})
+			}
 
 		case TypeKeys.DETAILS_REQUEST:
 			return changeObjectStatus(action.id, action.data, true)
@@ -97,16 +100,17 @@ export default (state: AppState, action: AppAction) => {
 				changeObjectStatus(action.id, action.data, false)
 			}
 
-			return _.assign({}, state, {
+			return {
+				...state,
 				[path]: {
 					...state[path],
-					list: _.filter(state[path].list, obj =>
-						action.id(obj) !== action.id(action.data))
+					list: state[path].list.filter((obj: any) => action.id(obj) !== action.id(action.data))
 				}
-			})
+			}
 
 		case TypeKeys.SET_FILTER:
-			return _.assign({}, state, {
+			return {
+				...state,
 				[path]: {
 					...state[path],
 					filter: {
@@ -114,7 +118,7 @@ export default (state: AppState, action: AppAction) => {
 						[action.filter]: action.value,
 					},
 				}
-			})
+			}
 
 		default:
 			return state

@@ -53,7 +53,7 @@ export interface AppState {
 	plugin: PluginState
 	world: DataViewState<WorldFull>
 	tileentity: DataViewState<TileEntity>
-	info_properties: SettingsState
+	server_properties: SettingsState
 	router: RouterState
 }
 
@@ -76,6 +76,7 @@ export interface DataViewRef<T> extends DataTableRef {
 	details: (data: T) => void
 	save: (data: T, newData: any) => void
 	edit: (data: T | null) => void
+	endEdit: () => void
 	delete: (data: T) => void
 }
 
@@ -139,6 +140,7 @@ export interface Server {
 
 export interface EServerProperty extends ServerProperty {
 	edit?: boolean
+	updating?: boolean
 }
 
 export interface PermissionTree {

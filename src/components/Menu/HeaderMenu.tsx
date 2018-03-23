@@ -5,8 +5,10 @@ import { NavLink } from "react-router-dom"
 import { Dispatch } from "redux"
 import { Dropdown, Icon, Image, Menu, MenuItemProps } from "semantic-ui-react"
 
-import { AppAction, changeLanguage,  ChangeLanguageAction, changeServer, ChangeServerAction, LogoutRequestAction,
-	requestLogout } from "../../actions"
+import {
+	AppAction, changeLanguage, ChangeLanguageAction, changeServer, ChangeServerAction, LogoutRequestAction,
+	requestLogout
+} from "../../actions"
 import { AppState, Lang, langArray, Server } from "../../types"
 import { handleChange, HandleChangeFunc } from "../Util"
 
@@ -69,7 +71,7 @@ class HeaderMenu extends React.Component<AppProps> {
 						placeholder={_t("ChangeLanguage")}
 						options={langArray}
 						value={this.props.lang}
-						onChange={(e, data) => { if (typeof data.value === "string") { this.props.changeLanguage(data.value) }}}
+						onChange={(e, data) => { if (typeof data.value === "string") { this.props.changeLanguage(data.value) } }}
 					/>
 				</Menu.Item>
 
@@ -128,7 +130,7 @@ const mapStateToProps = (state: AppState) => {
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		requestLogout: () => dispatch(requestLogout()),
-		changeLanguage: (lang: string) => dispatch(changeLanguage(lang)),
+		changeLanguage: (lang: Lang) => dispatch(changeLanguage(lang)),
 		changeServer: (server: Server) => dispatch(changeServer(server)),
 	}
 }

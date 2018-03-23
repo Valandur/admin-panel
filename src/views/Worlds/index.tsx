@@ -61,7 +61,7 @@ class Worlds extends React.Component<Props, OwnState> {
 	toggleRule(name: string) {
 		const rules = this.state.rules
 		const rule = rules.find(r => r.name === name)
-		if  (!rule) {
+		if (!rule) {
 			return
 		}
 
@@ -235,11 +235,11 @@ class Worlds extends React.Component<Props, OwnState> {
 								>
 									{_t("Delete")}
 								</Button>
-							: null}
+								: null}
 							{" "}
 							{(world as any).updating ?
 								<Icon name="spinner" loading />
-							: null}
+								: null}
 						</div>
 					}
 				/>
@@ -264,7 +264,7 @@ class Worlds extends React.Component<Props, OwnState> {
 											</Table.Row>
 										</Table.Header>
 										<Table.Body>
-											{_.map(_.slice(this.state.rules, 0, this.state.rules.length / 2), rule =>
+											{_.slice(this.state.rules, 0, this.state.rules.length / 2).map(rule =>
 												<Table.Row key={rule.name}>
 													<Table.Cell>{rule.name}</Table.Cell>
 													<Table.Cell>
@@ -274,7 +274,7 @@ class Worlds extends React.Component<Props, OwnState> {
 																checked={rule.value === "true"}
 																onClick={() => this.toggleRule(rule.name)}
 															/>
-														: rule.value}
+															: rule.value}
 													</Table.Cell>
 												</Table.Row>
 											)}
@@ -291,7 +291,7 @@ class Worlds extends React.Component<Props, OwnState> {
 											</Table.Row>
 										</Table.Header>
 										<Table.Body>
-											{_.map(_.slice(this.state.rules, this.state.rules.length / 2), rule =>
+											{_.slice(this.state.rules, this.state.rules.length / 2).map(rule =>
 												<Table.Row key={rule.name}>
 													<Table.Cell>{rule.name}</Table.Cell>
 													<Table.Cell>
@@ -301,7 +301,7 @@ class Worlds extends React.Component<Props, OwnState> {
 																checked={rule.value === "true"}
 																onClick={() => this.toggleRule(rule.name)}
 															/>
-														: rule.value}
+															: rule.value}
 													</Table.Cell>
 												</Table.Row>
 											)}
@@ -315,7 +315,7 @@ class Worlds extends React.Component<Props, OwnState> {
 							<Button onClick={this.toggleModal}>{_t("Cancel")}</Button>
 						</Modal.Actions>
 					</Modal>
-				: null}
+					: null}
 			</div>
 		)
 	}

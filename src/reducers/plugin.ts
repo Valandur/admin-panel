@@ -1,5 +1,3 @@
-import * as _ from "lodash"
-
 import { AppAction } from "../actions"
 import { TypeKeys } from "../actions/plugin"
 import { PluginContainer } from "../fetch"
@@ -22,9 +20,10 @@ const initialState: PluginState = {
 export default (state = initialState, action: AppAction) => {
 	switch (action.type) {
 		case TypeKeys.CONFIG_RESPONSE:
-			return _.assign({}, state, {
-				configs: _.assign({}, action.configs),
-			})
+			return {
+				...state,
+				configs: { ...action.configs },
+			}
 
 		default:
 			return state

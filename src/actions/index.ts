@@ -2,7 +2,7 @@ import { Action } from "redux"
 import { ResponseError } from "superagent"
 
 import { CatalogType, PermissionStruct } from "../fetch"
-import { Server } from "../types"
+import { Lang, Server } from "../types"
 
 import { CommandAction } from "./command"
 import { DashboardAction } from "./dashboard"
@@ -55,9 +55,9 @@ export function respondServlets(ok: boolean, servlets: { [x: string]: string }):
 
 export interface ChangeLanguageAction extends Action {
 	type: TypeKeys.CHANGE_LANGUAGE
-	lang: string
+	lang: Lang
 }
-export function changeLanguage(lang: string): ChangeLanguageAction {
+export function changeLanguage(lang: Lang): ChangeLanguageAction {
 	return {
 		type: TypeKeys.CHANGE_LANGUAGE,
 		lang: lang,

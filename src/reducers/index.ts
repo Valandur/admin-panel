@@ -29,7 +29,7 @@ const initialState: AppState = {
 	player: player(undefined, initAcc),
 	plugin: plugin(undefined, initAcc),
 	world: dataState,
-	info_properties: settings(undefined, initAcc),
+	server_properties: settings(undefined, initAcc),
 	tileentity: dataState,
 
 	router: routerReducer({ location: null }, initAcc),
@@ -48,7 +48,7 @@ const app = (state: AppState = initialState, action: AppAction): AppState => {
 		player: player(data.player, action),
 		plugin: plugin(data.plugin, action),
 		world: data.world,
-		info_properties: settings(data.info_properties, action),
+		server_properties: settings(data.server_properties, action),
 		tileentity: data.tileentity,
 
 		router: routerReducer(data.router, action),
