@@ -78,6 +78,17 @@ export function checkPermissions(_perms: PermissionTree | boolean | undefined, p
 	return perms === true || perms["*"] === true
 }
 
+export function checkServlets(servlets: { [x: string]: string }, reqs: string[]) {
+	if (!reqs || reqs.length === 0) {
+		return true
+	}
+	if (!servlets) {
+		return false
+	}
+
+	return reqs.every(req => !!servlets[req])
+}
+
 // Render catalog types as dropdown options
 export function renderCatalogTypeOptions(types: CatalogType[] | undefined): { value: string, text: string }[] {
 	if (!types) {

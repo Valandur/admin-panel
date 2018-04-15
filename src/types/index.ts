@@ -116,6 +116,7 @@ export interface ViewDefinition {
 	path: string,
 	icon?: SemanticICONS,
 	perms: string[] | null,
+	servlets?: string[] | null,
 	component?: React.ComponentType,
 	views?: ViewDefinition[],
 }

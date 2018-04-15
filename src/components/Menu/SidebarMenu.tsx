@@ -7,7 +7,7 @@ import { Icon, Menu, Progress, Sidebar } from "semantic-ui-react"
 
 import { AppAction, requestServlets, ServletsRequestAction } from "../../actions"
 
-import { checkPermissions } from "../../components/Util"
+import { checkPermissions, checkServlets } from "../../components/Util"
 import { ServerStatDouble } from "../../fetch"
 import { AppState, PermissionTree, ViewDefinition } from "../../types"
 
@@ -16,7 +16,9 @@ export interface Props extends reactI18Next.InjectedTranslateProps {
 	cpu: Array<ServerStatDouble>
 	disk: Array<ServerStatDouble>
 	memory: Array<ServerStatDouble>
-	servlets: {},
+	servlets: {
+		[x: string]: string
+	},
 	perms: PermissionTree,
 	path: string
 
@@ -79,7 +81,7 @@ class SidebarMenu extends React.Component<Props> {
 							size="small"
 						/>
 					</Menu.Item>
-				: null}
+					: null}
 
 				{views.map(this.renderMenuItem)}
 			</Sidebar>
@@ -88,6 +90,9 @@ class SidebarMenu extends React.Component<Props> {
 
 	renderMenuItem(view: ViewDefinition): JSX.Element | null {
 		if (view.perms && !checkPermissions(this.props.perms, view.perms)) {
+			return null
+		}
+		if (view.servlets && !checkServlets(this.props.servlets, view.servlets)) {
 			return null
 		}
 
