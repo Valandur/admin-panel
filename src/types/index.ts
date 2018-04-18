@@ -137,6 +137,7 @@ export interface AutosuggestChangeData {
 export interface Server {
 	name: string
 	apiUrl: string
+	apiUrlHttps: string
 }
 
 export interface EServerProperty extends ServerProperty {

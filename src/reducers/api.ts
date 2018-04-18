@@ -19,8 +19,12 @@ export interface ApiCollection {
 	user: UserApi
 }
 
-function setupApis(basePath?: string, apiKey?: string): ApiCollection {
-	const conf = { apiKey: apiKey, basePath: basePath + "/api/v5" }
+function setupApis(server: Server, apiKey?: string): ApiCollection {
+	const conf = {
+		apiKey: apiKey,
+		basePath: (window.location.protocol === "https:" && server.apiUrlHttps ?
+			server.apiUrlHttps : server.apiUrl) + "/api/v5",
+	}
 
 	return {
 		cmd: new CommandApi(conf),
@@ -62,7 +66,7 @@ let initialState: ApiState = {
 	types: {},
 	lang: Lang.EN,
 
-	apis: setupApis(window.config.servers[0].apiUrl),
+	apis: setupApis(window.config.servers[0]),
 	version: 2,
 }
 
@@ -76,7 +80,7 @@ if (window.localStorage) {
 			initialState.server = window.config.servers[0]
 			initialState.servers = window.config.servers
 		}
-		initialState.apis = setupApis(prevApi.server.apiUrl, prevApi.key)
+		initialState.apis = setupApis(prevApi.server, prevApi.key)
 	}
 }
 
@@ -87,7 +91,7 @@ export default (state = initialState, action: AppAction) => {
 			return {
 				...state,
 				server: action.server,
-				apis: setupApis(action.server.apiUrl),
+				apis: setupApis(action.server),
 			}
 
 		case TypeKeys.SERVLETS_RESPONSE:
@@ -131,7 +135,7 @@ export default (state = initialState, action: AppAction) => {
 				key: action.data.key,
 				permissions: action.data.permissions,
 				rateLimit: action.data.rateLimit,
-				apis: setupApis(state.server.apiUrl, action.data.key)
+				apis: setupApis(state.server, action.data.key)
 			}
 
 		case TypeKeys.LOGOUT_REQUEST:

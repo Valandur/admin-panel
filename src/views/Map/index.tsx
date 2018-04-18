@@ -141,10 +141,13 @@ class Map extends React.Component<Props, OwnState> {
 			return
 		}
 
-		this.setState({
-			width: this.wrapper.offsetWidth,
-			height: window.innerHeight - totalOffset(this.wrapper).top - 30,
-		}, () => this.getAllBiomes())
+		this.setState(
+			{
+				width: this.wrapper.offsetWidth,
+				height: window.innerHeight - totalOffset(this.wrapper).top - 30,
+			},
+			() => this.getAllBiomes()
+		)
 	}
 
 	getAllBiomes() {
@@ -159,32 +162,37 @@ class Map extends React.Component<Props, OwnState> {
 
 		this.timeouts.forEach(timeout => clearTimeout(timeout))
 
-		this.setState({
-			biomes: _.uniqBy(this.state.biomes.filter(biome =>
-				biome.x + HALF_TILE >= min.x && biome.x - HALF_TILE <= max.x &&
-				biome.z + HALF_TILE >= min.z && biome.z - HALF_TILE <= max.z), b => b.x + "+" + b.z)
-		}, () => {
-			min.x = min.x - min.x % TILE_SIZE - TILE_SIZE
-			min.z = min.z - min.z % TILE_SIZE - TILE_SIZE
+		this.setState(
+			{
+				biomes: _.uniqBy(
+					this.state.biomes.filter(biome => biome.x + HALF_TILE >= min.x && biome.x - HALF_TILE <= max.x &&
+						biome.z + HALF_TILE >= min.z && biome.z - HALF_TILE <= max.z),
+					b => b.x + "+" + b.z
+				)
+			},
+			() => {
+				min.x = min.x - min.x % TILE_SIZE - TILE_SIZE
+				min.z = min.z - min.z % TILE_SIZE - TILE_SIZE
 
-			max.x = max.x - max.x % TILE_SIZE + TILE_SIZE
-			max.z = max.z - max.z % TILE_SIZE + TILE_SIZE
+				max.x = max.x - max.x % TILE_SIZE + TILE_SIZE
+				max.z = max.z - max.z % TILE_SIZE + TILE_SIZE
 
-			let index = 0
-			this.timeouts = []
-			for (let x = min.x; x <= max.x; x += TILE_SIZE) {
-				for (let z = min.z; z <= max.z; z += TILE_SIZE) {
-					if (this.state.biomes.find(b => b.x === x && b.z === z)) {
-						continue
+				let index = 0
+				this.timeouts = []
+				for (let x = min.x; x <= max.x; x += TILE_SIZE) {
+					for (let z = min.z; z <= max.z; z += TILE_SIZE) {
+						if (this.state.biomes.find(b => b.x === x && b.z === z)) {
+							continue
+						}
+
+						this.timeouts.push(
+							setTimeout(() => this.getBiome(x, z), index * 100)
+						)
+						index++
 					}
-
-					this.timeouts.push(
-						setTimeout(() => this.getBiome(x, z), index * 100)
-					)
-					index++
 				}
 			}
-		})
+		)
 	}
 
 	getBiome(x: number, z: number) {
@@ -202,10 +210,13 @@ class Map extends React.Component<Props, OwnState> {
 	}
 
 	handleWorldChange(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
-		this.setState({
-			biomes: [],
-			worldId: (data.value as string),
-		}, () => this.getAllBiomes())
+		this.setState(
+			{
+				biomes: [],
+				worldId: (data.value as string),
+			},
+			() => this.getAllBiomes()
+		)
 	}
 
 	handleObjMouseDown(
@@ -299,12 +310,15 @@ class Map extends React.Component<Props, OwnState> {
 			return
 		}
 
-		this.setState({
-			center: {
-				x: this.state.center.x - (this.x - evt.screenX) / this.state.zoom,
-				z: this.state.center.z + (this.y - evt.screenY) / this.state.zoom,
-			}
-		}, () => this.getAllBiomes())
+		this.setState(
+			{
+				center: {
+					x: this.state.center.x - (this.x - evt.screenX) / this.state.zoom,
+					z: this.state.center.z + (this.y - evt.screenY) / this.state.zoom,
+				}
+			},
+			() => this.getAllBiomes()
+		)
 
 		this.x = evt.screenX
 		this.y = evt.screenY
@@ -328,9 +342,12 @@ class Map extends React.Component<Props, OwnState> {
 	}*/
 
 	handleZoomChange(value: number) {
-		this.setState({
-			zoom: Math.min(Math.max(Math.pow(value, 4), MIN_ZOOM), MAX_ZOOM),
-		}, () => this.getAllBiomes())
+		this.setState(
+			{
+				zoom: Math.min(Math.max(Math.pow(value, 4), MIN_ZOOM), MAX_ZOOM),
+			},
+			() => this.getAllBiomes()
+		)
 	}
 
 	deleteEntity(entity: Entity) {
