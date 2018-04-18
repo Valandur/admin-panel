@@ -101,14 +101,15 @@ class Crates extends React.Component<Props, OwnState> {
 		reward: HuskyCratesCrateReward,
 		event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
 
-		handleChange.call(this, (name: string, value: string) => {
+		const cb = (name: string, value: string) => {
 			const newReward = _.assign({}, reward)
 			_.set(newReward, name, value)
 
 			this.setState({
 				rewards: this.state.rewards.map(r => r === reward ? newReward : r)
 			})
-		}, event, data)
+		}
+		handleChange.call(this, cb, event, data)
 	}
 
 	addReward() {

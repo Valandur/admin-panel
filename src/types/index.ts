@@ -116,6 +116,7 @@ export interface ViewDefinition {
 	path: string,
 	icon?: SemanticICONS,
 	perms: string[] | null,
+	servlets?: string[] | null,
 	component?: React.ComponentType,
 	views?: ViewDefinition[],
 }
@@ -136,6 +137,7 @@ export interface AutosuggestChangeData {
 export interface Server {
 	name: string
 	apiUrl: string
+	apiUrlHttps: string
 }
 
 export interface EServerProperty extends ServerProperty {

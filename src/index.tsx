@@ -100,8 +100,10 @@ class Main extends React.Component {
 										return <Full {...props} />
 									} else {
 										return <Redirect
-											to={{ pathname: "/login",
-											state: { from: props.location }}}
+											to={{
+												pathname: "/login",
+												state: { from: props.location }
+											}}
 										/>
 									}
 								}}
