@@ -11,7 +11,6 @@ export interface Props<T> extends reactI18Next.InjectedTranslateProps {
 }
 
 export default class DataTableHeader<T> extends React.Component<Props<T>> {
-
 	shouldComponentUpdate(nextProps: Props<T>, nextState: any) {
 		return nextProps.fields !== this.props.fields
 	}
@@ -28,9 +27,9 @@ export default class DataTableHeader<T> extends React.Component<Props<T>> {
 							</Table.HeaderCell>
 						)
 					})}
-					{this.props.hasActions || this.props.canEdit || this.props.canDelete ?
+					{this.props.hasActions || this.props.canEdit || this.props.canDelete ? (
 						<Table.HeaderCell>{this.props.t("Actions")}</Table.HeaderCell>
-					: null}
+					) : null}
 				</Table.Row>
 			</Table.Header>
 		)

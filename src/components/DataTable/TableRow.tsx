@@ -7,8 +7,8 @@ import { get, HandleChangeFunc } from "../Util"
 export interface Props<T> extends reactI18Next.InjectedTranslateProps {
 	obj: T
 	tableRef: DataTableRef
-	canEdit?: boolean
-	canDelete?: boolean
+	canEdit?: (data: T) => boolean
+	canDelete?: (data: T) => boolean
 	editing: boolean
 	fields: DataFieldRaw<T>[]
 	onEdit: (data: T | null, view: DataTableRef) => void
@@ -20,12 +20,13 @@ export interface Props<T> extends reactI18Next.InjectedTranslateProps {
 }
 
 export default class TableRow<T> extends React.Component<Props<T>> {
-
 	shouldComponentUpdate(nextProps: Props<T>, nextState: any) {
-		return nextProps.obj !== this.props.obj ||
+		return (
+			nextProps.obj !== this.props.obj ||
 			nextProps.editing !== this.props.editing ||
 			nextProps.fields !== this.props.fields ||
 			(this.props.editing && nextProps.newData !== this.props.newData)
+		)
 	}
 
 	renderEdit(obj: T, col: DataFieldRaw<T>) {
@@ -59,47 +60,50 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 	render() {
 		const { actions, fields, obj, canEdit, canDelete, editing, tableRef } = this.props
 
+		const _canEdit = typeof canEdit === "function" ? canEdit(obj) : canEdit
+		const _canDelete = typeof canDelete === "function" ? canDelete(obj) : canEdit
+
 		return (
 			<Table.Row>
-				{fields.map((field, j) =>
+				{fields.map((field, j) => (
 					<Table.Cell key={j} collapsing={!field.wide}>
-						{field.edit && editing ?
-							(typeof field.edit === "function" ?
-								field.edit(obj, tableRef)
-							:
-								this.renderEdit(obj, field)
-							)
-						:
-							(typeof field.view === "function" ?
-								field.view(obj, tableRef)
-							:
-								get(obj, field.name)
-							)
-						}
+						{field.edit && editing
+							? typeof field.edit === "function"
+								? field.edit(obj, tableRef)
+								: this.renderEdit(obj, field)
+							: typeof field.view === "function"
+								? field.view(obj, tableRef)
+								: get(obj, field.name)}
 					</Table.Cell>
-				)}
-				{actions || canEdit || canDelete ?
+				))}
+				{actions || _canEdit || _canDelete ? (
 					<Table.Cell collapsing>
-						{canEdit && editing ?
-							[<Button
-								key="save"
-								color="green"
-								disabled={(obj as any).updating}
-								loading={(obj as any).updating}
-								onClick={() => { if (this.props.onSave) { this.props.onSave(obj, this.props.newData, tableRef) }}}
-							>
-								<Icon name="save" /> {this.props.t("Save")}
-							</Button>,
-							<Button
-								key="cancel"
-								color="yellow"
-								disabled={(obj as any).updating}
-								loading={(obj as any).updating}
-								onClick={() => this.props.onEdit(null, tableRef)}
-							>
-								<Icon name="cancel" /> {this.props.t("Cancel")}
-							</Button>]
-						: canEdit ?
+						{_canEdit && editing ? (
+							[
+								<Button
+									key="save"
+									color="green"
+									disabled={(obj as any).updating}
+									loading={(obj as any).updating}
+									onClick={() => {
+										if (this.props.onSave) {
+											this.props.onSave(obj, this.props.newData, tableRef)
+										}
+									}}
+								>
+									<Icon name="save" /> {this.props.t("Save")}
+								</Button>,
+								<Button
+									key="cancel"
+									color="yellow"
+									disabled={(obj as any).updating}
+									loading={(obj as any).updating}
+									onClick={() => this.props.onEdit(null, tableRef)}
+								>
+									<Icon name="cancel" /> {this.props.t("Cancel")}
+								</Button>
+							]
+						) : _canEdit ? (
 							<Button
 								color="blue"
 								disabled={(obj as any).updating}
@@ -108,20 +112,24 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 							>
 								<Icon name="edit" /> {this.props.t("Edit")}
 							</Button>
-						: null}
-						{canDelete &&
+						) : null}
+						{_canDelete && (
 							<Button
 								color="red"
 								disabled={(obj as any).updating}
 								loading={(obj as any).updating}
-								onClick={() => { if (this.props.onDelete) { this.props.onDelete(obj, tableRef) }}}
+								onClick={() => {
+									if (this.props.onDelete) {
+										this.props.onDelete(obj, tableRef)
+									}
+								}}
 							>
 								<Icon name="trash" /> {this.props.t("Remove")}
 							</Button>
-						}
+						)}
 						{actions && actions(obj, tableRef)}
 					</Table.Cell>
-				: null}
+				) : null}
 			</Table.Row>
 		)
 	}

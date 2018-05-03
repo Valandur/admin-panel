@@ -10,19 +10,20 @@ export function formatRange(current: number, max: number, a: number = 1): number
 	}
 
 	const acc = Math.pow(10, a)
-	return Math.round((current / max) * 100 * acc) / acc
+	return Math.round(current / max * 100 * acc) / acc
 }
 
 // Handle input change of various components
 export type HandleChangeFunc = (
 	event: React.SyntheticEvent<HTMLElement>,
-	data?: InputProps | CheckboxProps) => void
+	data?: InputProps | CheckboxProps
+) => void
 export function handleChange(
 	this: { setState: (o: object) => void },
 	setState: (key: string, value: string) => void,
 	event: React.SyntheticEvent<HTMLElement>,
-	data?: InputProps | CheckboxProps): void {
-
+	data?: InputProps | CheckboxProps
+): void {
 	let value = null
 	let name = null
 
@@ -53,7 +54,10 @@ export function handleChange(
 }
 
 // Returns true if the permissions specified allow access to the specified path
-export function checkPermissions(_perms: PermissionTree | boolean | undefined, path: Array<string>): boolean {
+export function checkPermissions(
+	_perms: PermissionTree | boolean | undefined,
+	path: Array<string>
+): boolean {
 	if (!path || path.length === 0) {
 		return true
 	}
@@ -61,11 +65,12 @@ export function checkPermissions(_perms: PermissionTree | boolean | undefined, p
 		return false
 	}
 
-	let perms = JSON.parse(JSON.stringify(_perms))
+	// Start at the root
+	let perms = _perms
 
 	for (let i = 0; i < path.length; i++) {
 		// Get the specific permission node for this level, if we have one
-		if (perms[path[i]]) {
+		if (typeof perms[path[i]] !== "undefined") {
 			perms = perms[path[i]]
 			continue
 		}
@@ -90,34 +95,35 @@ export function checkServlets(servlets: { [x: string]: string }, reqs: string[])
 }
 
 // Render catalog types as dropdown options
-export function renderCatalogTypeOptions(types: CatalogType[] | undefined): { value: string, text: string }[] {
+export function renderCatalogTypeOptions(
+	types: CatalogType[] | undefined
+): { value: string; text: string }[] {
 	if (!types) {
 		return []
 	}
-	return types.map(type =>
-		({
-			value: type.id,
-			text: type.name + " (" + type.id + ")",
-		})
-	)
+	return types.map(type => ({
+		value: type.id,
+		text: type.name + " (" + type.id + ")"
+	}))
 }
 
 // Render worlds as dropdown options
-export function renderWorldOptions(worlds: WorldFull[] | undefined): { value: string, text: string }[] {
+export function renderWorldOptions(
+	worlds: WorldFull[] | undefined
+): { value: string; text: string }[] {
 	if (!worlds) {
 		return []
 	}
 
-	return worlds.map(w =>
-		({
-			value: w.uuid,
-			text: w.name + " (" + w.dimensionType.name + ")"
-		})
-	)
+	return worlds.map(w => ({
+		value: w.uuid,
+		text: w.name + " (" + w.dimensionType.name + ")"
+	}))
 }
 
 // Get a property according to a path
-export const get = (o: any, path: string) => path.split(".").reduce((obj: any = {}, key) => obj[key], o)
+export const get = (o: any, path: string) =>
+	path.split(".").reduce((obj: any = {}, key) => obj[key], o)
 
 // Format source
 export const formatSource = (source: any): string => {

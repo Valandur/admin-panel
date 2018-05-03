@@ -1,14 +1,20 @@
 import { SemanticICONS } from "semantic-ui-react"
 
-import { ChangeRequestAction, CreateRequestAction, DeleteRequestAction, DetailsRequestAction,
-	ListRequestAction, SetFilterAction } from "../../actions/dataview"
+import {
+	ChangeRequestAction,
+	CreateRequestAction,
+	DeleteRequestAction,
+	DetailsRequestAction,
+	ListRequestAction,
+	SetFilterAction
+} from "../../actions/dataview"
 import { DataField, DataFieldViewFunc, DataViewRef, IdFunction, PermissionTree } from "../../types"
 
 export interface OwnProps<T> {
 	title?: string
 	icon?: SemanticICONS
-	canEdit?: boolean
-	canDelete?: boolean
+	canEdit?: boolean | ((data: T) => boolean)
+	canDelete?: boolean | ((data: T) => boolean)
 	createTitle?: string
 	createButton?: string
 	filterTitle?: string
@@ -17,6 +23,7 @@ export interface OwnProps<T> {
 	fields: {
 		[key: string]: DataField<T> | DataFieldViewFunc<T> | string
 	}
+	checkSinglePerm?: boolean
 	actions?: (data: T, view: DataViewRef<T>) => JSX.Element
 	onCreate?: (data: any, view: DataViewRef<T>) => void
 	onEdit?: (data: T | null, view: DataViewRef<T>) => void
@@ -36,8 +43,7 @@ export interface StateProps<T> {
 	}
 }
 
-export interface Props<T> extends OwnProps<T>, StateProps<T>,
-	reactI18Next.InjectedTranslateProps {}
+export interface Props<T> extends OwnProps<T>, StateProps<T>, reactI18Next.InjectedTranslateProps {}
 
 export interface DispatchProps<T> {
 	requestList: () => ListRequestAction
@@ -46,7 +52,7 @@ export interface DispatchProps<T> {
 	requestChange: (data: T, newData: any) => ChangeRequestAction<T>
 	requestDelete: (data: T) => DeleteRequestAction<T>
 	setFilter: (filter: string, value: string) => SetFilterAction
-	equals:  (o1: T | null, o2: T | null) => boolean
+	equals: (o1: T | null, o2: T | null) => boolean
 }
 
 export interface FullProps<T> extends Props<T>, DispatchProps<T> {}

@@ -4,21 +4,34 @@ import { connect, Dispatch } from "react-redux"
 import { Button, Label, Loader, Message, Modal, Segment, Tab } from "semantic-ui-react"
 
 import { AppAction } from "../../actions"
-import { PluginConfigRequestAction, PluginConfigSaveRequestAction, requestPluginConfig, requestPluginConfigSave
-	} from "../../actions/plugin"
+import {
+	PluginConfigRequestAction,
+	PluginConfigSaveRequestAction,
+	requestPluginConfig,
+	requestPluginConfigSave
+} from "../../actions/plugin"
 import { JSON_EDITOR_MODE, ReactJSONEditor } from "../../components/JsonEditor"
 import { PluginContainer } from "../../fetch"
-import { AppState, DataViewRef } from "../../types"
+import { AppState, DataViewRef, PermissionTree } from "../../types"
 
 import DataViewFunc from "../../components/DataView"
+import { checkPermissions } from "../../components/Util"
 const DataView = DataViewFunc("plugin", "id", true)
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface OwnProps {
 	configs: {
 		[x: string]: any
 	}
+	perms?: PermissionTree
+}
+
+interface Props extends OwnProps, reactI18Next.InjectedTranslateProps {
 	requestPluginConfig: (id: string) => PluginConfigRequestAction
-	requestPluginConfigSave: (id: string, plugin: PluginContainer, configs: any) => PluginConfigSaveRequestAction
+	requestPluginConfigSave: (
+		id: string,
+		plugin: PluginContainer,
+		configs: any
+	) => PluginConfigSaveRequestAction
 }
 
 interface OwnState {
@@ -31,12 +44,11 @@ interface OwnState {
 }
 
 class Plugins extends React.Component<Props, OwnState> {
-
 	constructor(props: Props) {
 		super(props)
 
 		this.state = {
-			modal: false,
+			modal: false
 		}
 
 		this.toggleModal = this.toggleModal.bind(this)
@@ -46,7 +58,7 @@ class Plugins extends React.Component<Props, OwnState> {
 
 	toggleModal() {
 		this.setState({
-			modal: !this.state.modal,
+			modal: !this.state.modal
 		})
 	}
 
@@ -62,7 +74,7 @@ class Plugins extends React.Component<Props, OwnState> {
 		this.setState({
 			modal: true,
 			plugin: plugin,
-			configs: undefined,
+			configs: undefined
 		})
 		this.props.requestPluginConfig(plugin.id)
 	}
@@ -102,11 +114,10 @@ class Plugins extends React.Component<Props, OwnState> {
 						<Message.Header>{_t("WarnTitle")}</Message.Header>
 						<p>
 							<Trans i18nKey="WarnText">
-								Web-API automatically makes a backup of your configs before saving them,
-								but caution is still advised when changing config values.
-								To apply your new configs use <b>/sponge plugins reload</b>.
-								Plugins are not required to implement the reload event,
-								so this might not work for all plugins. Use a server restart if required.
+								Web-API automatically makes a backup of your configs before saving them, but caution
+								is still advised when changing config values. To apply your new configs use{" "}
+								<b>/sponge plugins reload</b>. Plugins are not required to implement the reload
+								event, so this might not work for all plugins. Use a server restart if required.
 							</Trans>
 						</p>
 					</Message>
@@ -117,16 +128,17 @@ class Plugins extends React.Component<Props, OwnState> {
 					fields={{
 						id: _t("Id"),
 						name: _t("Name"),
-						version: _t("Version"),
+						version: _t("Version")
 					}}
-					actions={(plugin: PluginContainer, view) => <div>
-						<Button
-							color="blue"
-							onClick={e => this.showDetails(plugin, view)}
-						>
-							{_t("Details")}
-						</Button>
-					</div>}
+					actions={(plugin: PluginContainer, view) => (
+						<div>
+							{checkPermissions(this.props.perms, ["plugin", "config", "modify", plugin.id]) && (
+								<Button color="blue" onClick={e => this.showDetails(plugin, view)}>
+									{_t("Details")}
+								</Button>
+							)}
+						</div>
+					)}
 				/>
 
 				{this.renderModal()}
@@ -142,36 +154,30 @@ class Plugins extends React.Component<Props, OwnState> {
 		const _t = this.props.t
 
 		return (
-			<Modal
-				open={this.state.modal}
-				onClose={this.toggleModal}
-				size="fullscreen"
-			>
+			<Modal open={this.state.modal} onClose={this.toggleModal} size="fullscreen">
 				<Modal.Header>
-					{this.state.plugin.name}{" "}
-					<Label color="blue">{this.state.plugin.version}</Label>
+					{this.state.plugin.name} <Label color="blue">{this.state.plugin.version}</Label>
 				</Modal.Header>
 				<Modal.Content>
-					{this.state.configs ?
+					{this.state.configs ? (
 						<Tab
-							panes={
-								Object.keys(this.state.configs).map(name => ({
-									menuItem: name,
-									render: () =>
-										<ReactJSONEditor
-											key={name}
-											mode={JSON_EDITOR_MODE.tree}
-											json={this.props.configs[name]}
-											onChange={newConf => this.handleChange(name, newConf)}
-											width="100%"
-											height="calc(100vh - 20em)"
-										/>
-								}))
-							}
+							panes={Object.keys(this.state.configs).map(name => ({
+								menuItem: name,
+								render: () => (
+									<ReactJSONEditor
+										key={name}
+										mode={JSON_EDITOR_MODE.tree}
+										json={this.props.configs[name]}
+										onChange={newConf => this.handleChange(name, newConf)}
+										width="100%"
+										height="calc(100vh - 20em)"
+									/>
+								)
+							}))}
 						/>
-					:
+					) : (
 						<Loader />
-					}
+					)}
 				</Modal.Content>
 				<Modal.Actions>
 					<Button primary content={_t("Save")} onClick={this.save} />
@@ -182,9 +188,10 @@ class Plugins extends React.Component<Props, OwnState> {
 	}
 }
 
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: AppState): OwnProps => {
 	return {
 		configs: state.plugin.configs,
+		perms: state.api.permissions
 	}
 }
 
@@ -192,7 +199,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		requestPluginConfig: (id: string) => dispatch(requestPluginConfig(id)),
 		requestPluginConfigSave: (id: string, plugin: PluginContainer, configs: any) =>
-			dispatch(requestPluginConfigSave(id, plugin, configs)),
+			dispatch(requestPluginConfigSave(id, plugin, configs))
 	}
 }
 
