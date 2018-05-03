@@ -1,5 +1,4 @@
 import { RouterState } from "react-router-redux"
-import { Dispatch, Middleware, MiddlewareAPI } from "redux"
 import { SemanticICONS } from "semantic-ui-react"
 
 import { HandleChangeFunc } from "../components/Util"
@@ -17,30 +16,35 @@ export enum Lang {
 	EN = "en",
 	DE = "de",
 	FR = "fr",
-	RU = "ru",
+	RU = "ru"
 }
 export interface LangEntry {
 	text: string
 	value: Lang
 	flag: string
 }
-export const langArray: LangEntry[] = [{
-	text: "English",
-	value: Lang.EN,
-	flag: "us",
-}, {
-	text: "Deutsch",
-	value: Lang.DE,
-	flag: "de",
-}, {
-	text: "Français",
-	value: Lang.FR,
-	flag: "fr",
-}, {
-	text: "русский",
-	value: Lang.RU,
-	flag: "ru",
-}]
+export const langArray: LangEntry[] = [
+	{
+		text: "English",
+		value: Lang.EN,
+		flag: "us"
+	},
+	{
+		text: "Deutsch",
+		value: Lang.DE,
+		flag: "de"
+	},
+	{
+		text: "Français",
+		value: Lang.FR,
+		flag: "fr"
+	},
+	{
+		text: "русский",
+		value: Lang.RU,
+		flag: "ru"
+	}
+]
 
 // Reducers
 export interface AppState {
@@ -55,11 +59,6 @@ export interface AppState {
 	tileentity: DataViewState<TileEntity>
 	server_properties: SettingsState
 	router: RouterState
-}
-
-// Middleware
-export interface ExtendedMiddleware<StateType> extends Middleware {
-	<S extends StateType>(api: MiddlewareAPI<S>): (next: Dispatch<S>) => Dispatch<S>
 }
 
 // Data table
@@ -96,7 +95,7 @@ export interface DataField<T> {
 	filterValue?: (val: T) => string
 	required?: boolean
 	isGroup?: boolean
-	options?: { value: string, text: string }[]
+	options?: { value: string; text: string }[]
 	wide?: boolean
 }
 
@@ -112,13 +111,13 @@ export interface DataFieldGroup<T> {
 
 // Views
 export interface ViewDefinition {
-	title: string,
-	path: string,
-	icon?: SemanticICONS,
-	perms: string[] | null,
-	servlets?: string[] | null,
-	component?: React.ComponentType,
-	views?: ViewDefinition[],
+	title: string
+	path: string
+	icon?: SemanticICONS
+	perms: string[] | null
+	servlets?: string[] | null
+	component?: React.ComponentType
+	views?: ViewDefinition[]
 }
 
 // Autosuggest
@@ -158,5 +157,5 @@ export enum CatalogTypeKeys {
 	GameMode = "entity.living.player.gamemode.GameMode",
 	Generator = "world.GeneratorType",
 	Item = "item.ItemType",
-	TileEntity = "block.tileentity.TileEntityType",
+	TileEntity = "block.tileentity.TileEntityType"
 }
