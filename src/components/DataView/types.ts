@@ -8,7 +8,13 @@ import {
 	ListRequestAction,
 	SetFilterAction
 } from "../../actions/dataview"
-import { DataField, DataFieldViewFunc, DataViewRef, IdFunction, PermissionTree } from "../../types"
+import {
+	DataField,
+	DataFieldViewFunc,
+	DataViewRef,
+	IdFunction,
+	PermissionTree
+} from "../../types"
 
 export interface OwnProps<T> {
 	title?: string
@@ -23,7 +29,7 @@ export interface OwnProps<T> {
 	fields: {
 		[key: string]: DataField<T> | DataFieldViewFunc<T> | string
 	}
-	checkSinglePerm?: boolean
+	checkCreatePerm?: boolean
 	actions?: (data: T, view: DataViewRef<T>) => JSX.Element
 	onCreate?: (data: any, view: DataViewRef<T>) => void
 	onEdit?: (data: T | null, view: DataViewRef<T>) => void
@@ -43,7 +49,10 @@ export interface StateProps<T> {
 	}
 }
 
-export interface Props<T> extends OwnProps<T>, StateProps<T>, reactI18Next.InjectedTranslateProps {}
+export interface Props<T>
+	extends OwnProps<T>,
+		StateProps<T>,
+		reactI18Next.InjectedTranslateProps {}
 
 export interface DispatchProps<T> {
 	requestList: () => ListRequestAction

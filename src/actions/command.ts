@@ -1,9 +1,10 @@
 import { Action } from "redux"
-import { ResponseError } from "superagent"
+
+import { ExecuteCommandResponse } from "../fetch"
 
 export enum TypeKeys {
 	EXECUTE_REQUEST = "EXECUTE_REQUEST",
-	EXECUTE_RESPONSE = "EXECUTE_RESPONSE",
+	EXECUTE_RESPONSE = "EXECUTE_RESPONSE"
 }
 
 export interface ExecuteRequestAction extends Action {
@@ -12,30 +13,29 @@ export interface ExecuteRequestAction extends Action {
 	waitLines: number
 	waitTime: number
 }
-export function requestExecute(cmd: string, waitLines: number, waitTime: number): ExecuteRequestAction {
+export function requestExecute(
+	cmd: string,
+	waitLines: number,
+	waitTime: number
+): ExecuteRequestAction {
 	return {
 		type: TypeKeys.EXECUTE_REQUEST,
 		command: cmd,
 		waitLines: waitLines,
-		waitTime: waitTime,
+		waitTime: waitTime
 	}
 }
 
 export interface ExecuteResponseAction extends Action {
 	type: TypeKeys.EXECUTE_RESPONSE
-	ok: boolean
-	command: string
-	result: string[]
-	error?: ResponseError
+	response: ExecuteCommandResponse
 }
-export function respondExecute(ok: boolean, command: string, result: string[], error?: ResponseError):
-		ExecuteResponseAction {
+export function respondExecute(
+	response: ExecuteCommandResponse
+): ExecuteResponseAction {
 	return {
 		type: TypeKeys.EXECUTE_RESPONSE,
-		ok,
-		command,
-		result,
-		error,
+		response
 	}
 }
 

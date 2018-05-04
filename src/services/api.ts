@@ -170,7 +170,13 @@ const api = ({
 					}
 				])
 				.then(results =>
-					next(respondBanPlayer(true, action.player, results[0]))
+					next(
+						respondBanPlayer(
+							true,
+							action.player,
+							results[0].response!.join("\n")
+						)
+					)
 				)
 				.catch(err => next(respondBanPlayer(false, action.player, err)))
 			break
@@ -212,8 +218,10 @@ const api = ({
 						waitTime: action.waitTime
 					}
 				])
-				.then(results => next(respondExecute(true, action.command, results)))
-				.catch(err => next(respondExecute(false, action.command, [], err)))
+				.then(results => next(respondExecute(results[0])))
+				.catch(err =>
+					next(respondExecute({ ok: false, cmd: action.command, error: err }))
+				)
 			break
 
 		case DataViewTypeKeys.LIST_REQUEST:

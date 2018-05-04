@@ -4,7 +4,11 @@ import { CatalogType, WorldFull } from "../../fetch"
 import { PermissionTree } from "../../types"
 
 // Format a number to a certain accuracy as a ratio
-export function formatRange(current: number, max: number, a: number = 1): number {
+export function formatRange(
+	current: number,
+	max: number,
+	a: number = 1
+): number {
 	if (max === 0) {
 		return 0
 	}
@@ -56,7 +60,7 @@ export function handleChange(
 // Returns true if the permissions specified allow access to the specified path
 export function checkPermissions(
 	_perms: PermissionTree | boolean | undefined,
-	path: Array<string>
+	path: string[][] | string[] | null
 ): boolean {
 	if (!path || path.length === 0) {
 		return true
@@ -65,13 +69,20 @@ export function checkPermissions(
 		return false
 	}
 
+	// If we have an array of arrays, then OR the outer arrays
+	if (typeof path[0] === "object") {
+		return (path as string[][]).some(p => checkPermissions(_perms, p))
+	}
+
 	// Start at the root
 	let perms = _perms
 
 	for (let i = 0; i < path.length; i++) {
+		const p = path[i] as string
+
 		// Get the specific permission node for this level, if we have one
-		if (typeof perms[path[i]] !== "undefined") {
-			perms = perms[path[i]]
+		if (typeof perms[p] !== "undefined") {
+			perms = perms[p]
 			continue
 		}
 
@@ -80,10 +91,13 @@ export function checkPermissions(
 	}
 
 	// If we get here then that means we have an exact permission for this path
-	return perms === true || perms["*"] === true
+	return perms === true || perms["*"] === true || perms["."] === true
 }
 
-export function checkServlets(servlets: { [x: string]: string }, reqs: string[]) {
+export function checkServlets(
+	servlets: { [x: string]: string },
+	reqs: string[][] | string[] | null
+): boolean {
 	if (!reqs || reqs.length === 0) {
 		return true
 	}
@@ -91,7 +105,12 @@ export function checkServlets(servlets: { [x: string]: string }, reqs: string[])
 		return false
 	}
 
-	return reqs.every(req => !!servlets[req])
+	// If we have an array of arrays, then OR the outer arrays
+	if (typeof reqs[0] === "object") {
+		return (reqs as string[][]).some(r => checkServlets(servlets, r))
+	}
+
+	return (reqs as string[]).every(req => !!servlets[req])
 }
 
 // Render catalog types as dropdown options

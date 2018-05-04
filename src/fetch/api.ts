@@ -2810,6 +2810,38 @@ export interface ExecuteCommandRequest {
 /**
  * 
  * @export
+ * @interface ExecuteCommandResponse
+ */
+export interface ExecuteCommandResponse {
+    /**
+     * The command that was executed
+     * @type {string}
+     * @memberof ExecuteCommandResponse
+     */
+    cmd: string;
+    /**
+     * True if this command executed successfully, false otherwise
+     * @type {boolean}
+     * @memberof ExecuteCommandResponse
+     */
+    ok: boolean;
+    /**
+     * Any potential error that occured during execution
+     * @type {string}
+     * @memberof ExecuteCommandResponse
+     */
+    error?: string;
+    /**
+     * The response chat lines that were sent when executing the command
+     * @type {Array&lt;string&gt;}
+     * @memberof ExecuteCommandResponse
+     */
+    response?: Array<string>;
+}
+
+/**
+ * 
+ * @export
  * @interface ExecuteMethodParam
  */
 export interface ExecuteMethodParam {
@@ -5056,13 +5088,13 @@ export interface InventoryDimension {
      * @type {number}
      * @memberof InventoryDimension
      */
-    columns?: number;
+    rows?: number;
     /**
      * 
      * @type {number}
      * @memberof InventoryDimension
      */
-    rows?: number;
+    columns?: number;
 }
 
 /**
@@ -7586,13 +7618,13 @@ export interface SlotPos {
      * @type {number}
      * @memberof SlotPos
      */
-    y?: number;
+    x?: number;
     /**
      * 
      * @type {number}
      * @memberof SlotPos
      */
-    x?: number;
+    y?: number;
 }
 
 /**
@@ -9954,6 +9986,30 @@ export interface PlayerFull {
      */
     latency: number;
     /**
+     * The item stack that the player is wearing as a helmet
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    helmet?: ItemStack;
+    /**
+     * The item stack that the player is wearing as chestplate
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    chestplate?: ItemStack;
+    /**
+     * The item stack that the player is wearing as leggings
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    leggings?: ItemStack;
+    /**
+     * The item stack that the player is wearing as boots
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    boots?: ItemStack;
+    /**
      * The current rotation of the player
      * @type {Vector3d}
      * @memberof PlayerFull
@@ -9977,30 +10033,6 @@ export interface PlayerFull {
      * @memberof PlayerFull
      */
     inventory?: Inventory;
-    /**
-     * The item stack that the player is wearing as leggings
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    leggings?: ItemStack;
-    /**
-     * The item stack that the player is wearing as a helmet
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    helmet?: ItemStack;
-    /**
-     * The item stack that the player is wearing as chestplate
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    chestplate?: ItemStack;
-    /**
-     * The item stack that the player is wearing as boots
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    boots?: ItemStack;
     /**
      * The player's IP address and port
      * @type {string}
@@ -11285,17 +11317,17 @@ export interface WorldFull {
      */
     uuid: string;
     /**
-     * True if this world is loaded when the server starts, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    loadOnStartup: boolean;
-    /**
      * True if the spawn of this world is always kept loaded, false otherwise
      * @type {boolean}
      * @memberof WorldFull
      */
     keepSpawnLoaded: boolean;
+    /**
+     * True if this world is loaded when the server starts, false otherwise
+     * @type {boolean}
+     * @memberof WorldFull
+     */
+    loadOnStartup: boolean;
     /**
      * True if commands are allowed to be executed in this world, false otherwise
      * @type {boolean}
@@ -11339,6 +11371,12 @@ export interface WorldFull {
      */
     time: number;
     /**
+     * The current weather in the world
+     * @type {CatalogTypeWeather}
+     * @memberof WorldFull
+     */
+    weather: CatalogTypeWeather;
+    /**
      * The difficulty of the world
      * @type {CatalogTypeDifficulty}
      * @memberof WorldFull
@@ -11350,12 +11388,6 @@ export interface WorldFull {
      * @memberof WorldFull
      */
     gameRules: { [key: string]: string; };
-    /**
-     * The current weather in the world
-     * @type {CatalogTypeWeather}
-     * @memberof WorldFull
-     */
-    weather: CatalogTypeWeather;
     /**
      * 
      * @type {GameMode}
@@ -14221,7 +14253,7 @@ export const CommandApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        runCommands(body?: Array<ExecuteCommandRequest>, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<any>> {
+        runCommands(body?: Array<ExecuteCommandRequest>, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<ExecuteCommandResponse>> {
             const localVarFetchArgs = CommandApiFetchParamCreator(configuration).runCommands(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {

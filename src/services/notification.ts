@@ -23,7 +23,10 @@ const showNotif = (
 		position: "br"
 	})
 
-const notif = ({ dispatch, getState }: MiddlewareAPI<Dispatch<AppAction>, AppState>) => (
+const notif = ({
+	dispatch,
+	getState
+}: MiddlewareAPI<Dispatch<AppAction>, AppState>) => (
 	next: Dispatch<Action>
 ) => (action: AppAction): any => {
 	next(action)
@@ -49,14 +52,17 @@ const notif = ({ dispatch, getState }: MiddlewareAPI<Dispatch<AppAction>, AppSta
 			break
 
 		case CmdTypeKeys.EXECUTE_RESPONSE:
-			if (!action.ok) {
-				showNotif(
-					"error",
-					"Could not run command: " + action.command,
-					action.error ? action.error.text : "General error"
-				)
+			if (!action.response.ok) {
+				const err =
+					typeof action.response.error === "string"
+						? action.response.error
+						: JSON.stringify(action.response.error)
+				showNotif("error", "Could not run command: " + action.response.cmd, err)
 			} else {
-				showNotif("success", "Execute Command: " + action.command, action.result[0])
+				const text = action.response.response
+					? action.response.response.join("\n")
+					: ""
+				showNotif("success", "Execute Command: " + action.response.cmd, text)
 			}
 			break
 
@@ -68,7 +74,11 @@ const notif = ({ dispatch, getState }: MiddlewareAPI<Dispatch<AppAction>, AppSta
 					action.err ? action.err.text : "No response data"
 				)
 			} else {
-				showNotif("success", _.upperFirst(action.endpoint), "Created " + action.id(action.data))
+				showNotif(
+					"success",
+					_.upperFirst(action.endpoint),
+					"Created " + action.id(action.data)
+				)
 			}
 			break
 
@@ -76,7 +86,11 @@ const notif = ({ dispatch, getState }: MiddlewareAPI<Dispatch<AppAction>, AppSta
 			if (action.err) {
 				showNotif("error", _.upperFirst(action.endpoint), action.err.text)
 			} else {
-				showNotif("success", _.upperFirst(action.endpoint), "Changed " + action.id(action.data))
+				showNotif(
+					"success",
+					_.upperFirst(action.endpoint),
+					"Changed " + action.id(action.data)
+				)
 			}
 			break
 
@@ -84,12 +98,20 @@ const notif = ({ dispatch, getState }: MiddlewareAPI<Dispatch<AppAction>, AppSta
 			if (action.err) {
 				showNotif("error", _.upperFirst(action.endpoint), action.err.text)
 			} else {
-				showNotif("success", _.upperFirst(action.endpoint), "Deleted " + action.id(action.data))
+				showNotif(
+					"success",
+					_.upperFirst(action.endpoint),
+					"Deleted " + action.id(action.data)
+				)
 			}
 			break
 
 		case PlayerTypeKeys.KICK_RESPONSE:
-			showNotif("success", "Kick " + action.player.name, "Player has been kicked from the server")
+			showNotif(
+				"success",
+				"Kick " + action.player.name,
+				"Player has been kicked from the server"
+			)
 			break
 
 		case PlayerTypeKeys.BAN_RESPONSE:
