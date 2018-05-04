@@ -29,6 +29,7 @@ export interface Props extends reactI18Next.InjectedTranslateProps {
 		event: React.MouseEvent<HTMLElement>,
 		data: MenuItemProps
 	) => void
+	path: string
 }
 
 class HeaderMenu extends React.Component<Props> {
@@ -141,7 +142,10 @@ const mapStateToProps = (state: AppState) => {
 		lang: state.preferences.lang,
 		username: state.api.username,
 		server: state.api.server,
-		servers: state.api.servers
+		servers: state.api.servers,
+
+		// We include the pathname so this component updates when the path changes
+		path: state.router.location ? state.router.location.pathname : ""
 	}
 }
 

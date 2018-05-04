@@ -47,7 +47,6 @@ const persist = ({
 			}
 			break
 
-		case PreferencesTypeKeys.CHANGE_LANGUAGE:
 		case PreferencesTypeKeys.SET_PREFERENCE:
 			if (window.localStorage) {
 				window.localStorage.setItem(

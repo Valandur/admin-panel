@@ -13,9 +13,17 @@ import {
 } from "semantic-ui-react"
 
 import { AppAction, changeServer, requestLogin } from "../../actions"
-import { changeLanguage } from "../../actions/preferences"
+import { setPreference } from "../../actions/preferences"
 import { handleChange, HandleChangeFunc } from "../../components/Util"
-import { AppState, Lang, langArray, Server } from "../../types"
+import {
+	AppState,
+	Lang,
+	langArray,
+	PreferenceKey,
+	Server,
+	Theme,
+	themesArray
+} from "../../types"
 
 const imageUrl = require("../../assets/logo.png")
 
@@ -24,6 +32,7 @@ interface StateProps {
 	server?: Server
 	servers: Server[]
 	lang: Lang
+	theme: Theme
 	path: string
 	ok: boolean
 }
@@ -31,7 +40,7 @@ interface StateProps {
 interface Props extends StateProps, reactI18Next.InjectedTranslateProps {
 	changeServer: (server: Server) => AppAction
 	onLoginClick: (username: string, password: string) => AppAction
-	changeLanguage: (lang: string) => AppAction
+	setPref: (key: PreferenceKey, value: any) => AppAction
 }
 
 interface OwnState {
@@ -115,11 +124,22 @@ class Login extends React.Component<Props, OwnState> {
 							<Form.Field
 								selection
 								control={Dropdown}
+								placeholder={_t("ChangeTheme")}
+								options={themesArray}
+								value={this.props.theme}
+								onChange={(e: Event, data: DropdownProps) =>
+									this.props.setPref(PreferenceKey.theme, data.value)
+								}
+							/>
+
+							<Form.Field
+								selection
+								control={Dropdown}
 								placeholder={_t("ChangeLanguage")}
 								options={langArray}
 								value={this.props.lang}
 								onChange={(e: Event, data: DropdownProps) =>
-									this.props.changeLanguage(data.value as string)
+									this.props.setPref(PreferenceKey.lang, data.value)
 								}
 							/>
 
@@ -164,6 +184,7 @@ const mapStateToProps = (state: AppState): StateProps => {
 	return {
 		ok: state.api.loggedIn,
 		lang: state.preferences.lang,
+		theme: state.preferences.theme,
 		loggingIn: state.api.loggingIn,
 		server: state.api.server,
 		servers: state.api.servers,
@@ -177,7 +198,8 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 		onLoginClick: (username: string, password: string): AppAction =>
 			dispatch(requestLogin(username, password)),
 		changeServer: (server: Server): AppAction => dispatch(changeServer(server)),
-		changeLanguage: (lang: Lang): AppAction => dispatch(changeLanguage(lang))
+		setPref: (key: PreferenceKey, value: any): AppAction =>
+			dispatch(setPreference(key, value))
 	}
 }
 

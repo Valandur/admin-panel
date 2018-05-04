@@ -5,7 +5,11 @@ import { NavLink } from "react-router-dom"
 import { Dispatch } from "redux"
 import { Icon, Menu, Progress, Sidebar } from "semantic-ui-react"
 
-import { AppAction, requestServlets, ServletsRequestAction } from "../../actions"
+import {
+	AppAction,
+	requestServlets,
+	ServletsRequestAction
+} from "../../actions"
 
 import { checkPermissions, checkServlets } from "../../components/Util"
 import { ServerStatDouble } from "../../fetch"
@@ -13,9 +17,9 @@ import { AppState, PermissionTree, ViewDefinition } from "../../types"
 
 export interface Props extends reactI18Next.InjectedTranslateProps {
 	// State
-	cpu: Array<ServerStatDouble>
-	disk: Array<ServerStatDouble>
-	memory: Array<ServerStatDouble>
+	cpu: ServerStatDouble[]
+	disk: ServerStatDouble[]
+	memory: ServerStatDouble[]
 	servlets: {
 		[x: string]: string
 	}
@@ -47,7 +51,13 @@ class SidebarMenu extends React.Component<Props> {
 		const views = this.props.views
 
 		return (
-			<Sidebar vertical as={Menu} animation="push" visible={this.props.show}>
+			<Sidebar
+				vertical
+				as={Menu}
+				animation="push"
+				visible={this.props.show}
+				secondary
+			>
 				{this.props.showServerUsage && this.props.cpu.length > 0 ? (
 					<Menu.Item name="load">
 						<Progress
@@ -59,7 +69,9 @@ class SidebarMenu extends React.Component<Props> {
 							size="small"
 						/>
 						<Progress
-							percent={this.props.memory[this.props.memory.length - 1].value * 100}
+							percent={
+								this.props.memory[this.props.memory.length - 1].value * 100
+							}
 							progress="percent"
 							precision={1}
 							label={_t("Memory")}
@@ -127,4 +139,6 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate("Menu")(SidebarMenu))
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Menu")(SidebarMenu)
+)

@@ -78,7 +78,10 @@ class Main extends React.Component {
 				<Segment basic={true}>
 					<Message negative={true}>
 						<Message.Header>No servers found</Message.Header>
-						<p>You have not configured any servers to connect to! Check your config.js file.</p>
+						<p>
+							You have not configured any servers to connect to! Check your
+							config.js file.
+						</p>
 					</Message>
 				</Segment>
 			)
@@ -111,7 +114,9 @@ class Main extends React.Component {
 					</ConnectedRouter>
 				</Provider>
 				<NotificationSystem
-					ref={(ref: NotificationSystem.System) => store.dispatch(saveNotifRef(ref))}
+					ref={(ref: NotificationSystem.System) =>
+						store.dispatch(saveNotifRef(ref))
+					}
 				/>
 			</div>
 		)

@@ -13,12 +13,24 @@
 
 	<title>Web-API Admin Panel</title>
 
+	<script>
+		function swapThemeCss(theme) {
+			console.log('Theme change to "' + theme + '".');
+			const sheet = document.querySelector('#theme');
+			if (!sheet) {
+				return;
+			}
+			let href = sheet.getAttribute('href');
+			href = href.substring(0, href.lastIndexOf('/')) + '/semantic.' + theme + '.min.css';
+			sheet.setAttribute('href', href)
+		}
+	</script>
 	<script src="%PUBLIC_URL%/config.js"></script>
 
 	<!-- Icons -->
 	<link href="%PUBLIC_URL%/css/font-awesome.min.css" rel="stylesheet">
 	<link href="%PUBLIC_URL%/css/simple-line-icons.css" rel="stylesheet">
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css"></link>
+	<link id="theme" rel="stylesheet" href="%PUBLIC_URL%/theme/semantic.yeti.min.css"></link>
 	<link href="%PUBLIC_URL%/css/style.css" rel="stylesheet">
 </head>
 
