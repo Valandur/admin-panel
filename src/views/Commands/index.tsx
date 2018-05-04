@@ -8,7 +8,11 @@ import { Form } from "semantic-ui-react"
 import { AppAction } from "../../actions"
 import { ExecuteRequestAction, requestExecute } from "../../actions/command"
 import { ListRequestAction, requestList } from "../../actions/dataview"
-import { NotifLevel, showNotification, ShowNotificationAction } from "../../actions/notification"
+import {
+	NotifLevel,
+	showNotification,
+	ShowNotificationAction
+} from "../../actions/notification"
 import Autosuggest from "../../components/Autosuggest"
 import DataViewFunc from "../../components/DataView"
 import { formatSource } from "../../components/Util"
@@ -20,8 +24,16 @@ const DataView = DataViewFunc("history/cmd", "timestamp")
 interface Props extends reactI18Next.InjectedTranslateProps {
 	commands: Command[]
 	requestCommands: () => ListRequestAction
-	requestExecute: (cmd: string, waitLines: number, waitTime: number) => ExecuteRequestAction
-	showNotification: (level: NotifLevel, title: string, message: string) => ShowNotificationAction
+	requestExecute: (
+		cmd: string,
+		waitLines: number,
+		waitTime: number
+	) => ExecuteRequestAction
+	showNotification: (
+		level: NotifLevel,
+		title: string,
+		message: string
+	) => ShowNotificationAction
 }
 
 interface ExtendedCommand extends Command {
@@ -30,7 +42,6 @@ interface ExtendedCommand extends Command {
 }
 
 class Commands extends React.Component<Props, {}> {
-
 	constructor(props: Props) {
 		super(props)
 
@@ -62,9 +73,7 @@ class Commands extends React.Component<Props, {}> {
 			subs = subs.filter(sub => sub !== "/" + cmds[0].name.toLowerCase() + " ?")
 
 			if (parts.length > 1 && !_.isEmpty(parts[1])) {
-				subs = subs.filter(sub =>
-					sub.startsWith(parts[1])
-				)
+				subs = subs.filter(sub => sub.startsWith(parts[1]))
 			}
 			cmds = subs.map(sub => ({
 				name: sub,
@@ -74,7 +83,7 @@ class Commands extends React.Component<Props, {}> {
 				help: cmds[0].help,
 				base: cmds[0].name,
 				link: cmds[0].link,
-				isSub: true,
+				isSub: true
 			}))
 		}
 
@@ -84,7 +93,7 @@ class Commands extends React.Component<Props, {}> {
 					value: cmd.base + " " + cmd.name + " ",
 					content: (
 						<div style={{ padding: 10 }}>
-							<b>{cmd.base}</b> <i style={{fontSize: "90%"}}>{cmd.name}</i>
+							<b>{cmd.base}</b> <i style={{ fontSize: "90%" }}>{cmd.name}</i>
 						</div>
 					)
 				}
@@ -94,8 +103,10 @@ class Commands extends React.Component<Props, {}> {
 				value: cmd.name + " ",
 				content: (
 					<div style={{ padding: 10 }}>
-						<b>{cmd.name}</b> <i style={{fontSize: "90%"}}>{cmd.usage}</i><br />
-						{cmd.description}<br />
+						<b>{cmd.name}</b> <i style={{ fontSize: "90%" }}>{cmd.usage}</i>
+						<br />
+						{cmd.description}
+						<br />
 					</div>
 				)
 			}
@@ -110,7 +121,7 @@ class Commands extends React.Component<Props, {}> {
 		if (cmd.cause.causes) {
 			return formatSource(cmd.cause.causes[0])
 		} else {
-			const c = (cmd as any)
+			const c = cmd as any
 			if (c.cause.source && c.cause.source.name) {
 				return c.cause.source.name
 			} else {
@@ -132,26 +143,26 @@ class Commands extends React.Component<Props, {}> {
 				fields={{
 					timestamp: {
 						label: _t("Timestamp"),
-						view: (cmd: CommandCall) => moment.unix(cmd.timestamp).calendar(),
+						view: (cmd: CommandCall) => moment.unix(cmd.timestamp).calendar()
 					},
 					source: {
 						label: _t("Source"),
 						filter: true,
 						filterValue: this.getCause,
-						view: this.getCause,
+						view: this.getCause
 					},
 					command: {
 						label: _t("Command"),
 						filter: true,
 						filterValue: (cmd: CommandCall) => cmd.command + " " + cmd.args,
 						wide: true,
-						view: (cmd: CommandCall) => cmd.command + " " + cmd.args,
+						view: (cmd: CommandCall) => cmd.command + " " + cmd.args
 					},
 					create: {
 						view: false,
 						isGroup: true,
-						create: (view) =>
-							<div>
+						create: view => (
+							<>
 								<Form.Field
 									control={Autosuggest}
 									name="execCmd"
@@ -177,15 +188,24 @@ class Commands extends React.Component<Props, {}> {
 										onChange={view.handleChange}
 									/>
 								</Form.Group>
-							</div>,
-					},
+							</>
+						)
+					}
 				}}
 				onCreate={(obj, view) => {
 					if (!obj.execCmd) {
-						this.props.showNotification("error", "Command", "You must enter a command")
+						this.props.showNotification(
+							"error",
+							"Command",
+							"You must enter a command"
+						)
 						return
 					}
-					this.props.requestExecute(obj.execCmd.trim(), obj.waitLines, obj.waitTime)
+					this.props.requestExecute(
+						obj.execCmd.trim(),
+						obj.waitLines,
+						obj.waitTime
+					)
 				}}
 			/>
 		)
@@ -194,7 +214,7 @@ class Commands extends React.Component<Props, {}> {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		commands: state.cmd.list,
+		commands: state.cmd.list
 	}
 }
 
@@ -208,4 +228,6 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate("Commands")(Commands))
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Commands")(Commands)
+)

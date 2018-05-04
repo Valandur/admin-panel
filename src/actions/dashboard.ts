@@ -6,7 +6,7 @@ export enum TypeKeys {
 	INFO_REQUEST = "INFO_REQUEST",
 	INFO_RESPONSE = "INFO_RESPONSE",
 	STATS_REQUEST = "STATS_REQUEST",
-	STATS_RESPONSE = "STATS_RESPONSE",
+	STATS_RESPONSE = "STATS_RESPONSE"
 }
 
 export interface InfoRequestAction extends Action {
@@ -25,16 +25,18 @@ export interface InfoResponseAction extends Action {
 export function respondInfo(data: ServerInfo): InfoResponseAction {
 	return {
 		type: TypeKeys.INFO_RESPONSE,
-		data: data,
+		data: data
 	}
 }
 
 export interface StatsRequestAction extends Action {
 	type: TypeKeys.STATS_REQUEST
+	limit?: number
 }
-export function requestStats() {
+export function requestStats(limit?: number): StatsRequestAction {
 	return {
-		type: TypeKeys.STATS_REQUEST
+		type: TypeKeys.STATS_REQUEST,
+		limit
 	}
 }
 
@@ -48,8 +50,12 @@ export function respondStats(stats: ServerStats): StatsResponseAction {
 		players: stats.players,
 		cpu: stats.cpu,
 		memory: stats.memory,
-		disk: stats.disk,
+		disk: stats.disk
 	}
 }
 
-export type DashboardAction = InfoRequestAction | InfoResponseAction | StatsRequestAction | StatsResponseAction
+export type DashboardAction =
+	| InfoRequestAction
+	| InfoResponseAction
+	| StatsRequestAction
+	| StatsResponseAction

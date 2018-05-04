@@ -10,7 +10,9 @@ import dataview from "./dataview"
 import permission from "./permission"
 import player from "./player"
 import plugin from "./plugin"
-import settings from "./settings"
+import serverSettings from "./server-settings"
+
+import preferences from "./preferences"
 
 const initAcc = initAction()
 
@@ -29,10 +31,11 @@ const initialState: AppState = {
 	player: player(undefined, initAcc),
 	plugin: plugin(undefined, initAcc),
 	world: dataState,
-	server_properties: settings(undefined, initAcc),
+	server_properties: serverSettings(undefined, initAcc),
 	tileentity: dataState,
 
-	router: routerReducer({ location: null }, initAcc),
+	preferences: preferences(undefined, initAcc),
+	router: routerReducer({ location: null }, initAcc)
 }
 
 const app = (state: AppState = initialState, action: AppAction): AppState => {
@@ -48,10 +51,11 @@ const app = (state: AppState = initialState, action: AppAction): AppState => {
 		player: player(data.player, action),
 		plugin: plugin(data.plugin, action),
 		world: data.world,
-		server_properties: settings(data.server_properties, action),
+		server_properties: serverSettings(data.server_properties, action),
 		tileentity: data.tileentity,
 
-		router: routerReducer(data.router, action),
+		preferences: preferences(data.preferences, action),
+		router: routerReducer(data.router, action)
 	}
 }
 

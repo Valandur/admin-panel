@@ -2,12 +2,18 @@ import * as React from "react"
 import { translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
 import { Redirect } from "react-router-dom"
-import { Button, Dropdown, DropdownProps, Form, Grid, Image, Segment } from "semantic-ui-react"
-
 import {
-	AppAction, changeLanguage, ChangeLanguageAction, changeServer, ChangeServerAction,
-	LoginRequestAction, requestLogin
-} from "../../actions"
+	Button,
+	Dropdown,
+	DropdownProps,
+	Form,
+	Grid,
+	Image,
+	Segment
+} from "semantic-ui-react"
+
+import { AppAction, changeServer, requestLogin } from "../../actions"
+import { changeLanguage } from "../../actions/preferences"
 import { handleChange, HandleChangeFunc } from "../../components/Util"
 import { AppState, Lang, langArray, Server } from "../../types"
 
@@ -23,9 +29,9 @@ interface StateProps {
 }
 
 interface Props extends StateProps, reactI18Next.InjectedTranslateProps {
-	changeServer: (server: Server) => ChangeServerAction
-	onLoginClick: (username: string, password: string) => LoginRequestAction
-	changeLanguage: (lang: string) => ChangeLanguageAction
+	changeServer: (server: Server) => AppAction
+	onLoginClick: (username: string, password: string) => AppAction
+	changeLanguage: (lang: string) => AppAction
 }
 
 interface OwnState {
@@ -36,7 +42,6 @@ interface OwnState {
 }
 
 class Login extends React.Component<Props, OwnState> {
-
 	handleChange: HandleChangeFunc
 
 	constructor(props: Props) {
@@ -44,7 +49,7 @@ class Login extends React.Component<Props, OwnState> {
 
 		this.state = {
 			username: "",
-			password: "",
+			password: ""
 		}
 
 		this.handleChangeServer = this.handleChangeServer.bind(this)
@@ -71,7 +76,9 @@ class Login extends React.Component<Props, OwnState> {
 
 	render() {
 		if (this.props.ok) {
-			return <Redirect to={{ pathname: "/", state: { from: this.props.path } }} />
+			return (
+				<Redirect to={{ pathname: "/", state: { from: this.props.path } }} />
+			)
 		}
 
 		const _t = this.props.t
@@ -83,23 +90,27 @@ class Login extends React.Component<Props, OwnState> {
 				verticalAlign="middle"
 			>
 				<Grid.Column style={{ maxWidth: 450 }}>
-
 					<Image size="medium" centered src={imageUrl} />
 
 					<Form size="large" loading={this.props.loggingIn}>
 						<Segment>
-							{this.props.servers.length > 1 ?
+							{this.props.servers.length > 1 ? (
 								<Form.Field
 									fluid
 									selection
 									name="server"
 									control={Dropdown}
 									placeholder={_t("Server")}
-									value={this.props.server ? this.props.server.apiUrl : undefined}
+									value={
+										this.props.server ? this.props.server.apiUrl : undefined
+									}
 									onChange={this.handleChange}
-									options={this.props.servers.map(s => ({ value: s.apiUrl, text: s.name }))}
+									options={this.props.servers.map(s => ({
+										value: s.apiUrl,
+										text: s.name
+									}))}
 								/>
-								: null}
+							) : null}
 
 							<Form.Field
 								selection
@@ -107,7 +118,9 @@ class Login extends React.Component<Props, OwnState> {
 								placeholder={_t("ChangeLanguage")}
 								options={langArray}
 								value={this.props.lang}
-								onChange={(e: Event, data: DropdownProps) => this.props.changeLanguage(data.value as string)}
+								onChange={(e: Event, data: DropdownProps) =>
+									this.props.changeLanguage(data.value as string)
+								}
 							/>
 
 							<Form.Input
@@ -131,7 +144,12 @@ class Login extends React.Component<Props, OwnState> {
 								onChange={this.handleChange}
 							/>
 
-							<Button color="blue" fluid size="large" onClick={this.handleLogin}>
+							<Button
+								color="blue"
+								fluid
+								size="large"
+								onClick={this.handleLogin}
+							>
 								{_t("Login")}
 							</Button>
 						</Segment>
@@ -145,21 +163,24 @@ class Login extends React.Component<Props, OwnState> {
 const mapStateToProps = (state: AppState): StateProps => {
 	return {
 		ok: state.api.loggedIn,
-		lang: state.api.lang,
+		lang: state.preferences.lang,
 		loggingIn: state.api.loggingIn,
 		server: state.api.server,
 		servers: state.api.servers,
 
-		path: state.router.location ? state.router.location.pathname : "",
+		path: state.router.location ? state.router.location.pathname : ""
 	}
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
-		onLoginClick: (username: string, password: string) => dispatch(requestLogin(username, password)),
-		changeServer: (server: Server) => dispatch(changeServer(server)),
-		changeLanguage: (lang: Lang) => dispatch(changeLanguage(lang)),
+		onLoginClick: (username: string, password: string): AppAction =>
+			dispatch(requestLogin(username, password)),
+		changeServer: (server: Server): AppAction => dispatch(changeServer(server)),
+		changeLanguage: (lang: Lang): AppAction => dispatch(changeLanguage(lang))
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate("Login")(Login))
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Login")(Login)
+)

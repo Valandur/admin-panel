@@ -3,9 +3,17 @@ import { translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
 import { Button, Dropdown, Form, Input, Label, Popup } from "semantic-ui-react"
 
-import { AppAction, CatalogRequestAction, requestCatalog } from "../../../actions"
+import {
+	AppAction,
+	CatalogRequestAction,
+	requestCatalog
+} from "../../../actions"
 import ItemStack from "../../../components/ItemStack"
-import { handleChange, HandleChangeFunc, renderCatalogTypeOptions } from "../../../components/Util"
+import {
+	handleChange,
+	HandleChangeFunc,
+	renderCatalogTypeOptions
+} from "../../../components/Util"
 import { CatalogType, NucleusKit } from "../../../fetch"
 import { AppState, CatalogTypeKeys, DataViewRef } from "../../../types"
 
@@ -24,7 +32,6 @@ interface OwnState {
 }
 
 class Kits extends React.Component<Props, OwnState> {
-
 	handleChange: HandleChangeFunc
 
 	constructor(props: Props) {
@@ -33,7 +40,7 @@ class Kits extends React.Component<Props, OwnState> {
 		this.state = {
 			newKitCmd: "",
 			newItemType: "",
-			newItemAmount: 1,
+			newItemAmount: 1
 		}
 
 		this.renderCommands = this.renderCommands.bind(this)
@@ -67,7 +74,7 @@ class Kits extends React.Component<Props, OwnState> {
 			stacks: kit.stacks.concat({
 				type: {
 					id: this.state.newItemType,
-					name: "",
+					name: ""
 				},
 				quantity: this.state.newItemAmount ? this.state.newItemAmount : 1
 			})
@@ -96,31 +103,31 @@ class Kits extends React.Component<Props, OwnState> {
 						label: _t("Name"),
 						create: true,
 						filter: true,
-						required: true,
+						required: true
 					},
 					cost: {
 						label: _t("Cost"),
 						type: "number",
 						edit: true,
 						create: true,
-						required: true,
+						required: true
 					},
 					cooldown: {
 						label: _t("Cooldown"),
 						type: "number",
 						edit: true,
 						create: true,
-						required: true,
+						required: true
 					},
 					commands: {
 						label: _t("Commands"),
 						wide: true,
-						view: this.renderCommands,
+						view: this.renderCommands
 					},
 					stacks: {
 						label: _t("Stacks"),
 						wide: true,
-						view: this.renderStacks,
+						view: this.renderStacks
 					}
 				}}
 			/>
@@ -131,15 +138,15 @@ class Kits extends React.Component<Props, OwnState> {
 		const _t = this.props.t
 
 		return (
-			<div>
-				{kit.commands.map((cmd, i) =>
+			<>
+				{kit.commands.map((cmd, i) => (
 					<Label
 						key={i}
 						color="blue"
 						content={"/" + cmd}
 						onRemove={e => this.removeCmd(view, kit, i)}
 					/>
-				)}
+				))}
 				<Popup
 					on="click"
 					position="top right"
@@ -150,7 +157,7 @@ class Kits extends React.Component<Props, OwnState> {
 							action={{
 								color: "green",
 								content: _t("Add"),
-								onClick: () => this.addCmd(view, kit),
+								onClick: () => this.addCmd(view, kit)
 							}}
 							placeholder="/say Hi"
 							value={this.state.newKitCmd}
@@ -158,7 +165,7 @@ class Kits extends React.Component<Props, OwnState> {
 						/>
 					}
 				/>
-			</div>
+			</>
 		)
 	}
 
@@ -166,57 +173,59 @@ class Kits extends React.Component<Props, OwnState> {
 		const _t = this.props.t
 
 		return (
-			<div>
-				{kit.stacks.map((item, i) =>
+			<>
+				{kit.stacks.map((item, i) => (
 					<ItemStack
 						key={i}
 						item={item}
 						onRemove={e => this.removeStack(view, kit, i)}
 					/>
-				)}
+				))}
 				<Popup
 					on="click"
 					position="top right"
 					trigger={<Button color="green" icon="plus" size="mini" />}
-					content={<Form>
-						<Form.Field
-							required
-							fluid
-							selection
-							search
-							name="newItemType"
-							control={Dropdown}
-							placeholder={_t("Type")}
-							onChange={this.handleChange}
-							options={renderCatalogTypeOptions(this.props.itemTypes)}
-						/>
-						<Form.Input
-							name="newItemAmount"
-							type="number"
-							placeholder={_t("Amount")}
-							onChange={this.handleChange}
-							action={{
-								color: "green",
-								content: _t("Add"),
-								onClick: () => this.addStack(view, kit),
-							}}
-						/>
-					</Form>}
+					content={
+						<Form>
+							<Form.Field
+								required
+								fluid
+								selection
+								search
+								name="newItemType"
+								control={Dropdown}
+								placeholder={_t("Type")}
+								onChange={this.handleChange}
+								options={renderCatalogTypeOptions(this.props.itemTypes)}
+							/>
+							<Form.Input
+								name="newItemAmount"
+								type="number"
+								placeholder={_t("Amount")}
+								onChange={this.handleChange}
+								action={{
+									color: "green",
+									content: _t("Add"),
+									onClick: () => this.addStack(view, kit)
+								}}
+							/>
+						</Form>
+					}
 				/>
-			</div>
+			</>
 		)
 	}
 }
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		itemTypes: state.api.types[CatalogTypeKeys.Item],
+		itemTypes: state.api.types[CatalogTypeKeys.Item]
 	}
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
-		requestCatalog: (type: string) => dispatch(requestCatalog(type)),
+		requestCatalog: (type: string) => dispatch(requestCatalog(type))
 	}
 }
 

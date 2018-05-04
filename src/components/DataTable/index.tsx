@@ -16,8 +16,8 @@ export interface Props<T> extends reactI18Next.InjectedTranslateProps {
 	title?: string
 	icon?: SemanticICONS
 	list: T[]
-	canEdit?: boolean
-	canDelete?: boolean
+	canEdit?: (data: T) => boolean
+	canDelete?: (data: T) => boolean
 	fields: {
 		[key: string]: DataFieldRaw<T>
 	}
@@ -35,7 +35,6 @@ interface OwnState {
 }
 
 class DataTable<T> extends React.Component<Props<T>, OwnState> {
-
 	handleChange: HandleChangeFunc
 
 	constructor(props: Props<T>) {
@@ -43,7 +42,7 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 
 		this.state = {
 			page: 0,
-			newData: {},
+			newData: {}
 		}
 
 		this.changePage = this.changePage.bind(this)
@@ -64,7 +63,7 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 		event.preventDefault()
 
 		this.setState({
-			page: page,
+			page: page
 		})
 	}
 
@@ -79,9 +78,8 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 			})
 		}
 
-		console.log(newData)
 		this.setState({
-			newData: newData,
+			newData: newData
 		})
 
 		if (this.props.onEdit) {
@@ -90,15 +88,19 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 	}
 
 	shouldComponentUpdate(nextProps: Props<T>, nextState: OwnState) {
-		return nextProps.fields !== this.props.fields ||
+		return (
+			nextProps.fields !== this.props.fields ||
 			nextProps.list !== this.props.list ||
 			nextState.page !== this.state.page ||
 			nextState.newData !== this.state.newData
+		)
 	}
 
 	render() {
 		const { icon, title, list, canEdit, canDelete, actions } = this.props
-		const fields = Object.keys(this.props.fields).map(f => this.props.fields[f]).filter(f => f.view)
+		const fields = Object.keys(this.props.fields)
+			.map(f => this.props.fields[f])
+			.filter(f => f.view)
 
 		const maxPage = Math.ceil(list.length / ITEMS_PER_PAGE)
 		const page = Math.min(this.state.page, maxPage - 1)
@@ -108,31 +110,32 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 		const thisRef: DataTableRef = {
 			handleChange: this.handleChange,
 			state: this.state.newData,
-			setState: (changes: object) => this.setState({
-				newData: { ...this.state.newData, ...changes }
-			}),
+			setState: (changes: object) =>
+				this.setState({
+					newData: { ...this.state.newData, ...changes }
+				})
 		}
 
 		const _t = this.props.t
 
 		return (
 			<div style={{ marginTop: "2em" }}>
-				{title &&
+				{title && (
 					<Header>
 						<Icon fitted name={icon} /> {title}
 					</Header>
-				}
+				)}
 
 				<Table striped={true} stackable>
 					<TableHeader
 						fields={fields}
 						hasActions={typeof actions !== "undefined"}
-						canEdit={canEdit}
-						canDelete={canDelete}
+						canEdit={!!canEdit}
+						canDelete={!!canDelete}
 						t={_t}
 					/>
 					<Table.Body>
-						{listPage.map((obj, i) =>
+						{listPage.map((obj, i) => (
 							<TableRow
 								key={this.props.idFunc(obj)}
 								obj={obj}
@@ -149,14 +152,10 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 								handleChange={this.handleChange}
 								t={_t}
 							/>
-						)}
+						))}
 					</Table.Body>
 				</Table>
-				<Pagination
-					page={page}
-					maxPage={maxPage}
-					changePage={(e, p) => this.changePage(e, p)}
-				/>
+				<Pagination page={page} maxPage={maxPage} changePage={(e, p) => this.changePage(e, p)} />
 			</div>
 		)
 	}

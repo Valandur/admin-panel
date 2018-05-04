@@ -11,14 +11,11 @@ import { AppState } from "../../../types"
 import DataViewFunc from "../../../components/DataView"
 const DataView = DataViewFunc("universal-market/item", "id")
 
-interface Props extends reactI18Next.InjectedTranslateProps {
-}
+interface Props extends reactI18Next.InjectedTranslateProps {}
 
-interface OwnState {
-}
+interface OwnState {}
 
 class Items extends React.Component<Props, OwnState> {
-
 	render() {
 		const _t = this.props.t
 
@@ -31,11 +28,9 @@ class Items extends React.Component<Props, OwnState> {
 					item: {
 						label: _t("Item"),
 						filter: true,
-						filterValue: (mi: UniversalMarketItem) => mi.item.type.name + " (" + mi.item.type.id + ")",
-						view: (mi: UniversalMarketItem) =>
-							<ItemStack
-								item={mi.item}
-							/>
+						filterValue: (mi: UniversalMarketItem) =>
+							mi.item.type.name + " (" + mi.item.type.id + ")",
+						view: (mi: UniversalMarketItem) => <ItemStack item={mi.item} />
 					},
 					price: _t("Price"),
 					expires: {
@@ -43,7 +38,7 @@ class Items extends React.Component<Props, OwnState> {
 						view: (mi: UniversalMarketItem) =>
 							moment.unix(mi.expires).calendar()
 					},
-					"owner.name": _t("Seller"),
+					"owner.name": _t("Seller")
 				}}
 			/>
 		)

@@ -8,19 +8,24 @@ import { Redirect, Route, Switch } from "react-router-dom"
 import { Action } from "redux"
 import { Button, Message, Segment, Sidebar } from "semantic-ui-react"
 
+import { AppAction } from "../../actions"
 import { requestStats } from "../../actions/dashboard"
 import HeaderMenu from "../../components/Menu/HeaderMenu"
 import SidebarMenu from "../../components/Menu/SidebarMenu"
 import { checkPermissions } from "../../components/Util"
 import { AppState, PermissionTree, ViewDefinition } from "../../types"
 
-import views from "./Views"
+import { load, views } from "./Views"
+
+const Preferences = load(() => import("../../views/Preferences"))
 
 const baseIssueUrl = "https://github.com/Valandur/admin-panel/issues/new?"
 
-export interface Props extends reactI18Next.InjectedTranslateProps, RouteComponentProps<any> {
+export interface Props
+	extends reactI18Next.InjectedTranslateProps,
+		RouteComponentProps<any> {
 	perms: PermissionTree
-	requestStats: () => Action
+	requestStats: (limit?: number) => Action
 }
 
 interface OwnState {
@@ -31,7 +36,6 @@ interface OwnState {
 }
 
 class Full extends React.Component<Props, OwnState> {
-
 	interval: NodeJS.Timer
 
 	constructor(props: Props) {
@@ -39,7 +43,7 @@ class Full extends React.Component<Props, OwnState> {
 
 		this.state = {
 			show: true,
-			hasError: false,
+			hasError: false
 		}
 
 		this.toggleSidebar = this.toggleSidebar.bind(this)
@@ -49,7 +53,7 @@ class Full extends React.Component<Props, OwnState> {
 	componentDidMount() {
 		if (checkPermissions(this.props.perms, ["info", "stats"])) {
 			this.props.requestStats()
-			this.interval = setInterval(this.props.requestStats, 10000)
+			this.interval = setInterval(() => this.props.requestStats(3), 10000)
 		}
 	}
 
@@ -61,7 +65,11 @@ class Full extends React.Component<Props, OwnState> {
 
 	componentDidCatch(error: Error, info: React.ErrorInfo) {
 		Raven.captureException(error, { extra: info })
-		this.setState({ hasError: true, error: error.toString(), stack: info.componentStack })
+		this.setState({
+			hasError: true,
+			error: error.toString(),
+			stack: info.componentStack
+		})
 	}
 
 	toggleSidebar() {
@@ -71,11 +79,20 @@ class Full extends React.Component<Props, OwnState> {
 	}
 
 	getIssueUrl() {
-		return baseIssueUrl + "labels=bug" +
-			"&title=" + encodeURIComponent("[Issue] <Add a short description>") +
-			"&body=" + encodeURIComponent("<Say a little about what happened>\n\n" +
-				this.state.error + "\n\nStacktrace:" + this.state.stack) +
+		return (
+			baseIssueUrl +
+			"labels=bug" +
+			"&title=" +
+			encodeURIComponent("[Issue] <Add a short description>") +
+			"&body=" +
+			encodeURIComponent(
+				"<Say a little about what happened>\n\n" +
+					this.state.error +
+					"\n\nStacktrace:" +
+					this.state.stack
+			) +
 			"&assignee=Valandur"
+		)
 	}
 
 	render() {
@@ -85,6 +102,7 @@ class Full extends React.Component<Props, OwnState> {
 			<div>
 				<HeaderMenu
 					toggleSidebar={this.toggleSidebar}
+					showSidebar={this.state.show}
 				/>
 
 				<Sidebar.Pushable style={{ height: "calc(100vh - 67px)" }}>
@@ -99,7 +117,7 @@ class Full extends React.Component<Props, OwnState> {
 							float: "right"
 						}}
 					>
-						{this.state.hasError ?
+						{this.state.hasError ? (
 							<Segment basic>
 								<Message negative size="huge">
 									<Message.Header>{_t("ErrorHeader")}</Message.Header>
@@ -121,13 +139,14 @@ class Full extends React.Component<Props, OwnState> {
 									/>
 								</Message>
 							</Segment>
-						:
+						) : (
 							<Switch>
 								{views.map(this.renderRoute)}
 
+								<Route path="/preferences" component={Preferences} />
 								<Redirect from="/" to="/dashboard" />
 							</Switch>
-						}
+						)}
 					</Sidebar.Pusher>
 				</Sidebar.Pushable>
 			</div>
@@ -139,7 +158,9 @@ class Full extends React.Component<Props, OwnState> {
 			return <Redirect key={view.path} from={view.path} to="/dashboard" />
 		}
 		if (view.component) {
-			return <Route key={view.path} path={view.path} component={view.component} />
+			return (
+				<Route key={view.path} path={view.path} component={view.component} />
+			)
 		}
 		return _.flatMap(view.views, this.renderRoute)
 	}
@@ -153,8 +174,10 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
 	return {
-		requestStats: () => dispatch(requestStats()),
+		requestStats: (limit?: number): AppAction => dispatch(requestStats(limit))
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate("Main")(Full))
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Main")(Full)
+)

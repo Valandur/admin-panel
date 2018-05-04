@@ -3,15 +3,34 @@ import * as moment from "moment"
 import * as React from "react"
 import { Trans, translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
-import { Button, Dropdown, DropdownProps, Form, Header, Icon, Label, Modal, Radio, Table } from "semantic-ui-react"
+import {
+	Button,
+	Dropdown,
+	DropdownProps,
+	Form,
+	Header,
+	Icon,
+	Label,
+	Modal,
+	Radio,
+	Table
+} from "semantic-ui-react"
 
-import { AppAction, CatalogRequestAction, requestCatalog } from "../../../actions"
+import {
+	AppAction,
+	CatalogRequestAction,
+	requestCatalog
+} from "../../../actions"
 import DataViewFunc from "../../../components/DataView"
 import ItemStack from "../../../components/ItemStack"
 import { handleChange, HandleChangeFunc } from "../../../components/Util"
 import {
-	CatalogType, HuskyCratesCommandReward, HuskyCratesCrate, HuskyCratesCrateReward,
-	HuskyCratesCrateRewardObject, HuskyCratesItemReward
+	CatalogType,
+	HuskyCratesCommandReward,
+	HuskyCratesCrate,
+	HuskyCratesCrateReward,
+	HuskyCratesCrateRewardObject,
+	HuskyCratesItemReward
 } from "../../../fetch"
 import { AppState, CatalogTypeKeys, DataViewRef } from "../../../types"
 
@@ -20,8 +39,8 @@ import CrateReward from "./CrateReward"
 const DataView = DataViewFunc("husky-crates/crate", "id")
 
 interface Props extends reactI18Next.InjectedTranslateProps {
-	objectTypes: { value: string, text: string }[]
-	crateTypes: { value: string, text: string }[]
+	objectTypes: { value: string; text: string }[]
+	crateTypes: { value: string; text: string }[]
 	itemTypes: CatalogType[]
 	requestCatalog: (type: string) => CatalogRequestAction
 }
@@ -37,7 +56,6 @@ interface OwnState {
 }
 
 class Crates extends React.Component<Props, OwnState> {
-
 	handleChange: HandleChangeFunc
 	save: () => void
 
@@ -46,7 +64,7 @@ class Crates extends React.Component<Props, OwnState> {
 
 		this.state = {
 			modal: false,
-			rewards: [],
+			rewards: []
 		}
 
 		this.toggleModal = this.toggleModal.bind(this)
@@ -72,11 +90,11 @@ class Crates extends React.Component<Props, OwnState> {
 				type: this.state.type,
 				free: this.state.free,
 				freeDelay: this.state.freeDelay,
-				rewards: this.state.rewards,
+				rewards: this.state.rewards
 			})
 			this.setState({
 				modal: false,
-				crate: undefined,
+				crate: undefined
 			})
 		}
 
@@ -87,7 +105,7 @@ class Crates extends React.Component<Props, OwnState> {
 			type: crate ? crate.type : undefined,
 			free: crate ? crate.free : undefined,
 			freeDelay: crate ? crate.freeDelay : undefined,
-			rewards: crate ? crate.rewards.map(r => _.assign({}, r)) : [],
+			rewards: crate ? crate.rewards.map(r => _.assign({}, r)) : []
 		})
 	}
 
@@ -99,14 +117,15 @@ class Crates extends React.Component<Props, OwnState> {
 
 	handleRewardChange(
 		reward: HuskyCratesCrateReward,
-		event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
-
+		event: React.SyntheticEvent<HTMLElement>,
+		data: DropdownProps
+	) {
 		const cb = (name: string, value: string) => {
 			const newReward = _.assign({}, reward)
 			_.set(newReward, name, value)
 
 			this.setState({
-				rewards: this.state.rewards.map(r => r === reward ? newReward : r)
+				rewards: this.state.rewards.map(r => (r === reward ? newReward : r))
 			})
 		}
 		handleChange.call(this, cb, event, data)
@@ -121,15 +140,17 @@ class Crates extends React.Component<Props, OwnState> {
 			displayItem: {
 				type: {
 					id: "",
-					name: "",
+					name: ""
 				},
-				quantity: 1,
-			},
+				quantity: 1
+			}
 		}
 
-		const rewards = this.state.rewards ? this.state.rewards.concat(newReward) : [newReward]
+		const rewards = this.state.rewards
+			? this.state.rewards.concat(newReward)
+			: [newReward]
 		this.setState({
-			rewards: rewards,
+			rewards: rewards
 		})
 	}
 
@@ -139,7 +160,10 @@ class Crates extends React.Component<Props, OwnState> {
 		})
 	}
 
-	addRewardObject(reward: HuskyCratesCrateReward, object: HuskyCratesCrateRewardObject) {
+	addRewardObject(
+		reward: HuskyCratesCrateReward,
+		object: HuskyCratesCrateRewardObject
+	) {
 		this.setState({
 			rewards: this.state.rewards.map(r => {
 				if (r !== reward) {
@@ -147,9 +171,9 @@ class Crates extends React.Component<Props, OwnState> {
 				}
 				return {
 					...reward,
-					objects: reward.objects.concat(object),
+					objects: reward.objects.concat(object)
 				}
-			}),
+			})
 		})
 	}
 
@@ -161,9 +185,9 @@ class Crates extends React.Component<Props, OwnState> {
 				}
 				return {
 					...reward,
-					objects: reward.objects.filter((__, i) => i !== index),
+					objects: reward.objects.filter((__, i) => i !== index)
 				}
-			}),
+			})
 		})
 	}
 
@@ -171,7 +195,7 @@ class Crates extends React.Component<Props, OwnState> {
 		const _t = this.props.t
 
 		return (
-			<div>
+			<>
 				<DataView
 					canEdit
 					canDelete
@@ -184,14 +208,14 @@ class Crates extends React.Component<Props, OwnState> {
 							label: _t("Id"),
 							create: true,
 							filter: true,
-							required: true,
+							required: true
 						},
 						name: {
 							label: _t("Name"),
 							create: true,
 							edit: true,
 							filter: true,
-							required: true,
+							required: true
 						},
 						type: {
 							label: _t("Type"),
@@ -203,41 +227,43 @@ class Crates extends React.Component<Props, OwnState> {
 						},
 						free: {
 							label: _t("Free"),
-							view: (crate: HuskyCratesCrate) => <div>
-								<Icon
-									color={crate.free ? "green" : "red"}
-									name={crate.free ? "check" : "remove"}
-								/>
-								{crate.free ?
-									<div>
-										<Icon name="repeat" />
-										{moment.duration(crate.freeDelay, "second").humanize()}
-									</div>
-									: null}
-							</div>,
+							view: (crate: HuskyCratesCrate) => (
+								<>
+									<Icon
+										color={crate.free ? "green" : "red"}
+										name={crate.free ? "check" : "remove"}
+									/>
+									{crate.free ? (
+										<>
+											<Icon name="repeat" />
+											{moment.duration(crate.freeDelay, "second").humanize()}
+										</>
+									) : null}
+								</>
+							)
 						},
 						rewards: {
 							label: _t("Rewards"),
 							wide: true,
-							view: this.renderRewards,
-						},
+							view: this.renderRewards
+						}
 					}}
 					onEdit={this.handleEdit}
 				/>
 
 				{this.renderModal()}
-			</div>
+			</>
 		)
 	}
 
 	renderRewards(crate: HuskyCratesCrate) {
 		const tc = _.sumBy(crate.rewards, "chance")
-		const fmt = (chance: number) => ((chance / tc) * 100).toFixed(3) + "%"
+		const fmt = (chance: number) => (chance / tc * 100).toFixed(3) + "%"
 
 		return (
 			<Table compact size="small">
 				<Table.Body>
-					{crate.rewards.map((reward, i) =>
+					{crate.rewards.map((reward, i) => (
 						<Table.Row key={i}>
 							<Table.Cell collapsing>{fmt(reward.chance)}</Table.Cell>
 							<Table.Cell collapsing>{reward.name}</Table.Cell>
@@ -245,34 +271,55 @@ class Crates extends React.Component<Props, OwnState> {
 								{reward.announce && <Icon name="bullhorn" />}
 							</Table.Cell>
 							<Table.Cell>
-								{reward.objects.map((obj: HuskyCratesCrateRewardObject, j: number) => {
-									if (obj.type === HuskyCratesCrateRewardObject.TypeEnum.COMMAND &&
-										(obj as HuskyCratesCommandReward).command) {
-										return <Label key={j} color="blue">/{(obj as HuskyCratesCommandReward).command}</Label>
+								{reward.objects.map(
+									(obj: HuskyCratesCrateRewardObject, j: number) => {
+										if (
+											obj.type ===
+												HuskyCratesCrateRewardObject.TypeEnum.COMMAND &&
+											(obj as HuskyCratesCommandReward).command
+										) {
+											return (
+												<Label key={j} color="blue">
+													/{(obj as HuskyCratesCommandReward).command}
+												</Label>
+											)
+										}
+										if (
+											obj.type === HuskyCratesCrateRewardObject.TypeEnum.ITEM &&
+											(obj as HuskyCratesItemReward).item
+										) {
+											return (
+												<ItemStack
+													key={j}
+													item={(obj as HuskyCratesItemReward).item}
+												/>
+											)
+										}
+										return null
 									}
-									if (obj.type === HuskyCratesCrateRewardObject.TypeEnum.ITEM && (obj as HuskyCratesItemReward).item) {
-										return <ItemStack key={j} item={(obj as HuskyCratesItemReward).item} />
-									}
-									return null
-								})}
+								)}
 							</Table.Cell>
 						</Table.Row>
-					)}
+					))}
 				</Table.Body>
 			</Table>
 		)
 	}
 
 	renderModal() {
-		const totalChance = _.sum(this.state.rewards.map(r => r.chance ? r.chance : 0))
+		const totalChance = _.sum(
+			this.state.rewards.map(r => (r.chance ? r.chance : 0))
+		)
 		const _t = this.props.t
 
 		return (
-			<Modal open={this.state.modal} onClose={this.toggleModal} size="fullscreen">
+			<Modal
+				open={this.state.modal}
+				onClose={this.toggleModal}
+				size="fullscreen"
+			>
 				<Modal.Header>
-					<Trans i18nKey="RewardsTitle">
-						Edit '{this.state.name}' crate
-					</Trans>
+					<Trans i18nKey="RewardsTitle">Edit '{this.state.name}' crate</Trans>
 				</Modal.Header>
 				<Modal.Content>
 					<Form>
@@ -281,7 +328,6 @@ class Crates extends React.Component<Props, OwnState> {
 						</Header>
 
 						<Form.Group widths="equal">
-
 							<Form.Input
 								required
 								fluid
@@ -305,11 +351,9 @@ class Crates extends React.Component<Props, OwnState> {
 								options={this.props.crateTypes}
 								value={this.state.type}
 							/>
-
 						</Form.Group>
 
 						<Form.Group widths="equal">
-
 							<Form.Field
 								toggle
 								required
@@ -331,9 +375,10 @@ class Crates extends React.Component<Props, OwnState> {
 								disabled={!this.state.free}
 							>
 								<input />
-								<Label>{moment.duration(this.state.freeDelay, "second").humanize()}</Label>
+								<Label>
+									{moment.duration(this.state.freeDelay, "second").humanize()}
+								</Label>
 							</Form.Input>
-
 						</Form.Group>
 
 						<Header>
@@ -351,7 +396,7 @@ class Crates extends React.Component<Props, OwnState> {
 								</Table.Row>
 							</Table.Header>
 							<Table.Body>
-								{this.state.rewards.map((reward, i) =>
+								{this.state.rewards.map((reward, i) => (
 									<CrateReward
 										key={i}
 										reward={reward}
@@ -364,7 +409,7 @@ class Crates extends React.Component<Props, OwnState> {
 										itemTypes={this.props.itemTypes}
 										t={_t}
 									/>
-								)}
+								))}
 								<Table.Row>
 									<Table.Cell colSpan="4" textAlign="center">
 										<Button
@@ -380,7 +425,9 @@ class Crates extends React.Component<Props, OwnState> {
 					</Form>
 				</Modal.Content>
 				<Modal.Actions>
-					<Button color="blue" onClick={this.save}>{_t("Save")}</Button>&nbsp;
+					<Button color="blue" onClick={this.save}>
+						{_t("Save")}
+					</Button>&nbsp;
 					<Button onClick={this.toggleModal}>{_t("Cancel")}</Button>
 				</Modal.Actions>
 			</Modal>
@@ -391,32 +438,40 @@ class Crates extends React.Component<Props, OwnState> {
 const mapStateToProps = (state: AppState) => {
 	return {
 		itemTypes: state.api.types[CatalogTypeKeys.Item],
-		crateTypes: [{
-			value: "Spinner",
-			text: "Spinner",
-		}, {
-			value: "Roulette",
-			text: "Roulette",
-		}, {
-			value: "Instant",
-			text: "Instant",
-		}, {
-			value: "Simple",
-			text: "Simple"
-		}],
-		objectTypes: [{
-			value: "ITEM",
-			text: "Item",
-		}, {
-			value: "COMMAND",
-			text: "Command",
-		}]
+		crateTypes: [
+			{
+				value: "Spinner",
+				text: "Spinner"
+			},
+			{
+				value: "Roulette",
+				text: "Roulette"
+			},
+			{
+				value: "Instant",
+				text: "Instant"
+			},
+			{
+				value: "Simple",
+				text: "Simple"
+			}
+		],
+		objectTypes: [
+			{
+				value: "ITEM",
+				text: "Item"
+			},
+			{
+				value: "COMMAND",
+				text: "Command"
+			}
+		]
 	}
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
-		requestCatalog: (type: string) => dispatch(requestCatalog(type)),
+		requestCatalog: (type: string) => dispatch(requestCatalog(type))
 	}
 }
 

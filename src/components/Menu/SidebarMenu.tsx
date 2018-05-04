@@ -18,20 +18,20 @@ export interface Props extends reactI18Next.InjectedTranslateProps {
 	memory: Array<ServerStatDouble>
 	servlets: {
 		[x: string]: string
-	},
-	perms: PermissionTree,
+	}
+	perms: PermissionTree
 	path: string
 
 	// Own
 	show: boolean
 	views: ViewDefinition[]
+	showServerUsage: boolean
 
 	// Dispatch
 	requestServlets: () => ServletsRequestAction
 }
 
 class SidebarMenu extends React.Component<Props> {
-
 	constructor(props: Props) {
 		super(props)
 
@@ -47,14 +47,8 @@ class SidebarMenu extends React.Component<Props> {
 		const views = this.props.views
 
 		return (
-			<Sidebar
-				vertical
-				as={Menu}
-				animation="push"
-				visible={this.props.show}
-			>
-
-				{this.props.cpu.length > 0 ?
+			<Sidebar vertical as={Menu} animation="push" visible={this.props.show}>
+				{this.props.showServerUsage && this.props.cpu.length > 0 ? (
 					<Menu.Item name="load">
 						<Progress
 							percent={this.props.cpu[this.props.cpu.length - 1].value * 100}
@@ -81,7 +75,7 @@ class SidebarMenu extends React.Component<Props> {
 							size="small"
 						/>
 					</Menu.Item>
-					: null}
+				) : null}
 
 				{views.map(this.renderMenuItem)}
 			</Sidebar>
@@ -98,11 +92,7 @@ class SidebarMenu extends React.Component<Props> {
 
 		if (!view.views) {
 			return (
-				<Menu.Item
-					as={NavLink}
-					key={view.path}
-					to={view.path}
-				>
+				<Menu.Item as={NavLink} key={view.path} to={view.path}>
 					<Icon name={view.icon} /> {this.props.t(view.title)}
 				</Menu.Item>
 			)
@@ -111,9 +101,7 @@ class SidebarMenu extends React.Component<Props> {
 		return (
 			<Menu.Item key={view.path}>
 				<Menu.Header>{this.props.t(view.title)}</Menu.Header>
-				<Menu.Menu>
-					{view.views.map(this.renderMenuItem)}
-				</Menu.Menu>
+				<Menu.Menu>{view.views.map(this.renderMenuItem)}</Menu.Menu>
 			</Menu.Item>
 		)
 	}
@@ -126,15 +114,16 @@ const mapStateToProps = (state: AppState) => {
 		disk: state.dashboard.disk,
 		servlets: state.api.servlets,
 		perms: state.api.permissions,
+		showServerUsage: state.preferences.showServerUsage,
 
 		// We include the pathname so this component updates when the path changes
-		path: state.router.location ? state.router.location.pathname : "",
+		path: state.router.location ? state.router.location.pathname : ""
 	}
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
-		requestServlets: () => dispatch(requestServlets()),
+		requestServlets: () => dispatch(requestServlets())
 	}
 }
 

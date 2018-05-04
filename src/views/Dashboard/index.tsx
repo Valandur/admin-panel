@@ -5,26 +5,31 @@ import { connect, Dispatch } from "react-redux"
 import { Card, Grid, Message, Segment, SemanticCOLORS } from "semantic-ui-react"
 
 import { AppAction } from "../../actions"
-import { InfoRequestAction, requestInfo } from "../../actions/dashboard"
+import { requestInfo } from "../../actions/dashboard"
+import { setPreference } from "../../actions/preferences"
 import { checkPermissions } from "../../components/Util"
 import { ServerInfo, ServerStats } from "../../fetch"
-import { AppState, PermissionTree } from "../../types"
+import { AppState, PermissionTree, PreferenceKey } from "../../types"
 
 import graphConfig from "./chart"
 
 interface StateProps extends ServerStats {
 	data?: ServerInfo
 	perms?: PermissionTree
+	hideNote: boolean
 }
 
 interface DispatchProps {
-	requestInfo: () => InfoRequestAction
+	requestInfo: () => AppAction
+	hideWIPNotice: () => AppAction
 }
 
-interface Props extends StateProps, DispatchProps, reactI18Next.InjectedTranslateProps {}
+interface Props
+	extends StateProps,
+		DispatchProps,
+		reactI18Next.InjectedTranslateProps {}
 
 class Dashboard extends React.Component<Props, {}> {
-
 	interval: NodeJS.Timer
 
 	lineInfo: any
@@ -72,24 +77,24 @@ class Dashboard extends React.Component<Props, {}> {
 
 		this.lineInfo.datasets[0].data = this.props.tps.map(p => ({
 			x: new Date(p.timestamp * 1000),
-			y: p.value,
+			y: p.value
 		}))
 		this.lineInfo.datasets[1].data = this.props.players.map(p => ({
 			x: new Date(p.timestamp * 1000),
-			y: p.value,
+			y: p.value
 		}))
 
 		this.lineStats.datasets[0].data = this.props.cpu.map(p => ({
 			x: new Date(p.timestamp * 1000),
-			y: p.value * 100,
+			y: p.value * 100
 		}))
 		this.lineStats.datasets[1].data = this.props.memory.map(p => ({
 			x: new Date(p.timestamp * 1000),
-			y: p.value * 100,
+			y: p.value * 100
 		}))
 		this.lineStats.datasets[2].data = this.props.disk.map(p => ({
 			x: new Date(p.timestamp * 1000),
-			y: p.value * 100,
+			y: p.value * 100
 		}))
 
 		let playerState: SemanticCOLORS = "blue"
@@ -117,37 +122,36 @@ class Dashboard extends React.Component<Props, {}> {
 
 		return (
 			<Segment basic>
-				<Message info>
-					<Message.Header>{_t("WIPTitle")}</Message.Header>
-					<p>
-						<Trans i18nKey="WIPText">
-							The Web-API AdminPanel is still a work in progress, and not all of it's functionality
-							has been fully implemented yet. This means there may be bugs and other issues when
-							using the AdminPanel!
-							<br />
-							Please report any bugs you find
-							<a
-								href="https://github.com/Valandur/admin-panel/issues"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								over on GitHub
-							</a>
-						</Trans>
-					</p>
-				</Message>
+				{!this.props.hideNote && (
+					<Message info onDismiss={() => this.props.hideWIPNotice()}>
+						<Message.Header>{_t("WIPTitle")}</Message.Header>
+						<p>
+							<Trans i18nKey="WIPText">
+								The Web-API AdminPanel is still a work in progress, and not all
+								of it's functionality has been fully implemented yet. This means
+								there may be bugs and other issues when using the AdminPanel!
+								<br />
+								Please report any bugs you find
+								<a
+									href="https://github.com/Valandur/admin-panel/issues"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									over on GitHub
+								</a>
+							</Trans>
+						</p>
+					</Message>
+				)}
 
 				<Grid columns={4} stackable doubling>
-
 					<Grid.Column>
 						<Card color={playerState}>
 							<Card.Content>
 								<Card.Header>
 									{this.props.data.players}/{this.props.data.maxPlayers}
 								</Card.Header>
-								<Card.Description>
-									{_t("PlayersOnline")}
-								</Card.Description>
+								<Card.Description>{_t("PlayersOnline")}</Card.Description>
 							</Card.Content>
 						</Card>
 					</Grid.Column>
@@ -155,12 +159,8 @@ class Dashboard extends React.Component<Props, {}> {
 					<Grid.Column>
 						<Card color={tpsState}>
 							<Card.Content>
-								<Card.Header>
-									{this.props.data.tps}
-								</Card.Header>
-								<Card.Description>
-									{_t("CurrentTPS")}
-								</Card.Description>
+								<Card.Header>{this.props.data.tps}</Card.Header>
+								<Card.Description>{_t("CurrentTPS")}</Card.Description>
 							</Card.Content>
 						</Card>
 					</Grid.Column>
@@ -168,12 +168,8 @@ class Dashboard extends React.Component<Props, {}> {
 					<Grid.Column>
 						<Card color="blue">
 							<Card.Content>
-								<Card.Header>
-									{this.props.data.address}
-								</Card.Header>
-								<Card.Description>
-									{_t("ServerAddress")}
-								</Card.Description>
+								<Card.Header>{this.props.data.address}</Card.Header>
+								<Card.Description>{_t("ServerAddress")}</Card.Description>
 							</Card.Content>
 						</Card>
 					</Grid.Column>
@@ -184,9 +180,7 @@ class Dashboard extends React.Component<Props, {}> {
 								<Card.Header>
 									{this.props.data.onlineMode ? "Yes" : "No"}
 								</Card.Header>
-								<Card.Description>
-									{_t("OnlineMode")}
-								</Card.Description>
+								<Card.Description>{_t("OnlineMode")}</Card.Description>
 							</Card.Content>
 						</Card>
 					</Grid.Column>
@@ -194,12 +188,8 @@ class Dashboard extends React.Component<Props, {}> {
 					<Grid.Column>
 						<Card color="blue">
 							<Card.Content>
-								<Card.Header>
-									{this.props.data.uptimeTicks}
-								</Card.Header>
-								<Card.Description>
-									{_t("UptimeTicks")}
-								</Card.Description>
+								<Card.Header>{this.props.data.uptimeTicks}</Card.Header>
+								<Card.Description>{_t("UptimeTicks")}</Card.Description>
 							</Card.Content>
 						</Card>
 					</Grid.Column>
@@ -207,12 +197,8 @@ class Dashboard extends React.Component<Props, {}> {
 					<Grid.Column>
 						<Card color="blue">
 							<Card.Content>
-								<Card.Header>
-									{this.props.data.game.version}
-								</Card.Header>
-								<Card.Description>
-									{_t("MinecraftVersion")}
-								</Card.Description>
+								<Card.Header>{this.props.data.game.version}</Card.Header>
+								<Card.Description>{_t("MinecraftVersion")}</Card.Description>
 							</Card.Content>
 						</Card>
 					</Grid.Column>
@@ -220,12 +206,8 @@ class Dashboard extends React.Component<Props, {}> {
 					<Grid.Column>
 						<Card color="blue">
 							<Card.Content>
-								<Card.Header>
-									{this.props.data.api.version}
-								</Card.Header>
-								<Card.Description>
-									{_t("APIVersion")}
-								</Card.Description>
+								<Card.Header>{this.props.data.api.version}</Card.Header>
+								<Card.Description>{_t("APIVersion")}</Card.Description>
 							</Card.Content>
 						</Card>
 					</Grid.Column>
@@ -236,40 +218,36 @@ class Dashboard extends React.Component<Props, {}> {
 								<Card.Header>
 									{this.props.data.implementation.version}
 								</Card.Header>
-								<Card.Description>
-									{_t("SpongeVersion")}
-								</Card.Description>
+								<Card.Description>{_t("SpongeVersion")}</Card.Description>
 							</Card.Content>
 						</Card>
 					</Grid.Column>
 
-					{checkPermissions(this.props.perms, ["info", "stats"]) &&
+					{checkPermissions(this.props.perms, ["info", "stats"]) && (
 						<Grid.Column width={8}>
 							<Card style={{ width: "100%", height: "50vh" }}>
 								<Card.Content>
-									<Card.Header>
-										{_t("GraphTitleInfo")}
-									</Card.Header>
+									<Card.Header>{_t("GraphTitleInfo")}</Card.Header>
 								</Card.Content>
 								<div style={{ width: "100%", height: "100%", padding: "1em" }}>
 									<Line data={this.lineInfo} options={this.optionsInfo} />
 								</div>
 							</Card>
-						</Grid.Column>}
+						</Grid.Column>
+					)}
 
-					{checkPermissions(this.props.perms, ["info", "stats"]) &&
+					{checkPermissions(this.props.perms, ["info", "stats"]) && (
 						<Grid.Column width={8}>
 							<Card style={{ width: "100%", height: "50vh" }}>
 								<Card.Content>
-									<Card.Header>
-										{_t("GraphTitleStats")}
-									</Card.Header>
+									<Card.Header>{_t("GraphTitleStats")}</Card.Header>
 								</Card.Content>
 								<div style={{ width: "100%", height: "100%", padding: "1em" }}>
 									<Line data={this.lineStats} options={this.optionsStats} />
 								</div>
 							</Card>
-						</Grid.Column>}
+						</Grid.Column>
+					)}
 				</Grid>
 			</Segment>
 		)
@@ -287,14 +265,19 @@ const mapStateToProps = (_state: AppState): StateProps => {
 		disk: state.disk,
 		data: state.data,
 
-		perms: _state.api.permissions,
+		hideNote: _state.preferences.hideWIPNote,
+		perms: _state.api.permissions
 	}
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
-		requestInfo: () => dispatch(requestInfo()),
+		requestInfo: (): AppAction => dispatch(requestInfo()),
+		hideWIPNotice: (): AppAction =>
+			dispatch(setPreference(PreferenceKey.hideWIPNote, true))
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate("Dashboard")(Dashboard))
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Dashboard")(Dashboard)
+)

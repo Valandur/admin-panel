@@ -1,15 +1,15 @@
 import { AppAction } from "../actions"
-import { TypeKeys } from "../actions/settings"
+import { TypeKeys } from "../actions/server-settings"
 import { EServerProperty } from "../types"
 
 import { DataViewState } from "./dataview"
 
-export interface SettingsState extends DataViewState<EServerProperty> { }
+export interface SettingsState extends DataViewState<EServerProperty> {}
 
 const initialState: SettingsState = {
 	creating: false,
 	filter: {},
-	list: [],
+	list: []
 }
 
 export default (state = initialState, action: AppAction) => {
@@ -23,7 +23,7 @@ export default (state = initialState, action: AppAction) => {
 					}
 					return {
 						...prop,
-						edit: !prop.edit,
+						edit: !prop.edit
 					}
 				})
 			}
@@ -37,7 +37,7 @@ export default (state = initialState, action: AppAction) => {
 					}
 					return {
 						...prop,
-						value: action.value,
+						value: action.value
 					}
 				})
 			}
@@ -52,7 +52,7 @@ export default (state = initialState, action: AppAction) => {
 					return {
 						...prop,
 						edit: false,
-						updating: true,
+						updating: true
 					}
 				})
 			}
@@ -68,7 +68,7 @@ export default (state = initialState, action: AppAction) => {
 						...prop,
 						value: action.prop.value,
 						edit: false,
-						updating: false,
+						updating: false
 					}
 				})
 			}

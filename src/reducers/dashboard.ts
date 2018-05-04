@@ -14,24 +14,24 @@ const defaultState: DashboardState = {
 	players: [],
 	cpu: [],
 	memory: [],
-	disk: [],
+	disk: []
 }
 
 export default (state = defaultState, action: AppAction) => {
 	switch (action.type) {
 		case TypeKeys.INFO_RESPONSE:
 			return _.merge({}, state, {
-				data: action.data,
+				data: action.data
 			})
 
 		case TypeKeys.STATS_RESPONSE:
 			return {
 				...state,
-				tps: action.tps,
-				players: action.players,
-				cpu: action.cpu,
-				memory: action.memory,
-				disk: action.disk,
+				tps: state.tps.concat(action.tps),
+				players: state.players.concat(action.players),
+				cpu: state.cpu.concat(action.cpu),
+				memory: state.memory.concat(action.memory),
+				disk: state.disk.concat(action.disk)
 			}
 
 		default:

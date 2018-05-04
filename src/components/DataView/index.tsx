@@ -6,7 +6,11 @@ import { Grid, Segment } from "semantic-ui-react"
 
 import { AppAction } from "../../actions"
 import {
-	requestChange, requestCreate, requestDelete, requestDetails, requestList,
+	requestChange,
+	requestCreate,
+	requestDelete,
+	requestDetails,
+	requestList,
 	setFilter
 } from "../../actions/dataview"
 import { DataViewState } from "../../reducers/dataview"
@@ -19,7 +23,6 @@ import { checkPermissions } from "../Util"
 import { DispatchProps, FullProps, OwnProps, OwnState, StateProps } from "./types"
 
 class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
-
 	interval: NodeJS.Timer
 
 	constructor(props: FullProps<T>) {
@@ -27,7 +30,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 
 		this.state = {
 			page: 0,
-			data: null,
+			data: null
 		}
 
 		this.details = this.details.bind(this)
@@ -38,7 +41,9 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 		this.delete = this.delete.bind(this)
 	}
 
-	createTable() { return DataTable as React.ComponentClass<DataTableProps<T>> }
+	createTable() {
+		return DataTable as React.ComponentClass<DataTableProps<T>>
+	}
 
 	componentDidMount() {
 		if (!this.props.static) {
@@ -54,11 +59,13 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 	}
 
 	shouldComponentUpdate(nextProps: FullProps<T>, nextState: OwnState<T>) {
-		return nextProps.creating !== this.props.creating ||
+		return (
+			nextProps.creating !== this.props.creating ||
 			nextProps.filter !== this.props.filter ||
 			nextProps.fields !== this.props.fields ||
 			nextProps.list !== this.props.list ||
 			nextState.data !== this.state.data
+		)
 	}
 
 	// Create a new data entry
@@ -74,7 +81,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 	// Select a data entry for editing
 	edit(data: T | null) {
 		this.setState({
-			data: data,
+			data: data
 		})
 	}
 
@@ -87,7 +94,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 	// End editing an entry
 	endEdit() {
 		this.setState({
-			data: null,
+			data: null
 		})
 	}
 
@@ -97,63 +104,86 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 	}
 
 	render() {
+		const {
+			filter,
+			canEdit,
+			canDelete,
+			onCreate,
+			onEdit,
+			onDelete,
+			onSave,
+			perm,
+			perms,
+			title,
+			createTitle,
+			filterTitle
+		} = this.props
+
 		const checks: ((val: T) => boolean)[] = []
 		let regsValid = false
 
 		// Reference that we pass to our various functions
-		const expandRef = (tableRef: DataTableRef): DataViewRef<T> =>
-			({
-				...tableRef,
-				create: this.create,
-				details: this.details,
-				save: this.save,
-				edit: this.edit,
-				endEdit: this.endEdit,
-				delete: this.delete,
-			})
+		const expandRef = (tableRef: DataTableRef): DataViewRef<T> => ({
+			...tableRef,
+			create: this.create,
+			details: this.details,
+			save: this.save,
+			edit: this.edit,
+			endEdit: this.endEdit,
+			delete: this.delete
+		})
 
 		// Get all the fields of the table
-		const fields: { [x: string]: DataFieldRaw<T> } = _.mapValues(this.props.fields, (value, name) => {
-			let val: DataFieldRaw<T> = {
-				name: name,
-				view: true
-			}
-
-			// If the column is a string use that as the label
-			// If the column is a function, use that function to display the cell
-			// else if the column provides a view function then use that to display the cell
-			if (typeof value === "string") {
-				val.label = value
-			} else if (typeof value === "function") {
-				val.view = (obj: T, tableRef: DataTableRef) => value(obj, expandRef(tableRef))
-			} else if (typeof value === "object") {
-				val = { ...val, ...value }
-				if (typeof value.view === "function") {
-					const func = value.view
-					val.view = (obj: T, tableRef: DataTableRef) => func(obj, expandRef(tableRef))
+		const fields: { [x: string]: DataFieldRaw<T> } = _.mapValues(
+			this.props.fields,
+			(value, name) => {
+				let val: DataFieldRaw<T> = {
+					name: name,
+					view: true
 				}
-			}
 
-			return val
-		})
+				// If the column is a string use that as the label
+				// If the column is a function, use that function to display the cell
+				// else if the column provides a view function then use that to display the cell
+				if (typeof value === "string") {
+					val.label = value
+				} else if (typeof value === "function") {
+					val.view = (obj: T, tableRef: DataTableRef) => value(obj, expandRef(tableRef))
+				} else if (typeof value === "object") {
+					val = { ...val, ...value }
+					if (typeof value.view === "function") {
+						const func = value.view
+						val.view = (obj: T, tableRef: DataTableRef) => func(obj, expandRef(tableRef))
+					}
+				}
+
+				return val
+			}
+		)
 
 		// Get all the fields for the create form
 		// Get all the fields for the filter form
 		const createFields: { [x: string]: DataFieldRaw<T> } = {}
 		const filterFields: { [x: string]: DataFieldRaw<T> } = {}
 		Object.keys(fields).forEach(f => {
-			if (fields[f].create) { createFields[f] = fields[f] }
-			if (fields[f].filter) { filterFields[f] = fields[f] }
+			if (fields[f].create) {
+				createFields[f] = fields[f]
+			}
+			if (fields[f].filter) {
+				filterFields[f] = fields[f]
+			}
 		})
 
 		try {
-			Object.keys(this.props.filter).forEach(name => {
-				const value = this.props.filter[name]
+			Object.keys(filter).forEach(name => {
+				const value = filter[name]
 
 				// Get the filter field according to the filterName if specified,
 				// otherwise just the name
-				const ff = Object.keys(filterFields).map(f => filterFields[f]).find(f => f.filterName === name)
-					|| filterFields[name]
+				const ff =
+					Object.keys(filterFields)
+						.map(f => filterFields[f])
+						.find(f => f.filterName === name) || filterFields[name]
 
 				// If we have a filterValue function then use that as the value for the check
 				let val = (dataVal: T) => _.get(dataVal, name)
@@ -173,7 +203,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 						return value.indexOf(v) >= 0
 					})
 				} else {
-					checks.push((dataVal: T) => (new RegExp(value, "i")).test(val(dataVal)))
+					checks.push((dataVal: T) => new RegExp(value, "i").test(val(dataVal)))
 				}
 			})
 			regsValid = true
@@ -188,7 +218,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 		})
 
 		// Check how many columns we need for the create and filter form
-		const cols = this.props.createTitle && this.props.filterTitle ? 2 : 1
+		const cols = createTitle && filterTitle ? 2 : 1
 
 		// Wrap the provided actions if we have any
 		const origActions = this.props.actions
@@ -201,67 +231,57 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 
 		return (
 			<Segment basic>
-
 				<Grid stackable doubling columns={cols}>
-					{this.props.createTitle &&
-						checkPermissions(this.props.perms, this.props.perm.concat("create")) &&
+					{createTitle &&
+						checkPermissions(perms, perm.concat("create")) && (
+							<Grid.Column>
+								<CreateForm
+									title={createTitle}
+									button={this.props.createButton}
+									creating={this.props.creating}
+									fields={createFields}
+									onCreate={(obj: any, tableRef: DataTableRef) =>
+										onCreate ? onCreate(obj, expandRef(tableRef)) : this.create(obj)
+									}
+								/>
+							</Grid.Column>
+						)}
 
-						<Grid.Column>
-							<CreateForm
-								title={this.props.createTitle}
-								button={this.props.createButton}
-								creating={this.props.creating}
-								fields={createFields}
-								onCreate={(obj: any, tableRef: DataTableRef) =>
-									this.props.onCreate ?
-										this.props.onCreate(obj, expandRef(tableRef))
-										:
-										this.create(obj)
-								}
-							/>
-						</Grid.Column>
-					}
-
-					{this.props.filterTitle &&
+					{filterTitle && (
 						<Grid.Column>
 							<FilterForm
-								title={this.props.filterTitle}
+								title={filterTitle}
 								fields={filterFields}
 								valid={regsValid}
-								values={this.props.filter}
+								values={filter}
 								onFilterChange={this.props.setFilter}
 							/>
 						</Grid.Column>
-					}
+					)}
 				</Grid>
 
 				<DT
-					title={this.props.title}
+					title={title}
 					icon={this.props.icon}
 					list={list}
 					t={this.props.t}
 					idFunc={this.props.idFunc}
 					fields={fields}
-					onEdit={(obj, tableRef) =>
-						this.props.onEdit ?
-							this.props.onEdit(obj, expandRef(tableRef))
-							:
-							this.edit(obj)
-					}
+					onEdit={(obj, tableRef) => (onEdit ? onEdit(obj, expandRef(tableRef)) : this.edit(obj))}
 					onSave={(obj, newObj, tableRef) =>
-						this.props.onSave ?
-							this.props.onSave(obj, newObj, expandRef(tableRef))
-							:
-							this.save(obj, newObj)
+						onSave ? onSave(obj, newObj, expandRef(tableRef)) : this.save(obj, newObj)
 					}
 					onDelete={(obj, tableRef) =>
-						this.props.onDelete ?
-							this.props.onDelete(obj, expandRef(tableRef))
-							:
-							this.delete(obj)
+						onDelete ? onDelete(obj, expandRef(tableRef)) : this.delete(obj)
 					}
-					canEdit={this.props.canEdit && checkPermissions(this.props.perms, this.props.perm.concat("change"))}
-					canDelete={this.props.canDelete && checkPermissions(this.props.perms, this.props.perm.concat("delete"))}
+					canEdit={(obj: T) =>
+						(typeof canEdit === "function" ? canEdit(obj) : !!canEdit) &&
+						checkPermissions(perms, perm.concat("modify"))
+					}
+					canDelete={(obj: T) =>
+						(typeof canDelete === "function" ? canDelete(obj) : !!canDelete) &&
+						checkPermissions(perms, perm.concat("delete"))
+					}
 					actions={actions}
 					isEditing={obj => this.props.equals(obj, this.state.data)}
 				/>
@@ -281,7 +301,7 @@ function mapStateToProps<T>(endpoint: string, id: IdFunction<T>) {
 			types: _state.api.types,
 			idFunc: id,
 			perm: endpoint.split("/"),
-			perms: _state.api.permissions,
+			perms: _state.api.permissions
 		}
 	}
 }
@@ -292,15 +312,20 @@ function mapDispatchToProps<T>(endpoint: string, id: IdFunction<T>, noDetails: b
 			requestList: () => dispatch(requestList(endpoint, !noDetails)),
 			requestDetails: (data: T) => dispatch(requestDetails(endpoint, id, data)),
 			requestCreate: (data: T) => dispatch(requestCreate(endpoint, id, data)),
-			requestChange: (data: T, newData: object) => dispatch(requestChange(endpoint, id, data, newData)),
+			requestChange: (data: T, newData: object) =>
+				dispatch(requestChange(endpoint, id, data, newData)),
 			requestDelete: (data: T) => dispatch(requestDelete(endpoint, id, data)),
 			setFilter: (filter: string, value: string) => dispatch(setFilter(endpoint, filter, value)),
-			equals: (o1: T, o2: T) => o1 != null && o2 != null && id(o1) === id(o2),
+			equals: (o1: T, o2: T) => o1 != null && o2 != null && id(o1) === id(o2)
 		}
 	}
 }
 
-export default function createDataView<T>(endpoint: string, objId: string | IdFunction<T>, noDetails?: boolean) {
+export default function createDataView<T>(
+	endpoint: string,
+	objId: string | IdFunction<T>,
+	noDetails?: boolean
+) {
 	if (!objId) {
 		objId = "id"
 	}

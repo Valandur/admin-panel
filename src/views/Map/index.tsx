@@ -3,7 +3,14 @@ import Slider from "rc-slider"
 import * as React from "react"
 import { Circle, Image, Layer, Line, Stage } from "react-konva"
 import { connect, Dispatch } from "react-redux"
-import { Button, Dropdown, DropdownProps, Header, Progress, Segment } from "semantic-ui-react"
+import {
+	Button,
+	Dropdown,
+	DropdownProps,
+	Header,
+	Progress,
+	Segment
+} from "semantic-ui-react"
 
 import { AppAction } from "../../actions"
 import { requestDelete, requestList } from "../../actions/dataview"
@@ -25,7 +32,7 @@ const totalOffset = (element: HTMLElement) => {
 	do {
 		top += element.offsetTop || 0
 		left += element.offsetLeft || 0
-		element = (element.offsetParent as HTMLElement)
+		element = element.offsetParent as HTMLElement
 	} while (element)
 
 	return {
@@ -35,49 +42,51 @@ const totalOffset = (element: HTMLElement) => {
 }
 
 const marks = {
-	0.400: <strong>MIN</strong>,
+	0.4: <strong>MIN</strong>,
 	0.707: "0.25x",
 	0.841: "0.5x",
 	1: "-",
 	1.189: "2x",
 	1.414: "4x",
 	1.682: "8x",
-	2: <strong>MAX</strong>,
+	2: <strong>MAX</strong>
 }
 
 interface OwnProps {
-	entities: Entity[],
-	worlds: WorldFull[],
-	players: PlayerFull[],
-	tileEntities: TileEntity[],
-	apiKey?: string,
-	apiUrl: string,
+	entities: Entity[]
+	worlds: WorldFull[]
+	players: PlayerFull[]
+	tileEntities: TileEntity[]
+	apiKey?: string
+	apiUrl: string
 }
 interface DispatchProps {
 	requestWorlds: () => AppAction
 	requestPlayers: () => AppAction
 	requestEntities: (query: { [x: string]: string }) => AppAction
 	requestTileEntities: (query: { [x: string]: string }) => AppAction
-	requestDeleteEntity: (entity: Entity) => AppAction,
+	requestDeleteEntity: (entity: Entity) => AppAction
 }
-interface Props extends OwnProps, DispatchProps, reactI18Next.InjectedTranslateProps { }
+interface Props
+	extends OwnProps,
+		DispatchProps,
+		reactI18Next.InjectedTranslateProps {}
 
 interface OwnState {
-	biomes: { x: number, z: number, image: any }[]
+	biomes: { x: number; z: number; image: any }[]
 	top: number
 	left: number
 	width: number
 	height: number
 	display: string
 	content?: JSX.Element
-	center: { x: number, z: number, }
+	center: { x: number; z: number }
 	zoom: number
 	dragging: boolean
 	worldId?: string
 }
 
 class Map extends React.Component<Props, OwnState> {
-
 	wrapper: HTMLDivElement
 	timeouts: NodeJS.Timer[]
 
@@ -100,10 +109,10 @@ class Map extends React.Component<Props, OwnState> {
 			display: "none",
 			center: {
 				x: 0,
-				z: 0,
+				z: 0
 			},
 			zoom: 1,
-			dragging: false,
+			dragging: false
 		}
 
 		this.timeouts = []
@@ -144,7 +153,7 @@ class Map extends React.Component<Props, OwnState> {
 		this.setState(
 			{
 				width: this.wrapper.offsetWidth,
-				height: window.innerHeight - totalOffset(this.wrapper).top - 30,
+				height: window.innerHeight - totalOffset(this.wrapper).top - 30
 			},
 			() => this.getAllBiomes()
 		)
@@ -165,8 +174,13 @@ class Map extends React.Component<Props, OwnState> {
 		this.setState(
 			{
 				biomes: _.uniqBy(
-					this.state.biomes.filter(biome => biome.x + HALF_TILE >= min.x && biome.x - HALF_TILE <= max.x &&
-						biome.z + HALF_TILE >= min.z && biome.z - HALF_TILE <= max.z),
+					this.state.biomes.filter(
+						biome =>
+							biome.x + HALF_TILE >= min.x &&
+							biome.x - HALF_TILE <= max.x &&
+							biome.z + HALF_TILE >= min.z &&
+							biome.z - HALF_TILE <= max.z
+					),
 					b => b.x + "+" + b.z
 				)
 			},
@@ -197,23 +211,31 @@ class Map extends React.Component<Props, OwnState> {
 
 	getBiome(x: number, z: number) {
 		const image = document.createElement("img")
-		image.src = this.props.apiUrl + "/api/v5/map/" + this.state.worldId +
-			"/" + (x / TILE_SIZE) + "/" + (z / TILE_SIZE) + "?key=" + this.props.apiKey
+		image.src =
+			this.props.apiUrl +
+			"/api/v5/map/" +
+			this.state.worldId +
+			"/" +
+			x / TILE_SIZE +
+			"/" +
+			z / TILE_SIZE +
+			"?key=" +
+			this.props.apiKey
 		image.onload = () => {
 			this.setState({
-				biomes: [
-					...this.state.biomes,
-					{ x: x, z: z, image }
-				]
+				biomes: [...this.state.biomes, { x: x, z: z, image }]
 			})
 		}
 	}
 
-	handleWorldChange(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+	handleWorldChange(
+		event: React.SyntheticEvent<HTMLElement>,
+		data: DropdownProps
+	) {
 		this.setState(
 			{
 				biomes: [],
-				worldId: (data.value as string),
+				worldId: data.value as string
 			},
 			() => this.getAllBiomes()
 		)
@@ -222,8 +244,8 @@ class Map extends React.Component<Props, OwnState> {
 	handleObjMouseDown(
 		{ evt }: { evt: React.MouseEvent<HTMLElement> },
 		type: "player" | "entity" | "tile-entity",
-		obj: Entity | PlayerFull | TileEntity) {
-
+		obj: Entity | PlayerFull | TileEntity
+	) {
 		this.objClicked = true
 		const loc = this.worldToScreen(obj.location.position)
 
@@ -240,30 +262,29 @@ class Map extends React.Component<Props, OwnState> {
 			left: loc.x,
 			top: loc.z,
 			display: "block",
-			content: content,
+			content: content
 		})
 	}
 
 	renderPlayerInfo(player: PlayerFull) {
 		return (
 			<Segment>
-				<Header>
-					{player.name}
-				</Header>
-				{player.inventory &&
-					<Inventory items={player.inventory.itemStacks} />}
-				{player.health &&
+				<Header>{player.name}</Header>
+				{player.inventory && <Inventory items={player.inventory.itemStacks} />}
+				{player.health && (
 					<Progress
 						progress
 						color="red"
 						percent={formatRange(player.health.current, player.health.max)}
-					/>}
-				{player.food &&
+					/>
+				)}
+				{player.food && (
 					<Progress
 						progress
 						color="green"
 						percent={formatRange(player.food.foodLevel, 20)}
-					/>}
+					/>
+				)}
 			</Segment>
 		)
 	}
@@ -272,7 +293,7 @@ class Map extends React.Component<Props, OwnState> {
 		return (
 			<Segment>
 				<Header>
-					{entity.type ? entity.type.name : (entity.uuid ? entity.uuid : null)}
+					{entity.type ? entity.type.name : entity.uuid ? entity.uuid : null}
 				</Header>
 				<Button color="red" onClick={() => this.deleteEntity(entity)}>
 					Destroy
@@ -284,9 +305,7 @@ class Map extends React.Component<Props, OwnState> {
 	renderTileEntityInfo(te: TileEntity) {
 		return (
 			<Segment>
-				<Header>
-					{te.type ? te.type.name : null}
-				</Header>
+				<Header>{te.type ? te.type.name : null}</Header>
 			</Segment>
 		)
 	}
@@ -299,7 +318,7 @@ class Map extends React.Component<Props, OwnState> {
 
 		this.setState({
 			dragging: true,
-			display: "none",
+			display: "none"
 		})
 	}
 
@@ -314,7 +333,7 @@ class Map extends React.Component<Props, OwnState> {
 			{
 				center: {
 					x: this.state.center.x - (this.x - evt.screenX) / this.state.zoom,
-					z: this.state.center.z + (this.y - evt.screenY) / this.state.zoom,
+					z: this.state.center.z + (this.y - evt.screenY) / this.state.zoom
 				}
 			},
 			() => this.getAllBiomes()
@@ -326,7 +345,7 @@ class Map extends React.Component<Props, OwnState> {
 
 	handleMouseOutUp(event: React.MouseEvent<HTMLElement>) {
 		this.setState({
-			dragging: false,
+			dragging: false
 		})
 	}
 
@@ -344,7 +363,7 @@ class Map extends React.Component<Props, OwnState> {
 	handleZoomChange(value: number) {
 		this.setState(
 			{
-				zoom: Math.min(Math.max(Math.pow(value, 4), MIN_ZOOM), MAX_ZOOM),
+				zoom: Math.min(Math.max(Math.pow(value, 4), MIN_ZOOM), MAX_ZOOM)
 			},
 			() => this.getAllBiomes()
 		)
@@ -354,30 +373,34 @@ class Map extends React.Component<Props, OwnState> {
 		this.props.requestDeleteEntity(entity)
 		this.setState({
 			display: "none",
-			content: undefined,
+			content: undefined
 		})
 	}
 
 	center() {
 		return {
-			x: Math.floor(this.state.width / 2) + this.state.center.x * this.state.zoom,
-			z: Math.floor(this.state.height / 2) - this.state.center.z * this.state.zoom,
+			x:
+				Math.floor(this.state.width / 2) +
+				this.state.center.x * this.state.zoom,
+			z:
+				Math.floor(this.state.height / 2) -
+				this.state.center.z * this.state.zoom
 		}
 	}
 
-	worldToScreen({ x, z }: { x: number, z: number }) {
+	worldToScreen({ x, z }: { x: number; z: number }) {
 		const center = this.center()
 		return {
 			x: center.x + x * this.state.zoom,
-			z: center.z - z * this.state.zoom,
+			z: center.z - z * this.state.zoom
 		}
 	}
 
-	screenToWorld({ x, z }: { x: number, z: number }) {
+	screenToWorld({ x, z }: { x: number; z: number }) {
 		const center = this.center()
 		return {
 			x: (x - center.x) / this.state.zoom,
-			z: (center.z - z) / this.state.zoom,
+			z: (center.z - z) / this.state.zoom
 		}
 	}
 
@@ -395,12 +418,12 @@ class Map extends React.Component<Props, OwnState> {
 		this.props.requestEntities({
 			world: this.state.worldId,
 			min: minStr,
-			max: maxStr,
+			max: maxStr
 		})
 		this.props.requestTileEntities({
 			world: this.state.worldId,
 			min: minStr,
-			max: maxStr,
+			max: maxStr
 		})
 	}
 
@@ -412,8 +435,18 @@ class Map extends React.Component<Props, OwnState> {
 		return (
 			<Segment basic style={{ position: "relative" }}>
 				<div
-					style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
-					ref={w => { if (w != null) { this.wrapper = w } }}
+					style={{
+						position: "absolute",
+						top: 0,
+						left: 0,
+						width: "100%",
+						height: "100%"
+					}}
+					ref={w => {
+						if (w != null) {
+							this.wrapper = w
+						}
+					}}
 				>
 					<Stage
 						width={this.state.width}
@@ -422,20 +455,22 @@ class Map extends React.Component<Props, OwnState> {
 						onContentMouseUp={e => this.handleMouseOutUp(e)}
 						onContentMouseOut={e => this.handleMouseOutUp(e)}
 						onContentMouseMove={e => this.handleMouseMove(e)}
-					/*onContentWheel={e => this.handleWheel(e)}*/
+						/*onContentWheel={e => this.handleWheel(e)}*/
 					>
 						<Layer>
 							{this.state.biomes.map(biome => {
 								const pos = this.worldToScreen(biome)
 
-								return <Image
-									key={biome.x + "+" + biome.z}
-									x={pos.x - HALF_TILE * this.state.zoom}
-									y={pos.z - HALF_TILE * this.state.zoom}
-									image={biome.image}
-									width={TILE_SIZE * this.state.zoom}
-									height={TILE_SIZE * this.state.zoom}
-								/>
+								return (
+									<Image
+										key={biome.x + "+" + biome.z}
+										x={pos.x - HALF_TILE * this.state.zoom}
+										y={pos.z - HALF_TILE * this.state.zoom}
+										image={biome.image}
+										width={TILE_SIZE * this.state.zoom}
+										height={TILE_SIZE * this.state.zoom}
+									/>
+								)
 							})}
 						</Layer>
 						<Layer>
@@ -443,54 +478,71 @@ class Map extends React.Component<Props, OwnState> {
 							<Line points={[cX, 0, cX, 2000]} stroke="Black" strokeWidth={1} />
 						</Layer>
 						<Layer>
-							{this.props.entities.filter(e => e.location.world.uuid === this.state.worldId).map(ent => {
-								const pos = this.worldToScreen(ent.location.position)
+							{this.props.entities
+								.filter(e => e.location.world.uuid === this.state.worldId)
+								.map(ent => {
+									const pos = this.worldToScreen(ent.location.position)
 
-								return (
-									<Circle
-										key={ent.uuid}
-										radius={4}
-										x={pos.x - 4}
-										y={pos.z - 4}
-										width={8}
-										height={8}
-										fill={"Red"}
-										onMouseDown={e => this.handleObjMouseDown(e, "entity", ent)}
-									/>
-								)
-							})}
-							{this.props.players.filter(p => p.location.world.uuid === this.state.worldId).map(player => {
-								const pos = this.worldToScreen(player.location.position)
+									return (
+										<Circle
+											key={ent.uuid}
+											radius={4}
+											x={pos.x - 4}
+											y={pos.z - 4}
+											width={8}
+											height={8}
+											fill={"Red"}
+											onMouseDown={e =>
+												this.handleObjMouseDown(e, "entity", ent)
+											}
+										/>
+									)
+								})}
+							{this.props.players
+								.filter(p => p.location.world.uuid === this.state.worldId)
+								.map(player => {
+									const pos = this.worldToScreen(player.location.position)
 
-								return (
-									<Circle
-										key={player.uuid}
-										radius={4}
-										x={pos.x - 4}
-										y={pos.z - 4}
-										width={8}
-										height={8}
-										fill={"Gold"}
-										onMouseDown={e => this.handleObjMouseDown(e, "player", player)}
-									/>
-								)
-							})}
-							{this.props.tileEntities.filter(te => te.location.world.uuid === this.state.worldId).map(te => {
-								const pos = this.worldToScreen(te.location.position)
+									return (
+										<Circle
+											key={player.uuid}
+											radius={4}
+											x={pos.x - 4}
+											y={pos.z - 4}
+											width={8}
+											height={8}
+											fill={"Gold"}
+											onMouseDown={e =>
+												this.handleObjMouseDown(e, "player", player)
+											}
+										/>
+									)
+								})}
+							{this.props.tileEntities
+								.filter(te => te.location.world.uuid === this.state.worldId)
+								.map(te => {
+									const pos = this.worldToScreen(te.location.position)
 
-								return (
-									<Circle
-										key={"te-" + te.location.position.x + "-" + te.location.position.z}
-										radius={4}
-										x={pos.x - 4}
-										y={pos.z - 4}
-										width={8}
-										height={8}
-										fill={"Green"}
-										onMouseDown={e => this.handleObjMouseDown(e, "tile-entity", te)}
-									/>
-								)
-							})}
+									return (
+										<Circle
+											key={
+												"te-" +
+												te.location.position.x +
+												"-" +
+												te.location.position.z
+											}
+											radius={4}
+											x={pos.x - 4}
+											y={pos.z - 4}
+											width={8}
+											height={8}
+											fill={"Green"}
+											onMouseDown={e =>
+												this.handleObjMouseDown(e, "tile-entity", te)
+											}
+										/>
+									)
+								})}
 						</Layer>
 					</Stage>
 					<div
@@ -505,7 +557,7 @@ class Map extends React.Component<Props, OwnState> {
 						{this.state.content}
 					</div>
 				</div>
-				<Segment style={{ position: "absolute", "top": 0, "left": 10 }}>
+				<Segment style={{ position: "absolute", top: 0, left: 10 }}>
 					<Dropdown
 						id="world"
 						placeholder="Select world..."
@@ -514,11 +566,19 @@ class Map extends React.Component<Props, OwnState> {
 						options={renderWorldOptions(this.props.worlds)}
 					/>
 				</Segment>
-				<Segment style={{ position: "absolute", "top": 60, "left": 10, height: "25vh", width: 80 }}>
+				<Segment
+					style={{
+						position: "absolute",
+						top: 60,
+						left: 10,
+						height: "25vh",
+						width: 80
+					}}
+				>
 					<Slider
 						vertical
 						marks={marks}
-						min={0.400}
+						min={0.4}
 						max={2}
 						step={0.001}
 						value={Math.pow(this.state.zoom, 1 / 4)}
@@ -527,7 +587,7 @@ class Map extends React.Component<Props, OwnState> {
 						handleStyle={{ borderColor: "blue" }}
 					/>
 				</Segment>
-				<Segment style={{ position: "absolute", "top": 0, "right": 10 }}>
+				<Segment style={{ position: "absolute", top: 0, right: 10 }}>
 					<Button
 						primary
 						content="Refresh entities"
@@ -547,7 +607,7 @@ const mapStateToProps = (state: AppState): OwnProps => {
 		players: state.player.list,
 		tileEntities: state.tileentity.list,
 		apiKey: state.api.key,
-		apiUrl: state.api.server.apiUrl,
+		apiUrl: state.api.server.apiUrl
 	}
 }
 
@@ -555,9 +615,11 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>): DispatchProps => {
 	return {
 		requestWorlds: () => dispatch(requestList("world", true)),
 		requestPlayers: () => dispatch(requestList("player", true)),
-		requestEntities: (query) => dispatch(requestList("entity", false, query)),
-		requestTileEntities: (query) => dispatch(requestList("tile-entity", false, query)),
-		requestDeleteEntity: (entity: Entity) => dispatch(requestDelete("entity", ent => ent.uuid, entity)),
+		requestEntities: query => dispatch(requestList("entity", false, query)),
+		requestTileEntities: query =>
+			dispatch(requestList("tile-entity", false, query)),
+		requestDeleteEntity: (entity: Entity) =>
+			dispatch(requestDelete("entity", ent => ent.uuid, entity))
 	}
 }
 
