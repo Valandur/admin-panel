@@ -6944,6 +6944,12 @@ export interface PermissionStruct {
      */
     key: string;
     /**
+     * The human readable name of this permssions struct. Only useful for users.
+     * @type {string}
+     * @memberof PermissionStruct
+     */
+    name: string;
+    /**
      * The permissions tree that this key grants access to
      * @type {any}
      * @memberof PermissionStruct
@@ -7580,13 +7586,13 @@ export interface SlotPos {
      * @type {number}
      * @memberof SlotPos
      */
-    x?: number;
+    y?: number;
     /**
      * 
      * @type {number}
      * @memberof SlotPos
      */
-    y?: number;
+    x?: number;
 }
 
 /**
@@ -9972,6 +9978,12 @@ export interface PlayerFull {
      */
     inventory?: Inventory;
     /**
+     * The item stack that the player is wearing as leggings
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    leggings?: ItemStack;
+    /**
      * The item stack that the player is wearing as a helmet
      * @type {ItemStack}
      * @memberof PlayerFull
@@ -9983,12 +9995,6 @@ export interface PlayerFull {
      * @memberof PlayerFull
      */
     chestplate?: ItemStack;
-    /**
-     * The item stack that the player is wearing as leggings
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    leggings?: ItemStack;
     /**
      * The item stack that the player is wearing as boots
      * @type {ItemStack}
@@ -11333,12 +11339,6 @@ export interface WorldFull {
      */
     time: number;
     /**
-     * The current weather in the world
-     * @type {CatalogTypeWeather}
-     * @memberof WorldFull
-     */
-    weather: CatalogTypeWeather;
-    /**
      * The difficulty of the world
      * @type {CatalogTypeDifficulty}
      * @memberof WorldFull
@@ -11350,6 +11350,12 @@ export interface WorldFull {
      * @memberof WorldFull
      */
     gameRules: { [key: string]: string; };
+    /**
+     * The current weather in the world
+     * @type {CatalogTypeWeather}
+     * @memberof WorldFull
+     */
+    weather: CatalogTypeWeather;
     /**
      * 
      * @type {GameMode}

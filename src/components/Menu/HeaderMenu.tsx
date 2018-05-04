@@ -19,6 +19,7 @@ const imageUrl = require("../../assets/logo.png")
 
 export interface Props extends reactI18Next.InjectedTranslateProps {
 	lang: Lang
+	username: string
 	server: Server
 	servers: Server[]
 	showSidebar: boolean
@@ -84,7 +85,7 @@ class HeaderMenu extends React.Component<Props> {
 				: null*/}
 
 				<Menu.Menu position="right">
-					<Dropdown item icon="setting">
+					<Dropdown item text={this.props.username}>
 						<Dropdown.Menu>
 							<Dropdown.Header content="Links" />
 							<Dropdown.Item
@@ -138,6 +139,7 @@ class HeaderMenu extends React.Component<Props> {
 const mapStateToProps = (state: AppState) => {
 	return {
 		lang: state.preferences.lang,
+		username: state.api.username,
 		server: state.api.server,
 		servers: state.api.servers
 	}

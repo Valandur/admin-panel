@@ -48,6 +48,7 @@ function setupApis(server: Server, apiKey?: string): ApiCollection {
 
 export interface ApiState {
 	key?: string
+	username?: string
 	loggedIn: boolean
 	loggingIn: boolean
 	server: Server
@@ -120,6 +121,7 @@ export default (state = initialState, action: AppAction) => {
 					loggingIn: false,
 					loggedIn: false,
 					key: undefined,
+					username: undefined,
 					permissions: undefined,
 					rateLimit: undefined
 				}
@@ -129,6 +131,7 @@ export default (state = initialState, action: AppAction) => {
 				loggingIn: false,
 				loggedIn: true,
 				key: action.data.key,
+				username: action.data.name,
 				permissions: action.data.permissions,
 				rateLimit: action.data.rateLimit,
 				apis: setupApis(state.server, action.data.key)
@@ -139,6 +142,7 @@ export default (state = initialState, action: AppAction) => {
 				...state,
 				loggedIn: false,
 				key: undefined,
+				username: undefined,
 				permissions: undefined,
 				rateLimit: undefined
 			}
@@ -150,6 +154,7 @@ export default (state = initialState, action: AppAction) => {
 
 			return {
 				...state,
+				username: action.data.name,
 				permissions: action.data.permissions,
 				rateLimit: action.data.rateLimit
 			}

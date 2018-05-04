@@ -64,7 +64,7 @@ export interface ChangeServerAction extends Action {
 export function changeServer(server: Server): ChangeServerAction {
 	return {
 		type: TypeKeys.CHANGE_SERVER,
-		server: server
+		server
 	}
 }
 
@@ -79,8 +79,8 @@ export function requestLogin(
 ): LoginRequestAction {
 	return {
 		type: TypeKeys.LOGIN_REQUEST,
-		username: username,
-		password: password
+		username,
+		password
 	}
 }
 
@@ -95,8 +95,8 @@ export function respondLogin(
 ): LoginResponseAction {
 	return {
 		type: TypeKeys.LOGIN_RESPONSE,
-		data: data,
-		error: error
+		data,
+		error
 	}
 }
 
