@@ -4,10 +4,12 @@ import { Loader, Message } from "semantic-ui-react"
 
 import { ViewDefinition } from "../../types"
 
-function load(func: () => Promise<React.ComponentType | { default: React.ComponentType }>): React.ComponentType {
+export function load(
+	func: () => Promise<React.ComponentType | { default: React.ComponentType }>
+): React.ComponentType {
 	return Loadable({
 		loader: func,
-		loading: (props) => {
+		loading: props => {
 			if (props.error) {
 				return (
 					<Message negative={true}>
@@ -46,168 +48,198 @@ const NucleusKits = load(() => import("../../views/Integrations/Nucleus/Kits"))
 const UMItems = load(() => import("../../views/Integrations/UniversalMarket/Items"))
 const WebBooksBooks = load(() => import("../../views/Integrations/WebBooks/Books"))
 
-const views: Array<ViewDefinition> = [{
-	title: "Dashboard",
-	path: "/dashboard",
-	icon: "dashboard",
-	perms: null,
-	component: Dashboard,
-}, {
-	title: "Chat",
-	path: "/chat",
-	icon: "chat",
-	perms: ["history", "chat"],
-	servlets: ["/history"],
-	component: Chat,
-}, {
-	title: "Commands",
-	path: "/commands",
-	icon: "terminal",
-	perms: ["history", "cmd"],
-	servlets: ["/history", "/cmd"],
-	component: Commands,
-}, {
-	title: "Map",
-	path: "/map",
-	icon: "map",
-	perms: ["map"],
-	servlets: ["/map"],
-	component: Map,
-}, {
-	title: "Worlds",
-	path: "/worlds",
-	icon: "globe",
-	perms: ["world", "list"],
-	servlets: ["/world"],
-	component: Worlds,
-}, {
-	title: "Players",
-	path: "/players",
-	icon: "users",
-	perms: ["player", "list"],
-	servlets: ["/player"],
-	component: Players,
-}, {
-	title: "Permissions",
-	path: "/permissions",
-	icon: "lock",
-	perms: ["permission", "collection", "list"],
-	servlets: ["/permission"],
-	component: Permissions,
-}, {
-	title: "Entities",
-	path: "/entities",
-	icon: "paw",
-	perms: ["entity", "list"],
-	servlets: ["/entity"],
-	component: Entities,
-}, {
-	title: "TileEntities",
-	path: "/tile-entities",
-	icon: "puzzle",
-	perms: ["tile-entity", "list"],
-	servlets: ["/tile-entity"],
-	component: TileEntities,
-}, {
-	title: "BlockOperations",
-	path: "/block-operations",
-	icon: "block layout",
-	perms: ["block", "op", "list"],
-	servlets: ["/block"],
-	component: BlockOperations,
-}, {
-	title: "Plugins",
-	path: "/plugins",
-	icon: "plug",
-	perms: ["plugin", "list"],
-	servlets: ["/plugin"],
-	component: Plugins,
-}, {
-	title: "ServerSettings",
-	path: "/server-settings",
-	icon: "cogs",
-	perms: ["info", "properties"],
-	servlets: ["/info"],
-	component: ServerSettings,
-},
+export const views: Array<ViewDefinition> = [
+	{
+		title: "Dashboard",
+		path: "/dashboard",
+		icon: "dashboard",
+		perms: null,
+		component: Dashboard
+	},
+	{
+		title: "Chat",
+		path: "/chat",
+		icon: "chat",
+		perms: ["history", "chat"],
+		servlets: ["/history"],
+		component: Chat
+	},
+	{
+		title: "Commands",
+		path: "/commands",
+		icon: "terminal",
+		perms: ["history", "cmd"],
+		servlets: ["/history", "/cmd"],
+		component: Commands
+	},
+	{
+		title: "Map",
+		path: "/map",
+		icon: "map",
+		perms: ["map"],
+		servlets: ["/map"],
+		component: Map
+	},
+	{
+		title: "Worlds",
+		path: "/worlds",
+		icon: "globe",
+		perms: ["world", "list"],
+		servlets: ["/world"],
+		component: Worlds
+	},
+	{
+		title: "Players",
+		path: "/players",
+		icon: "users",
+		perms: ["player", "list"],
+		servlets: ["/player"],
+		component: Players
+	},
+	{
+		title: "Permissions",
+		path: "/permissions",
+		icon: "lock",
+		perms: ["permission", "collection", "list"],
+		servlets: ["/permission"],
+		component: Permissions
+	},
+	{
+		title: "Entities",
+		path: "/entities",
+		icon: "paw",
+		perms: ["entity", "list"],
+		servlets: ["/entity"],
+		component: Entities
+	},
+	{
+		title: "TileEntities",
+		path: "/tile-entities",
+		icon: "puzzle",
+		perms: ["tile-entity", "list"],
+		servlets: ["/tile-entity"],
+		component: TileEntities
+	},
+	{
+		title: "BlockOperations",
+		path: "/block-operations",
+		icon: "block layout",
+		perms: ["block", "op", "list"],
+		servlets: ["/block"],
+		component: BlockOperations
+	},
+	{
+		title: "Plugins",
+		path: "/plugins",
+		icon: "plug",
+		perms: ["plugin", "list"],
+		servlets: ["/plugin"],
+		component: Plugins
+	},
+	{
+		title: "ServerSettings",
+		path: "/server-settings",
+		icon: "cogs",
+		perms: ["info", "properties"],
+		servlets: ["/info"],
+		component: ServerSettings
+	},
 
-{
-	title: "HuskyCrates",
-	path: "/husky-crates",
-	perms: ["husky-crates"],
-	servlets: ["/husky-crates"],
-	views: [{
-		title: "HuskyCratesCrates",
-		path: "/husky-crates/crates",
-		icon: "archive",
-		perms: ["husky-crates", "crates", "list"],
-		component: HuskyCratesCrates,
-	}]
-}, {
-	title: "MMCRestrict",
-	path: "/mmc-restrict",
-	perms: ["mmc-restrict"],
-	servlets: ["/mmc-restrict"],
-	views: [{
-		title: "MMCRestrictItems",
-		path: "/mmc-restrict/items",
-		icon: "ban",
-		perms: ["mmc-restrict", "item"],
-		component: MMCRestrictItems,
-	}]
-}, {
-	title: "MMCTickets",
-	path: "/mmc-tickets",
-	perms: ["mmc-tickets"],
-	servlets: ["/mmc-tickets"],
-	views: [{
-		title: "MMCTicketsTickets",
-		path: "/mmc-tickets/tickets",
-		icon: "ticket",
-		perms: ["mmc-tickets", "ticket"],
-		component: MMCTicketsTickets,
-	}]
-}, {
-	title: "Nucleus",
-	path: "/nucleus",
-	perms: ["nucleus"],
-	servlets: ["/nucleus"],
-	views: [{
-		title: "NucleusJails",
-		path: "/nucleus/jails",
-		icon: "bars",
-		perms: ["nucleus", "jail"],
-		component: NucleusJails,
-	}, {
-		title: "NucleusKits",
-		path: "/nucleus/kits",
-		icon: "wrench",
-		perms: ["nucleus", "kit"],
-		component: NucleusKits,
-	}]
-}, {
-	title: "UniversalMarket",
-	path: "/universal-market",
-	perms: ["universal-market"],
-	servlets: ["/universal-market"],
-	views: [{
-		title: "UniversalMarketItems",
-		path: "/universal-market/items",
-		icon: "shopping cart",
-		perms: ["universal-market", "item"],
-		component: UMItems,
-	}]
-}, {
-	title: "WebBooks",
-	path: "/web-books",
-	perms: ["web-books"],
-	servlets: ["/web-books"],
-	views: [{
-		title: "WebBooksBooks",
-		path: "/web-books/books",
-		icon: "book",
-		perms: ["webbooks", "book"],
-		component: WebBooksBooks,
-	}]
-}]
-export default views
+	{
+		title: "HuskyCrates",
+		path: "/husky-crates",
+		perms: ["husky-crates"],
+		servlets: ["/husky-crates"],
+		views: [
+			{
+				title: "HuskyCratesCrates",
+				path: "/husky-crates/crates",
+				icon: "archive",
+				perms: ["husky-crates", "crates", "list"],
+				component: HuskyCratesCrates
+			}
+		]
+	},
+	{
+		title: "MMCRestrict",
+		path: "/mmc-restrict",
+		perms: ["mmc-restrict"],
+		servlets: ["/mmc-restrict"],
+		views: [
+			{
+				title: "MMCRestrictItems",
+				path: "/mmc-restrict/items",
+				icon: "ban",
+				perms: ["mmc-restrict", "item"],
+				component: MMCRestrictItems
+			}
+		]
+	},
+	{
+		title: "MMCTickets",
+		path: "/mmc-tickets",
+		perms: ["mmc-tickets"],
+		servlets: ["/mmc-tickets"],
+		views: [
+			{
+				title: "MMCTicketsTickets",
+				path: "/mmc-tickets/tickets",
+				icon: "ticket",
+				perms: ["mmc-tickets", "ticket"],
+				component: MMCTicketsTickets
+			}
+		]
+	},
+	{
+		title: "Nucleus",
+		path: "/nucleus",
+		perms: ["nucleus"],
+		servlets: ["/nucleus"],
+		views: [
+			{
+				title: "NucleusJails",
+				path: "/nucleus/jails",
+				icon: "bars",
+				perms: ["nucleus", "jail"],
+				component: NucleusJails
+			},
+			{
+				title: "NucleusKits",
+				path: "/nucleus/kits",
+				icon: "wrench",
+				perms: ["nucleus", "kit"],
+				component: NucleusKits
+			}
+		]
+	},
+	{
+		title: "UniversalMarket",
+		path: "/universal-market",
+		perms: ["universal-market"],
+		servlets: ["/universal-market"],
+		views: [
+			{
+				title: "UniversalMarketItems",
+				path: "/universal-market/items",
+				icon: "shopping cart",
+				perms: ["universal-market", "item"],
+				component: UMItems
+			}
+		]
+	},
+	{
+		title: "WebBooks",
+		path: "/web-books",
+		perms: ["web-books"],
+		servlets: ["/web-books"],
+		views: [
+			{
+				title: "WebBooksBooks",
+				path: "/web-books/books",
+				icon: "book",
+				perms: ["webbooks", "book"],
+				component: WebBooksBooks
+			}
+		]
+	}
+]

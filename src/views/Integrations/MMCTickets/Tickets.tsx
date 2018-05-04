@@ -10,34 +10,36 @@ import { AppState } from "../../../types"
 import DataViewFunc from "../../../components/DataView"
 const DataView = DataViewFunc("mmc-tickets/ticket", "id")
 
-interface Props extends reactI18Next.InjectedTranslateProps {
-}
+interface Props extends reactI18Next.InjectedTranslateProps {}
 
-interface OwnState {
-}
+interface OwnState {}
 
 class Tickets extends React.Component<Props, OwnState> {
-
-	ticketStates: { value: string, text: string }[]
+	ticketStates: { value: string; text: string }[]
 
 	constructor(props: Props) {
 		super(props)
 
 		const _t = props.t
 
-		this.ticketStates = [{
-			value: MMCTicketsTicket.StatusEnum.Open.toString(),
-			text: _t("Open"),
-		}, {
-			value: MMCTicketsTicket.StatusEnum.Claimed.toString(),
-			text: _t("Claimed"),
-		}, {
-			value: MMCTicketsTicket.StatusEnum.Held.toString(),
-			text: _t("Held"),
-		}, {
-			value: MMCTicketsTicket.StatusEnum.Closed.toString(),
-			text: _t("Closed"),
-		}]
+		this.ticketStates = [
+			{
+				value: MMCTicketsTicket.StatusEnum.Open.toString(),
+				text: _t("Open")
+			},
+			{
+				value: MMCTicketsTicket.StatusEnum.Claimed.toString(),
+				text: _t("Claimed")
+			},
+			{
+				value: MMCTicketsTicket.StatusEnum.Held.toString(),
+				text: _t("Held")
+			},
+			{
+				value: MMCTicketsTicket.StatusEnum.Closed.toString(),
+				text: _t("Closed")
+			}
+		]
 	}
 
 	render() {
@@ -53,31 +55,32 @@ class Tickets extends React.Component<Props, OwnState> {
 					id: _t("Id"),
 					timestamp: {
 						label: _t("Timestamp"),
-						view: (ticket: MMCTicketsTicket) => moment.unix(ticket.timestamp).calendar(),
+						view: (ticket: MMCTicketsTicket) =>
+							moment.unix(ticket.timestamp).calendar()
 					},
 					status: {
 						label: _t("Status"),
 						edit: true,
-						options: this.ticketStates,
+						options: this.ticketStates
 					},
 					"sender.name": {
 						label: _t("Sender"),
-						filter: true,
+						filter: true
 					},
 					"staff.name": {
 						label: _t("Assigned"),
-						filter: true,
+						filter: true
 					},
 					message: {
 						label: _t("Message"),
 						filter: true,
-						wide: true,
+						wide: true
 					},
 					comment: {
 						label: _t("Comment"),
 						edit: true,
 						filter: true,
-						wide: true,
+						wide: true
 					}
 				}}
 			/>

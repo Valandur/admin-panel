@@ -2,7 +2,7 @@ import { Action } from "redux"
 import { ResponseError } from "superagent"
 
 import { CatalogType, PermissionStruct } from "../fetch"
-import { Lang, Server } from "../types"
+import { Server } from "../types"
 
 import { CommandAction } from "./command"
 import { DashboardAction } from "./dashboard"
@@ -11,7 +11,8 @@ import { NotificationAction } from "./notification"
 import { PermissionAction } from "./permission"
 import { PlayerAction } from "./player"
 import { PluginAction } from "./plugin"
-import { SettingsAction } from "./settings"
+import { PreferencesAction } from "./preferences"
+import { ServerSettingsAction } from "./server-settings"
 
 export enum TypeKeys {
 	INIT = "@@__INIT__@@",
@@ -26,7 +27,7 @@ export enum TypeKeys {
 	CHECK_USER_REQUEST = "CHECK_USER_REQUEST",
 	CHECK_USER_RESPONSE = "CHECK_USER_RESPONSE",
 	CATALOG_REQUEST = "CATALOG_REQUEST",
-	CATALOG_RESPONSE = "CATALOG_RESPONSE",
+	CATALOG_RESPONSE = "CATALOG_RESPONSE"
 }
 
 export interface ServletsRequestAction extends Action {
@@ -34,7 +35,7 @@ export interface ServletsRequestAction extends Action {
 }
 export function requestServlets(): ServletsRequestAction {
 	return {
-		type: TypeKeys.SERVLETS_REQUEST,
+		type: TypeKeys.SERVLETS_REQUEST
 	}
 }
 
@@ -45,22 +46,14 @@ export interface ServletsResponseAction extends Action {
 		[x: string]: string
 	}
 }
-export function respondServlets(ok: boolean, servlets: { [x: string]: string }): ServletsResponseAction {
+export function respondServlets(
+	ok: boolean,
+	servlets: { [x: string]: string }
+): ServletsResponseAction {
 	return {
 		type: TypeKeys.SERVLETS_RESPONSE,
 		ok,
-		servlets,
-	}
-}
-
-export interface ChangeLanguageAction extends Action {
-	type: TypeKeys.CHANGE_LANGUAGE
-	lang: Lang
-}
-export function changeLanguage(lang: Lang): ChangeLanguageAction {
-	return {
-		type: TypeKeys.CHANGE_LANGUAGE,
-		lang: lang,
+		servlets
 	}
 }
 
@@ -71,7 +64,7 @@ export interface ChangeServerAction extends Action {
 export function changeServer(server: Server): ChangeServerAction {
 	return {
 		type: TypeKeys.CHANGE_SERVER,
-		server: server,
+		server: server
 	}
 }
 
@@ -80,11 +73,14 @@ export interface LoginRequestAction extends Action {
 	username: string
 	password: string
 }
-export function requestLogin(username: string, password: string): LoginRequestAction {
+export function requestLogin(
+	username: string,
+	password: string
+): LoginRequestAction {
 	return {
 		type: TypeKeys.LOGIN_REQUEST,
 		username: username,
-		password: password,
+		password: password
 	}
 }
 
@@ -93,11 +89,14 @@ export interface LoginResponseAction extends Action {
 	data: PermissionStruct | undefined
 	error: ResponseError | undefined
 }
-export function respondLogin(data?: PermissionStruct, error?: ResponseError): LoginResponseAction {
+export function respondLogin(
+	data?: PermissionStruct,
+	error?: ResponseError
+): LoginResponseAction {
 	return {
 		type: TypeKeys.LOGIN_RESPONSE,
 		data: data,
-		error: error,
+		error: error
 	}
 }
 
@@ -128,11 +127,14 @@ export interface CheckUserResponseAction extends Action {
 	ok: boolean
 	data: PermissionStruct
 }
-export function respondCheckUser(ok: boolean, data: PermissionStruct): CheckUserResponseAction {
+export function respondCheckUser(
+	ok: boolean,
+	data: PermissionStruct
+): CheckUserResponseAction {
 	return {
 		type: TypeKeys.CHECK_USER_RESPONSE,
 		ok,
-		data,
+		data
 	}
 }
 
@@ -143,7 +145,7 @@ export interface CatalogRequestAction extends Action {
 export function requestCatalog(clazz: string): CatalogRequestAction {
 	return {
 		type: TypeKeys.CATALOG_REQUEST,
-		class: clazz,
+		class: clazz
 	}
 }
 
@@ -152,11 +154,14 @@ export interface CatalogResponseAction extends Action {
 	class: string
 	types: CatalogType[]
 }
-export function respondCatalog(clazz: string, types: CatalogType[]): CatalogResponseAction {
+export function respondCatalog(
+	clazz: string,
+	types: CatalogType[]
+): CatalogResponseAction {
 	return {
 		type: TypeKeys.CATALOG_RESPONSE,
 		class: clazz,
-		types,
+		types
 	}
 }
 
@@ -172,16 +177,26 @@ export function initAction(): InitAction {
 // Merge all actions
 export type AppAction =
 	// index
-	InitAction | ServletsRequestAction | ServletsResponseAction | ChangeLanguageAction | ChangeServerAction |
-	LoginRequestAction | LoginResponseAction | LogoutRequestAction | LogoutResponseAction | CheckUserRequestAction |
-	CheckUserResponseAction | CatalogRequestAction | CatalogResponseAction |
+	| InitAction
+	| ServletsRequestAction
+	| ServletsResponseAction
+	| ChangeServerAction
+	| LoginRequestAction
+	| LoginResponseAction
+	| LogoutRequestAction
+	| LogoutResponseAction
+	| CheckUserRequestAction
+	| CheckUserResponseAction
+	| CatalogRequestAction
+	| CatalogResponseAction
 
 	// Others
-	DashboardAction |
-	CommandAction |
-	DataViewAction<any> |
-	NotificationAction |
-	PermissionAction |
-	PlayerAction |
-	PluginAction |
-	SettingsAction
+	| DashboardAction
+	| CommandAction
+	| DataViewAction<any>
+	| NotificationAction
+	| PermissionAction
+	| PlayerAction
+	| PluginAction
+	| PreferencesAction
+	| ServerSettingsAction

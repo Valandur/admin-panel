@@ -2,7 +2,17 @@ import * as _ from "lodash"
 import * as React from "react"
 import { Trans, translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
-import { Button, Icon, Label, Menu, Modal, Segment, Tab, Table, TabProps } from "semantic-ui-react"
+import {
+	Button,
+	Icon,
+	Label,
+	Menu,
+	Modal,
+	Segment,
+	Tab,
+	Table,
+	TabProps
+} from "semantic-ui-react"
 
 import DataTable from "../../components/DataTable"
 
@@ -104,12 +114,19 @@ class Permissions extends React.Component<Props, OwnState> {
 												name: "permissions",
 												label: _t("Permissions"),
 												view: (subj: Subject) => {
-													if (!subj.permissions || !Object.keys(subj.permissions).length) {
+													if (
+														!subj.permissions ||
+														!Object.keys(subj.permissions).length
+													) {
 														return _t("No permissions")
 													}
 
 													return (
-														<Button primary content="View" onClick={() => this.showSubject(subj)} />
+														<Button
+															primary
+															content="View"
+															onClick={() => this.showSubject(subj)}
+														/>
 													)
 												}
 											}
@@ -125,7 +142,9 @@ class Permissions extends React.Component<Props, OwnState> {
 					subject.permissions && (
 						<Modal open={modal} onClose={() => this.toggleModal()}>
 							<Modal.Header>
-								<Trans i18nKey="GameRulesTitle">Permissions for '{subject.id}'</Trans>
+								<Trans i18nKey="GameRulesTitle">
+									Permissions for '{subject.id}'
+								</Trans>
 							</Modal.Header>
 							<Modal.Content>
 								<Table basic compact>
@@ -135,8 +154,16 @@ class Permissions extends React.Component<Props, OwnState> {
 												<Table.Cell>{key}</Table.Cell>
 												<Table.Cell>
 													<Icon
-														color={(subject.permissions as any)[key] ? "green" : "red"}
-														name={(subject.permissions as any)[key] ? "check" : "delete"}
+														color={
+															(subject.permissions as any)[key]
+																? "green"
+																: "red"
+														}
+														name={
+															(subject.permissions as any)[key]
+																? "check"
+																: "delete"
+														}
 													/>
 												</Table.Cell>
 											</Table.Row>
@@ -166,8 +193,11 @@ const mapStateToProps = (state: AppState) => {
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		requestCollections: () => dispatch(requestCollections()),
-		requestSubjects: (coll: SubjectCollection) => dispatch(requestSubjects(coll))
+		requestSubjects: (coll: SubjectCollection) =>
+			dispatch(requestSubjects(coll))
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate("Permissions")(Permissions))
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Permissions")(Permissions)
+)

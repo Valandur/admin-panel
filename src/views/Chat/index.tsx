@@ -12,12 +12,9 @@ import { formatSource } from "../../components/Util"
 
 const DataView = DataViewFunc("history/message", "timestamp")
 
-interface Props extends reactI18Next.InjectedTranslateProps {
-
-}
+interface Props extends reactI18Next.InjectedTranslateProps {}
 
 class Chat extends React.Component<Props, {}> {
-
 	render() {
 		const _t = this.props.t
 
@@ -29,7 +26,7 @@ class Chat extends React.Component<Props, {}> {
 				fields={{
 					timestamp: {
 						label: _t("Timestamp"),
-						view: (msg: Message) => moment.unix(msg.timestamp).calendar(),
+						view: (msg: Message) => moment.unix(msg.timestamp).calendar()
 					},
 					sender: {
 						label: _t("Sender"),
@@ -39,9 +36,10 @@ class Chat extends React.Component<Props, {}> {
 					receivers: {
 						label: _t("Receivers"),
 						filter: true,
-						view: (msg: Message ) => msg.receivers.map(r => formatSource(r)).join(", ")
+						view: (msg: Message) =>
+							msg.receivers.map(r => formatSource(r)).join(", ")
 					},
-					content: _t("Message"),
+					content: _t("Message")
 				}}
 			/>
 		)
@@ -56,4 +54,6 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate("Chat")(Chat))
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Chat")(Chat)
+)

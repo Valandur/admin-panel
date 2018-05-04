@@ -12,7 +12,11 @@ import {
 	TypeKeys
 } from "../actions"
 import { respondExecute, TypeKeys as CommandTypeKeys } from "../actions/command"
-import { respondInfo, respondStats, TypeKeys as DashboardTypeKeys } from "../actions/dashboard"
+import {
+	respondInfo,
+	respondStats,
+	TypeKeys as DashboardTypeKeys
+} from "../actions/dashboard"
 import {
 	respondChange,
 	respondCreate,
@@ -27,18 +31,28 @@ import {
 	respondSubjects,
 	TypeKeys as PermissionTypeKeys
 } from "../actions/permission"
-import { respondBanPlayer, respondKickPlayer, TypeKeys as PlayerTypeKeys } from "../actions/player"
+import {
+	respondBanPlayer,
+	respondKickPlayer,
+	TypeKeys as PlayerTypeKeys
+} from "../actions/player"
 import {
 	respondPluginConfig,
 	respondPluginConfigSave,
 	TypeKeys as PluginTypeKeys
 } from "../actions/plugin"
-import { respondSaveProperty, TypeKeys as SettingTypeKeys } from "../actions/settings"
+import {
+	respondSaveProperty,
+	TypeKeys as SettingTypeKeys
+} from "../actions/server-settings"
 
 import { ExecuteMethodParam } from "../fetch"
 import { AppState } from "../types"
 
-const api = ({ getState, dispatch }: MiddlewareAPI<Dispatch<AppAction>, AppState>) => (
+const api = ({
+	getState,
+	dispatch
+}: MiddlewareAPI<Dispatch<AppAction>, AppState>) => (
 	next: Dispatch<Action>
 ) => (action: AppAction): any => {
 	next(action)
@@ -114,7 +128,7 @@ const api = ({ getState, dispatch }: MiddlewareAPI<Dispatch<AppAction>, AppState
 
 		case DashboardTypeKeys.STATS_REQUEST:
 			state.api.apis.info
-				.getStats()
+				.getStats(action.limit)
 				.then(stats => next(respondStats(stats)))
 				.catch(errorHandler)
 			break
@@ -155,7 +169,9 @@ const api = ({ getState, dispatch }: MiddlewareAPI<Dispatch<AppAction>, AppState
 						command: "ban " + action.player.name
 					}
 				])
-				.then(results => next(respondBanPlayer(true, action.player, results[0])))
+				.then(results =>
+					next(respondBanPlayer(true, action.player, results[0]))
+				)
 				.catch(err => next(respondBanPlayer(false, action.player, err)))
 			break
 
@@ -203,7 +219,11 @@ const api = ({ getState, dispatch }: MiddlewareAPI<Dispatch<AppAction>, AppState
 		case DataViewTypeKeys.LIST_REQUEST:
 			const params = toQueryParams(action.query)
 			request
-				.get(makeUrl(action.endpoint + "?" + (action.details ? "details&" : "") + params))
+				.get(
+					makeUrl(
+						action.endpoint + "?" + (action.details ? "details&" : "") + params
+					)
+				)
 				.then(resp => next(respondList(action.endpoint, resp.body)))
 				.catch(err => next(respondList(action.endpoint, undefined, err)))
 			break
@@ -211,31 +231,47 @@ const api = ({ getState, dispatch }: MiddlewareAPI<Dispatch<AppAction>, AppState
 		case DataViewTypeKeys.DETAILS_REQUEST:
 			request
 				.get(makeUrl(action.endpoint + "/" + action.id(action.data)))
-				.then(resp => next(respondDetails(action.endpoint, action.id, resp.body)))
-				.catch(err => next(respondDetails(action.endpoint, action.id, action.data, err)))
+				.then(resp =>
+					next(respondDetails(action.endpoint, action.id, resp.body))
+				)
+				.catch(err =>
+					next(respondDetails(action.endpoint, action.id, action.data, err))
+				)
 			break
 
 		case DataViewTypeKeys.CREATE_REQUEST:
 			request
 				.post(makeUrl(action.endpoint))
 				.send(action.data)
-				.then(resp => next(respondCreate(action.endpoint, action.id, resp.body)))
-				.catch(err => next(respondCreate(action.endpoint, action.id, undefined, err)))
+				.then(resp =>
+					next(respondCreate(action.endpoint, action.id, resp.body))
+				)
+				.catch(err =>
+					next(respondCreate(action.endpoint, action.id, undefined, err))
+				)
 			break
 
 		case DataViewTypeKeys.CHANGE_REQUEST:
 			request
 				.put(makeUrl(action.endpoint + "/" + action.id(action.data)))
 				.send(action.newData)
-				.then(resp => next(respondChange(action.endpoint, action.id, resp.body)))
-				.catch(err => next(respondChange(action.endpoint, action.id, action.data, err)))
+				.then(resp =>
+					next(respondChange(action.endpoint, action.id, resp.body))
+				)
+				.catch(err =>
+					next(respondChange(action.endpoint, action.id, action.data, err))
+				)
 			break
 
 		case DataViewTypeKeys.DELETE_REQUEST:
 			request
 				.delete(makeUrl(action.endpoint + "/" + action.id(action.data)))
-				.then(resp => next(respondDelete(action.endpoint, action.id, resp.body)))
-				.catch(err => next(respondDelete(action.endpoint, action.id, action.data, err)))
+				.then(resp =>
+					next(respondDelete(action.endpoint, action.id, resp.body))
+				)
+				.catch(err =>
+					next(respondDelete(action.endpoint, action.id, action.data, err))
+				)
 			break
 
 		default:

@@ -6,17 +6,18 @@ import { CatalogType } from "../../../fetch"
 
 export interface Props {
 	name: string
-	value:  string
+	value: string
 	placeholder: string
 	itemTypes: CatalogType[]
 	onChange: (e: React.SyntheticEvent<HTMLElement>, data?: DropdownProps) => void
 }
 
 export default class ItemTypeDropdown extends React.Component<Props> {
-
 	shouldComponentUpdate(nextProps: Props, nextState: any) {
-		return nextProps.value !== this.props.value ||
+		return (
+			nextProps.value !== this.props.value ||
 			nextProps.itemTypes !== this.props.itemTypes
+		)
 	}
 
 	render() {
@@ -27,7 +28,9 @@ export default class ItemTypeDropdown extends React.Component<Props> {
 				name={this.props.name}
 				control={Dropdown}
 				placeholder={this.props.placeholder}
-				onChange={(e: React.SyntheticEvent<HTMLElement>, val: DropdownProps) => this.props.onChange(e, val)}
+				onChange={(e: React.SyntheticEvent<HTMLElement>, val: DropdownProps) =>
+					this.props.onChange(e, val)
+				}
 				value={this.props.value}
 				options={renderCatalogTypeOptions(this.props.itemTypes)}
 			/>

@@ -490,17 +490,17 @@ export namespace BlockOperation {
  */
 export interface BlockState {
     /**
-     * The type of block this block state is from
-     * @type {CatalogType}
-     * @memberof BlockState
-     */
-    type?: CatalogType;
-    /**
      * Additional data attached to the block state
      * @type {{ [key: string]: any; }}
      * @memberof BlockState
      */
     data?: { [key: string]: any; };
+    /**
+     * The type of block this block state is from
+     * @type {CatalogType}
+     * @memberof BlockState
+     */
+    type?: CatalogType;
 }
 
 /**
@@ -610,12 +610,6 @@ export interface CatalogTypeAdvancementTree {
      */
     id: string;
     /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof CatalogTypeAdvancementTree
-     */
-    link: string;
-    /**
      * The name of the catalog type
      * @type {string}
      * @memberof CatalogTypeAdvancementTree
@@ -630,23 +624,17 @@ export interface CatalogTypeAdvancementTree {
  */
 export interface CatalogTypeDifficulty {
     /**
-     * The name of the catalog type
-     * @type {string}
-     * @memberof CatalogTypeDifficulty
-     */
-    name: string;
-    /**
      * The unique id that indexes this catalog type
      * @type {string}
      * @memberof CatalogTypeDifficulty
      */
     id: string;
     /**
-     * The API link that can be used to obtain more information about this object
+     * The name of the catalog type
      * @type {string}
      * @memberof CatalogTypeDifficulty
      */
-    link: string;
+    name: string;
 }
 
 /**
@@ -656,23 +644,17 @@ export interface CatalogTypeDifficulty {
  */
 export interface CatalogTypeDimensionType {
     /**
-     * The name of the catalog type
-     * @type {string}
-     * @memberof CatalogTypeDimensionType
-     */
-    name: string;
-    /**
      * The unique id that indexes this catalog type
      * @type {string}
      * @memberof CatalogTypeDimensionType
      */
     id: string;
     /**
-     * The API link that can be used to obtain more information about this object
+     * The name of the catalog type
      * @type {string}
      * @memberof CatalogTypeDimensionType
      */
-    link: string;
+    name: string;
 }
 
 /**
@@ -682,23 +664,17 @@ export interface CatalogTypeDimensionType {
  */
 export interface CatalogTypeGameMode {
     /**
-     * The name of the catalog type
-     * @type {string}
-     * @memberof CatalogTypeGameMode
-     */
-    name: string;
-    /**
      * The unique id that indexes this catalog type
      * @type {string}
      * @memberof CatalogTypeGameMode
      */
     id: string;
     /**
-     * The API link that can be used to obtain more information about this object
+     * The name of the catalog type
      * @type {string}
      * @memberof CatalogTypeGameMode
      */
-    link: string;
+    name: string;
 }
 
 /**
@@ -708,23 +684,17 @@ export interface CatalogTypeGameMode {
  */
 export interface CatalogTypeGeneratorType {
     /**
-     * The name of the catalog type
-     * @type {string}
-     * @memberof CatalogTypeGeneratorType
-     */
-    name: string;
-    /**
      * The unique id that indexes this catalog type
      * @type {string}
      * @memberof CatalogTypeGeneratorType
      */
     id: string;
     /**
-     * The API link that can be used to obtain more information about this object
+     * The name of the catalog type
      * @type {string}
      * @memberof CatalogTypeGeneratorType
      */
-    link: string;
+    name: string;
 }
 
 /**
@@ -754,23 +724,17 @@ export interface CatalogTypeItemType {
  */
 export interface CatalogTypeWeather {
     /**
-     * The name of the catalog type
-     * @type {string}
-     * @memberof CatalogTypeWeather
-     */
-    name: string;
-    /**
      * The unique id that indexes this catalog type
      * @type {string}
      * @memberof CatalogTypeWeather
      */
     id: string;
     /**
-     * The API link that can be used to obtain more information about this object
+     * The name of the catalog type
      * @type {string}
      * @memberof CatalogTypeWeather
      */
-    link: string;
+    name: string;
 }
 
 /**
@@ -1373,6 +1337,12 @@ export interface DyeColor {
  */
 export interface Enchantment {
     /**
+     * The level of the enchantment
+     * @type {number}
+     * @memberof Enchantment
+     */
+    level?: number;
+    /**
      * The name of the enchantment type
      * @type {string}
      * @memberof Enchantment
@@ -1384,12 +1354,6 @@ export interface Enchantment {
      * @memberof Enchantment
      */
     id?: string;
-    /**
-     * The level of the enchantment
-     * @type {number}
-     * @memberof Enchantment
-     */
-    level?: number;
 }
 
 /**
@@ -1431,23 +1395,17 @@ export interface EndGatewayData {
  */
 export interface Entity {
     /**
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
+     * @memberof Entity
+     */
+    link: string;
+    /**
      * The current location of the entity
      * @type {Location}
      * @memberof Entity
      */
     location: Location;
-    /**
-     * The type of entity
-     * @type {CatalogType}
-     * @memberof Entity
-     */
-    type: CatalogType;
-    /**
-     * The current scale of the entity
-     * @type {Vector3d}
-     * @memberof Entity
-     */
-    scale: Vector3d;
     /**
      * The current rotation of the entity
      * @type {Vector3d}
@@ -1455,11 +1413,17 @@ export interface Entity {
      */
     rotation: Vector3d;
     /**
-     * The current velocity of the entity
+     * The current scale of the entity
      * @type {Vector3d}
      * @memberof Entity
      */
-    velocity: Vector3d;
+    scale: Vector3d;
+    /**
+     * The type of entity
+     * @type {CatalogType}
+     * @memberof Entity
+     */
+    type: CatalogType;
     /**
      * The unique UUID of the entity
      * @type {string}
@@ -1467,17 +1431,17 @@ export interface Entity {
      */
     uuid: string;
     /**
+     * The current velocity of the entity
+     * @type {Vector3d}
+     * @memberof Entity
+     */
+    velocity: Vector3d;
+    /**
      * 
      * @type {Inventory}
      * @memberof Entity
      */
     inventory?: Inventory;
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof Entity
-     */
-    link: string;
     /**
      * 
      * @type {number}
@@ -3071,17 +3035,17 @@ export interface FireworkRocketData {
  */
 export interface FluidStack {
     /**
-     * The type of fluid contained within this stack
-     * @type {CatalogType}
-     * @memberof FluidStack
-     */
-    type: CatalogType;
-    /**
      * The amount of fluid in this stack
      * @type {number}
      * @memberof FluidStack
      */
     volume: number;
+    /**
+     * The type of fluid contained within this stack
+     * @type {CatalogType}
+     * @memberof FluidStack
+     */
+    type: CatalogType;
     /**
      * 
      * @type {number}
@@ -4916,7 +4880,7 @@ export interface InteractiveMessage {
      */
     link: string;
     /**
-     * The target of the message, usually this is a player UUID
+     * The target of the message, usually this is a player UUID. Can be set to \"server\" to send to all online players.
      * @type {string}
      * @memberof InteractiveMessage
      */
@@ -4928,7 +4892,7 @@ export interface InteractiveMessage {
      */
     uuid: string;
     /**
-     * 
+     * The actual content of the message
      * @type {string}
      * @memberof InteractiveMessage
      */
@@ -4980,29 +4944,11 @@ export interface InteractiveMessageOption {
  */
 export interface Inventory {
     /**
-     * The name of the inventory
-     * @type {string}
-     * @memberof Inventory
-     */
-    name: string;
-    /**
-     * The type of the inventory
-     * @type {CatalogType}
-     * @memberof Inventory
-     */
-    type: CatalogType;
-    /**
      * The maximum capacity of the inventory (maximum number of stacks)
      * @type {number}
      * @memberof Inventory
      */
     capacity: number;
-    /**
-     * The total amount of items currently in the inventory
-     * @type {number}
-     * @memberof Inventory
-     */
-    totalItems: number;
     /**
      * Gets a list of item stacks in the inventory
      * @type {Array&lt;ItemStack&gt;}
@@ -5015,6 +4961,24 @@ export interface Inventory {
      * @memberof Inventory
      */
     link: string;
+    /**
+     * The name of the inventory
+     * @type {string}
+     * @memberof Inventory
+     */
+    name: string;
+    /**
+     * The total amount of items currently in the inventory
+     * @type {number}
+     * @memberof Inventory
+     */
+    totalItems: number;
+    /**
+     * The type of the inventory
+     * @type {CatalogType}
+     * @memberof Inventory
+     */
+    type: CatalogType;
 }
 
 /**
@@ -5220,17 +5184,17 @@ export interface InvulnerabilityData {
  */
 export interface ItemStack {
     /**
-     * The type of this item
-     * @type {CatalogType}
-     * @memberof ItemStack
-     */
-    type: CatalogType;
-    /**
      * The quantity of items in this stack
      * @type {number}
      * @memberof ItemStack
      */
     quantity: number;
+    /**
+     * The type of this item
+     * @type {CatalogType}
+     * @memberof ItemStack
+     */
+    type: CatalogType;
     /**
      * 
      * @type {number}
@@ -6545,17 +6509,17 @@ export interface LocalDate {
  */
 export interface Location {
     /**
-     * The world this location refers to
-     * @type {World}
-     * @memberof Location
-     */
-    world: World;
-    /**
      * The position within the world that this location refers to
      * @type {Vector3d}
      * @memberof Location
      */
     position: Vector3d;
+    /**
+     * The world this location refers to
+     * @type {World}
+     * @memberof Location
+     */
+    world: World;
 }
 
 /**
@@ -6836,38 +6800,6 @@ export interface ModifyBlockOperationRequest {
 /**
  * 
  * @export
- * @interface NucleusJail
- */
-export interface NucleusJail {
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof NucleusJail
-     */
-    link: string;
-    /**
-     * The location of the jail
-     * @type {Location}
-     * @memberof NucleusJail
-     */
-    location: Location;
-    /**
-     * The unique name of this jail
-     * @type {string}
-     * @memberof NucleusJail
-     */
-    name: string;
-    /**
-     * The rotation of players within the jail
-     * @type {Vector3d}
-     * @memberof NucleusJail
-     */
-    rotation: Vector3d;
-}
-
-/**
- * 
- * @export
  * @interface NucleusKit
  */
 export interface NucleusKit {
@@ -6919,6 +6851,64 @@ export interface NucleusKit {
      * @memberof NucleusKit
      */
     stacks: Array<ItemStack>;
+}
+
+/**
+ * 
+ * @export
+ * @interface NucleusMailMessage
+ */
+export interface NucleusMailMessage {
+    /**
+     * The instant when the message was sent
+     * @type {number}
+     * @memberof NucleusMailMessage
+     */
+    date: number;
+    /**
+     * The message content
+     * @type {string}
+     * @memberof NucleusMailMessage
+     */
+    message: string;
+    /**
+     * The sender of the message
+     * @type {Player}
+     * @memberof NucleusMailMessage
+     */
+    sender?: Player;
+}
+
+/**
+ * 
+ * @export
+ * @interface NucleusNamedLocation
+ */
+export interface NucleusNamedLocation {
+    /**
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
+     * @memberof NucleusNamedLocation
+     */
+    link: string;
+    /**
+     * The location of the jail
+     * @type {Location}
+     * @memberof NucleusNamedLocation
+     */
+    location: Location;
+    /**
+     * The unique name of this jail
+     * @type {string}
+     * @memberof NucleusNamedLocation
+     */
+    name: string;
+    /**
+     * The rotation of players within the jail
+     * @type {Vector3d}
+     * @memberof NucleusNamedLocation
+     */
+    rotation: Vector3d;
 }
 
 /**
@@ -9590,13 +9580,13 @@ export interface Vector2i {
      * @type {number}
      * @memberof Vector2i
      */
-    maxAxis?: number;
+    minAxis?: number;
     /**
      * 
      * @type {number}
      * @memberof Vector2i
      */
-    minAxis?: number;
+    maxAxis?: number;
 }
 
 /**
@@ -9748,11 +9738,11 @@ export interface WireAttachmentData {
  */
 export interface World {
     /**
-     * The name of this world
+     * The API link that can be used to obtain more information about this object
      * @type {string}
      * @memberof World
      */
-    name: string;
+    link: string;
     /**
      * True if the world is loaded, false otherwise
      * @type {boolean}
@@ -9760,17 +9750,17 @@ export interface World {
      */
     loaded: boolean;
     /**
+     * The name of this world
+     * @type {string}
+     * @memberof World
+     */
+    name: string;
+    /**
      * The unique UUID that identifies this world
      * @type {string}
      * @memberof World
      */
     uuid: string;
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof World
-     */
-    link: string;
 }
 
 /**
@@ -9780,29 +9770,11 @@ export interface World {
  */
 export interface WorldBorder {
     /**
-     * The maximum amount of damage done to a player
-     * @type {number}
-     * @memberof WorldBorder
-     */
-    damageThreshold: number;
-    /**
-     * The amount of distance from the border a player will receive a warning at
-     * @type {number}
-     * @memberof WorldBorder
-     */
-    warningDistance: number;
-    /**
      * The center of the world border
      * @type {Vector3d}
      * @memberof WorldBorder
      */
     center: Vector3d;
-    /**
-     * The amount of time near a border before a warning is shown for players
-     * @type {number}
-     * @memberof WorldBorder
-     */
-    warningTime: number;
     /**
      * The amount of damage done to players outside the border
      * @type {number}
@@ -9810,17 +9782,23 @@ export interface WorldBorder {
      */
     damageAmount: number;
     /**
+     * The maximum amount of damage done to a player
+     * @type {number}
+     * @memberof WorldBorder
+     */
+    damageThreshold: number;
+    /**
      * The diameter of the border
      * @type {number}
      * @memberof WorldBorder
      */
     diameter: number;
     /**
-     * The time remaining until the border reaches it's new size
-     * @type {number}
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
      * @memberof WorldBorder
      */
-    timeRemaining: number;
+    link: string;
     /**
      * The new diameter of the border, in case it is collapsing/expanding
      * @type {number}
@@ -9828,11 +9806,23 @@ export interface WorldBorder {
      */
     newDiameter: number;
     /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
+     * The time remaining until the border reaches it's new size
+     * @type {number}
      * @memberof WorldBorder
      */
-    link: string;
+    timeRemaining: number;
+    /**
+     * The amount of distance from the border a player will receive a warning at
+     * @type {number}
+     * @memberof WorldBorder
+     */
+    warningDistance: number;
+    /**
+     * The amount of time near a border before a warning is shown for players
+     * @type {number}
+     * @memberof WorldBorder
+     */
+    warningTime: number;
 }
 
 /**
@@ -9946,6 +9936,66 @@ export interface PlayerFull {
      */
     uuid: string;
     /**
+     * A list of all unlocked advancements of this player
+     * @type {Array&lt;Advancement&gt;}
+     * @memberof PlayerFull
+     */
+    unlockedAdvancements: Array<Advancement>;
+    /**
+     * The latency (in milliseconds) of the player
+     * @type {number}
+     * @memberof PlayerFull
+     */
+    latency: number;
+    /**
+     * The current rotation of the player
+     * @type {Vector3d}
+     * @memberof PlayerFull
+     */
+    rotation: Vector3d;
+    /**
+     * The current scale of the player
+     * @type {Vector3d}
+     * @memberof PlayerFull
+     */
+    scale: Vector3d;
+    /**
+     * The current velocity of the player
+     * @type {Vector3d}
+     * @memberof PlayerFull
+     */
+    velocity: Vector3d;
+    /**
+     * 
+     * @type {Inventory}
+     * @memberof PlayerFull
+     */
+    inventory?: Inventory;
+    /**
+     * The item stack that the player is wearing as a helmet
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    helmet?: ItemStack;
+    /**
+     * The item stack that the player is wearing as chestplate
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    chestplate?: ItemStack;
+    /**
+     * The item stack that the player is wearing as leggings
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    leggings?: ItemStack;
+    /**
+     * The item stack that the player is wearing as boots
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    boots?: ItemStack;
+    /**
      * The player's IP address and port
      * @type {string}
      * @memberof PlayerFull
@@ -9957,66 +10007,6 @@ export interface PlayerFull {
      * @memberof PlayerFull
      */
     location: Location;
-    /**
-     * The latency (in milliseconds) of the player
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    latency: number;
-    /**
-     * The current scale of the player
-     * @type {Vector3d}
-     * @memberof PlayerFull
-     */
-    scale: Vector3d;
-    /**
-     * The current rotation of the player
-     * @type {Vector3d}
-     * @memberof PlayerFull
-     */
-    rotation: Vector3d;
-    /**
-     * The current velocity of the player
-     * @type {Vector3d}
-     * @memberof PlayerFull
-     */
-    velocity: Vector3d;
-    /**
-     * A list of all unlocked advancements of this player
-     * @type {Array&lt;Advancement&gt;}
-     * @memberof PlayerFull
-     */
-    unlockedAdvancements: Array<Advancement>;
-    /**
-     * The item stack that the player is wearing as chestplate
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    chestplate?: ItemStack;
-    /**
-     * The item stack that the player is wearing as boots
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    boots?: ItemStack;
-    /**
-     * The item stack that the player is wearing as leggings
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    leggings?: ItemStack;
-    /**
-     * The item stack that the player is wearing as a helmet
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    helmet?: ItemStack;
-    /**
-     * 
-     * @type {Inventory}
-     * @memberof PlayerFull
-     */
-    inventory?: Inventory;
     /**
      * 
      * @type {number}
@@ -11265,11 +11255,11 @@ export namespace PlayerFull {
  */
 export interface WorldFull {
     /**
-     * The name of this world
+     * The API link that can be used to obtain more information about this object
      * @type {string}
      * @memberof WorldFull
      */
-    name: string;
+    link: string;
     /**
      * True if the world is loaded, false otherwise
      * @type {boolean}
@@ -11277,41 +11267,17 @@ export interface WorldFull {
      */
     loaded: boolean;
     /**
+     * The name of this world
+     * @type {string}
+     * @memberof WorldFull
+     */
+    name: string;
+    /**
      * The unique UUID that identifies this world
      * @type {string}
      * @memberof WorldFull
      */
     uuid: string;
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof WorldFull
-     */
-    link: string;
-    /**
-     * The current time in the world
-     * @type {number}
-     * @memberof WorldFull
-     */
-    time: number;
-    /**
-     * The seed of the world
-     * @type {number}
-     * @memberof WorldFull
-     */
-    seed: number;
-    /**
-     * 
-     * @type {GameMode}
-     * @memberof WorldFull
-     */
-    gameMode?: GameMode;
-    /**
-     * The generator type used for this world
-     * @type {CatalogTypeGeneratorType}
-     * @memberof WorldFull
-     */
-    generatorType: CatalogTypeGeneratorType;
     /**
      * True if this world is loaded when the server starts, false otherwise
      * @type {boolean}
@@ -11319,17 +11285,11 @@ export interface WorldFull {
      */
     loadOnStartup: boolean;
     /**
-     * 
-     * @type {CatalogType}
+     * True if the spawn of this world is always kept loaded, false otherwise
+     * @type {boolean}
      * @memberof WorldFull
      */
-    spawn?: CatalogType;
-    /**
-     * The border of the world
-     * @type {WorldBorder}
-     * @memberof WorldFull
-     */
-    border: WorldBorder;
+    keepSpawnLoaded: boolean;
     /**
      * True if commands are allowed to be executed in this world, false otherwise
      * @type {boolean}
@@ -11337,11 +11297,41 @@ export interface WorldFull {
      */
     allowCommands: boolean;
     /**
-     * The dimension of the world
-     * @type {CatalogTypeDimensionType}
+     * True if bonus chests are generated for this world, false otherwise
+     * @type {boolean}
      * @memberof WorldFull
      */
-    dimensionType: CatalogTypeDimensionType;
+    generateBonusChests: boolean;
+    /**
+     * True if map specific features are enabled for this world, false otherwise
+     * @type {boolean}
+     * @memberof WorldFull
+     */
+    mapFeaturesEnabled: boolean;
+    /**
+     * The border of the world
+     * @type {WorldBorder}
+     * @memberof WorldFull
+     */
+    border: WorldBorder;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof WorldFull
+     */
+    spawn?: CatalogType;
+    /**
+     * The seed of the world
+     * @type {number}
+     * @memberof WorldFull
+     */
+    seed: number;
+    /**
+     * The current time in the world
+     * @type {number}
+     * @memberof WorldFull
+     */
+    time: number;
     /**
      * The current weather in the world
      * @type {CatalogTypeWeather}
@@ -11361,23 +11351,23 @@ export interface WorldFull {
      */
     gameRules: { [key: string]: string; };
     /**
-     * True if the spawn of this world is always kept loaded, false otherwise
-     * @type {boolean}
+     * 
+     * @type {GameMode}
      * @memberof WorldFull
      */
-    keepSpawnLoaded: boolean;
+    gameMode?: GameMode;
     /**
-     * True if bonus chests are generated for this world, false otherwise
-     * @type {boolean}
+     * The generator type used for this world
+     * @type {CatalogTypeGeneratorType}
      * @memberof WorldFull
      */
-    generateBonusChests: boolean;
+    generatorType: CatalogTypeGeneratorType;
     /**
-     * True if map specific features are enabled for this world, false otherwise
-     * @type {boolean}
+     * The dimension of the world
+     * @type {CatalogTypeDimensionType}
      * @memberof WorldFull
      */
-    mapFeaturesEnabled: boolean;
+    dimensionType: CatalogTypeDimensionType;
     /**
      * 
      * @type {number}
@@ -14782,6 +14772,8 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
          * @summary List entities
          * @param {string} [world] The world to filter the entities by
          * @param {string} [type] The type id of the entities to filter by
+         * @param {string} [min] The minimum coordinates at which the entity must be, min&#x3D;x|y|z
+         * @param {string} [max] The maximum coordinates at which the entity must be, max&#x3D;x|y|z
          * @param {number} [limit] The maximum amount of entities returned
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -14789,7 +14781,7 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+        listEntities(world?: string, type?: string, min?: string, max?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/entity`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -14818,6 +14810,14 @@ export const EntityApiFetchParamCreator = function (configuration?: Configuratio
 
             if (type !== undefined) {
                 localVarQueryParameter['type'] = type;
+            }
+
+            if (min !== undefined) {
+                localVarQueryParameter['min'] = min;
+            }
+
+            if (max !== undefined) {
+                localVarQueryParameter['max'] = max;
             }
 
             if (limit !== undefined) {
@@ -15052,6 +15052,8 @@ export const EntityApiFp = function(configuration?: Configuration) {
          * @summary List entities
          * @param {string} [world] The world to filter the entities by
          * @param {string} [type] The type id of the entities to filter by
+         * @param {string} [min] The minimum coordinates at which the entity must be, min&#x3D;x|y|z
+         * @param {string} [max] The maximum coordinates at which the entity must be, max&#x3D;x|y|z
          * @param {number} [limit] The maximum amount of entities returned
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -15059,8 +15061,8 @@ export const EntityApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Entity>> {
-            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).listEntities(world, type, limit, details, accept, pretty, options);
+        listEntities(world?: string, type?: string, min?: string, max?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Entity>> {
+            const localVarFetchArgs = EntityApiFetchParamCreator(configuration).listEntities(world, type, min, max, limit, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -15170,6 +15172,8 @@ export const EntityApiFactory = function (configuration?: Configuration, fetch?:
          * @summary List entities
          * @param {string} [world] The world to filter the entities by
          * @param {string} [type] The type id of the entities to filter by
+         * @param {string} [min] The minimum coordinates at which the entity must be, min&#x3D;x|y|z
+         * @param {string} [max] The maximum coordinates at which the entity must be, max&#x3D;x|y|z
          * @param {number} [limit] The maximum amount of entities returned
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -15177,8 +15181,8 @@ export const EntityApiFactory = function (configuration?: Configuration, fetch?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
-            return EntityApiFp(configuration).listEntities(world, type, limit, details, accept, pretty, options)(fetch, basePath);
+        listEntities(world?: string, type?: string, min?: string, max?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return EntityApiFp(configuration).listEntities(world, type, min, max, limit, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Modify the properties of an existing entity.     **Required permissions:**    - **entity.modify**   
@@ -15268,6 +15272,8 @@ export class EntityApi extends BaseAPI {
      * @summary List entities
      * @param {} [world] The world to filter the entities by
      * @param {} [type] The type id of the entities to filter by
+     * @param {} [min] The minimum coordinates at which the entity must be, min&#x3D;x|y|z
+     * @param {} [max] The maximum coordinates at which the entity must be, max&#x3D;x|y|z
      * @param {} [limit] The maximum amount of entities returned
      * @param {} [details] Add to include additional details, omit or false otherwise
      * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -15276,8 +15282,8 @@ export class EntityApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof EntityApi
      */
-    public listEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
-        return EntityApiFp(this.configuration).listEntities(world, type, limit, details, accept, pretty, options)(this.fetch, this.basePath);
+    public listEntities(world?: string, type?: string, min?: string, max?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return EntityApiFp(this.configuration).listEntities(world, type, min, max, limit, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -16198,13 +16204,14 @@ export const InfoApiFetchParamCreator = function (configuration?: Configuration)
         /**
          * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**   
          * @summary Server stats
+         * @param {number} [limit] 
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
          * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStats(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+        getStats(limit?: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/info/stats`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -16225,6 +16232,10 @@ export const InfoApiFetchParamCreator = function (configuration?: Configuration)
 					? configuration.apiKey("key")
 					: configuration.apiKey;
                 localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
             }
 
             if (details !== undefined) {
@@ -16336,14 +16347,15 @@ export const InfoApiFp = function(configuration?: Configuration) {
         /**
          * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**   
          * @summary Server stats
+         * @param {number} [limit] 
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
          * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStats(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ServerStats> {
-            const localVarFetchArgs = InfoApiFetchParamCreator(configuration).getStats(details, accept, pretty, options);
+        getStats(limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ServerStats> {
+            const localVarFetchArgs = InfoApiFetchParamCreator(configuration).getStats(limit, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -16399,14 +16411,15 @@ export const InfoApiFactory = function (configuration?: Configuration, fetch?: F
         /**
          * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**   
          * @summary Server stats
+         * @param {number} [limit] 
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
          * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStats(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
-            return InfoApiFp(configuration).getStats(details, accept, pretty, options)(fetch, basePath);
+        getStats(limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return InfoApiFp(configuration).getStats(limit, details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Lists all the active servlets running in the Web-API     **Required permissions:**    - **info.servlets**   
@@ -16447,6 +16460,7 @@ export class InfoApi extends BaseAPI {
     /**
      * Get statistical information about the server, such as player count, cpu and memory usage over time.     **Required permissions:**    - **info.stats**   
      * @summary Server stats
+     * @param {} [limit] 
      * @param {} [details] Add to include additional details, omit or false otherwise
      * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
      * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
@@ -16454,8 +16468,8 @@ export class InfoApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof InfoApi
      */
-    public getStats(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
-        return InfoApiFp(this.configuration).getStats(details, accept, pretty, options)(this.fetch, this.basePath);
+    public getStats(limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return InfoApiFp(this.configuration).getStats(limit, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -17842,14 +17856,14 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
         /**
          * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**   
          * @summary Create a jail
-         * @param {NucleusJail} [body] 
+         * @param {NucleusNamedLocation} [body] 
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
          * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createJail(body?: NucleusJail, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+        createJail(body?: NucleusNamedLocation, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/nucleus/jail`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -17890,7 +17904,7 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            const needsSerialization = (<any>"NucleusJail" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            const needsSerialization = (<any>"NucleusNamedLocation" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
             localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
 
             return {
@@ -18198,6 +18212,66 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Get a list of all the homes of a player.     **Required permissions:**    - **nucleus.home.list**   
+         * @summary List homes
+         * @param {string} player The uuid of the player
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listHomes(player: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'player' is not null or undefined
+            if (player === null || player === undefined) {
+                throw new RequiredError('player','Required parameter player was null or undefined when calling listHomes.');
+            }
+            const localVarPath = `/nucleus/home/{player}`
+                .replace(`{${"player"}}`, encodeURIComponent(String(player)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**   
          * @summary List jails
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
@@ -18262,6 +18336,120 @@ export const NucleusApiFetchParamCreator = function (configuration?: Configurati
          */
         listKits(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/nucleus/kit`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a list of all mail messages of a player.     **Required permissions:**    - **nucleus.mail.list**   
+         * @summary List mail
+         * @param {string} player The uuid of the player
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listMail(player: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'player' is not null or undefined
+            if (player === null || player === undefined) {
+                throw new RequiredError('player','Required parameter player was null or undefined when calling listMail.');
+            }
+            const localVarPath = `/nucleus/mail/{player}`
+                .replace(`{${"player"}}`, encodeURIComponent(String(player)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a list of loaded Nucleus modules.     **Required permissions:**    - **nucleus.module.list**   
+         * @summary List modules
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listMail_1(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            const localVarPath = `/nucleus/module`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
@@ -18436,14 +18624,14 @@ export const NucleusApiFp = function(configuration?: Configuration) {
         /**
          * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**   
          * @summary Create a jail
-         * @param {NucleusJail} [body] 
+         * @param {NucleusNamedLocation} [body] 
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
          * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createJail(body?: NucleusJail, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusJail> {
+        createJail(body?: NucleusNamedLocation, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusNamedLocation> {
             const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).createJail(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -18487,7 +18675,7 @@ export const NucleusApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteJail(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusJail> {
+        deleteJail(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusNamedLocation> {
             const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).deleteJail(name, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -18531,7 +18719,7 @@ export const NucleusApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getJail(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusJail> {
+        getJail(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusNamedLocation> {
             const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).getJail(name, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -18566,6 +18754,28 @@ export const NucleusApiFp = function(configuration?: Configuration) {
             };
         },
         /**
+         * Get a list of all the homes of a player.     **Required permissions:**    - **nucleus.home.list**   
+         * @summary List homes
+         * @param {string} player The uuid of the player
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listHomes(player: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<NucleusNamedLocation>> {
+            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).listHomes(player, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
          * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**   
          * @summary List jails
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
@@ -18574,7 +18784,7 @@ export const NucleusApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listJails(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<NucleusJail>> {
+        listJails(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<NucleusNamedLocation>> {
             const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).listJails(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -18608,6 +18818,49 @@ export const NucleusApiFp = function(configuration?: Configuration) {
             };
         },
         /**
+         * Get a list of all mail messages of a player.     **Required permissions:**    - **nucleus.mail.list**   
+         * @summary List mail
+         * @param {string} player The uuid of the player
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listMail(player: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<NucleusMailMessage>> {
+            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).listMail(player, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Get a list of loaded Nucleus modules.     **Required permissions:**    - **nucleus.module.list**   
+         * @summary List modules
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listMail_1(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<string>> {
+            const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).listMail_1(details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
          * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**   
          * @summary Modify a jail
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
@@ -18616,7 +18869,7 @@ export const NucleusApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyJail(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusJail> {
+        modifyJail(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<NucleusNamedLocation> {
             const localVarFetchArgs = NucleusApiFetchParamCreator(configuration).modifyJail(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -18663,14 +18916,14 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
         /**
          * Creates a new jail.     **Required permissions:**    - **nucleus.jail.create**   
          * @summary Create a jail
-         * @param {NucleusJail} [body] 
+         * @param {NucleusNamedLocation} [body] 
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
          * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createJail(body?: NucleusJail, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        createJail(body?: NucleusNamedLocation, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
             return NucleusApiFp(configuration).createJail(body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
@@ -18739,6 +18992,19 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
             return NucleusApiFp(configuration).getKit(name, details, accept, pretty, options)(fetch, basePath);
         },
         /**
+         * Get a list of all the homes of a player.     **Required permissions:**    - **nucleus.home.list**   
+         * @summary List homes
+         * @param {string} player The uuid of the player
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listHomes(player: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return NucleusApiFp(configuration).listHomes(player, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
          * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**   
          * @summary List jails
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
@@ -18761,6 +19027,31 @@ export const NucleusApiFactory = function (configuration?: Configuration, fetch?
          */
         listKits(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
             return NucleusApiFp(configuration).listKits(details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Get a list of all mail messages of a player.     **Required permissions:**    - **nucleus.mail.list**   
+         * @summary List mail
+         * @param {string} player The uuid of the player
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listMail(player: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return NucleusApiFp(configuration).listMail(player, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Get a list of loaded Nucleus modules.     **Required permissions:**    - **nucleus.module.list**   
+         * @summary List modules
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listMail_1(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return NucleusApiFp(configuration).listMail_1(details, accept, pretty, options)(fetch, basePath);
         },
         /**
          * Modify an existing jail.     **Required permissions:**    - **nucleus.jail.modify**   
@@ -18809,7 +19100,7 @@ export class NucleusApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof NucleusApi
      */
-    public createJail(body?: NucleusJail, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+    public createJail(body?: NucleusNamedLocation, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
         return NucleusApiFp(this.configuration).createJail(body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
@@ -18889,6 +19180,21 @@ export class NucleusApi extends BaseAPI {
     }
 
     /**
+     * Get a list of all the homes of a player.     **Required permissions:**    - **nucleus.home.list**   
+     * @summary List homes
+     * @param {} player The uuid of the player
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NucleusApi
+     */
+    public listHomes(player: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return NucleusApiFp(this.configuration).listHomes(player, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
      * Get a list of all the jails on the server.     **Required permissions:**    - **nucleus.jail.list**   
      * @summary List jails
      * @param {} [details] Add to include additional details, omit or false otherwise
@@ -18914,6 +19220,35 @@ export class NucleusApi extends BaseAPI {
      */
     public listKits(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
         return NucleusApiFp(this.configuration).listKits(details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Get a list of all mail messages of a player.     **Required permissions:**    - **nucleus.mail.list**   
+     * @summary List mail
+     * @param {} player The uuid of the player
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NucleusApi
+     */
+    public listMail(player: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return NucleusApiFp(this.configuration).listMail(player, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Get a list of loaded Nucleus modules.     **Required permissions:**    - **nucleus.module.list**   
+     * @summary List modules
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NucleusApi
+     */
+    public listMail_1(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return NucleusApiFp(this.configuration).listMail_1(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -19914,7 +20249,7 @@ export class PlayerApi extends BaseAPI {
 export const PluginApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.change**   
+         * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.modify**   - **plugin.config.modify.[plugin]**   
          * @summary Change plugin configs
          * @param {string} plugin The id of the plugin
          * @param {any} [body] 
@@ -20162,7 +20497,7 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
 export const PluginApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.change**   
+         * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.modify**   - **plugin.config.modify.[plugin]**   
          * @summary Change plugin configs
          * @param {string} plugin The id of the plugin
          * @param {any} [body] 
@@ -20259,7 +20594,7 @@ export const PluginApiFp = function(configuration?: Configuration) {
 export const PluginApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.change**   
+         * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.modify**   - **plugin.config.modify.[plugin]**   
          * @summary Change plugin configs
          * @param {string} plugin The id of the plugin
          * @param {any} [body] 
@@ -20321,7 +20656,7 @@ export const PluginApiFactory = function (configuration?: Configuration, fetch?:
  */
 export class PluginApi extends BaseAPI {
     /**
-     * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.change**   
+     * Allows changing the config files of plugin. Send a map from config filename to file contents. **This does not reload the plugin**, you can do that with `sponge plugins reload`, but not all plugins implement the reload event.     **Required permissions:**    - **plugin.config.modify**   - **plugin.config.modify.[plugin]**   
      * @summary Change plugin configs
      * @param {} plugin The id of the plugin
      * @param {} [body] 
@@ -21675,6 +22010,8 @@ export const TileEntityApiFetchParamCreator = function (configuration?: Configur
          * @summary List tile entities
          * @param {string} [world] The world to filter tile entities by
          * @param {string} [type] The type if of tile entities to filter by
+         * @param {string} [min] The minimum coordinates at which the tile entity must be, min&#x3D;x|y|z
+         * @param {string} [max] The maximum coordinates at which the tile entity must be, max&#x3D;x|y|z
          * @param {number} [limit] The maximum amount of tile entities returned
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -21682,7 +22019,7 @@ export const TileEntityApiFetchParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTileEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+        listTileEntities(world?: string, type?: string, min?: string, max?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
             const localVarPath = `/tile-entity`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -21711,6 +22048,14 @@ export const TileEntityApiFetchParamCreator = function (configuration?: Configur
 
             if (type !== undefined) {
                 localVarQueryParameter['type'] = type;
+            }
+
+            if (min !== undefined) {
+                localVarQueryParameter['min'] = min;
+            }
+
+            if (max !== undefined) {
+                localVarQueryParameter['max'] = max;
             }
 
             if (limit !== undefined) {
@@ -21804,6 +22149,8 @@ export const TileEntityApiFp = function(configuration?: Configuration) {
          * @summary List tile entities
          * @param {string} [world] The world to filter tile entities by
          * @param {string} [type] The type if of tile entities to filter by
+         * @param {string} [min] The minimum coordinates at which the tile entity must be, min&#x3D;x|y|z
+         * @param {string} [max] The maximum coordinates at which the tile entity must be, max&#x3D;x|y|z
          * @param {number} [limit] The maximum amount of tile entities returned
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -21811,8 +22158,8 @@ export const TileEntityApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTileEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<TileEntity>> {
-            const localVarFetchArgs = TileEntityApiFetchParamCreator(configuration).listTileEntities(world, type, limit, details, accept, pretty, options);
+        listTileEntities(world?: string, type?: string, min?: string, max?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<TileEntity>> {
+            const localVarFetchArgs = TileEntityApiFetchParamCreator(configuration).listTileEntities(world, type, min, max, limit, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -21870,6 +22217,8 @@ export const TileEntityApiFactory = function (configuration?: Configuration, fet
          * @summary List tile entities
          * @param {string} [world] The world to filter tile entities by
          * @param {string} [type] The type if of tile entities to filter by
+         * @param {string} [min] The minimum coordinates at which the tile entity must be, min&#x3D;x|y|z
+         * @param {string} [max] The maximum coordinates at which the tile entity must be, max&#x3D;x|y|z
          * @param {number} [limit] The maximum amount of tile entities returned
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -21877,8 +22226,8 @@ export const TileEntityApiFactory = function (configuration?: Configuration, fet
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTileEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
-            return TileEntityApiFp(configuration).listTileEntities(world, type, limit, details, accept, pretty, options)(fetch, basePath);
+        listTileEntities(world?: string, type?: string, min?: string, max?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return TileEntityApiFp(configuration).listTileEntities(world, type, min, max, limit, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -21932,6 +22281,8 @@ export class TileEntityApi extends BaseAPI {
      * @summary List tile entities
      * @param {} [world] The world to filter tile entities by
      * @param {} [type] The type if of tile entities to filter by
+     * @param {} [min] The minimum coordinates at which the tile entity must be, min&#x3D;x|y|z
+     * @param {} [max] The maximum coordinates at which the tile entity must be, max&#x3D;x|y|z
      * @param {} [limit] The maximum amount of tile entities returned
      * @param {} [details] Add to include additional details, omit or false otherwise
      * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -21940,8 +22291,8 @@ export class TileEntityApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TileEntityApi
      */
-    public listTileEntities(world?: string, type?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
-        return TileEntityApiFp(this.configuration).listTileEntities(world, type, limit, details, accept, pretty, options)(this.fetch, this.basePath);
+    public listTileEntities(world?: string, type?: string, min?: string, max?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return TileEntityApiFp(this.configuration).listTileEntities(world, type, min, max, limit, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }

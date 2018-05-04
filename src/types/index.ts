@@ -9,7 +9,8 @@ import { DashboardState } from "../reducers/dashboard"
 import { DataViewState } from "../reducers/dataview"
 import { PermissionState } from "../reducers/permission"
 import { PluginState } from "../reducers/plugin"
-import { SettingsState } from "../reducers/settings"
+import { PreferencesState } from "../reducers/preferences"
+import { SettingsState } from "../reducers/server-settings"
 
 // Lang
 export enum Lang {
@@ -58,6 +59,8 @@ export interface AppState {
 	world: DataViewState<WorldFull>
 	tileentity: DataViewState<TileEntity>
 	server_properties: SettingsState
+
+	preferences: PreferencesState
 	router: RouterState
 }
 
@@ -158,4 +161,11 @@ export enum CatalogTypeKeys {
 	Generator = "world.GeneratorType",
 	Item = "item.ItemType",
 	TileEntity = "block.tileentity.TileEntityType"
+}
+
+export enum PreferenceKey {
+	"showServerUsage" = "showServerUsage",
+	"hideWIPNote" = "hideWIPNote",
+	"hidePluginsNote" = "hidePluginsNote",
+	"hideServerSettingsNote" = "hideServerSettingsNote"
 }

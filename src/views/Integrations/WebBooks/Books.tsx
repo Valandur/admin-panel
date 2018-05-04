@@ -21,7 +21,6 @@ interface OwnState {
 }
 
 class Books extends React.Component<Props, OwnState> {
-
 	constructor(props: Props) {
 		super(props)
 
@@ -31,30 +30,40 @@ class Books extends React.Component<Props, OwnState> {
 	addLine(view: DataViewRef<WebBooksBook>) {
 		view.setState({
 			lines: view.state.lines.concat(view.state.newItem),
-			newItem: "",
+			newItem: ""
 		})
 	}
 
 	moveLineUp(view: DataViewRef<WebBooksBook>, index: number) {
 		view.setState({
-			lines: view.state.lines.map((line: string, i: number) =>
-				i === index ? view.state.lines[index - 1] :
-				(i === index - 1 ? view.state.lines[index] : line)),
+			lines: view.state.lines.map(
+				(line: string, i: number) =>
+					i === index
+						? view.state.lines[index - 1]
+						: i === index - 1
+							? view.state.lines[index]
+							: line
+			)
 		})
 	}
 
 	moveLineDown(view: DataViewRef<WebBooksBook>, index: number) {
 		view.setState({
-			lines: view.state.lines.map((line: string, i: number) =>
-				i === index ? view.state.lines[index + 1] :
-				(i === index + 1 ? view.state.lines[index] : line)),
+			lines: view.state.lines.map(
+				(line: string, i: number) =>
+					i === index
+						? view.state.lines[index + 1]
+						: i === index + 1
+							? view.state.lines[index]
+							: line
+			)
 		})
 	}
 
 	deleteLine(view: DataViewRef<WebBooksBook>, index: number) {
 		view.setState({
 			lines: view.state.lines.filter((line: string, i: number) => i !== index),
-			newItem: "",
+			newItem: ""
 		})
 	}
 
@@ -78,42 +87,60 @@ class Books extends React.Component<Props, OwnState> {
 						label: _t("Id"),
 						create: true,
 						filter: true,
-						required: true,
+						required: true
 					},
 					title: {
 						label: _t("Title"),
 						edit: true,
 						create: true,
 						required: true,
-						wide: true,
+						wide: true
 					},
 					lines: {
 						view: false,
-						edit: true,
+						edit: true
 					},
 					content: {
 						label: _t("Content"),
 						wide: true,
-						view: (book: WebBooksBook) => <div dangerouslySetInnerHTML={{ __html: book.html }} />,
-						edit: this.renderEditContent,
+						view: (book: WebBooksBook) => (
+							<div dangerouslySetInnerHTML={{ __html: book.html }} />
+						),
+						edit: this.renderEditContent
 					},
 					link: {
 						label: _t("Link"),
 						wide: true,
-						view: (book: WebBooksBook) =>
+						view: (book: WebBooksBook) => (
 							<Input
 								fluid
-								onFocus={(e: React.SyntheticEvent<HTMLInputElement>) => (e.target as any).select()}
-								action={{ color: "teal", icon: "linkify", onClick: () => this.copy(book) }}
-								value={this.props.apiUrl + "/api/v5/web-books/book/" + book.id + "/html"}
-							/>,
-					},
+								onFocus={(e: React.SyntheticEvent<HTMLInputElement>) =>
+									(e.target as any).select()
+								}
+								action={{
+									color: "teal",
+									icon: "linkify",
+									onClick: () => this.copy(book)
+								}}
+								value={
+									this.props.apiUrl +
+									"/api/v5/web-books/book/" +
+									book.id +
+									"/html"
+								}
+							/>
+						)
+					}
 				}}
-				onSave={(obj: WebBooksBook, newData: any, view: DataViewRef<WebBooksBook>) => {
+				onSave={(
+					obj: WebBooksBook,
+					newData: any,
+					view: DataViewRef<WebBooksBook>
+				) => {
 					view.save(obj, {
 						id: obj.id,
 						title: newData.title,
-						lines: newData.lines,
+						lines: newData.lines
 					})
 				}}
 			/>
@@ -124,9 +151,9 @@ class Books extends React.Component<Props, OwnState> {
 		const _t = this.props.t
 
 		return (
-			<div>
+			<>
 				<List size="large">
-					{view.state.lines.map((line: string, index: number) =>
+					{view.state.lines.map((line: string, index: number) => (
 						<List.Item key={index}>
 							<Button
 								compact
@@ -155,16 +182,20 @@ class Books extends React.Component<Props, OwnState> {
 								disabled={index <= 0}
 							/>
 						</List.Item>
-					)}
+					))}
 				</List>
 				<Input
 					name="newItem"
 					placeholder={_t("NewLine")}
 					onChange={view.handleChange}
 					value={view.state.newItem ? view.state.newItem : ""}
-					action={{ color: "green", icon: "plus", onClick: () => this.addLine(view) }}
+					action={{
+						color: "green",
+						icon: "plus",
+						onClick: () => this.addLine(view)
+					}}
 				/>
-			</div>
+			</>
 		)
 	}
 }

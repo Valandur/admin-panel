@@ -5,8 +5,12 @@ import { Button, Icon, Label, Modal, Progress } from "semantic-ui-react"
 
 import { AppAction } from "../../actions"
 import { ListRequestAction, requestList } from "../../actions/dataview"
-import { BanPlayerRequestAction, KickPlayerRequestAction, requestBanPlayer,
-	requestKickPlayer } from "../../actions/player"
+import {
+	BanPlayerRequestAction,
+	KickPlayerRequestAction,
+	requestBanPlayer,
+	requestKickPlayer
+} from "../../actions/player"
 import InventoryComp from "../../components/Inventory"
 import { formatRange, renderWorldOptions } from "../../components/Util"
 import { Inventory, Player, PlayerFull, WorldFull } from "../../fetch"
@@ -29,12 +33,11 @@ interface OwnState {
 }
 
 class Players extends React.Component<Props, OwnState> {
-
 	constructor(props: Props) {
 		super(props)
 
 		this.state = {
-			modal: false,
+			modal: false
 		}
 
 		this.toggleModal = this.toggleModal.bind(this)
@@ -59,13 +62,13 @@ class Players extends React.Component<Props, OwnState> {
 		this.setState({
 			modal: true,
 			player: player,
-			inventory: player.inventory,
+			inventory: player.inventory
 		})
 	}
 
 	toggleModal() {
 		this.setState({
-			modal: !this.state.modal,
+			modal: !this.state.modal
 		})
 	}
 
@@ -73,7 +76,7 @@ class Players extends React.Component<Props, OwnState> {
 		const _t = this.props.t
 
 		return (
-			<div>
+			<>
 				<DataView
 					icon="users"
 					title={_t("Players")}
@@ -82,12 +85,15 @@ class Players extends React.Component<Props, OwnState> {
 						name: {
 							label: _t("NameUUID"),
 							filter: true,
-							view: (player: PlayerFull) =>
-								<div>
-									{player.name}<br />
-									{player.uuid}<br />
+							view: (player: PlayerFull) => (
+								<>
+									{player.name}
+									<br />
+									{player.uuid}
+									<br />
 									{player.address}
-								</div>,
+								</>
+							)
 						},
 						world: {
 							label: _t("World"),
@@ -95,63 +101,66 @@ class Players extends React.Component<Props, OwnState> {
 							filter: true,
 							filterName: "location.world.uuid",
 							options: renderWorldOptions(this.props.worlds),
-							required: true,
+							required: true
 						},
 						location: {
 							label: _t("Location"),
-							view: (player: PlayerFull) =>
+							view: (player: PlayerFull) => (
 								<Button color="blue">
 									<Icon name="globe" />
 									{player.location.world.name}&nbsp; &nbsp;
 									{player.location.position.x.toFixed(0)} |&nbsp;
 									{player.location.position.y.toFixed(0)} |&nbsp;
 									{player.location.position.z.toFixed(0)}
-								</Button>,
+								</Button>
+							)
 						},
 						health: {
 							label: _t("HealthFood"),
 							wide: true,
 							view: (player: PlayerFull) => {
-								if (!player.health || ! player.food) {
+								if (!player.health || !player.food) {
 									return
 								}
 
 								return (
-									<div>
+									<>
 										<Progress
 											progress
 											color="red"
-											style={{marginBottom: "1em"}}
-											percent={formatRange(player.health.current, player.health.max)}
+											style={{ marginBottom: "1em" }}
+											percent={formatRange(
+												player.health.current,
+												player.health.max
+											)}
 										/>
 										<Progress
 											progress
 											color="green"
 											percent={formatRange(player.food.foodLevel, 20)}
 										/>
-									</div>
+									</>
 								)
 							}
 						},
 						info: {
 							label: _t("Info"),
 							wide: true,
-							view: (player: PlayerFull) =>
-								<div>
-									{player.gameMode &&
-										<Label>
-											{player.gameMode.name}
-										</Label>}
-									{player.experience &&
+							view: (player: PlayerFull) => (
+								<>
+									{player.gameMode && <Label>{player.gameMode.name}</Label>}
+									{player.experience && (
 										<Label>
 											{_t("Level")}
 											<Label.Detail>{player.experience.level}</Label.Detail>
-										</Label>}
-								</div>,
+										</Label>
+									)}
+								</>
+							)
 						}
 					}}
-					actions={(player: PlayerFull, view: DataViewRef<PlayerFull>) =>
-						<div>
+					actions={(player: PlayerFull, view: DataViewRef<PlayerFull>) => (
+						<>
 							<Button
 								color="blue"
 								loading={(player as any).updating}
@@ -176,11 +185,11 @@ class Players extends React.Component<Props, OwnState> {
 							>
 								{_t("Ban")}
 							</Button>
-						</div>
-					}
+						</>
+					)}
 				/>
 
-				{this.state.player && this.state.inventory ?
+				{this.state.player && this.state.inventory ? (
 					<Modal open={this.state.modal} onClose={this.toggleModal}>
 						<Modal.Header>
 							<Trans i18nKey="InventoryTitle">
@@ -194,15 +203,15 @@ class Players extends React.Component<Props, OwnState> {
 							/>
 						</Modal.Content>
 					</Modal>
-				: null}
-			</div>
+				) : null}
+			</>
 		)
 	}
 }
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		worlds: state.world.list,
+		worlds: state.world.list
 	}
 }
 
@@ -210,8 +219,10 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		requestKickPlayer: (player: Player) => dispatch(requestKickPlayer(player)),
 		requestBanPlayer: (player: Player) => dispatch(requestBanPlayer(player)),
-		requestWorlds: () => dispatch(requestList("world", true)),
+		requestWorlds: () => dispatch(requestList("world", true))
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate("Players")(Players))
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Players")(Players)
+)

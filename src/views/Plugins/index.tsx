@@ -1,37 +1,52 @@
 import * as React from "react"
 import { Trans, translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
-import { Button, Label, Loader, Message, Modal, Segment, Tab } from "semantic-ui-react"
+import {
+	Button,
+	Label,
+	Loader,
+	Message,
+	Modal,
+	Segment,
+	Tab
+} from "semantic-ui-react"
 
 import { AppAction } from "../../actions"
 import {
-	PluginConfigRequestAction,
-	PluginConfigSaveRequestAction,
 	requestPluginConfig,
 	requestPluginConfigSave
 } from "../../actions/plugin"
 import { JSON_EDITOR_MODE, ReactJSONEditor } from "../../components/JsonEditor"
 import { PluginContainer } from "../../fetch"
-import { AppState, DataViewRef, PermissionTree } from "../../types"
+import {
+	AppState,
+	DataViewRef,
+	PermissionTree,
+	PreferenceKey
+} from "../../types"
+
+import { setPreference } from "../../actions/preferences"
+import { checkPermissions } from "../../components/Util"
 
 import DataViewFunc from "../../components/DataView"
-import { checkPermissions } from "../../components/Util"
 const DataView = DataViewFunc("plugin", "id", true)
 
 interface OwnProps {
 	configs: {
 		[x: string]: any
 	}
+	hideNote: boolean
 	perms?: PermissionTree
 }
 
 interface Props extends OwnProps, reactI18Next.InjectedTranslateProps {
-	requestPluginConfig: (id: string) => PluginConfigRequestAction
+	requestPluginConfig: (id: string) => AppAction
 	requestPluginConfigSave: (
 		id: string,
 		plugin: PluginContainer,
 		configs: any
-	) => PluginConfigSaveRequestAction
+	) => AppAction
+	doHideNote: () => AppAction
 }
 
 interface OwnState {
@@ -108,20 +123,25 @@ class Plugins extends React.Component<Props, OwnState> {
 		const _t = this.props.t
 
 		return (
-			<div>
-				<Segment basic>
-					<Message warning>
-						<Message.Header>{_t("WarnTitle")}</Message.Header>
-						<p>
-							<Trans i18nKey="WarnText">
-								Web-API automatically makes a backup of your configs before saving them, but caution
-								is still advised when changing config values. To apply your new configs use{" "}
-								<b>/sponge plugins reload</b>. Plugins are not required to implement the reload
-								event, so this might not work for all plugins. Use a server restart if required.
-							</Trans>
-						</p>
-					</Message>
-				</Segment>
+			<>
+				{!this.props.hideNote && (
+					<Segment basic>
+						<Message warning onDismiss={() => this.props.doHideNote()}>
+							<Message.Header>{_t("WarnTitle")}</Message.Header>
+							<p>
+								<Trans i18nKey="WarnText">
+									Web-API automatically makes a backup of your configs before
+									saving them, but caution is still advised when changing config
+									values. To apply your new configs use{" "}
+									<b>/sponge plugins reload</b>. Plugins are not required to
+									implement the reload event, so this might not work for all
+									plugins. Use a server restart if required.
+								</Trans>
+							</p>
+						</Message>
+					</Segment>
+				)}
+
 				<DataView
 					icon="plug"
 					title={_t("Plugins")}
@@ -131,18 +151,24 @@ class Plugins extends React.Component<Props, OwnState> {
 						version: _t("Version")
 					}}
 					actions={(plugin: PluginContainer, view) => (
-						<div>
-							{checkPermissions(this.props.perms, ["plugin", "config", "modify", plugin.id]) && (
-								<Button color="blue" onClick={e => this.showDetails(plugin, view)}>
+						<>
+							{checkPermissions(
+								this.props.perms,
+								["plugin", "config", "modify", plugin.id]
+							) && (
+								<Button
+									color="blue"
+									onClick={e => this.showDetails(plugin, view)}
+								>
 									{_t("Details")}
 								</Button>
 							)}
-						</div>
+						</>
 					)}
 				/>
 
 				{this.renderModal()}
-			</div>
+			</>
 		)
 	}
 
@@ -154,9 +180,14 @@ class Plugins extends React.Component<Props, OwnState> {
 		const _t = this.props.t
 
 		return (
-			<Modal open={this.state.modal} onClose={this.toggleModal} size="fullscreen">
+			<Modal
+				open={this.state.modal}
+				onClose={this.toggleModal}
+				size="fullscreen"
+			>
 				<Modal.Header>
-					{this.state.plugin.name} <Label color="blue">{this.state.plugin.version}</Label>
+					{this.state.plugin.name}{" "}
+					<Label color="blue">{this.state.plugin.version}</Label>
 				</Modal.Header>
 				<Modal.Content>
 					{this.state.configs ? (
@@ -191,16 +222,25 @@ class Plugins extends React.Component<Props, OwnState> {
 const mapStateToProps = (state: AppState): OwnProps => {
 	return {
 		configs: state.plugin.configs,
+		hideNote: state.preferences.hidePluginsNote,
 		perms: state.api.permissions
 	}
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
-		requestPluginConfig: (id: string) => dispatch(requestPluginConfig(id)),
-		requestPluginConfigSave: (id: string, plugin: PluginContainer, configs: any) =>
-			dispatch(requestPluginConfigSave(id, plugin, configs))
+		requestPluginConfig: (id: string): AppAction =>
+			dispatch(requestPluginConfig(id)),
+		requestPluginConfigSave: (
+			id: string,
+			plugin: PluginContainer,
+			configs: any
+		): AppAction => dispatch(requestPluginConfigSave(id, plugin, configs)),
+		doHideNote: (): AppAction =>
+			dispatch(setPreference(PreferenceKey.hidePluginsNote, true))
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate("Plugins")(Plugins))
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Plugins")(Plugins)
+)

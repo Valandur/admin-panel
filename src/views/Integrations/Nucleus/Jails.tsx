@@ -6,7 +6,7 @@ import { Button, Form, Icon } from "semantic-ui-react"
 import { AppAction } from "../../../actions"
 import { ListRequestAction, requestList } from "../../../actions/dataview"
 import { renderWorldOptions } from "../../../components/Util"
-import { NucleusJail, WorldFull } from "../../../fetch"
+import { NucleusNamedLocation, WorldFull } from "../../../fetch"
 import { AppState } from "../../../types"
 
 import DataViewFunc from "../../../components/DataView"
@@ -17,11 +17,9 @@ interface Props extends reactI18Next.InjectedTranslateProps {
 	requestWorlds: () => ListRequestAction
 }
 
-interface OwnState {
-}
+interface OwnState {}
 
 class Jails extends React.Component<Props, OwnState> {
-
 	componentDidMount() {
 		this.props.requestWorlds()
 	}
@@ -42,7 +40,7 @@ class Jails extends React.Component<Props, OwnState> {
 						create: true,
 						filter: true,
 						required: true,
-						wide: true,
+						wide: true
 					},
 					world: {
 						label: _t("World"),
@@ -52,13 +50,13 @@ class Jails extends React.Component<Props, OwnState> {
 						filter: true,
 						filterName: "location.world.uuid",
 						options: renderWorldOptions(this.props.worlds),
-						required: true,
+						required: true
 					},
 					position: {
 						label: _t("Location"),
 						isGroup: true,
 						wide: true,
-						view: (jail: NucleusJail) => {
+						view: (jail: NucleusNamedLocation) => {
 							if (!jail.location) {
 								return <Button color="red">Invalid location</Button>
 							}
@@ -73,7 +71,7 @@ class Jails extends React.Component<Props, OwnState> {
 								</Button>
 							)
 						},
-						create: (view) =>
+						create: view => (
 							<Form.Group inline>
 								<label>Position</label>
 								<Form.Input
@@ -100,7 +98,8 @@ class Jails extends React.Component<Props, OwnState> {
 									value={view.state["location.position.z"]}
 									onChange={view.handleChange}
 								/>
-							</Form.Group>,
+							</Form.Group>
+						)
 					}
 				}}
 			/>
@@ -110,13 +109,13 @@ class Jails extends React.Component<Props, OwnState> {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		worlds: state.world.list,
+		worlds: state.world.list
 	}
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
-		requestWorlds: () => dispatch(requestList("world", true)),
+		requestWorlds: () => dispatch(requestList("world", true))
 	}
 }
 

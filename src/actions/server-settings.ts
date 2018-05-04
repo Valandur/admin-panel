@@ -6,7 +6,7 @@ export enum TypeKeys {
 	EDIT_PROPERTY = "EDIT_PROPERTY",
 	SET_PROPERTY = "SET_PROPERTY",
 	SAVE_PROPERTY_REQUEST = "SAVE_PROPERTY_REQUEST",
-	SAVE_PROPERTY_RESPONSE = "SAVE_PROPERTY_RESPONSE",
+	SAVE_PROPERTY_RESPONSE = "SAVE_PROPERTY_RESPONSE"
 }
 
 export interface EditPropertyAction extends Action {
@@ -16,7 +16,7 @@ export interface EditPropertyAction extends Action {
 export function editProperty(prop: EServerProperty): EditPropertyAction {
 	return {
 		type: TypeKeys.EDIT_PROPERTY,
-		prop,
+		prop
 	}
 }
 
@@ -29,7 +29,7 @@ export function setProperty(prop: EServerProperty, value: string): SetPropertyAc
 	return {
 		type: TypeKeys.SET_PROPERTY,
 		prop,
-		value,
+		value
 	}
 }
 
@@ -40,7 +40,7 @@ export interface SavePropertyRequestAction extends Action {
 export function requestSaveProperty(prop: EServerProperty): SavePropertyRequestAction {
 	return {
 		type: TypeKeys.SAVE_PROPERTY_REQUEST,
-		prop,
+		prop
 	}
 }
 
@@ -51,9 +51,12 @@ export interface SavePropertyResponseAction extends Action {
 export function respondSaveProperty(prop: EServerProperty): SavePropertyResponseAction {
 	return {
 		type: TypeKeys.SAVE_PROPERTY_RESPONSE,
-		prop,
+		prop
 	}
 }
 
-export type SettingsAction = EditPropertyAction | SetPropertyAction | SavePropertyRequestAction |
-	SavePropertyResponseAction
+export type ServerSettingsAction =
+	| EditPropertyAction
+	| SetPropertyAction
+	| SavePropertyRequestAction
+	| SavePropertyResponseAction

@@ -76,7 +76,7 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 								: get(obj, field.name)}
 					</Table.Cell>
 				))}
-				{actions || _canEdit || _canDelete ? (
+				{actions || canEdit || canDelete ? (
 					<Table.Cell collapsing>
 						{_canEdit && editing ? (
 							[

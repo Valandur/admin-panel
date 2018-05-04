@@ -1,12 +1,18 @@
-import * as i18next from "i18next"
 import * as _ from "lodash"
 
 import { AppAction, TypeKeys } from "../actions"
 import {
-	CatalogType, CommandApi, InfoApi, PermissionApi, PlayerApi, PluginApi, RegistryApi, ServerApi,
+	CatalogType,
+	CommandApi,
+	InfoApi,
+	PermissionApi,
+	PlayerApi,
+	PluginApi,
+	RegistryApi,
+	ServerApi,
 	UserApi
 } from "../fetch"
-import { CatalogTypeKeys, Lang, PermissionTree, Server } from "../types"
+import { CatalogTypeKeys, PermissionTree, Server } from "../types"
 
 export interface ApiCollection {
 	cmd: CommandApi
@@ -22,8 +28,10 @@ export interface ApiCollection {
 function setupApis(server: Server, apiKey?: string): ApiCollection {
 	const conf = {
 		apiKey: apiKey,
-		basePath: (window.location.protocol === "https:" && server.apiUrlHttps ?
-			server.apiUrlHttps : server.apiUrl) + "/api/v5",
+		basePath:
+			(window.location.protocol === "https:" && server.apiUrlHttps
+				? server.apiUrlHttps
+				: server.apiUrl) + "/api/v5"
 	}
 
 	return {
@@ -34,7 +42,7 @@ function setupApis(server: Server, apiKey?: string): ApiCollection {
 		plugin: new PluginApi(conf),
 		registry: new RegistryApi(conf),
 		server: new ServerApi(conf),
-		user: new UserApi(conf),
+		user: new UserApi(conf)
 	}
 }
 
@@ -47,14 +55,11 @@ export interface ApiState {
 	servlets: {
 		[x: string]: string
 	}
-	types: {
-		[x in CatalogTypeKeys]?: CatalogType[]
-	}
-	lang: Lang
+	types: { [x in CatalogTypeKeys]?: CatalogType[] }
 	permissions?: PermissionTree
 
 	apis: ApiCollection
-	version: 2,
+	version: 2
 }
 
 let initialState: ApiState = {
@@ -64,10 +69,9 @@ let initialState: ApiState = {
 	servers: window.config.servers,
 	servlets: {},
 	types: {},
-	lang: Lang.EN,
 
 	apis: setupApis(window.config.servers[0]),
-	version: 2,
+	version: 2
 }
 
 if (window.localStorage) {
@@ -85,13 +89,12 @@ if (window.localStorage) {
 }
 
 export default (state = initialState, action: AppAction) => {
-
 	switch (action.type) {
 		case TypeKeys.CHANGE_SERVER:
 			return {
 				...state,
 				server: action.server,
-				apis: setupApis(action.server),
+				apis: setupApis(action.server)
 			}
 
 		case TypeKeys.SERVLETS_RESPONSE:
@@ -101,20 +104,13 @@ export default (state = initialState, action: AppAction) => {
 
 			return {
 				...state,
-				servlets: action.servlets,
-			}
-
-		case TypeKeys.CHANGE_LANGUAGE:
-			i18next.changeLanguage(action.lang)
-			return {
-				...state,
-				lang: action.lang,
+				servlets: action.servlets
 			}
 
 		case TypeKeys.LOGIN_REQUEST:
 			return {
 				...state,
-				loggingIn: true,
+				loggingIn: true
 			}
 
 		case TypeKeys.LOGIN_RESPONSE:
@@ -125,7 +121,7 @@ export default (state = initialState, action: AppAction) => {
 					loggedIn: false,
 					key: undefined,
 					permissions: undefined,
-					rateLimit: undefined,
+					rateLimit: undefined
 				}
 			}
 			return {
@@ -144,7 +140,7 @@ export default (state = initialState, action: AppAction) => {
 				loggedIn: false,
 				key: undefined,
 				permissions: undefined,
-				rateLimit: undefined,
+				rateLimit: undefined
 			}
 
 		case TypeKeys.CHECK_USER_RESPONSE:
@@ -155,7 +151,7 @@ export default (state = initialState, action: AppAction) => {
 			return {
 				...state,
 				permissions: action.data.permissions,
-				rateLimit: action.data.rateLimit,
+				rateLimit: action.data.rateLimit
 			}
 
 		case TypeKeys.CATALOG_RESPONSE:
@@ -163,8 +159,10 @@ export default (state = initialState, action: AppAction) => {
 				...state,
 				types: {
 					...state.types,
-					[action.class]: action.types.filter((t, i) => action.types.findIndex(otherT => otherT.id === t.id) === i),
-				},
+					[action.class]: action.types.filter(
+						(t, i) => action.types.findIndex(otherT => otherT.id === t.id) === i
+					)
+				}
 			}
 
 		default:

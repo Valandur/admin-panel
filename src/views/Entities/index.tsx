@@ -5,7 +5,11 @@ import { Button, Form, Icon, Label, Progress } from "semantic-ui-react"
 
 import { AppAction, CatalogRequestAction, requestCatalog } from "../../actions"
 import { ListRequestAction, requestList } from "../../actions/dataview"
-import { formatRange, renderCatalogTypeOptions, renderWorldOptions } from "../../components/Util"
+import {
+	formatRange,
+	renderCatalogTypeOptions,
+	renderWorldOptions
+} from "../../components/Util"
 import { CatalogType, Entity, WorldFull } from "../../fetch"
 import { AppState, CatalogTypeKeys } from "../../types"
 
@@ -13,14 +17,13 @@ import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("entity", "uuid")
 
 interface Props extends reactI18Next.InjectedTranslateProps {
-	worlds: WorldFull[],
-	entTypes: CatalogType[],
-	requestWorlds: () => ListRequestAction,
-	requestCatalog: (type: string) => CatalogRequestAction,
+	worlds: WorldFull[]
+	entTypes: CatalogType[]
+	requestWorlds: () => ListRequestAction
+	requestCatalog: (type: string) => CatalogRequestAction
 }
 
 class Entities extends React.Component<Props> {
-
 	componentDidMount() {
 		this.props.requestWorlds()
 		this.props.requestCatalog(CatalogTypeKeys.Entity)
@@ -44,7 +47,7 @@ class Entities extends React.Component<Props> {
 						filter: true,
 						filterName: "type.id",
 						view: (entity: Entity) => entity.type.name,
-						options: renderCatalogTypeOptions(this.props.entTypes),
+						options: renderCatalogTypeOptions(this.props.entTypes)
 					},
 					world: {
 						label: _t("World"),
@@ -53,20 +56,21 @@ class Entities extends React.Component<Props> {
 						filter: true,
 						filterName: "location.world.uuid",
 						options: renderWorldOptions(this.props.worlds),
-						required: true,
+						required: true
 					},
 					position: {
 						label: _t("Location"),
 						isGroup: true,
-						view: (entity: Entity) =>
+						view: (entity: Entity) => (
 							<Button color="blue">
 								<Icon name="globe" />
 								{entity.location.world.name}&nbsp; &nbsp;
 								{entity.location.position.x.toFixed(0)} |&nbsp;
 								{entity.location.position.y.toFixed(0)} |&nbsp;
 								{entity.location.position.z.toFixed(0)}
-							</Button>,
-						create: (view) =>
+							</Button>
+						),
+						create: view => (
 							<Form.Group inline>
 								<label>{_t("Position")}</label>
 								<Form.Input
@@ -93,7 +97,8 @@ class Entities extends React.Component<Props> {
 									value={view.state["position.z"]}
 									onChange={view.handleChange}
 								/>
-							</Form.Group>,
+							</Form.Group>
+						)
 					},
 					health: {
 						label: _t("Health"),
@@ -103,60 +108,47 @@ class Entities extends React.Component<Props> {
 								return
 							}
 
-							return <Progress
-								progress
-								color="red"
-								percent={formatRange(entity.health.current, entity.health.max)}
-							/>
+							return (
+								<Progress
+									progress
+									color="red"
+									percent={formatRange(
+										entity.health.current,
+										entity.health.max
+									)}
+								/>
+							)
 						}
 					},
 					info: {
 						label: _t("Info"),
 						wide: true,
-						view: (entity: Entity) =>
-							<div>
-								{entity.aiEnabled &&
-									<Label>
-										{_t("AI")}
-									</Label>}
-								{entity.age &&
+						view: (entity: Entity) => (
+							<>
+								{entity.aiEnabled && <Label>{_t("AI")}</Label>}
+								{entity.age && (
 									<Label>
 										{_t("Age")}
 										<Label.Detail>
 											{entity.age.adult ? _t("Adult") : entity.age.age}
 										</Label.Detail>
-									</Label>}
-								{entity.breedable &&
-									<Label>
-										{_t("Breedable")}
-									</Label>}
-								{entity.career &&
+									</Label>
+								)}
+								{entity.breedable && <Label>{_t("Breedable")}</Label>}
+								{entity.career && (
 									<Label>
 										{_t("Career")}
 										<Label.Detail>{entity.career.name}</Label.Detail>
-									</Label>}
-								{entity.flying &&
-									<Label>
-										{_t("Flying")}
-									</Label>}
-								{entity.glowing &&
-									<Label>
-										{_t("Glowing")}
-									</Label>}
-								{entity.silent &&
-									<Label>
-										{_t("Silent")}
-									</Label>}
-								{entity.sneaking &&
-									<Label>
-										{_t("Sneaking")}
-									</Label>}
-								{entity.sprinting &&
-									<Label>
-										{_t("Sprinting")}
-									</Label>}
-							</div>,
-					},
+									</Label>
+								)}
+								{entity.flying && <Label>{_t("Flying")}</Label>}
+								{entity.glowing && <Label>{_t("Glowing")}</Label>}
+								{entity.silent && <Label>{_t("Silent")}</Label>}
+								{entity.sneaking && <Label>{_t("Sneaking")}</Label>}
+								{entity.sprinting && <Label>{_t("Sprinting")}</Label>}
+							</>
+						)
+					}
 				}}
 			/>
 		)
@@ -166,15 +158,17 @@ class Entities extends React.Component<Props> {
 const mapStateToProps = (state: AppState) => {
 	return {
 		worlds: state.world.list,
-		entTypes: state.api.types[CatalogTypeKeys.Entity],
+		entTypes: state.api.types[CatalogTypeKeys.Entity]
 	}
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		requestWorlds: () => dispatch(requestList("world", true)),
-		requestCatalog: (type: string) => dispatch(requestCatalog(type)),
+		requestCatalog: (type: string) => dispatch(requestCatalog(type))
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate("Entities")(Entities))
+export default connect(mapStateToProps, mapDispatchToProps)(
+	translate("Entities")(Entities)
+)
