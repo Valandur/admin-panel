@@ -1,6 +1,6 @@
 {
   "name": "webapi-admin-panel",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "homepage": ".",
   "proxy": "http://localhost:8080/",
   "devDependencies": {
