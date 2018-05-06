@@ -2,7 +2,13 @@ import { RouterState } from "react-router-redux"
 import { SemanticICONS } from "semantic-ui-react"
 
 import { HandleChangeFunc } from "../components/Util"
-import { Entity, PlayerFull, ServerProperty, TileEntity, WorldFull } from "../fetch"
+import {
+	Entity,
+	PlayerFull,
+	ServerProperty,
+	TileEntity,
+	WorldFull
+} from "../fetch"
 import { ApiState } from "../reducers/api"
 import { CommandState } from "../reducers/command"
 import { DashboardState } from "../reducers/dashboard"
@@ -82,10 +88,20 @@ export interface DataViewRef<T> extends DataTableRef {
 	delete: (data: T) => void
 }
 
-export type DataFieldViewFunc<T> = (obj: T, view: DataTableRef) => JSX.Element | string | undefined
-export type DataFieldEditFunc<T> = (obj: T, view: DataTableRef) => JSX.Element | string | undefined
-export type DataFieldFilterFunc = (view: DataTableRef) => JSX.Element | undefined
-export type DataFieldCreateFunc = (view: DataTableRef) => JSX.Element | undefined
+export type DataFieldViewFunc<T> = (
+	obj: T,
+	view: DataTableRef
+) => JSX.Element | string | undefined
+export type DataFieldEditFunc<T> = (
+	obj: T,
+	view: DataTableRef
+) => JSX.Element | string | undefined
+export type DataFieldFilterFunc = (
+	view: DataTableRef
+) => JSX.Element | undefined
+export type DataFieldCreateFunc = (
+	view: DataTableRef
+) => JSX.Element | undefined
 export interface DataField<T> {
 	label?: string
 	type?: string
@@ -117,8 +133,8 @@ export interface ViewDefinition {
 	title: string
 	path: string
 	icon?: SemanticICONS
-	perms: string[] | null
-	servlets?: string[] | null
+	perms: string[][] | string[] | null
+	servlets?: string[][] | string[] | null
 	component?: React.ComponentType
 	views?: ViewDefinition[]
 }
@@ -164,8 +180,37 @@ export enum CatalogTypeKeys {
 }
 
 export enum PreferenceKey {
+	"lang" = "lang",
+	"theme" = "theme",
 	"showServerUsage" = "showServerUsage",
 	"hideWIPNote" = "hideWIPNote",
 	"hidePluginsNote" = "hidePluginsNote",
 	"hideServerSettingsNote" = "hideServerSettingsNote"
 }
+
+export enum Theme {
+	default = "default",
+
+	cerulean = "cerulean",
+	cosmo = "cosmo",
+	cyborg = "cyborg",
+	darkly = "darkly",
+	flatly = "flatly",
+	journal = "journal",
+	lumen = "lumen",
+	paper = "paper",
+	readable = "readable",
+	sandstone = "sandstone",
+	simplex = "simplex",
+	slate = "slate",
+	solar = "solar",
+	spacelab = "spacelab",
+	superhero = "superhero",
+	united = "united",
+	yeti = "yeti"
+}
+
+export const themesArray = Object.keys(Theme).map(t => ({
+	text: t.substring(0, 1).toLocaleUpperCase() + t.substring(1),
+	value: t
+}))

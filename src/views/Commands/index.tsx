@@ -15,14 +15,15 @@ import {
 } from "../../actions/notification"
 import Autosuggest from "../../components/Autosuggest"
 import DataViewFunc from "../../components/DataView"
-import { formatSource } from "../../components/Util"
+import { checkPermissions, formatSource } from "../../components/Util"
 import { Command, CommandCall } from "../../fetch"
-import { AppState } from "../../types"
+import { AppState, PermissionTree } from "../../types"
 
 const DataView = DataViewFunc("history/cmd", "timestamp")
 
 interface Props extends reactI18Next.InjectedTranslateProps {
 	commands: Command[]
+	perms: PermissionTree
 	requestCommands: () => ListRequestAction
 	requestExecute: (
 		cmd: string,
@@ -61,9 +62,15 @@ class Commands extends React.Component<Props, {}> {
 
 		let cmds: ExtendedCommand[] = this.props.commands.filter(cmd => {
 			if (isExact) {
-				return cmd.name.toLowerCase() === parts[0]
+				return (
+					cmd.name.toLowerCase() === parts[0] &&
+					checkPermissions(this.props.perms, ["cmd", "run", cmd.name])
+				)
 			} else {
-				return cmd.name.toLowerCase().startsWith(parts[0])
+				return (
+					cmd.name.toLowerCase().startsWith(parts[0]) &&
+					checkPermissions(this.props.perms, ["cmd", "run", cmd.name])
+				)
 			}
 		})
 
@@ -133,12 +140,20 @@ class Commands extends React.Component<Props, {}> {
 	render() {
 		const _t = this.props.t
 
+		const canExec = checkPermissions(this.props.perms, ["cmd", "run"])
+		const canViewHistory = checkPermissions(this.props.perms, [
+			"history",
+			"cmd"
+		])
+
 		return (
 			<DataView
 				title={_t("Commands")}
 				icon="terminal"
-				createTitle={_t("ExecuteCommand")}
+				static={!canViewHistory}
+				createTitle={canExec ? _t("ExecuteCommand") : undefined}
 				createButton={_t("Execute")}
+				checkCreatePerm={false}
 				filterTitle={_t("FilterCommands")}
 				fields={{
 					timestamp: {
@@ -214,7 +229,8 @@ class Commands extends React.Component<Props, {}> {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		commands: state.cmd.list
+		commands: state.cmd.list,
+		perms: state.api.permissions
 	}
 }
 

@@ -14,7 +14,8 @@ import {
 import { AppAction } from "../../actions"
 import {
 	requestPluginConfig,
-	requestPluginConfigSave
+	requestPluginConfigSave,
+	requestPluginToggle
 } from "../../actions/plugin"
 import { JSON_EDITOR_MODE, ReactJSONEditor } from "../../components/JsonEditor"
 import { PluginContainer } from "../../fetch"
@@ -31,6 +32,16 @@ import { checkPermissions } from "../../components/Util"
 import DataViewFunc from "../../components/DataView"
 const DataView = DataViewFunc("plugin", "id", true)
 
+const noDetailsIds = ["forge", "minecraft", "spongeapi", "mcp"]
+const noToggleIds = [
+	"forge",
+	"minecraft",
+	"sponge",
+	"spongeapi",
+	"mcp",
+	"webapi"
+]
+
 interface OwnProps {
 	configs: {
 		[x: string]: any
@@ -40,6 +51,7 @@ interface OwnProps {
 }
 
 interface Props extends OwnProps, reactI18Next.InjectedTranslateProps {
+	requestPluginToggle: (id: string) => AppAction
 	requestPluginConfig: (id: string) => AppAction
 	requestPluginConfigSave: (
 		id: string,
@@ -119,6 +131,22 @@ class Plugins extends React.Component<Props, OwnState> {
 		this.toggleModal()
 	}
 
+	stateToColor(plugin: PluginContainer, invert: boolean = false) {
+		return plugin.state === PluginContainer.StateEnum.Loaded
+			? invert
+				? "red"
+				: "green"
+			: plugin.state === PluginContainer.StateEnum.Unloaded
+				? invert
+					? "green"
+					: "red"
+				: "yellow"
+	}
+
+	togglePlugin(plugin: PluginContainer) {
+		this.props.requestPluginToggle(plugin.id)
+	}
+
 	render() {
 		const _t = this.props.t
 
@@ -148,21 +176,50 @@ class Plugins extends React.Component<Props, OwnState> {
 					fields={{
 						id: _t("Id"),
 						name: _t("Name"),
-						version: _t("Version")
+						version: _t("Version"),
+						state: {
+							label: _t("State"),
+							view: (plugin: PluginContainer) => (
+								<Label color={this.stateToColor(plugin)}>
+									{_t(plugin.state.toString())}
+								</Label>
+							)
+						}
 					}}
 					actions={(plugin: PluginContainer, view) => (
 						<>
-							{checkPermissions(
-								this.props.perms,
-								["plugin", "config", "modify", plugin.id]
-							) && (
-								<Button
-									color="blue"
-									onClick={e => this.showDetails(plugin, view)}
-								>
-									{_t("Details")}
-								</Button>
-							)}
+							{noDetailsIds.indexOf(plugin.id) === -1 &&
+								checkPermissions(this.props.perms, [
+									"plugin",
+									"config",
+									"modify",
+									plugin.id
+								]) && (
+									<Button
+										color="blue"
+										onClick={e => this.showDetails(plugin, view)}
+									>
+										{_t("Configs")}
+									</Button>
+								)}
+							{noToggleIds.indexOf(plugin.id) === -1 &&
+								checkPermissions(this.props.perms, [
+									"plugin",
+									"config",
+									"toggle",
+									plugin.id
+								]) && (
+									<Button
+										color={this.stateToColor(plugin, true)}
+										onClick={() => this.togglePlugin(plugin)}
+									>
+										{plugin.state === PluginContainer.StateEnum.Loaded
+											? _t("Unload")
+											: plugin.state === PluginContainer.StateEnum.Unloaded
+												? _t("Load")
+												: _t("Cancel")}
+									</Button>
+								)}
 						</>
 					)}
 				/>
@@ -174,7 +231,7 @@ class Plugins extends React.Component<Props, OwnState> {
 
 	renderModal() {
 		if (!this.state.plugin) {
-			return
+			return null
 		}
 
 		const _t = this.props.t
@@ -184,6 +241,7 @@ class Plugins extends React.Component<Props, OwnState> {
 				open={this.state.modal}
 				onClose={this.toggleModal}
 				size="fullscreen"
+				className="scrolling"
 			>
 				<Modal.Header>
 					{this.state.plugin.name}{" "}
@@ -229,6 +287,8 @@ const mapStateToProps = (state: AppState): OwnProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
+		requestPluginToggle: (id: string): AppAction =>
+			dispatch(requestPluginToggle(id)),
 		requestPluginConfig: (id: string): AppAction =>
 			dispatch(requestPluginConfig(id)),
 		requestPluginConfigSave: (

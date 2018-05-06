@@ -40,13 +40,25 @@ const BlockOperations = load(() => import("../../views/BlockOperations"))
 const Plugins = load(() => import("../../views/Plugins"))
 const ServerSettings = load(() => import("../../views/ServerSettings"))
 
-const HuskyCratesCrates = load(() => import("../../views/Integrations/HuskyCrates/Crates"))
-const MMCRestrictItems = load(() => import("../../views/Integrations/MMCRestrict/Items"))
-const MMCTicketsTickets = load(() => import("../../views/Integrations/MMCTickets/Tickets"))
-const NucleusJails = load(() => import("../../views/Integrations/Nucleus/Jails"))
+const HuskyCratesCrates = load(() =>
+	import("../../views/Integrations/HuskyCrates/Crates")
+)
+const MMCRestrictItems = load(() =>
+	import("../../views/Integrations/MMCRestrict/Items")
+)
+const MMCTicketsTickets = load(() =>
+	import("../../views/Integrations/MMCTickets/Tickets")
+)
+const NucleusJails = load(() =>
+	import("../../views/Integrations/Nucleus/Jails")
+)
 const NucleusKits = load(() => import("../../views/Integrations/Nucleus/Kits"))
-const UMItems = load(() => import("../../views/Integrations/UniversalMarket/Items"))
-const WebBooksBooks = load(() => import("../../views/Integrations/WebBooks/Books"))
+const UMItems = load(() =>
+	import("../../views/Integrations/UniversalMarket/Items")
+)
+const WebBooksBooks = load(() =>
+	import("../../views/Integrations/WebBooks/Books")
+)
 
 export const views: Array<ViewDefinition> = [
 	{
@@ -68,8 +80,8 @@ export const views: Array<ViewDefinition> = [
 		title: "Commands",
 		path: "/commands",
 		icon: "terminal",
-		perms: ["history", "cmd"],
-		servlets: ["/history", "/cmd"],
+		perms: [["history", "cmd"], ["cmd", "run"]],
+		servlets: [["/history"], ["/cmd"]],
 		component: Commands
 	},
 	{

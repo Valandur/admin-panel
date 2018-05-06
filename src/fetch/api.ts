@@ -2810,6 +2810,38 @@ export interface ExecuteCommandRequest {
 /**
  * 
  * @export
+ * @interface ExecuteCommandResponse
+ */
+export interface ExecuteCommandResponse {
+    /**
+     * The command that was executed
+     * @type {string}
+     * @memberof ExecuteCommandResponse
+     */
+    cmd: string;
+    /**
+     * True if this command executed successfully, false otherwise
+     * @type {boolean}
+     * @memberof ExecuteCommandResponse
+     */
+    ok: boolean;
+    /**
+     * Any potential error that occured during execution
+     * @type {string}
+     * @memberof ExecuteCommandResponse
+     */
+    error?: string;
+    /**
+     * The response chat lines that were sent when executing the command
+     * @type {Array&lt;string&gt;}
+     * @memberof ExecuteCommandResponse
+     */
+    response?: Array<string>;
+}
+
+/**
+ * 
+ * @export
  * @interface ExecuteMethodParam
  */
 export interface ExecuteMethodParam {
@@ -7052,11 +7084,23 @@ export interface PluginContainer {
      */
     name: string;
     /**
+     * The current loaded state of the plugin
+     * @type {string}
+     * @memberof PluginContainer
+     */
+    state: PluginContainer.StateEnum;
+    /**
      * A description describing what this plugin does (hopefully)
      * @type {string}
      * @memberof PluginContainer
      */
     description?: string;
+    /**
+     * The file source where the plugin was loaded from.
+     * @type {string}
+     * @memberof PluginContainer
+     */
+    source?: string;
     /**
      * The url that was added to the plugin (probably the homepage)
      * @type {string}
@@ -7069,6 +7113,23 @@ export interface PluginContainer {
      * @memberof PluginContainer
      */
     version?: string;
+}
+
+/**
+ * @export
+ * @namespace PluginContainer
+ */
+export namespace PluginContainer {
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum StateEnum {
+        Loaded = <any> 'Loaded',
+        Unloaded = <any> 'Unloaded',
+        WillBeLoaded = <any> 'WillBeLoaded',
+        WillBeUnloaded = <any> 'WillBeUnloaded'
+    }
 }
 
 /**
@@ -11285,17 +11346,17 @@ export interface WorldFull {
      */
     uuid: string;
     /**
-     * True if this world is loaded when the server starts, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    loadOnStartup: boolean;
-    /**
      * True if the spawn of this world is always kept loaded, false otherwise
      * @type {boolean}
      * @memberof WorldFull
      */
     keepSpawnLoaded: boolean;
+    /**
+     * True if this world is loaded when the server starts, false otherwise
+     * @type {boolean}
+     * @memberof WorldFull
+     */
+    loadOnStartup: boolean;
     /**
      * True if commands are allowed to be executed in this world, false otherwise
      * @type {boolean}
@@ -14221,7 +14282,7 @@ export const CommandApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        runCommands(body?: Array<ExecuteCommandRequest>, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<any>> {
+        runCommands(body?: Array<ExecuteCommandRequest>, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<ExecuteCommandResponse>> {
             const localVarFetchArgs = CommandApiFetchParamCreator(configuration).runCommands(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -20493,6 +20554,66 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Allows enabling/disabling a plugin/mod. Requires a server restart.     **Required permissions:**    - **plugin.toggle**   
+         * @summary Toggle a plugin
+         * @param {string} plugin The id of the plugin
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        togglePlugin(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'plugin' is not null or undefined
+            if (plugin === null || plugin === undefined) {
+                throw new RequiredError('plugin','Required parameter plugin was null or undefined when calling togglePlugin.');
+            }
+            const localVarPath = `/plugin/{plugin}`
+                .replace(`{${"plugin"}}`, encodeURIComponent(String(plugin)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -20590,6 +20711,28 @@ export const PluginApiFp = function(configuration?: Configuration) {
                 });
             };
         },
+        /**
+         * Allows enabling/disabling a plugin/mod. Requires a server restart.     **Required permissions:**    - **plugin.toggle**   
+         * @summary Toggle a plugin
+         * @param {string} plugin The id of the plugin
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        togglePlugin(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PluginContainer> {
+            const localVarFetchArgs = PluginApiFetchParamCreator(configuration).togglePlugin(plugin, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
     }
 };
 
@@ -20650,6 +20793,19 @@ export const PluginApiFactory = function (configuration?: Configuration, fetch?:
          */
         listPlugins(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
             return PluginApiFp(configuration).listPlugins(details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Allows enabling/disabling a plugin/mod. Requires a server restart.     **Required permissions:**    - **plugin.toggle**   
+         * @summary Toggle a plugin
+         * @param {string} plugin The id of the plugin
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        togglePlugin(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PluginApiFp(configuration).togglePlugin(plugin, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -20719,6 +20875,21 @@ export class PluginApi extends BaseAPI {
      */
     public listPlugins(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
         return PluginApiFp(this.configuration).listPlugins(details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Allows enabling/disabling a plugin/mod. Requires a server restart.     **Required permissions:**    - **plugin.toggle**   
+     * @summary Toggle a plugin
+     * @param {} plugin The id of the plugin
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PluginApi
+     */
+    public togglePlugin(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PluginApiFp(this.configuration).togglePlugin(plugin, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }

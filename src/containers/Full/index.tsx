@@ -12,7 +12,7 @@ import { AppAction } from "../../actions"
 import { requestStats } from "../../actions/dashboard"
 import HeaderMenu from "../../components/Menu/HeaderMenu"
 import SidebarMenu from "../../components/Menu/SidebarMenu"
-import { checkPermissions } from "../../components/Util"
+import { checkPermissions, checkServlets } from "../../components/Util"
 import { AppState, PermissionTree, ViewDefinition } from "../../types"
 
 import { load, views } from "./Views"
@@ -25,6 +25,9 @@ export interface Props
 	extends reactI18Next.InjectedTranslateProps,
 		RouteComponentProps<any> {
 	perms: PermissionTree
+	servlets: {
+		[x: string]: string
+	}
 	requestStats: (limit?: number) => Action
 }
 
@@ -157,6 +160,9 @@ class Full extends React.Component<Props, OwnState> {
 		if (view.perms && !checkPermissions(this.props.perms, view.perms)) {
 			return <Redirect key={view.path} from={view.path} to="/dashboard" />
 		}
+		if (view.servlets && !checkServlets(this.props.servlets, view.servlets)) {
+			return <Redirect key={view.path} from={view.path} to="/dashboard" />
+		}
 		if (view.component) {
 			return (
 				<Route key={view.path} path={view.path} component={view.component} />
@@ -168,7 +174,8 @@ class Full extends React.Component<Props, OwnState> {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		perms: state.api.permissions
+		perms: state.api.permissions,
+		servlets: state.api.servlets
 	}
 }
 

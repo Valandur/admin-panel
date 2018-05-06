@@ -14,7 +14,7 @@ export interface Props<T> extends reactI18Next.InjectedTranslateProps {
 	onEdit: (data: T | null, view: DataTableRef) => void
 	onSave?: (data: T, newData: any, view: DataTableRef) => void
 	onDelete?: (data: T, view: DataTableRef) => void
-	actions?: (data: T, view: DataTableRef) => JSX.Element
+	actions?: (data: T, view: DataTableRef) => JSX.Element | undefined
 	handleChange: HandleChangeFunc
 	newData: any
 }
@@ -58,10 +58,19 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 	}
 
 	render() {
-		const { actions, fields, obj, canEdit, canDelete, editing, tableRef } = this.props
+		const {
+			actions,
+			fields,
+			obj,
+			canEdit,
+			canDelete,
+			editing,
+			tableRef
+		} = this.props
 
 		const _canEdit = typeof canEdit === "function" ? canEdit(obj) : canEdit
-		const _canDelete = typeof canDelete === "function" ? canDelete(obj) : canEdit
+		const _canDelete =
+			typeof canDelete === "function" ? canDelete(obj) : canEdit
 
 		return (
 			<Table.Row>

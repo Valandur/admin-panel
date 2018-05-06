@@ -118,7 +118,7 @@ class Worlds extends React.Component<Props, OwnState> {
 								<>
 									<b>{world.name}</b>
 									<br />
-									{world.uuid}
+									<p style={{ fontSize: "0.8em" }}>{world.uuid}</p>
 								</>
 							)
 						},
@@ -215,8 +215,10 @@ class Worlds extends React.Component<Props, OwnState> {
 											.unix((world.time % 24000) / 1200 * 86400)
 											.format("HH:mm")}
 										<br />
-										<Icon name="leaf" />
-										{world.seed}
+										<p style={{ fontSize: "0.8em" }}>
+											<Icon name="leaf" />
+											{world.seed}
+										</p>
 									</div>
 								</>
 							)

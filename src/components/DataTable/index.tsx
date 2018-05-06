@@ -21,7 +21,7 @@ export interface Props<T> extends reactI18Next.InjectedTranslateProps {
 	fields: {
 		[key: string]: DataFieldRaw<T>
 	}
-	actions?: (data: T, view: DataTableRef) => JSX.Element
+	actions?: (data: T, view: DataTableRef) => JSX.Element | undefined
 	onEdit?: (data: T | null, view: DataTableRef) => void
 	onSave?: (data: T, newData: any, view: DataTableRef) => void
 	onDelete?: (data: T, view: DataTableRef) => void
@@ -105,7 +105,10 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 		const maxPage = Math.ceil(list.length / ITEMS_PER_PAGE)
 		const page = Math.min(this.state.page, maxPage - 1)
 
-		const listPage = list.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE)
+		const listPage = list.slice(
+			page * ITEMS_PER_PAGE,
+			(page + 1) * ITEMS_PER_PAGE
+		)
 
 		const thisRef: DataTableRef = {
 			handleChange: this.handleChange,
@@ -155,7 +158,11 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 						))}
 					</Table.Body>
 				</Table>
-				<Pagination page={page} maxPage={maxPage} changePage={(e, p) => this.changePage(e, p)} />
+				<Pagination
+					page={page}
+					maxPage={maxPage}
+					changePage={(e, p) => this.changePage(e, p)}
+				/>
 			</div>
 		)
 	}

@@ -1,21 +1,9 @@
 import { Action } from "redux"
 
-import { Lang, PreferenceKey } from "../types"
+import { PreferenceKey } from "../types"
 
 export enum TypeKeys {
-	CHANGE_LANGUAGE = "CHANGE_LANGUAGE",
 	SET_PREFERENCE = "SET_PREFERENCE"
-}
-
-export interface ChangeLanguageAction extends Action {
-	type: TypeKeys.CHANGE_LANGUAGE
-	lang: Lang
-}
-export function changeLanguage(lang: Lang): ChangeLanguageAction {
-	return {
-		type: TypeKeys.CHANGE_LANGUAGE,
-		lang: lang
-	}
 }
 
 export interface SetPreferenceAction extends Action {
@@ -34,4 +22,4 @@ export function setPreference(
 	}
 }
 
-export type PreferencesAction = ChangeLanguageAction | SetPreferenceAction
+export type PreferencesAction = SetPreferenceAction

@@ -2,10 +2,13 @@ import * as i18next from "i18next"
 
 import { AppAction } from "../actions"
 import { TypeKeys } from "../actions/preferences"
-import { Lang, PreferenceKey } from "../types"
+import { Lang, PreferenceKey, Theme } from "../types"
+
+declare const swapThemeCss: (theme: Theme) => void
 
 export interface PreferencesState {
-	lang: Lang
+	[PreferenceKey.lang]: Lang
+	[PreferenceKey.theme]: Theme
 	[PreferenceKey.showServerUsage]: boolean
 	[PreferenceKey.hideWIPNote]: boolean
 	[PreferenceKey.hidePluginsNote]: boolean
@@ -15,11 +18,12 @@ export interface PreferencesState {
 
 let initialState: PreferencesState = {
 	lang: Lang.EN,
+	theme: Theme.default,
 	showServerUsage: true,
 	hideWIPNote: false,
 	hidePluginsNote: false,
 	hideServerSettingsNote: false,
-	version: 2
+	version: 4
 }
 
 if (window.localStorage) {
@@ -30,18 +34,18 @@ if (window.localStorage) {
 	if (prevApi && prevApi.version === initialState.version) {
 		initialState = { ...initialState, ...prevApi }
 	}
+	swapThemeCss(initialState.theme)
 }
 
 export default (state = initialState, action: AppAction) => {
 	switch (action.type) {
-		case TypeKeys.CHANGE_LANGUAGE:
-			i18next.changeLanguage(action.lang)
-			return {
-				...state,
-				lang: action.lang
+		case TypeKeys.SET_PREFERENCE:
+			if (action.key === PreferenceKey.theme) {
+				swapThemeCss(action.value)
+			} else if (action.key === PreferenceKey.lang) {
+				i18next.changeLanguage(action.value)
 			}
 
-		case TypeKeys.SET_PREFERENCE:
 			return {
 				...state,
 				[action.key]: action.value

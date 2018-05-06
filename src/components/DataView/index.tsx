@@ -14,13 +14,25 @@ import {
 	setFilter
 } from "../../actions/dataview"
 import { DataViewState } from "../../reducers/dataview"
-import { AppState, DataFieldRaw, DataTableRef, DataViewRef, IdFunction } from "../../types"
+import {
+	AppState,
+	DataFieldRaw,
+	DataTableRef,
+	DataViewRef,
+	IdFunction
+} from "../../types"
 import CreateForm from "../CreateForm"
 import DataTable, { Props as DataTableProps } from "../DataTable"
 import FilterForm from "../FilterForm"
 import { checkPermissions } from "../Util"
 
-import { DispatchProps, FullProps, OwnProps, OwnState, StateProps } from "./types"
+import {
+	DispatchProps,
+	FullProps,
+	OwnProps,
+	OwnState,
+	StateProps
+} from "./types"
 
 class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 	interval: NodeJS.Timer
@@ -116,7 +128,8 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 			perms,
 			title,
 			createTitle,
-			filterTitle
+			filterTitle,
+			checkCreatePerm
 		} = this.props
 
 		const checks: ((val: T) => boolean)[] = []
@@ -148,12 +161,14 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 				if (typeof value === "string") {
 					val.label = value
 				} else if (typeof value === "function") {
-					val.view = (obj: T, tableRef: DataTableRef) => value(obj, expandRef(tableRef))
+					val.view = (obj: T, tableRef: DataTableRef) =>
+						value(obj, expandRef(tableRef))
 				} else if (typeof value === "object") {
 					val = { ...val, ...value }
 					if (typeof value.view === "function") {
 						const func = value.view
-						val.view = (obj: T, tableRef: DataTableRef) => func(obj, expandRef(tableRef))
+						val.view = (obj: T, tableRef: DataTableRef) =>
+							func(obj, expandRef(tableRef))
 					}
 				}
 
@@ -233,7 +248,8 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 			<Segment basic>
 				<Grid stackable doubling columns={cols}>
 					{createTitle &&
-						checkPermissions(perms, perm.concat("create")) && (
+						(!checkCreatePerm ||
+							checkPermissions(perms, perm.concat("create"))) && (
 							<Grid.Column>
 								<CreateForm
 									title={createTitle}
@@ -241,7 +257,9 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 									creating={this.props.creating}
 									fields={createFields}
 									onCreate={(obj: any, tableRef: DataTableRef) =>
-										onCreate ? onCreate(obj, expandRef(tableRef)) : this.create(obj)
+										onCreate
+											? onCreate(obj, expandRef(tableRef))
+											: this.create(obj)
 									}
 								/>
 							</Grid.Column>
@@ -267,9 +285,13 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 					t={this.props.t}
 					idFunc={this.props.idFunc}
 					fields={fields}
-					onEdit={(obj, tableRef) => (onEdit ? onEdit(obj, expandRef(tableRef)) : this.edit(obj))}
+					onEdit={(obj, tableRef) =>
+						onEdit ? onEdit(obj, expandRef(tableRef)) : this.edit(obj)
+					}
 					onSave={(obj, newObj, tableRef) =>
-						onSave ? onSave(obj, newObj, expandRef(tableRef)) : this.save(obj, newObj)
+						onSave
+							? onSave(obj, newObj, expandRef(tableRef))
+							: this.save(obj, newObj)
 					}
 					onDelete={(obj, tableRef) =>
 						onDelete ? onDelete(obj, expandRef(tableRef)) : this.delete(obj)
@@ -292,7 +314,10 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 
 function mapStateToProps<T>(endpoint: string, id: IdFunction<T>) {
 	return (_state: AppState, ownProps: OwnProps<T>) => {
-		const state: DataViewState<T> = _.get(_state, endpoint.replace(/\//g, "_").replace("-", ""))
+		const state: DataViewState<T> = _.get(
+			_state,
+			endpoint.replace(/\//g, "_").replace("-", "")
+		)
 
 		return {
 			creating: state ? state.creating : false,
@@ -306,7 +331,11 @@ function mapStateToProps<T>(endpoint: string, id: IdFunction<T>) {
 	}
 }
 
-function mapDispatchToProps<T>(endpoint: string, id: IdFunction<T>, noDetails: boolean) {
+function mapDispatchToProps<T>(
+	endpoint: string,
+	id: IdFunction<T>,
+	noDetails: boolean
+) {
 	return (dispatch: Dispatch<AppAction>) => {
 		return {
 			requestList: () => dispatch(requestList(endpoint, !noDetails)),
@@ -315,7 +344,8 @@ function mapDispatchToProps<T>(endpoint: string, id: IdFunction<T>, noDetails: b
 			requestChange: (data: T, newData: object) =>
 				dispatch(requestChange(endpoint, id, data, newData)),
 			requestDelete: (data: T) => dispatch(requestDelete(endpoint, id, data)),
-			setFilter: (filter: string, value: string) => dispatch(setFilter(endpoint, filter, value)),
+			setFilter: (filter: string, value: string) =>
+				dispatch(setFilter(endpoint, filter, value)),
 			equals: (o1: T, o2: T) => o1 != null && o2 != null && id(o1) === id(o2)
 		}
 	}
@@ -329,7 +359,10 @@ export default function createDataView<T>(
 	if (!objId) {
 		objId = "id"
 	}
-	const id = typeof objId === "function" ? objId : (data: T) => _.get(data, objId as string)
+	const id =
+		typeof objId === "function"
+			? objId
+			: (data: T) => _.get(data, objId as string)
 
 	return connect<StateProps<T>, DispatchProps<T>, OwnProps<T>, AppState>(
 		mapStateToProps<T>(endpoint, id),
