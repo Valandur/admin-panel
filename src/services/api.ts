@@ -39,6 +39,7 @@ import {
 import {
 	respondPluginConfig,
 	respondPluginConfigSave,
+	respondPluginToggle,
 	TypeKeys as PluginTypeKeys
 } from "../actions/plugin"
 import {
@@ -192,6 +193,13 @@ const api = ({
 			state.api.apis.plugin
 				.changePluginConfig(action.id, action.configs)
 				.then(configs => next(respondPluginConfigSave(configs)))
+				.catch(errorHandler)
+			break
+
+		case PluginTypeKeys.TOGGLE_REQUEST:
+			state.api.apis.plugin
+				.togglePlugin(action.id)
+				.then(plugin => next(respondPluginToggle(plugin)))
 				.catch(errorHandler)
 			break
 

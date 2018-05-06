@@ -5088,13 +5088,13 @@ export interface InventoryDimension {
      * @type {number}
      * @memberof InventoryDimension
      */
-    rows?: number;
+    columns?: number;
     /**
      * 
      * @type {number}
      * @memberof InventoryDimension
      */
-    columns?: number;
+    rows?: number;
 }
 
 /**
@@ -7084,11 +7084,23 @@ export interface PluginContainer {
      */
     name: string;
     /**
+     * The current loaded state of the plugin
+     * @type {string}
+     * @memberof PluginContainer
+     */
+    state: PluginContainer.StateEnum;
+    /**
      * A description describing what this plugin does (hopefully)
      * @type {string}
      * @memberof PluginContainer
      */
     description?: string;
+    /**
+     * The file source where the plugin was loaded from.
+     * @type {string}
+     * @memberof PluginContainer
+     */
+    source?: string;
     /**
      * The url that was added to the plugin (probably the homepage)
      * @type {string}
@@ -7101,6 +7113,23 @@ export interface PluginContainer {
      * @memberof PluginContainer
      */
     version?: string;
+}
+
+/**
+ * @export
+ * @namespace PluginContainer
+ */
+export namespace PluginContainer {
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum StateEnum {
+        Loaded = <any> 'Loaded',
+        Unloaded = <any> 'Unloaded',
+        WillBeLoaded = <any> 'WillBeLoaded',
+        WillBeUnloaded = <any> 'WillBeUnloaded'
+    }
 }
 
 /**
@@ -7618,13 +7647,13 @@ export interface SlotPos {
      * @type {number}
      * @memberof SlotPos
      */
-    x?: number;
+    y?: number;
     /**
      * 
      * @type {number}
      * @memberof SlotPos
      */
-    y?: number;
+    x?: number;
 }
 
 /**
@@ -9986,30 +10015,6 @@ export interface PlayerFull {
      */
     latency: number;
     /**
-     * The item stack that the player is wearing as a helmet
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    helmet?: ItemStack;
-    /**
-     * The item stack that the player is wearing as chestplate
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    chestplate?: ItemStack;
-    /**
-     * The item stack that the player is wearing as leggings
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    leggings?: ItemStack;
-    /**
-     * The item stack that the player is wearing as boots
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    boots?: ItemStack;
-    /**
      * The current rotation of the player
      * @type {Vector3d}
      * @memberof PlayerFull
@@ -10033,6 +10038,30 @@ export interface PlayerFull {
      * @memberof PlayerFull
      */
     inventory?: Inventory;
+    /**
+     * The item stack that the player is wearing as leggings
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    leggings?: ItemStack;
+    /**
+     * The item stack that the player is wearing as a helmet
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    helmet?: ItemStack;
+    /**
+     * The item stack that the player is wearing as chestplate
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    chestplate?: ItemStack;
+    /**
+     * The item stack that the player is wearing as boots
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    boots?: ItemStack;
     /**
      * The player's IP address and port
      * @type {string}
@@ -11371,12 +11400,6 @@ export interface WorldFull {
      */
     time: number;
     /**
-     * The current weather in the world
-     * @type {CatalogTypeWeather}
-     * @memberof WorldFull
-     */
-    weather: CatalogTypeWeather;
-    /**
      * The difficulty of the world
      * @type {CatalogTypeDifficulty}
      * @memberof WorldFull
@@ -11388,6 +11411,12 @@ export interface WorldFull {
      * @memberof WorldFull
      */
     gameRules: { [key: string]: string; };
+    /**
+     * The current weather in the world
+     * @type {CatalogTypeWeather}
+     * @memberof WorldFull
+     */
+    weather: CatalogTypeWeather;
     /**
      * 
      * @type {GameMode}
@@ -20525,6 +20554,66 @@ export const PluginApiFetchParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Allows enabling/disabling a plugin/mod. Requires a server restart.     **Required permissions:**    - **plugin.toggle**   
+         * @summary Toggle a plugin
+         * @param {string} plugin The id of the plugin
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        togglePlugin(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'plugin' is not null or undefined
+            if (plugin === null || plugin === undefined) {
+                throw new RequiredError('plugin','Required parameter plugin was null or undefined when calling togglePlugin.');
+            }
+            const localVarPath = `/plugin/{plugin}`
+                .replace(`{${"plugin"}}`, encodeURIComponent(String(plugin)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -20622,6 +20711,28 @@ export const PluginApiFp = function(configuration?: Configuration) {
                 });
             };
         },
+        /**
+         * Allows enabling/disabling a plugin/mod. Requires a server restart.     **Required permissions:**    - **plugin.toggle**   
+         * @summary Toggle a plugin
+         * @param {string} plugin The id of the plugin
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        togglePlugin(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PluginContainer> {
+            const localVarFetchArgs = PluginApiFetchParamCreator(configuration).togglePlugin(plugin, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
     }
 };
 
@@ -20682,6 +20793,19 @@ export const PluginApiFactory = function (configuration?: Configuration, fetch?:
          */
         listPlugins(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
             return PluginApiFp(configuration).listPlugins(details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Allows enabling/disabling a plugin/mod. Requires a server restart.     **Required permissions:**    - **plugin.toggle**   
+         * @summary Toggle a plugin
+         * @param {string} plugin The id of the plugin
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        togglePlugin(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return PluginApiFp(configuration).togglePlugin(plugin, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -20751,6 +20875,21 @@ export class PluginApi extends BaseAPI {
      */
     public listPlugins(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
         return PluginApiFp(this.configuration).listPlugins(details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Allows enabling/disabling a plugin/mod. Requires a server restart.     **Required permissions:**    - **plugin.toggle**   
+     * @summary Toggle a plugin
+     * @param {} plugin The id of the plugin
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PluginApi
+     */
+    public togglePlugin(plugin: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return PluginApiFp(this.configuration).togglePlugin(plugin, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }

@@ -30,7 +30,7 @@ export interface OwnProps<T> {
 		[key: string]: DataField<T> | DataFieldViewFunc<T> | string
 	}
 	checkCreatePerm?: boolean
-	actions?: (data: T, view: DataViewRef<T>) => JSX.Element
+	actions?: (data: T, view: DataViewRef<T>) => JSX.Element | undefined
 	onCreate?: (data: any, view: DataViewRef<T>) => void
 	onEdit?: (data: T | null, view: DataViewRef<T>) => void
 	onSave?: (data: T, newData: any, view: DataViewRef<T>) => void
