@@ -7090,6 +7090,12 @@ export interface PluginContainer {
      */
     state: PluginContainer.StateEnum;
     /**
+     * The type of the plugin
+     * @type {string}
+     * @memberof PluginContainer
+     */
+    type: PluginContainer.TypeEnum;
+    /**
      * A description describing what this plugin does (hopefully)
      * @type {string}
      * @memberof PluginContainer
@@ -7129,6 +7135,16 @@ export namespace PluginContainer {
         Unloaded = <any> 'Unloaded',
         WillBeLoaded = <any> 'WillBeLoaded',
         WillBeUnloaded = <any> 'WillBeUnloaded'
+    }
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum TypeEnum {
+        Unknown = <any> 'Unknown',
+        Sponge = <any> 'Sponge',
+        Forge = <any> 'Forge',
+        Minecraft = <any> 'Minecraft'
     }
 }
 
@@ -7647,13 +7663,13 @@ export interface SlotPos {
      * @type {number}
      * @memberof SlotPos
      */
-    y?: number;
+    x?: number;
     /**
      * 
      * @type {number}
      * @memberof SlotPos
      */
-    x?: number;
+    y?: number;
 }
 
 /**
@@ -10039,12 +10055,6 @@ export interface PlayerFull {
      */
     inventory?: Inventory;
     /**
-     * The item stack that the player is wearing as leggings
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    leggings?: ItemStack;
-    /**
      * The item stack that the player is wearing as a helmet
      * @type {ItemStack}
      * @memberof PlayerFull
@@ -10056,6 +10066,12 @@ export interface PlayerFull {
      * @memberof PlayerFull
      */
     chestplate?: ItemStack;
+    /**
+     * The item stack that the player is wearing as leggings
+     * @type {ItemStack}
+     * @memberof PlayerFull
+     */
+    leggings?: ItemStack;
     /**
      * The item stack that the player is wearing as boots
      * @type {ItemStack}
@@ -11346,12 +11362,6 @@ export interface WorldFull {
      */
     uuid: string;
     /**
-     * True if the spawn of this world is always kept loaded, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    keepSpawnLoaded: boolean;
-    /**
      * True if this world is loaded when the server starts, false otherwise
      * @type {boolean}
      * @memberof WorldFull
@@ -11363,6 +11373,12 @@ export interface WorldFull {
      * @memberof WorldFull
      */
     allowCommands: boolean;
+    /**
+     * True if the spawn of this world is always kept loaded, false otherwise
+     * @type {boolean}
+     * @memberof WorldFull
+     */
+    keepSpawnLoaded: boolean;
     /**
      * True if bonus chests are generated for this world, false otherwise
      * @type {boolean}
@@ -11424,17 +11440,17 @@ export interface WorldFull {
      */
     gameMode?: GameMode;
     /**
-     * The generator type used for this world
-     * @type {CatalogTypeGeneratorType}
-     * @memberof WorldFull
-     */
-    generatorType: CatalogTypeGeneratorType;
-    /**
      * The dimension of the world
      * @type {CatalogTypeDimensionType}
      * @memberof WorldFull
      */
     dimensionType: CatalogTypeDimensionType;
+    /**
+     * The generator type used for this world
+     * @type {CatalogTypeGeneratorType}
+     * @memberof WorldFull
+     */
+    generatorType: CatalogTypeGeneratorType;
     /**
      * 
      * @type {number}

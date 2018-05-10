@@ -3,6 +3,7 @@ import { Trans, translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
 import {
 	Button,
+	Form,
 	Label,
 	Loader,
 	Message,
@@ -40,6 +41,42 @@ const noToggleIds = [
 	"spongeapi",
 	"mcp",
 	"webapi"
+]
+const typeOptions = [
+	{
+		value: PluginContainer.TypeEnum.Forge.toString(),
+		text: "Forge"
+	},
+	{
+		value: PluginContainer.TypeEnum.Minecraft.toString(),
+		text: "Minecraft"
+	},
+	{
+		value: PluginContainer.TypeEnum.Sponge.toString(),
+		text: "Sponge"
+	},
+	{
+		value: PluginContainer.TypeEnum.Unknown.toString(),
+		text: "Unknown"
+	}
+]
+const stateOptions = [
+	{
+		value: PluginContainer.StateEnum.Loaded.toString(),
+		text: "Loaded"
+	},
+	{
+		value: PluginContainer.StateEnum.Unloaded.toString(),
+		text: "Unloaded"
+	},
+	{
+		value: PluginContainer.StateEnum.WillBeLoaded.toString(),
+		text: "Will be loaded"
+	},
+	{
+		value: PluginContainer.StateEnum.WillBeUnloaded.toString(),
+		text: "Will be unloaded"
+	}
 ]
 
 interface OwnProps {
@@ -131,6 +168,16 @@ class Plugins extends React.Component<Props, OwnState> {
 		this.toggleModal()
 	}
 
+	typeToColor(plugin: PluginContainer) {
+		return plugin.type === PluginContainer.TypeEnum.Forge
+			? "red"
+			: plugin.type === PluginContainer.TypeEnum.Minecraft
+				? "blue"
+				: plugin.type === PluginContainer.TypeEnum.Sponge
+					? "yellow"
+					: "grey"
+	}
+
 	stateToColor(plugin: PluginContainer, invert: boolean = false) {
 		return plugin.state === PluginContainer.StateEnum.Loaded
 			? invert
@@ -173,17 +220,42 @@ class Plugins extends React.Component<Props, OwnState> {
 				<DataView
 					icon="plug"
 					title={_t("Plugins")}
+					filterTitle={_t("Filter plugins")}
 					fields={{
 						id: _t("Id"),
 						name: _t("Name"),
 						version: _t("Version"),
+						type: {
+							label: _t("Type"),
+							view: (p: PluginContainer) => (
+								<Label color={this.typeToColor(p)}>{p.type.toString()}</Label>
+							),
+							options: typeOptions,
+							filter: true
+						},
 						state: {
 							label: _t("State"),
 							view: (plugin: PluginContainer) => (
 								<Label color={this.stateToColor(plugin)}>
 									{_t(plugin.state.toString())}
 								</Label>
-							)
+							),
+							options: stateOptions,
+							filter: true
+						},
+						filter: {
+							view: false,
+							filter: view => (
+								<Form.Input
+									type="text"
+									name="filter"
+									label="Name"
+									placeholder="Name"
+									onChange={view.handleChange}
+									value={view.value}
+								/>
+							),
+							filterValue: (p: PluginContainer) => p.id + " " + p.name
 						}
 					}}
 					actions={(plugin: PluginContainer, view) => (
