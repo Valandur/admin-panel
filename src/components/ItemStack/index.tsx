@@ -34,7 +34,7 @@ const itemStackStyle = {
 	borderRadius: ".28571429rem"
 }
 
-export interface AppProps {
+export interface Props {
 	item: ItemStack
 	onRemove?: (
 		event: React.MouseEvent<HTMLButtonElement>,
@@ -42,83 +42,68 @@ export interface AppProps {
 	) => void
 }
 
-class ItemStackComp extends React.Component<AppProps> {
-	render() {
-		const item: ItemStack = this.props.item
-
-		return (
-			<div style={itemStackStyle}>
-				<strong>{item.type.name}</strong>
-				{this.props.onRemove && (
-					<Button
-						compact
-						negative
-						size="mini"
-						icon="delete"
-						floated="right"
-						onClick={this.props.onRemove}
+export default ({ item, onRemove }: Props) => (
+	<div style={itemStackStyle}>
+		<strong>{item.type.name}</strong>
+		{onRemove && (
+			<Button
+				compact
+				negative
+				size="mini"
+				icon="delete"
+				floated="right"
+				onClick={onRemove}
+			/>
+		)}
+		<div style={{ color: "gray", marginBottom: "0.5em" }}>{item.type.id}</div>
+		<div>
+			{item.durability &&
+				(item.durability.unbreakable ? (
+					<Label size="tiny">Unbreakable</Label>
+				) : (
+					<Progress
+						progress
+						size="small"
+						percent={formatRange(
+							item.durability.durability,
+							item.useLimit ? item.useLimit : 0
+						)}
+						style={{ margin: "0 0 .5em 0" }}
 					/>
-				)}
-				<div style={{ color: "gray", marginBottom: "0.5em" }}>
-					{item.type.id}
-				</div>
+				))}
+			{item.quantity > 1 && (
+				<Label size="tiny" color="blue">
+					x{item.quantity}
+				</Label>
+			)}
+			{item.enchantments && (
 				<div>
-					{item.durability &&
-						(item.durability.unbreakable ? (
-							<Label size="tiny">Unbreakable</Label>
-						) : (
-							<Progress
-								progress
-								size="small"
-								percent={formatRange(
-									item.durability.durability,
-									item.useLimit ? item.useLimit : 0
-								)}
-								style={{ margin: "0 0 .5em 0" }}
-							/>
-						))}
-					{item.quantity > 1 && (
-						<Label size="tiny" color="blue">
-							x{item.quantity}
+					{item.enchantments.map(enchant => (
+						<Label color="purple" size="tiny" key={enchant.id}>
+							{enchant.name}
+							<Label.Detail>{enchant.level}</Label.Detail>
 						</Label>
-					)}
-					{item.enchantments && (
-						<div>
-							{item.enchantments.map(enchant => (
-								<Label color="purple" size="tiny" key={enchant.id}>
-									{enchant.name}
-									<Label.Detail>{enchant.level}</Label.Detail>
-								</Label>
-							))}
-						</div>
-					)}
-					{item.spawn && <Label size="tiny">{item.spawn.name}</Label>}
-					{item.potionEffects &&
-						item.potionEffects.map(effect => (
-							<Label size="tiny" color="brown" key={effect.type.id}>
-								{effect.type.name} {getAmplifier(effect)}
-							</Label>
-						))}
-					{item.foodRestoration && (
-						<Label
-							size="tiny"
-							color="green"
-							icon="food"
-							content={item.foodRestoration}
-						/>
-					)}
-					{item.burningFuel && (
-						<Label
-							size="tiny"
-							color="red"
-							icon="fire"
-							content={item.burningFuel}
-						/>
-					)}
+					))}
 				</div>
-			</div>
-		)
-	}
-}
-
-export default ItemStackComp
+			)}
+			{item.spawn && <Label size="tiny">{item.spawn.name}</Label>}
+			{item.potionEffects &&
+				item.potionEffects.map(effect => (
+					<Label size="tiny" color="brown" key={effect.type.id}>
+						{effect.type.name} {getAmplifier(effect)}
+					</Label>
+				))}
+			{item.foodRestoration && (
+				<Label
+					size="tiny"
+					color="green"
+					icon="food"
+					content={item.foodRestoration}
+				/>
+			)}
+			{item.burningFuel && (
+				<Label size="tiny" color="red" icon="fire" content={item.burningFuel} />
+			)}
+		</div>
+	</div>
+)

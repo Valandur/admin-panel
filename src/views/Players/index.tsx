@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Trans, translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
-import { Button, Icon, Label, Modal, Progress } from "semantic-ui-react"
+import { Button, Label, Modal, Progress } from "semantic-ui-react"
 
 import { AppAction } from "../../actions"
 import { ListRequestAction, requestList } from "../../actions/dataview"
@@ -12,6 +12,7 @@ import {
 	requestKickPlayer
 } from "../../actions/player"
 import InventoryComp from "../../components/Inventory"
+import Location from "../../components/Location"
 import { formatRange, renderWorldOptions } from "../../components/Util"
 import { Inventory, Player, PlayerFull, WorldFull } from "../../fetch"
 import { AppState, DataViewRef } from "../../types"
@@ -106,13 +107,7 @@ class Players extends React.Component<Props, OwnState> {
 						location: {
 							label: _t("Location"),
 							view: (player: PlayerFull) => (
-								<Button primary>
-									<Icon name="globe" />
-									{player.location.world.name}&nbsp; &nbsp;
-									{player.location.position.x.toFixed(0)} |&nbsp;
-									{player.location.position.y.toFixed(0)} |&nbsp;
-									{player.location.position.z.toFixed(0)}
-								</Button>
+								<Location location={player.location} />
 							)
 						},
 						health: {
