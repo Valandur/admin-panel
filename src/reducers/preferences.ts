@@ -34,7 +34,6 @@ if (window.localStorage) {
 	if (prevApi && prevApi.version === initialState.version) {
 		initialState = { ...initialState, ...prevApi }
 	}
-	swapThemeCss(initialState.theme)
 }
 
 export default (state = initialState, action: AppAction) => {

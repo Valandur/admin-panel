@@ -15,22 +15,33 @@
 
 	<script>
 		function swapThemeCss(theme) {
-			console.log('Theme change to "' + theme + '".');
-			const sheet = document.querySelector('#theme');
+			var sheet = document.querySelector('#theme');
 			if (!sheet) {
 				return;
 			}
-			let href = sheet.getAttribute('href');
+			var href = sheet.getAttribute('href');
 			href = href.substring(0, href.lastIndexOf('/')) + '/semantic.' + theme + '.min.css';
-			sheet.setAttribute('href', href)
+			sheet.setAttribute('href', href);
 		}
+
+		// Dynamically write out stylesheet link to load selected theme
+		var str = window.localStorage.getItem("preferences");
+		var json = str ? JSON.parse(str) : undefined;
+		var theme = json && json.theme ? json.theme : "default";
+
+		var link = document.createElement('link');
+		link.id = 'theme';
+		link.rel = 'stylesheet';
+		link.href = '%PUBLIC_URL%/theme/semantic.' + theme + '.min.css';
+		document.head.appendChild(link);
 	</script>
 	<script src="%PUBLIC_URL%/config.js"></script>
 
 	<!-- Icons -->
 	<link href="%PUBLIC_URL%/css/font-awesome.min.css" rel="stylesheet">
 	<link href="%PUBLIC_URL%/css/simple-line-icons.css" rel="stylesheet">
-	<link id="theme" rel="stylesheet" href="%PUBLIC_URL%/theme/semantic.yeti.min.css"></link>
+
+	<!-- Styles -->
 	<link href="%PUBLIC_URL%/css/style.css" rel="stylesheet">
 </head>
 
