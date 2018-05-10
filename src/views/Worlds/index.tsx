@@ -235,16 +235,14 @@ class Worlds extends React.Component<Props, OwnState> {
 					actions={(world: WorldFull, view) => (
 						<>
 							<Button
-								type="button"
-								color="blue"
+								primary
 								disabled={(world as any).updating}
 								onClick={() => this.showGameRules(world, view)}
 							>
 								{_t("GameRules")}
 							</Button>{" "}
 							<Button
-								type="button"
-								color={world.loaded ? "yellow" : "green"}
+								secondary
 								onClick={() => view.save(world, { loaded: !world.loaded })}
 								disabled={(world as any).updating}
 							>
@@ -252,8 +250,7 @@ class Worlds extends React.Component<Props, OwnState> {
 							</Button>{" "}
 							{!world.loaded ? (
 								<Button
-									type="button"
-									color="red"
+									negative
 									disabled={(world as any).updating}
 									onClick={() => view.delete(world)}
 								>
@@ -266,7 +263,12 @@ class Worlds extends React.Component<Props, OwnState> {
 				/>
 
 				{this.state.rules && this.state.rulesWorld ? (
-					<Modal open={this.state.modal} onClose={this.toggleModal}>
+					<Modal
+						open={this.state.modal}
+						onClose={this.toggleModal}
+						size="fullscreen"
+						className="scrolling"
+					>
 						<Modal.Header>
 							<Trans i18nKey="GameRulesTitle">
 								Game Rules for '{this.state.rulesWorld.name}'
@@ -342,10 +344,12 @@ class Worlds extends React.Component<Props, OwnState> {
 							</Grid>
 						</Modal.Content>
 						<Modal.Actions>
-							<Button color="blue" onClick={this.saveGameRules}>
+							<Button primary onClick={this.saveGameRules}>
 								{_t("Save")}
 							</Button>&nbsp;
-							<Button onClick={this.toggleModal}>{_t("Cancel")}</Button>
+							<Button secondary onClick={this.toggleModal}>
+								{_t("Cancel")}
+							</Button>
 						</Modal.Actions>
 					</Modal>
 				) : null}

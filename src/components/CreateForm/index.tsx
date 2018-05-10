@@ -134,11 +134,7 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 							)
 						})}
 
-						<Button
-							color="green"
-							onClick={this.create}
-							disabled={!this.canCreate()}
-						>
+						<Button primary onClick={this.create} disabled={!this.canCreate()}>
 							{this.props.button || _t("Create")}
 						</Button>
 					</Form>

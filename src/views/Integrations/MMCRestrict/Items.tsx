@@ -53,7 +53,7 @@ class Items extends React.Component<Props, OwnState> {
 				fields={{
 					"item.name": {
 						create: true,
-						createName: "item",
+						createName: "item.id",
 						label: _t("Item"),
 						required: true,
 						options: renderCatalogTypeOptions(this.props.itemTypes)

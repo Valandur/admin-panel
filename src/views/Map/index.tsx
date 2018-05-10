@@ -295,7 +295,7 @@ class Map extends React.Component<Props, OwnState> {
 				<Header>
 					{entity.type ? entity.type.name : entity.uuid ? entity.uuid : null}
 				</Header>
-				<Button color="red" onClick={() => this.deleteEntity(entity)}>
+				<Button negative onClick={() => this.deleteEntity(entity)}>
 					Destroy
 				</Button>
 			</Segment>

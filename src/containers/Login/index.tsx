@@ -164,12 +164,7 @@ class Login extends React.Component<Props, OwnState> {
 								onChange={this.handleChange}
 							/>
 
-							<Button
-								color="blue"
-								fluid
-								size="large"
-								onClick={this.handleLogin}
-							>
+							<Button fluid primary size="large" onClick={this.handleLogin}>
 								{_t("Login")}
 							</Button>
 						</Segment>

@@ -58,11 +58,11 @@ class Jails extends React.Component<Props, OwnState> {
 						wide: true,
 						view: (jail: NucleusNamedLocation) => {
 							if (!jail.location) {
-								return <Button color="red">Invalid location</Button>
+								return <Button negative>Invalid location</Button>
 							}
 
 							return (
-								<Button color="blue">
+								<Button primary>
 									<Icon name="globe" />
 									{jail.location.world.name}&nbsp; &nbsp;
 									{jail.location.position.x.toFixed(0)} |&nbsp;

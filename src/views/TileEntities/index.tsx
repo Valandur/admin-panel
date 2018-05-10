@@ -67,7 +67,7 @@ class TileEntities extends React.Component<Props, OwnState> {
 					position: {
 						label: _t("Position"),
 						view: te => (
-							<Button color="blue">
+							<Button primary>
 								<Icon name="globe" />
 								{te.location.world.name}&nbsp; &nbsp;
 								{te.location.position.x.toFixed(0)} |&nbsp;

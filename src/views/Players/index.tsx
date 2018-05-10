@@ -106,7 +106,7 @@ class Players extends React.Component<Props, OwnState> {
 						location: {
 							label: _t("Location"),
 							view: (player: PlayerFull) => (
-								<Button color="blue">
+								<Button primary>
 									<Icon name="globe" />
 									{player.location.world.name}&nbsp; &nbsp;
 									{player.location.position.x.toFixed(0)} |&nbsp;
@@ -162,7 +162,7 @@ class Players extends React.Component<Props, OwnState> {
 					actions={(player: PlayerFull, view: DataViewRef<PlayerFull>) => (
 						<>
 							<Button
-								color="blue"
+								primary
 								loading={(player as any).updating}
 								disabled={(player as any).updating}
 								onClick={() => this.showInventory(player, view)}
@@ -170,7 +170,7 @@ class Players extends React.Component<Props, OwnState> {
 								{_t("Inventory")}
 							</Button>{" "}
 							<Button
-								color="yellow"
+								negative
 								loading={(player as any).updating}
 								disabled={(player as any).updating}
 								onClick={() => this.kick(player)}
@@ -178,7 +178,7 @@ class Players extends React.Component<Props, OwnState> {
 								{_t("Kick")}
 							</Button>{" "}
 							<Button
-								color="red"
+								negative
 								loading={(player as any).updating}
 								disabled={(player as any).updating}
 								onClick={() => this.ban(player)}

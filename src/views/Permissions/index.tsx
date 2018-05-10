@@ -140,7 +140,12 @@ class Permissions extends React.Component<Props, OwnState> {
 
 				{subject &&
 					subject.permissions && (
-						<Modal open={modal} onClose={() => this.toggleModal()}>
+						<Modal
+							open={modal}
+							onClose={() => this.toggleModal()}
+							size="fullscreen"
+							className="scrolling"
+						>
 							<Modal.Header>
 								<Trans i18nKey="GameRulesTitle">
 									Permissions for '{subject.id}'
@@ -172,7 +177,7 @@ class Permissions extends React.Component<Props, OwnState> {
 								</Table>
 							</Modal.Content>
 							<Modal.Actions>
-								<Button color="blue" onClick={() => this.toggleModal()}>
+								<Button primary onClick={() => this.toggleModal()}>
 									{_t("OK")}
 								</Button>
 							</Modal.Actions>

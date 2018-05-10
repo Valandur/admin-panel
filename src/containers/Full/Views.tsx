@@ -33,8 +33,6 @@ const Commands = load(() => import("../../views/Commands"))
 const Map = load(() => import("../../views/Map"))
 const Worlds = load(() => import("../../views/Worlds"))
 const Players = load(() => import("../../views/Players"))
-const Entities = load(() => import("../../views/Entities"))
-const TileEntities = load(() => import("../../views/TileEntities"))
 const Permissions = load(() => import("../../views/Permissions"))
 const BlockOperations = load(() => import("../../views/BlockOperations"))
 const Plugins = load(() => import("../../views/Plugins"))
@@ -115,22 +113,6 @@ export const views: Array<ViewDefinition> = [
 		perms: ["permission", "collection", "list"],
 		servlets: ["/permission"],
 		component: Permissions
-	},
-	{
-		title: "Entities",
-		path: "/entities",
-		icon: "paw",
-		perms: ["entity", "list"],
-		servlets: ["/entity"],
-		component: Entities
-	},
-	{
-		title: "TileEntities",
-		path: "/tile-entities",
-		icon: "puzzle",
-		perms: ["tile-entity", "list"],
-		servlets: ["/tile-entity"],
-		component: TileEntities
 	},
 	{
 		title: "BlockOperations",

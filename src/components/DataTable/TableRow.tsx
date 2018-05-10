@@ -91,7 +91,7 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 							[
 								<Button
 									key="save"
-									color="green"
+									primary
 									disabled={(obj as any).updating}
 									loading={(obj as any).updating}
 									onClick={() => {
@@ -104,7 +104,7 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 								</Button>,
 								<Button
 									key="cancel"
-									color="yellow"
+									secondary
 									disabled={(obj as any).updating}
 									loading={(obj as any).updating}
 									onClick={() => this.props.onEdit(null, tableRef)}
@@ -114,7 +114,7 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 							]
 						) : _canEdit ? (
 							<Button
-								color="blue"
+								primary
 								disabled={(obj as any).updating}
 								loading={(obj as any).updating}
 								onClick={() => this.props.onEdit(obj, tableRef)}
@@ -124,7 +124,7 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 						) : null}
 						{_canDelete && (
 							<Button
-								color="red"
+								negative
 								disabled={(obj as any).updating}
 								loading={(obj as any).updating}
 								onClick={() => {

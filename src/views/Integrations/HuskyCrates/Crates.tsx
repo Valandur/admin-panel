@@ -317,6 +317,7 @@ class Crates extends React.Component<Props, OwnState> {
 				open={this.state.modal}
 				onClose={this.toggleModal}
 				size="fullscreen"
+				className="scrolling"
 			>
 				<Modal.Header>
 					<Trans i18nKey="RewardsTitle">Edit '{this.state.name}' crate</Trans>
@@ -413,7 +414,7 @@ class Crates extends React.Component<Props, OwnState> {
 								<Table.Row>
 									<Table.Cell colSpan="4" textAlign="center">
 										<Button
-											color="green"
+											positive
 											icon="plus"
 											content={_t("Add")}
 											onClick={this.addReward}
@@ -425,10 +426,12 @@ class Crates extends React.Component<Props, OwnState> {
 					</Form>
 				</Modal.Content>
 				<Modal.Actions>
-					<Button color="blue" onClick={this.save}>
+					<Button primary onClick={this.save}>
 						{_t("Save")}
 					</Button>&nbsp;
-					<Button onClick={this.toggleModal}>{_t("Cancel")}</Button>
+					<Button secondary onClick={this.toggleModal}>
+						{_t("Cancel")}
+					</Button>
 				</Modal.Actions>
 			</Modal>
 		)

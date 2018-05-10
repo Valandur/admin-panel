@@ -178,15 +178,11 @@ class Plugins extends React.Component<Props, OwnState> {
 					: "grey"
 	}
 
-	stateToColor(plugin: PluginContainer, invert: boolean = false) {
+	stateToColor(plugin: PluginContainer) {
 		return plugin.state === PluginContainer.StateEnum.Loaded
-			? invert
-				? "red"
-				: "green"
+			? "green"
 			: plugin.state === PluginContainer.StateEnum.Unloaded
-				? invert
-					? "green"
-					: "red"
+				? "red"
 				: "yellow"
 	}
 
@@ -267,10 +263,7 @@ class Plugins extends React.Component<Props, OwnState> {
 									"modify",
 									plugin.id
 								]) && (
-									<Button
-										color="blue"
-										onClick={e => this.showDetails(plugin, view)}
-									>
+									<Button primary onClick={e => this.showDetails(plugin, view)}>
 										{_t("Configs")}
 									</Button>
 								)}
@@ -281,10 +274,7 @@ class Plugins extends React.Component<Props, OwnState> {
 									"toggle",
 									plugin.id
 								]) && (
-									<Button
-										color={this.stateToColor(plugin, true)}
-										onClick={() => this.togglePlugin(plugin)}
-									>
+									<Button secondary onClick={() => this.togglePlugin(plugin)}>
 										{plugin.state === PluginContainer.StateEnum.Loaded
 											? _t("Unload")
 											: plugin.state === PluginContainer.StateEnum.Unloaded

@@ -241,20 +241,16 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 					}}
 					actions={(op: BlockOperation, view: DataViewRef<BlockOperation>) => (
 						<>
-							<Button color="blue" onClick={e => this.showDetails(op, view)}>
+							<Button primary onClick={e => this.showDetails(op, view)}>
 								{_t("Details")}
 							</Button>{" "}
 							{op.status === BlockOperation.StatusEnum.RUNNING ||
 							op.status === BlockOperation.StatusEnum.PAUSED ? (
 								<Button
-									color={
-										op.status === BlockOperation.StatusEnum.RUNNING
-											? "yellow"
-											: "green"
-									}
+									secondary
 									onClick={e =>
 										view.save(op, {
-											pause: op.status === BlockOperation.StatusEnum.RUNNING
+											paused: op.status === BlockOperation.StatusEnum.RUNNING
 										})
 									}
 								>
@@ -272,7 +268,7 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 							) : null}{" "}
 							{op.status === BlockOperation.StatusEnum.RUNNING ||
 							op.status === BlockOperation.StatusEnum.PAUSED ? (
-								<Button color="red" onClick={e => view.delete(op)}>
+								<Button negative onClick={e => view.delete(op)}>
 									<Icon name="stop" /> {_t("Stop")}
 								</Button>
 							) : null}
@@ -309,7 +305,12 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 		}
 
 		return (
-			<Modal open={this.state.modal} onClose={this.toggleModal}>
+			<Modal
+				open={this.state.modal}
+				onClose={this.toggleModal}
+				size="fullscreen"
+				className="scrolling"
+			>
 				<Modal.Header>
 					<Trans i18nKey="OperationTitle">
 						Operation {this.state.operation.uuid}

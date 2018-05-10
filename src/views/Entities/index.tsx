@@ -62,7 +62,7 @@ class Entities extends React.Component<Props> {
 						label: _t("Location"),
 						isGroup: true,
 						view: (entity: Entity) => (
-							<Button color="blue">
+							<Button primary>
 								<Icon name="globe" />
 								{entity.location.world.name}&nbsp; &nbsp;
 								{entity.location.position.x.toFixed(0)} |&nbsp;
