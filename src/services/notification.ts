@@ -23,6 +23,16 @@ const showNotif = (
 		position: "br"
 	})
 
+const extractErrorMessage = (err: any): string => {
+	if (!err) {
+		return "Unknown Error"
+	}
+	if (err.response && err.response.body) {
+		return err.response.body.error
+	}
+	return err.message
+}
+
 const notif = ({
 	dispatch,
 	getState
@@ -71,7 +81,7 @@ const notif = ({
 				showNotif(
 					"error",
 					_.upperFirst(action.endpoint),
-					action.err ? action.err.text : "No response data"
+					extractErrorMessage(action.err)
 				)
 			} else {
 				showNotif(
@@ -84,7 +94,11 @@ const notif = ({
 
 		case DataTypeKeys.CHANGE_RESPONSE:
 			if (action.err) {
-				showNotif("error", _.upperFirst(action.endpoint), action.err.text)
+				showNotif(
+					"error",
+					_.upperFirst(action.endpoint),
+					extractErrorMessage(action.err)
+				)
 			} else {
 				showNotif(
 					"success",
@@ -96,7 +110,11 @@ const notif = ({
 
 		case DataTypeKeys.DELETE_RESPONSE:
 			if (action.err) {
-				showNotif("error", _.upperFirst(action.endpoint), action.err.text)
+				showNotif(
+					"error",
+					_.upperFirst(action.endpoint),
+					extractErrorMessage(action.err)
+				)
 			} else {
 				showNotif(
 					"success",
