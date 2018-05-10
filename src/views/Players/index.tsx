@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Trans, translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
-import { Button, Label, Modal, Progress } from "semantic-ui-react"
+import { Button, Label, Modal, Popup, Progress } from "semantic-ui-react"
 
 import { AppAction } from "../../actions"
 import { ListRequestAction, requestList } from "../../actions/dataview"
@@ -87,13 +87,14 @@ class Players extends React.Component<Props, OwnState> {
 							label: _t("NameUUID"),
 							filter: true,
 							view: (player: PlayerFull) => (
-								<>
-									{player.name}
-									<br />
-									{player.uuid}
-									<br />
-									{player.address}
-								</>
+								<Popup
+									flowing
+									hoverable
+									on={["hover", "click"]}
+									trigger={<div>{player.name}</div>}
+									content={player.uuid}
+									position="right center"
+								/>
 							)
 						},
 						world: {
@@ -142,7 +143,11 @@ class Players extends React.Component<Props, OwnState> {
 							label: _t("Info"),
 							wide: true,
 							view: (player: PlayerFull) => (
-								<>
+								<Label.Group>
+									<Label>
+										{_t("IP")}
+										<Label.Detail>{player.address}</Label.Detail>
+									</Label>
 									{player.gameMode && <Label>{player.gameMode.name}</Label>}
 									{player.experience && (
 										<Label>
@@ -150,14 +155,14 @@ class Players extends React.Component<Props, OwnState> {
 											<Label.Detail>{player.experience.level}</Label.Detail>
 										</Label>
 									)}
-								</>
+								</Label.Group>
 							)
 						}
 					}}
 					actions={(player: PlayerFull, view: DataViewRef<PlayerFull>) => (
 						<>
 							<Button
-								primary
+								secondary
 								loading={(player as any).updating}
 								disabled={(player as any).updating}
 								onClick={() => this.showInventory(player, view)}
@@ -185,7 +190,12 @@ class Players extends React.Component<Props, OwnState> {
 				/>
 
 				{this.state.player && this.state.inventory ? (
-					<Modal open={this.state.modal} onClose={this.toggleModal}>
+					<Modal
+						open={this.state.modal}
+						onClose={this.toggleModal}
+						size="fullscreen"
+						className="scrolling"
+					>
 						<Modal.Header>
 							<Trans i18nKey="InventoryTitle">
 								{this.state.player.name}'s Inventory

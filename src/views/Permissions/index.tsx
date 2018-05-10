@@ -5,6 +5,7 @@ import { connect, Dispatch } from "react-redux"
 import {
 	Button,
 	Icon,
+	Input,
 	Label,
 	Menu,
 	Modal,
@@ -35,6 +36,7 @@ interface Props extends reactI18Next.InjectedTranslateProps {
 
 interface OwnState {
 	modal: boolean
+	filter: string
 	subject?: Subject
 }
 
@@ -43,7 +45,8 @@ class Permissions extends React.Component<Props, OwnState> {
 		super(props)
 
 		this.state = {
-			modal: false
+			modal: false,
+			filter: ""
 		}
 
 		this.onTabChange = this.onTabChange.bind(this)
@@ -152,27 +155,37 @@ class Permissions extends React.Component<Props, OwnState> {
 								</Trans>
 							</Modal.Header>
 							<Modal.Content>
+								<Input
+									type="text"
+									placeholder="Filter..."
+									value={this.state.filter}
+									onChange={(e, props) =>
+										this.setState({ filter: props.value })
+									}
+								/>
 								<Table basic compact>
 									<Table.Body>
-										{Object.keys(subject.permissions).map(key => (
-											<Table.Row key={key}>
-												<Table.Cell>{key}</Table.Cell>
-												<Table.Cell>
-													<Icon
-														color={
-															(subject.permissions as any)[key]
-																? "green"
-																: "red"
-														}
-														name={
-															(subject.permissions as any)[key]
-																? "check"
-																: "delete"
-														}
-													/>
-												</Table.Cell>
-											</Table.Row>
-										))}
+										{Object.keys(subject.permissions)
+											.filter(key => key.indexOf(this.state.filter) >= 0)
+											.map(key => (
+												<Table.Row key={key}>
+													<Table.Cell>{key}</Table.Cell>
+													<Table.Cell>
+														<Icon
+															color={
+																(subject.permissions as any)[key]
+																	? "green"
+																	: "red"
+															}
+															name={
+																(subject.permissions as any)[key]
+																	? "check"
+																	: "delete"
+															}
+														/>
+													</Table.Cell>
+												</Table.Row>
+											))}
 									</Table.Body>
 								</Table>
 							</Modal.Content>

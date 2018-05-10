@@ -15,7 +15,11 @@ import {
 } from "../../actions/notification"
 import Autosuggest from "../../components/Autosuggest"
 import DataViewFunc from "../../components/DataView"
-import { checkPermissions, formatSource } from "../../components/Util"
+import {
+	checkPermissions,
+	formatSource,
+	sourceLabel
+} from "../../components/Util"
 import { Command, CommandCall } from "../../fetch"
 import { AppState, PermissionTree } from "../../types"
 
@@ -124,19 +128,6 @@ class Commands extends React.Component<Props, {}> {
 		this.props.requestCommands()
 	}
 
-	getCause(cmd: CommandCall) {
-		if (cmd.cause.causes) {
-			return formatSource(cmd.cause.causes[0])
-		} else {
-			const c = cmd as any
-			if (c.cause.source && c.cause.source.name) {
-				return c.cause.source.name
-			} else {
-				return c.cause.source
-			}
-		}
-	}
-
 	render() {
 		const _t = this.props.t
 
@@ -163,8 +154,22 @@ class Commands extends React.Component<Props, {}> {
 					source: {
 						label: _t("Source"),
 						filter: true,
-						filterValue: this.getCause,
-						view: this.getCause
+						filterValue: (cmd: any) => {
+							if (cmd.cause.causes) {
+								return formatSource(cmd.cause.causes[0])
+							} else {
+								const c = cmd as any
+								return formatSource(c.cause.source)
+							}
+						},
+						view: (cmd: any) => {
+							if (cmd.cause.causes) {
+								return sourceLabel(cmd.cause.causes[0])
+							} else {
+								const c = cmd as any
+								return sourceLabel(c.cause.source)
+							}
+						}
 					},
 					command: {
 						label: _t("Command"),
