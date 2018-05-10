@@ -1,10 +1,11 @@
 import * as React from "react"
 import { translate } from "react-i18next"
 import { connect, Dispatch } from "react-redux"
-import { Button, Form, Icon } from "semantic-ui-react"
+import { Form } from "semantic-ui-react"
 
 import { AppAction } from "../../../actions"
 import { ListRequestAction, requestList } from "../../../actions/dataview"
+import Location from "../../../components/Location"
 import { renderWorldOptions } from "../../../components/Util"
 import { NucleusNamedLocation, WorldFull } from "../../../fetch"
 import { AppState } from "../../../types"
@@ -56,21 +57,9 @@ class Jails extends React.Component<Props, OwnState> {
 						label: _t("Location"),
 						isGroup: true,
 						wide: true,
-						view: (jail: NucleusNamedLocation) => {
-							if (!jail.location) {
-								return <Button color="red">Invalid location</Button>
-							}
-
-							return (
-								<Button color="blue">
-									<Icon name="globe" />
-									{jail.location.world.name}&nbsp; &nbsp;
-									{jail.location.position.x.toFixed(0)} |&nbsp;
-									{jail.location.position.y.toFixed(0)} |&nbsp;
-									{jail.location.position.z.toFixed(0)}
-								</Button>
-							)
-						},
+						view: (jail: NucleusNamedLocation) => (
+							<Location location={jail.location} />
+						),
 						create: view => (
 							<Form.Group inline>
 								<label>Position</label>

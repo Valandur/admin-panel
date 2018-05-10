@@ -8,7 +8,7 @@ import { ChatMessage, Message } from "../../fetch"
 import { AppState } from "../../types"
 
 import DataViewFunc from "../../components/DataView"
-import { formatSource } from "../../components/Util"
+import { formatSource, sourceLabel } from "../../components/Util"
 
 const DataView = DataViewFunc("history/message", "timestamp")
 
@@ -26,18 +26,22 @@ class Chat extends React.Component<Props, {}> {
 				fields={{
 					timestamp: {
 						label: _t("Timestamp"),
-						view: (msg: Message) => moment.unix(msg.timestamp).calendar()
+						view: (msg: ChatMessage) => moment(msg.timestamp).calendar()
 					},
 					sender: {
-						label: _t("Sender"),
+						label: _t("Cause"),
 						filter: true,
-						view: (msg: ChatMessage) => formatSource(msg.sender)
+						filterValue: (msg: ChatMessage) => formatSource(msg.sender),
+						view: (msg: ChatMessage) => sourceLabel(msg.sender)
 					},
 					receivers: {
 						label: _t("Receivers"),
 						filter: true,
-						view: (msg: Message) =>
-							msg.receivers.map(r => formatSource(r)).join(", ")
+						filterValue: (msg: Message) =>
+							msg.receivers.map(r => formatSource(r)).join(" "),
+						view: (msg: Message) => (
+							<>{msg.receivers.map(r => sourceLabel(r))}</>
+						)
 					},
 					content: _t("Message")
 				}}

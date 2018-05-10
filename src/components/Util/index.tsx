@@ -1,4 +1,5 @@
-import { CheckboxProps, InputProps } from "semantic-ui-react"
+import * as React from "react"
+import { CheckboxProps, Icon, InputProps, Label } from "semantic-ui-react"
 
 import { CatalogType, WorldFull } from "../../fetch"
 import { PermissionTree } from "../../types"
@@ -157,4 +158,35 @@ export const formatSource = (source: any): string => {
 	} else {
 		return source.name
 	}
+}
+export const sourceLabel = (source: any): JSX.Element | undefined => {
+	if (!source) {
+		return undefined
+	} else if (source === "valandur.webapi.command.CommandSource") {
+		return (
+			<Label key="webapi" color="blue">
+				<Icon name="browser" />
+				Web-API
+			</Label>
+		)
+	} else if (source === "net.minecraft.server.dedicated.DedicatedServer") {
+		return (
+			<Label key="console" color="black">
+				<Icon name="terminal" />
+				Console
+			</Label>
+		)
+	}
+
+	let name = source
+	if (typeof source !== "string") {
+		name = source.name
+	}
+
+	return (
+		<Label key={name}>
+			<Icon name="user" />
+			{name}
+		</Label>
+	)
 }

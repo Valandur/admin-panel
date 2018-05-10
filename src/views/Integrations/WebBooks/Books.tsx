@@ -157,16 +157,16 @@ class Books extends React.Component<Props, OwnState> {
 						<List.Item key={index}>
 							<Button
 								compact
+								negative
 								icon="delete"
-								color="red"
 								size="mini"
 								onClick={e => this.deleteLine(view, index)}
 							/>
 							{line}
 							<Button
 								compact
+								primary
 								icon="arrow down"
-								color="blue"
 								size="mini"
 								floated="right"
 								onClick={e => this.moveLineDown(view, index)}
@@ -174,8 +174,8 @@ class Books extends React.Component<Props, OwnState> {
 							/>
 							<Button
 								compact
+								primary
 								icon="arrow up"
-								color="blue"
 								size="mini"
 								floated="right"
 								onClick={e => this.moveLineUp(view, index)}

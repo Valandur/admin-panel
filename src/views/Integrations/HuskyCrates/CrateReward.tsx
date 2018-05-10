@@ -145,7 +145,7 @@ class CrateReward extends React.Component<Props, State> {
 					<Popup
 						on="click"
 						position="top right"
-						trigger={<Button color="green" icon="plus" size="small" />}
+						trigger={<Button positive icon="plus" size="small" />}
 						content={
 							<Form>
 								<Form.Field
@@ -220,7 +220,7 @@ class CrateReward extends React.Component<Props, State> {
 				</Table.Cell>
 				<Table.Cell collapsing>
 					<Button
-						color="red"
+						negative
 						icon="delete"
 						content={_t("Delete")}
 						onClick={e => removeReward(reward)}

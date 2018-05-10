@@ -6,13 +6,15 @@ import { Accordion, Button, Radio } from "semantic-ui-react"
 import { ItemStack } from "../../fetch"
 import ItemStackComp from "../ItemStack"
 
-const customizer: (objValue: ItemStack, srcValue: ItemStack) => ItemStack[] | undefined =
-	(objValue: ItemStack, srcValue: ItemStack) => {
-		if (_.isArray(objValue)) {
-			return objValue.concat(srcValue)
-		}
-		return undefined
+const customizer: (
+	objValue: ItemStack,
+	srcValue: ItemStack
+) => ItemStack[] | undefined = (objValue: ItemStack, srcValue: ItemStack) => {
+	if (_.isArray(objValue)) {
+		return objValue.concat(srcValue)
 	}
+	return undefined
+}
 
 export interface AppProps extends reactI18Next.InjectedTranslateProps {
 	items: ItemStack[]
@@ -40,7 +42,7 @@ class Inventory extends React.Component<AppProps, AppState> {
 
 	toggle() {
 		this.setState({
-			shown: !this.state.shown,
+			shown: !this.state.shown
 		})
 	}
 
@@ -49,7 +51,7 @@ class Inventory extends React.Component<AppProps, AppState> {
 
 		if (this.props.items.length === 0) {
 			return (
-				<Button color="blue" disabled>
+				<Button primary disabled>
 					{_t("EmptyInventory")}
 				</Button>
 			)
@@ -60,7 +62,9 @@ class Inventory extends React.Component<AppProps, AppState> {
 			const itemGroups = _.groupBy(items, "type.id")
 			items = _.map(itemGroups, itemGroup => {
 				let item = _.merge({}, _.first(itemGroup))
-				_.tail(itemGroup).forEach(newItem => item = _.mergeWith(item, newItem, customizer))
+				_.tail(itemGroup).forEach(
+					newItem => (item = _.mergeWith(item, newItem, customizer))
+				)
 				return _.merge(item, { quantity: _.sumBy(itemGroup, "quantity") })
 			})
 		}
@@ -76,9 +80,7 @@ class Inventory extends React.Component<AppProps, AppState> {
 					/>,
 					<br key="newline" />
 				]}
-				{items.map((item, i) =>
-					<ItemStackComp key={i} item={item} />
-				)}
+				{items.map((item, i) => <ItemStackComp key={i} item={item} />)}
 			</div>
 		)
 
@@ -88,7 +90,12 @@ class Inventory extends React.Component<AppProps, AppState> {
 
 		return (
 			<Accordion>
-				<Accordion.Title as={Button} primary active={this.state.shown} onClick={this.toggle}>
+				<Accordion.Title
+					as={Button}
+					primary
+					active={this.state.shown}
+					onClick={this.toggle}
+				>
 					{this.state.shown ? _t("HideInventory") : _t("ShowInventory")}
 				</Accordion.Title>
 				<Accordion.Content active={this.state.shown}>

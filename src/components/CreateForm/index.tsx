@@ -1,7 +1,7 @@
 import * as _ from "lodash"
 import * as React from "react"
 import { translate } from "react-i18next"
-import { Button, Dropdown, Form, Header, Icon, Segment } from "semantic-ui-react"
+import { Accordion, Button, Dropdown, Form, Icon } from "semantic-ui-react"
 
 import { DataFieldGroup, DataFieldRaw, DataTableRef } from "../../types"
 import { handleChange, HandleChangeFunc } from "../Util"
@@ -17,18 +17,19 @@ export interface Props<T> extends reactI18Next.InjectedTranslateProps {
 }
 
 interface OwnState {
+	open: boolean
 	newData: any
 }
 
 class CreateForm<T> extends React.Component<Props<T>, OwnState> {
-
 	handleChange: HandleChangeFunc
 
 	constructor(props: Props<T>) {
 		super(props)
 
 		this.state = {
-			newData: {},
+			open: false,
+			newData: {}
 		}
 
 		this.doHandleChange = this.doHandleChange.bind(this)
@@ -46,9 +47,12 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 	}
 
 	shouldComponentUpdate(nextProps: Props<T>, nextState: OwnState) {
-		return nextProps.creating !== this.props.creating ||
+		return (
+			nextProps.creating !== this.props.creating ||
 			nextProps.fields !== this.props.fields ||
-			nextState.newData !== this.state.newData
+			nextState.newData !== this.state.newData ||
+			nextState.open !== this.state.open
+		)
 	}
 
 	create() {
@@ -60,7 +64,7 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 		this.props.onCreate(data, {
 			state: this.state.newData,
 			setState: this.setState,
-			handleChange: this.handleChange,
+			handleChange: this.handleChange
 		})
 	}
 
@@ -68,7 +72,15 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 		return Object.keys(this.props.fields).every(name => {
 			const field = this.props.fields[name]
 			const key = field.createName ? field.createName : name
-			return typeof field === "string" || !field.required || this.state.newData[key]
+			return (
+				typeof field === "string" || !field.required || this.state.newData[key]
+			)
+		})
+	}
+
+	handleClick() {
+		this.setState({
+			open: !this.state.open
 		})
 	}
 
@@ -82,12 +94,15 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 			const field = fields[name]
 			const newField: DataFieldRaw<T> = {
 				...field,
-				name: field.createName ? field.createName : name,
+				name: field.createName ? field.createName : name
 			}
 
 			if (newField.isGroup) {
 				fieldGroups.push({ only: newField })
-			} else if (fieldGroups.length && !fieldGroups[fieldGroups.length - 1].second) {
+			} else if (
+				fieldGroups.length &&
+				!fieldGroups[fieldGroups.length - 1].second
+			) {
 				fieldGroups[fieldGroups.length - 1].second = newField
 			} else {
 				fieldGroups.push({ first: newField })
@@ -95,35 +110,36 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 		})
 
 		return (
-			<Segment>
-				<Header>
+			<Accordion styled fluid>
+				<Accordion.Title
+					active={this.state.open}
+					onClick={() => this.handleClick()}
+				>
 					<Icon fitted name="plus" /> {title}
-				</Header>
+				</Accordion.Title>
 
-				<Form loading={creating}>
-					{fieldGroups.map((fg, i) => {
-						if (fg.only) {
-							return <div key={i}>
-								{this.renderField(fg.only)}
-							</div>
-						}
-
-						return <Form.Group key={i} widths="equal">
-							{fg.first &&
-								this.renderField(fg.first)
+				<Accordion.Content active={this.state.open}>
+					<Form loading={creating}>
+						{fieldGroups.map((fg, i) => {
+							if (fg.only) {
+								return <div key={i}>{this.renderField(fg.only)}</div>
 							}
 
-							{fg.second &&
-								this.renderField(fg.second)
-							}
-						</Form.Group>
-					})}
+							return (
+								<Form.Group key={i} widths="equal">
+									{fg.first && this.renderField(fg.first)}
 
-					<Button color="green" onClick={this.create} disabled={!this.canCreate()}>
-						{this.props.button || _t("Create")}
-					</Button>
-				</Form>
-			</Segment>
+									{fg.second && this.renderField(fg.second)}
+								</Form.Group>
+							)
+						})}
+
+						<Button primary onClick={this.create} disabled={!this.canCreate()}>
+							{this.props.button || _t("Create")}
+						</Button>
+					</Form>
+				</Accordion.Content>
+			</Accordion>
 		)
 	}
 
@@ -135,7 +151,7 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 				state: state,
 				setState: this.setState,
 				handleChange: this.handleChange,
-				value: state[field.name],
+				value: state[field.name]
 			})
 		}
 

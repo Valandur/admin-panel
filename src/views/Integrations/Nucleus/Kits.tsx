@@ -150,7 +150,7 @@ class Kits extends React.Component<Props, OwnState> {
 				<Popup
 					on="click"
 					position="top right"
-					trigger={<Button color="green" icon="plus" size="mini" />}
+					trigger={<Button positive icon="plus" size="mini" />}
 					content={
 						<Input
 							name="newKitCmd"
@@ -184,7 +184,7 @@ class Kits extends React.Component<Props, OwnState> {
 				<Popup
 					on="click"
 					position="top right"
-					trigger={<Button color="green" icon="plus" size="mini" />}
+					trigger={<Button positive icon="plus" size="mini" />}
 					content={
 						<Form>
 							<Form.Field
