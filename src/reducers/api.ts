@@ -1,6 +1,6 @@
-import * as _ from "lodash"
+import * as _ from 'lodash';
 
-import { AppAction, TypeKeys } from "../actions"
+import { AppAction, TypeKeys } from '../actions';
 import {
 	CatalogType,
 	CommandApi,
@@ -11,28 +11,28 @@ import {
 	RegistryApi,
 	ServerApi,
 	UserApi
-} from "../fetch"
-import { CatalogTypeKeys, PermissionTree, Server } from "../types"
+} from '../fetch';
+import { CatalogTypeKeys, PermissionTree, Server } from '../types';
 
 export interface ApiCollection {
-	cmd: CommandApi
-	info: InfoApi
-	permission: PermissionApi
-	player: PlayerApi
-	plugin: PluginApi
-	registry: RegistryApi
-	server: ServerApi
-	user: UserApi
+	cmd: CommandApi;
+	info: InfoApi;
+	permission: PermissionApi;
+	player: PlayerApi;
+	plugin: PluginApi;
+	registry: RegistryApi;
+	server: ServerApi;
+	user: UserApi;
 }
 
 function setupApis(server: Server, apiKey?: string): ApiCollection {
 	const conf = {
 		apiKey: apiKey,
 		basePath:
-			(window.location.protocol === "https:" && server.apiUrlHttps
+			(window.location.protocol === 'https:' && server.apiUrlHttps
 				? server.apiUrlHttps
-				: server.apiUrl) + "/api/v5"
-	}
+				: server.apiUrl) + '/api/v5'
+	};
 
 	return {
 		cmd: new CommandApi(conf),
@@ -43,24 +43,24 @@ function setupApis(server: Server, apiKey?: string): ApiCollection {
 		registry: new RegistryApi(conf),
 		server: new ServerApi(conf),
 		user: new UserApi(conf)
-	}
+	};
 }
 
 export interface ApiState {
-	key?: string
-	username?: string
-	loggedIn: boolean
-	loggingIn: boolean
-	server: Server
-	servers: Server[]
+	key?: string;
+	username?: string;
+	loggedIn: boolean;
+	loggingIn: boolean;
+	server: Server;
+	servers: Server[];
 	servlets: {
 		[x: string]: string
-	}
-	types: { [x in CatalogTypeKeys]?: CatalogType[] }
-	permissions?: PermissionTree
+	};
+	types: { [x in CatalogTypeKeys]?: CatalogType[] };
+	permissions?: PermissionTree;
 
-	apis: ApiCollection
-	version: 2
+	apis: ApiCollection;
+	version: 2;
 }
 
 let initialState: ApiState = {
@@ -73,19 +73,19 @@ let initialState: ApiState = {
 
 	apis: setupApis(window.config.servers[0]),
 	version: 2
-}
+};
 
 if (window.localStorage) {
-	const str = window.localStorage.getItem("api")
-	const prevApi: ApiState | undefined = str ? JSON.parse(str) : undefined
+	const str = window.localStorage.getItem('api');
+	const prevApi: ApiState | undefined = str ? JSON.parse(str) : undefined;
 	if (prevApi && prevApi.version === initialState.version && prevApi.loggedIn) {
-		initialState = { ...initialState, ...prevApi }
+		initialState = { ...initialState, ...prevApi };
 		// If the servers changed we need to reload them
 		if (!_.isEqual(initialState.servers, window.config.servers)) {
-			initialState.server = window.config.servers[0]
-			initialState.servers = window.config.servers
+			initialState.server = window.config.servers[0];
+			initialState.servers = window.config.servers;
 		}
-		initialState.apis = setupApis(prevApi.server, prevApi.key)
+		initialState.apis = setupApis(prevApi.server, prevApi.key);
 	}
 }
 
@@ -96,23 +96,23 @@ export default (state = initialState, action: AppAction) => {
 				...state,
 				server: action.server,
 				apis: setupApis(action.server)
-			}
+			};
 
 		case TypeKeys.SERVLETS_RESPONSE:
 			if (!action.ok) {
-				return state
+				return state;
 			}
 
 			return {
 				...state,
 				servlets: action.servlets
-			}
+			};
 
 		case TypeKeys.LOGIN_REQUEST:
 			return {
 				...state,
 				loggingIn: true
-			}
+			};
 
 		case TypeKeys.LOGIN_RESPONSE:
 			if (action.error || !action.data) {
@@ -124,7 +124,7 @@ export default (state = initialState, action: AppAction) => {
 					username: undefined,
 					permissions: undefined,
 					rateLimit: undefined
-				}
+				};
 			}
 			return {
 				...state,
@@ -135,7 +135,7 @@ export default (state = initialState, action: AppAction) => {
 				permissions: action.data.permissions,
 				rateLimit: action.data.rateLimit,
 				apis: setupApis(state.server, action.data.key)
-			}
+			};
 
 		case TypeKeys.LOGOUT_REQUEST:
 			return {
@@ -145,11 +145,11 @@ export default (state = initialState, action: AppAction) => {
 				username: undefined,
 				permissions: undefined,
 				rateLimit: undefined
-			}
+			};
 
 		case TypeKeys.CHECK_USER_RESPONSE:
 			if (!action.ok) {
-				return state
+				return state;
 			}
 
 			return {
@@ -157,7 +157,7 @@ export default (state = initialState, action: AppAction) => {
 				username: action.data.name,
 				permissions: action.data.permissions,
 				rateLimit: action.data.rateLimit
-			}
+			};
 
 		case TypeKeys.CATALOG_RESPONSE:
 			return {
@@ -168,9 +168,9 @@ export default (state = initialState, action: AppAction) => {
 						(t, i) => action.types.findIndex(otherT => otherT.id === t.id) === i
 					)
 				}
-			}
+			};
 
 		default:
-			return state
+			return state;
 	}
-}
+};

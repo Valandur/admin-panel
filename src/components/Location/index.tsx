@@ -1,10 +1,10 @@
-import * as React from "react"
-import { Icon, Label } from "semantic-ui-react"
+import * as React from 'react';
+import { Icon, Label } from 'semantic-ui-react';
 
-import { Location } from "../../fetch"
+import { Location } from '../../fetch';
 
 export interface Props {
-	location: Location | undefined
+	location: Location | undefined;
 }
 
 export default ({ location }: Props) =>
@@ -18,4 +18,4 @@ export default ({ location }: Props) =>
 		</Label>
 	) : (
 		<Label color="red">Invalid location</Label>
-	)
+	);

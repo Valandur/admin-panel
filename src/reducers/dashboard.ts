@@ -1,12 +1,12 @@
-import * as _ from "lodash"
+import * as _ from 'lodash';
 
-import { AppAction } from "../actions"
-import { TypeKeys } from "../actions/dashboard"
+import { AppAction } from '../actions';
+import { TypeKeys } from '../actions/dashboard';
 
-import { ServerInfo, ServerStats } from "../fetch"
+import { ServerInfo, ServerStats } from '../fetch';
 
 export interface DashboardState extends ServerStats {
-	data?: ServerInfo
+	data?: ServerInfo;
 }
 
 const defaultState: DashboardState = {
@@ -15,14 +15,14 @@ const defaultState: DashboardState = {
 	cpu: [],
 	memory: [],
 	disk: []
-}
+};
 
 export default (state = defaultState, action: AppAction) => {
 	switch (action.type) {
 		case TypeKeys.INFO_RESPONSE:
 			return _.merge({}, state, {
 				data: action.data
-			})
+			});
 
 		case TypeKeys.STATS_RESPONSE:
 			return {
@@ -32,9 +32,9 @@ export default (state = defaultState, action: AppAction) => {
 				cpu: state.cpu.concat(action.cpu),
 				memory: state.memory.concat(action.memory),
 				disk: state.disk.concat(action.disk)
-			}
+			};
 
 		default:
-			return state
+			return state;
 	}
-}
+};

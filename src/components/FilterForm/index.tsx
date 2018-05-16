@@ -1,37 +1,37 @@
-import * as _ from "lodash"
-import * as React from "react"
-import { Accordion, Dropdown, Form, Icon, Message } from "semantic-ui-react"
+import * as _ from 'lodash';
+import * as React from 'react';
+import { Accordion, Dropdown, Form, Icon, Message } from 'semantic-ui-react';
 
-import { DataFieldGroup, DataFieldRaw } from "../../types"
-import { handleChange, HandleChangeFunc } from "../Util"
+import { DataFieldGroup, DataFieldRaw } from '../../types';
+import { handleChange, HandleChangeFunc } from '../Util';
 
 export interface Props<T> {
-	title: string
-	valid: boolean
+	title: string;
+	valid: boolean;
 	fields: {
 		[x: string]: DataFieldRaw<T>
-	}
+	};
 	values: {
 		[x: string]: string | string[]
-	}
-	onFilterChange: (key: string, value: string) => void
+	};
+	onFilterChange: (key: string, value: string) => void;
 }
 
 interface State {
-	open: boolean
+	open: boolean;
 }
 
 class FilterForm<T> extends React.Component<Props<T>, State> {
-	handleChange: HandleChangeFunc
+	handleChange: HandleChangeFunc;
 
 	constructor(props: Props<T>) {
-		super(props)
+		super(props);
 
 		this.state = {
 			open: false
-		}
+		};
 
-		this.handleChange = handleChange.bind(this, this.props.onFilterChange)
+		this.handleChange = handleChange.bind(this, this.props.onFilterChange);
 	}
 
 	shouldComponentUpdate(nextProps: Props<T>, nextState: State) {
@@ -40,37 +40,37 @@ class FilterForm<T> extends React.Component<Props<T>, State> {
 			nextProps.fields !== this.props.fields ||
 			nextProps.valid !== this.props.valid ||
 			nextState.open !== this.state.open
-		)
+		);
 	}
 
 	handleClick() {
 		this.setState({
 			open: !this.state.open
-		})
+		});
 	}
 
 	render() {
-		const { title, fields, values, valid } = this.props
+		const { title, fields, values, valid } = this.props;
 
-		const fieldGroups: DataFieldGroup<T>[] = []
+		const fieldGroups: DataFieldGroup<T>[] = [];
 		Object.keys(fields).forEach(name => {
-			const field = fields[name]
+			const field = fields[name];
 			const newField: DataFieldRaw<T> = {
 				...field,
 				name: field.filterName ? field.filterName : name
-			}
+			};
 
 			if (newField.isGroup) {
-				fieldGroups.push({ only: newField })
+				fieldGroups.push({ only: newField });
 			} else if (
 				fieldGroups.length &&
 				!fieldGroups[fieldGroups.length - 1].second
 			) {
-				fieldGroups[fieldGroups.length - 1].second = newField
+				fieldGroups[fieldGroups.length - 1].second = newField;
 			} else {
-				fieldGroups.push({ first: newField })
+				fieldGroups.push({ first: newField });
 			}
-		})
+		});
 
 		return (
 			<Accordion styled fluid>
@@ -89,7 +89,7 @@ class FilterForm<T> extends React.Component<Props<T>, State> {
 									fg.only,
 									_.get(values, fg.only.name),
 									!valid
-								)
+								);
 							}
 
 							return (
@@ -108,7 +108,7 @@ class FilterForm<T> extends React.Component<Props<T>, State> {
 											!valid
 										)}
 								</Form.Group>
-							)
+							);
 						})}
 						<Message
 							error
@@ -118,7 +118,7 @@ class FilterForm<T> extends React.Component<Props<T>, State> {
 					</Form>
 				</Accordion.Content>
 			</Accordion>
-		)
+		);
 	}
 
 	renderField(
@@ -126,18 +126,18 @@ class FilterForm<T> extends React.Component<Props<T>, State> {
 		value: string | string[],
 		error: boolean
 	) {
-		if (typeof field.filter === "function") {
+		if (typeof field.filter === 'function') {
 			return field.filter({
 				state: this.props.values,
 				setState: this.setState,
 				handleChange: this.handleChange,
 				value: value
-			})
+			});
 		}
 
 		if (field.options) {
 			if (!value) {
-				value = []
+				value = [];
 			}
 
 			return (
@@ -155,21 +155,21 @@ class FilterForm<T> extends React.Component<Props<T>, State> {
 					error={error}
 					onChange={this.handleChange}
 				/>
-			)
+			);
 		}
 
 		return (
 			<Form.Input
 				name={field.name}
-				type={field.type ? field.type : "text"}
+				type={field.type ? field.type : 'text'}
 				label={field.label}
 				placeholder={field.label}
 				value={value}
 				error={error}
 				onChange={this.handleChange}
 			/>
-		)
+		);
 	}
 }
 
-export default FilterForm
+export default FilterForm;

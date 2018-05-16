@@ -1,68 +1,69 @@
-import * as React from "react"
-import { translate } from "react-i18next"
-import { connect } from "react-redux"
-import { NavLink } from "react-router-dom"
-import { Dispatch } from "redux"
-import { Dropdown, Icon, Image, Menu, MenuItemProps } from "semantic-ui-react"
+import * as React from 'react';
+import { translate } from 'react-i18next';
+import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import { Dispatch } from 'redux';
+import { Dropdown, Icon, Image, Menu, MenuItemProps } from 'semantic-ui-react';
 
-import { AppAction, changeServer, requestLogout } from "../../actions"
-import { AppState, Lang, Server } from "../../types"
-import { handleChange, HandleChangeFunc } from "../Util"
+import { AppAction, changeServer, requestLogout } from '../../actions';
+import { AppState, Lang, Server } from '../../types';
+import { handleChange, HandleChangeFunc } from '../Util';
 
-const apiLink = "/docs"
+const apiLink = '/docs';
 const spongeLink =
-	"https://forums.spongepowered.org/t/" +
-	"web-api-provides-an-admin-panel-and-api-for-your-minecraft-server/15709"
-const docsLink = "https://github.com/Valandur/Web-API/blob/master/docs/INDEX.md"
-const issuesLink = "https://github.com/Valandur/admin-panel/issues"
-const imageUrl = require("../../assets/logo.png")
+	'https://forums.spongepowered.org/t/' +
+	'web-api-provides-an-admin-panel-and-api-for-your-minecraft-server/15709';
+const docsLink =
+	'https://github.com/Valandur/Web-API/blob/master/docs/INDEX.md';
+const issuesLink = 'https://github.com/Valandur/admin-panel/issues';
+const imageUrl = require('../../assets/logo.png');
 
 export interface Props extends reactI18Next.InjectedTranslateProps {
-	lang: Lang
-	username: string
-	server: Server
-	servers: Server[]
-	showSidebar: boolean
-	changeServer: (server: Server) => AppAction
-	requestLogout: () => AppAction
+	lang: Lang;
+	username: string;
+	server: Server;
+	servers: Server[];
+	showSidebar: boolean;
+	changeServer: (server: Server) => AppAction;
+	requestLogout: () => AppAction;
 	toggleSidebar?: (
 		event: React.MouseEvent<HTMLElement>,
 		data: MenuItemProps
-	) => void
-	path: string
+	) => void;
+	path: string;
 }
 
 class HeaderMenu extends React.Component<Props> {
-	handleChange: HandleChangeFunc
+	handleChange: HandleChangeFunc;
 
 	constructor(props: Props) {
-		super(props)
+		super(props);
 
-		this.handleChangeServer = this.handleChangeServer.bind(this)
-		this.handleChange = handleChange.bind(this, this.handleChangeServer)
+		this.handleChangeServer = this.handleChangeServer.bind(this);
+		this.handleChange = handleChange.bind(this, this.handleChangeServer);
 	}
 
 	handleChangeServer(key: string, value: string) {
-		if (key === "server") {
-			const server = this.props.servers.find(s => s.apiUrl === value)
+		if (key === 'server') {
+			const server = this.props.servers.find(s => s.apiUrl === value);
 			if (server == null) {
-				return
+				return;
 			}
-			this.props.changeServer(server)
+			this.props.changeServer(server);
 		} else {
-			this.setState({ [key]: value })
+			this.setState({ [key]: value });
 		}
 	}
 
 	render() {
-		const _t = this.props.t
+		const _t = this.props.t;
 
 		return (
 			<Menu fluid stackable size="small" style={{ marginBottom: 0 }}>
 				<Menu.Item
 					as={NavLink}
 					header
-					style={{ minWidth: "259px" }}
+					style={{ minWidth: '259px' }}
 					to="/dashboard"
 				>
 					<Image size="small" centered src={imageUrl} />
@@ -95,7 +96,7 @@ class HeaderMenu extends React.Component<Props> {
 								rel="noopener noreferrer"
 							>
 								<Icon name="external" />
-								{_t("APILink")}
+								{_t('APILink')}
 							</Dropdown.Item>
 							<Dropdown.Item
 								href={spongeLink}
@@ -103,7 +104,7 @@ class HeaderMenu extends React.Component<Props> {
 								rel="noopener noreferrer"
 							>
 								<Icon name="external" />
-								{_t("SpongeLink")}
+								{_t('SpongeLink')}
 							</Dropdown.Item>
 							<Dropdown.Item
 								href={docsLink}
@@ -111,7 +112,7 @@ class HeaderMenu extends React.Component<Props> {
 								rel="noopener noreferrer"
 							>
 								<Icon name="external" />
-								{_t("DocsLink")}
+								{_t('DocsLink')}
 							</Dropdown.Item>
 							<Dropdown.Item
 								href={issuesLink}
@@ -119,21 +120,21 @@ class HeaderMenu extends React.Component<Props> {
 								rel="noopener noreferrer"
 							>
 								<Icon name="external" />
-								{_t("IssuesLink")}
+								{_t('IssuesLink')}
 							</Dropdown.Item>
 
 							<Dropdown.Header content="User" />
 							<Dropdown.Item as={NavLink} to="/preferences">
-								<Icon name="setting" /> {_t("Preferences")}
+								<Icon name="setting" /> {_t('Preferences')}
 							</Dropdown.Item>
 							<Dropdown.Item name="logout" onClick={this.props.requestLogout}>
-								<Icon name="log out" /> {_t("Logout")}
+								<Icon name="log out" /> {_t('Logout')}
 							</Dropdown.Item>
 						</Dropdown.Menu>
 					</Dropdown>
 				</Menu.Menu>
 			</Menu>
-		)
+		);
 	}
 }
 
@@ -145,17 +146,17 @@ const mapStateToProps = (state: AppState) => {
 		servers: state.api.servers,
 
 		// We include the pathname so this component updates when the path changes
-		path: state.router.location ? state.router.location.pathname : ""
-	}
-}
+		path: state.router.location ? state.router.location.pathname : ''
+	};
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		requestLogout: (): AppAction => dispatch(requestLogout()),
 		changeServer: (server: Server): AppAction => dispatch(changeServer(server))
-	}
-}
+	};
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-	translate("Menu")(HeaderMenu)
-)
+	translate('Menu')(HeaderMenu)
+);

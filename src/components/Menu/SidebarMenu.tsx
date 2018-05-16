@@ -1,54 +1,54 @@
-import * as React from "react"
-import { translate } from "react-i18next"
-import { connect } from "react-redux"
-import { NavLink } from "react-router-dom"
-import { Dispatch } from "redux"
-import { Icon, Menu, Progress, Sidebar } from "semantic-ui-react"
+import * as React from 'react';
+import { translate } from 'react-i18next';
+import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import { Dispatch } from 'redux';
+import { Icon, Menu, Progress, Sidebar } from 'semantic-ui-react';
 
 import {
 	AppAction,
 	requestServlets,
 	ServletsRequestAction
-} from "../../actions"
+} from '../../actions';
 
-import { checkPermissions, checkServlets } from "../../components/Util"
-import { ServerStatDouble } from "../../fetch"
-import { AppState, PermissionTree, ViewDefinition } from "../../types"
+import { checkPermissions, checkServlets } from '../../components/Util';
+import { ServerStatDouble } from '../../fetch';
+import { AppState, PermissionTree, ViewDefinition } from '../../types';
 
 export interface Props extends reactI18Next.InjectedTranslateProps {
 	// State
-	cpu: ServerStatDouble[]
-	disk: ServerStatDouble[]
-	memory: ServerStatDouble[]
+	cpu: ServerStatDouble[];
+	disk: ServerStatDouble[];
+	memory: ServerStatDouble[];
 	servlets: {
 		[x: string]: string
-	}
-	perms: PermissionTree
-	path: string
+	};
+	perms: PermissionTree;
+	path: string;
 
 	// Own
-	show: boolean
-	views: ViewDefinition[]
-	showServerUsage: boolean
+	show: boolean;
+	views: ViewDefinition[];
+	showServerUsage: boolean;
 
 	// Dispatch
-	requestServlets: () => ServletsRequestAction
+	requestServlets: () => ServletsRequestAction;
 }
 
 class SidebarMenu extends React.Component<Props> {
 	constructor(props: Props) {
-		super(props)
+		super(props);
 
-		this.renderMenuItem = this.renderMenuItem.bind(this)
+		this.renderMenuItem = this.renderMenuItem.bind(this);
 	}
 
 	componentDidMount() {
-		this.props.requestServlets()
+		this.props.requestServlets();
 	}
 
 	render() {
-		const _t = this.props.t
-		const views = this.props.views
+		const _t = this.props.t;
+		const views = this.props.views;
 
 		return (
 			<Sidebar
@@ -64,7 +64,7 @@ class SidebarMenu extends React.Component<Props> {
 							percent={this.props.cpu[this.props.cpu.length - 1].value * 100}
 							progress="percent"
 							precision={1}
-							label={_t("CPU")}
+							label={_t('CPU')}
 							color="blue"
 							size="small"
 						/>
@@ -74,7 +74,7 @@ class SidebarMenu extends React.Component<Props> {
 							}
 							progress="percent"
 							precision={1}
-							label={_t("Memory")}
+							label={_t('Memory')}
 							color="red"
 							size="small"
 						/>
@@ -82,7 +82,7 @@ class SidebarMenu extends React.Component<Props> {
 							percent={this.props.disk[this.props.disk.length - 1].value * 100}
 							progress="percent"
 							precision={1}
-							label={_t("Disk")}
+							label={_t('Disk')}
 							color="green"
 							size="small"
 						/>
@@ -91,15 +91,15 @@ class SidebarMenu extends React.Component<Props> {
 
 				{views.map(this.renderMenuItem)}
 			</Sidebar>
-		)
+		);
 	}
 
 	renderMenuItem(view: ViewDefinition): JSX.Element | null {
 		if (view.perms && !checkPermissions(this.props.perms, view.perms)) {
-			return null
+			return null;
 		}
 		if (view.servlets && !checkServlets(this.props.servlets, view.servlets)) {
-			return null
+			return null;
 		}
 
 		if (!view.views) {
@@ -107,7 +107,7 @@ class SidebarMenu extends React.Component<Props> {
 				<Menu.Item as={NavLink} key={view.path} to={view.path}>
 					<Icon name={view.icon} /> {this.props.t(view.title)}
 				</Menu.Item>
-			)
+			);
 		}
 
 		return (
@@ -115,7 +115,7 @@ class SidebarMenu extends React.Component<Props> {
 				<Menu.Header>{this.props.t(view.title)}</Menu.Header>
 				<Menu.Menu>{view.views.map(this.renderMenuItem)}</Menu.Menu>
 			</Menu.Item>
-		)
+		);
 	}
 }
 
@@ -129,16 +129,16 @@ const mapStateToProps = (state: AppState) => {
 		showServerUsage: state.preferences.showServerUsage,
 
 		// We include the pathname so this component updates when the path changes
-		path: state.router.location ? state.router.location.pathname : ""
-	}
-}
+		path: state.router.location ? state.router.location.pathname : ''
+	};
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		requestServlets: () => dispatch(requestServlets())
-	}
-}
+	};
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-	translate("Menu")(SidebarMenu)
-)
+	translate('Menu')(SidebarMenu)
+);

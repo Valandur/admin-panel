@@ -1,19 +1,19 @@
-import * as i18next from "i18next"
+import * as i18next from 'i18next';
 
-import { AppAction } from "../actions"
-import { TypeKeys } from "../actions/preferences"
-import { Lang, PreferenceKey, Theme } from "../types"
+import { AppAction } from '../actions';
+import { TypeKeys } from '../actions/preferences';
+import { Lang, PreferenceKey, Theme } from '../types';
 
-declare const swapThemeCss: (theme: Theme) => void
+declare const swapThemeCss: (theme: Theme) => void;
 
 export interface PreferencesState {
-	[PreferenceKey.lang]: Lang
-	[PreferenceKey.theme]: Theme
-	[PreferenceKey.showServerUsage]: boolean
-	[PreferenceKey.hideWIPNote]: boolean
-	[PreferenceKey.hidePluginsNote]: boolean
-	[PreferenceKey.hideServerSettingsNote]: boolean
-	version: number
+	[PreferenceKey.lang]: Lang;
+	[PreferenceKey.theme]: Theme;
+	[PreferenceKey.showServerUsage]: boolean;
+	[PreferenceKey.hideWIPNote]: boolean;
+	[PreferenceKey.hidePluginsNote]: boolean;
+	[PreferenceKey.hideServerSettingsNote]: boolean;
+	version: number;
 }
 
 let initialState: PreferencesState = {
@@ -24,15 +24,15 @@ let initialState: PreferencesState = {
 	hidePluginsNote: false,
 	hideServerSettingsNote: false,
 	version: 4
-}
+};
 
 if (window.localStorage) {
-	const str = window.localStorage.getItem("preferences")
+	const str = window.localStorage.getItem('preferences');
 	const prevApi: PreferencesState | undefined = str
 		? JSON.parse(str)
-		: undefined
+		: undefined;
 	if (prevApi && prevApi.version === initialState.version) {
-		initialState = { ...initialState, ...prevApi }
+		initialState = { ...initialState, ...prevApi };
 	}
 }
 
@@ -40,17 +40,17 @@ export default (state = initialState, action: AppAction) => {
 	switch (action.type) {
 		case TypeKeys.SET_PREFERENCE:
 			if (action.key === PreferenceKey.theme) {
-				swapThemeCss(action.value)
+				swapThemeCss(action.value);
 			} else if (action.key === PreferenceKey.lang) {
-				i18next.changeLanguage(action.value)
+				i18next.changeLanguage(action.value);
 			}
 
 			return {
 				...state,
 				[action.key]: action.value
-			}
+			};
 
 		default:
-			return state
+			return state;
 	}
-}
+};

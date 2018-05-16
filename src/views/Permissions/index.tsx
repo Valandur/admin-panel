@@ -1,7 +1,7 @@
-import * as _ from "lodash"
-import * as React from "react"
-import { Trans, translate } from "react-i18next"
-import { connect, Dispatch } from "react-redux"
+import * as _ from 'lodash';
+import * as React from 'react';
+import { Trans, translate } from 'react-i18next';
+import { connect, Dispatch } from 'react-redux';
 import {
 	Button,
 	Icon,
@@ -13,74 +13,74 @@ import {
 	Tab,
 	Table,
 	TabProps
-} from "semantic-ui-react"
+} from 'semantic-ui-react';
 
-import DataTable from "../../components/DataTable"
+import DataTable from '../../components/DataTable';
 
-import { AppAction } from "../../actions"
+import { AppAction } from '../../actions';
 import {
 	CollectionsListRequestAction,
 	requestCollections,
 	requestSubjects,
 	SubjectsListRequestAction
-} from "../../actions/permission"
-import { Subject, SubjectCollection } from "../../fetch"
-import { AppState } from "../../types"
+} from '../../actions/permission';
+import { Subject, SubjectCollection } from '../../fetch';
+import { AppState } from '../../types';
 
 interface Props extends reactI18Next.InjectedTranslateProps {
-	collections: SubjectCollection[]
-	subjects: Subject[]
-	requestCollections: () => CollectionsListRequestAction
-	requestSubjects: (coll: SubjectCollection) => SubjectsListRequestAction
+	collections: SubjectCollection[];
+	subjects: Subject[];
+	requestCollections: () => CollectionsListRequestAction;
+	requestSubjects: (coll: SubjectCollection) => SubjectsListRequestAction;
 }
 
 interface OwnState {
-	modal: boolean
-	filter: string
-	subject?: Subject
+	modal: boolean;
+	filter: string;
+	subject?: Subject;
 }
 
 class Permissions extends React.Component<Props, OwnState> {
 	constructor(props: Props) {
-		super(props)
+		super(props);
 
 		this.state = {
 			modal: false,
-			filter: ""
-		}
+			filter: ''
+		};
 
-		this.onTabChange = this.onTabChange.bind(this)
+		this.onTabChange = this.onTabChange.bind(this);
 	}
 
 	componentDidMount() {
-		this.props.requestCollections()
+		this.props.requestCollections();
 	}
 
 	onTabChange(event: React.MouseEvent<HTMLDivElement>, data: TabProps) {
 		if (!data.activeIndex && data.activeIndex !== 0) {
-			return
+			return;
 		}
 
-		const coll: SubjectCollection = this.props.collections[data.activeIndex]
-		this.props.requestSubjects(coll)
+		const coll: SubjectCollection = this.props.collections[data.activeIndex];
+		this.props.requestSubjects(coll);
 	}
 
 	showSubject(subject: Subject) {
 		this.setState({
 			modal: true,
 			subject
-		})
+		});
 	}
 
 	toggleModal() {
 		this.setState({
 			modal: !this.state.modal
-		})
+		});
 	}
 
 	render() {
-		const _t = this.props.t
-		const { modal, subject } = this.state
+		const _t = this.props.t;
+		const { modal, subject } = this.state;
 
 		return (
 			<Segment basic>
@@ -104,24 +104,24 @@ class Permissions extends React.Component<Props, OwnState> {
 										isEditing={(subj: Subject) => false}
 										fields={{
 											id: {
-												name: "id",
-												label: _t("Id"),
+												name: 'id',
+												label: _t('Id'),
 												view: true
 											},
 											friendlyId: {
-												name: "friendlyId",
-												label: _t("Name"),
+												name: 'friendlyId',
+												label: _t('Name'),
 												view: true
 											},
 											permissions: {
-												name: "permissions",
-												label: _t("Permissions"),
+												name: 'permissions',
+												label: _t('Permissions'),
 												view: (subj: Subject) => {
 													if (
 														!subj.permissions ||
 														!Object.keys(subj.permissions).length
 													) {
-														return _t("No permissions")
+														return _t('No permissions');
 													}
 
 													return (
@@ -130,13 +130,13 @@ class Permissions extends React.Component<Props, OwnState> {
 															content="View"
 															onClick={() => this.showSubject(subj)}
 														/>
-													)
+													);
 												}
 											}
 										}}
 									/>
 								</Segment>
-							)
+							);
 						}
 					}))}
 				/>
@@ -174,13 +174,13 @@ class Permissions extends React.Component<Props, OwnState> {
 														<Icon
 															color={
 																(subject.permissions as any)[key]
-																	? "green"
-																	: "red"
+																	? 'green'
+																	: 'red'
 															}
 															name={
 																(subject.permissions as any)[key]
-																	? "check"
-																	: "delete"
+																	? 'check'
+																	: 'delete'
 															}
 														/>
 													</Table.Cell>
@@ -191,13 +191,13 @@ class Permissions extends React.Component<Props, OwnState> {
 							</Modal.Content>
 							<Modal.Actions>
 								<Button primary onClick={() => this.toggleModal()}>
-									{_t("OK")}
+									{_t('OK')}
 								</Button>
 							</Modal.Actions>
 						</Modal>
 					)}
 			</Segment>
-		)
+		);
 	}
 }
 
@@ -205,17 +205,17 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		collections: state.permission.collections,
 		subjects: state.permission.subjects
-	}
-}
+	};
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		requestCollections: () => dispatch(requestCollections()),
 		requestSubjects: (coll: SubjectCollection) =>
 			dispatch(requestSubjects(coll))
-	}
-}
+	};
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-	translate("Permissions")(Permissions)
-)
+	translate('Permissions')(Permissions)
+);

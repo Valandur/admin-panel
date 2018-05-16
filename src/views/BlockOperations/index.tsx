@@ -1,7 +1,7 @@
-import * as moment from "moment"
-import * as React from "react"
-import { Trans, translate } from "react-i18next"
-import { connect, Dispatch } from "react-redux"
+import * as moment from 'moment';
+import * as React from 'react';
+import { Trans, translate } from 'react-i18next';
+import { connect, Dispatch } from 'react-redux';
 import {
 	Button,
 	Dropdown,
@@ -10,29 +10,29 @@ import {
 	Label,
 	Modal,
 	Progress
-} from "semantic-ui-react"
+} from 'semantic-ui-react';
 
-import { AppAction, CatalogRequestAction, requestCatalog } from "../../actions"
-import { ListRequestAction, requestList } from "../../actions/dataview"
+import { AppAction, CatalogRequestAction, requestCatalog } from '../../actions';
+import { ListRequestAction, requestList } from '../../actions/dataview';
 import {
 	renderCatalogTypeOptions,
 	renderWorldOptions
-} from "../../components/Util"
-import { BlockOperation, CatalogType, WorldFull } from "../../fetch"
-import { AppState, CatalogTypeKeys, DataViewRef } from "../../types"
+} from '../../components/Util';
+import { BlockOperation, CatalogType, WorldFull } from '../../fetch';
+import { AppState, CatalogTypeKeys, DataViewRef } from '../../types';
 
-import DataViewFunc from "../../components/DataView"
-const DataView = DataViewFunc("block/op", "uuid", true)
+import DataViewFunc from '../../components/DataView';
+const DataView = DataViewFunc('block/op', 'uuid', true);
 
 interface OwnProps {}
 
 interface StateProps {
-	worlds: WorldFull[]
-	blockTypes: CatalogType[]
+	worlds: WorldFull[];
+	blockTypes: CatalogType[];
 	types: {
 		text: string
 		value: BlockOperation.TypeEnum
-	}[]
+	}[];
 }
 
 interface Props
@@ -41,72 +41,72 @@ interface Props
 		reactI18Next.InjectedTranslateProps {}
 
 interface DispatchProps {
-	requestWorlds: () => ListRequestAction
-	requestCatalog: (type: string) => CatalogRequestAction
+	requestWorlds: () => ListRequestAction;
+	requestCatalog: (type: string) => CatalogRequestAction;
 }
 
 interface FullProps extends Props, DispatchProps {}
 
 interface OwnState {
-	modal: boolean
-	operation?: BlockOperation
+	modal: boolean;
+	operation?: BlockOperation;
 }
 
 class BlockOperations extends React.Component<FullProps, OwnState> {
 	constructor(props: FullProps) {
-		super(props)
+		super(props);
 
 		this.state = {
 			modal: false
-		}
+		};
 
-		this.toggleModal = this.toggleModal.bind(this)
-		this.showDetails = this.showDetails.bind(this)
+		this.toggleModal = this.toggleModal.bind(this);
+		this.showDetails = this.showDetails.bind(this);
 	}
 
 	componentDidMount() {
-		this.props.requestWorlds()
-		this.props.requestCatalog(CatalogTypeKeys.Block)
+		this.props.requestWorlds();
+		this.props.requestCatalog(CatalogTypeKeys.Block);
 	}
 
 	showDetails(operation: BlockOperation, view: DataViewRef<BlockOperation>) {
-		view.details(operation)
+		view.details(operation);
 		this.setState({
 			modal: true,
 			operation: operation
-		})
+		});
 	}
 
 	toggleModal() {
 		this.setState({
 			modal: !this.state.modal
-		})
+		});
 	}
 
 	getStatusColor(op: BlockOperation) {
 		return op.status === BlockOperation.StatusEnum.DONE
-			? "blue"
+			? 'blue'
 			: op.status === BlockOperation.StatusEnum.PAUSED
-				? "yellow"
+				? 'yellow'
 				: op.status === BlockOperation.StatusEnum.ERRORED
-					? "red"
+					? 'red'
 					: op.status === BlockOperation.StatusEnum.RUNNING
-						? "green"
-						: "grey"
+						? 'green'
+						: 'grey';
 	}
 
 	render() {
-		const _t = this.props.t
+		const _t = this.props.t;
 
 		return (
 			<>
 				<DataView
 					icon="block layout"
-					title={_t("BlockOperations")}
-					createTitle={_t("StartOperation")}
+					title={_t('BlockOperations')}
+					createTitle={_t('StartOperation')}
 					fields={{
-						type: _t("Type"),
-						uuid: _t("UUID"),
+						type: _t('Type'),
+						uuid: _t('UUID'),
 						create: {
 							isGroup: true,
 							view: false,
@@ -121,8 +121,8 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 												search
 												name="type"
 												control={Dropdown}
-												label={_t("Type")}
-												placeholder={_t("Type")}
+												label={_t('Type')}
+												placeholder={_t('Type')}
 												onChange={view.handleChange}
 												value={view.state.type}
 												options={this.props.types}
@@ -134,8 +134,8 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 												search
 												name="world"
 												control={Dropdown}
-												label={_t("World")}
-												placeholder={_t("World")}
+												label={_t('World')}
+												placeholder={_t('World')}
 												onChange={view.handleChange}
 												value={view.state.world}
 												options={renderWorldOptions(this.props.worlds)}
@@ -147,19 +147,19 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 												search
 												name="block"
 												control={Dropdown}
-												label={_t("Block")}
-												placeholder={_t("Block")}
+												label={_t('Block')}
+												placeholder={_t('Block')}
 												onChange={view.handleChange}
 												value={view.state.block}
 												options={renderCatalogTypeOptions(
 													this.props.blockTypes
 												)}
-												disabled={view.state.type !== "CHANGE"}
+												disabled={view.state.type !== 'CHANGE'}
 											/>
 										</Form.Group>
 
 										<Form.Group width={1} inline>
-											<label>{_t("Min")}</label>
+											<label>{_t('Min')}</label>
 											<Form.Input
 												width={6}
 												name="minX"
@@ -181,7 +181,7 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 										</Form.Group>
 
 										<Form.Group width={1} inline>
-											<label>{_t("Max")}</label>
+											<label>{_t('Max')}</label>
 											<Form.Input
 												width={6}
 												name="maxX"
@@ -202,26 +202,26 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 											/>
 										</Form.Group>
 									</>
-								)
+								);
 							}
 						},
 						status: {
-							label: _t("Status"),
+							label: _t('Status'),
 							view: (op: BlockOperation) => {
 								return (
 									<Label color={this.getStatusColor(op)}>
 										{_t(op.status.toString())}
 									</Label>
-								)
+								);
 							}
 						},
 						progress: {
-							label: _t("Progress"),
+							label: _t('Progress'),
 							wide: true,
 							view: (op: BlockOperation) => {
 								const time = moment()
-									.add(op.estimatedSecondsRemaining, "s")
-									.fromNow(true)
+									.add(op.estimatedSecondsRemaining, 's')
+									.fromNow(true);
 
 								return (
 									<Progress
@@ -232,18 +232,18 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 									>
 										{op.status === BlockOperation.StatusEnum.RUNNING ||
 										op.status === BlockOperation.StatusEnum.PAUSED
-											? time + " remaining"
-											: _t("Done")}
+											? time + ' remaining'
+											: _t('Done')}
 									</Progress>
-								)
+								);
 							}
 						}
 					}}
 					actions={(op: BlockOperation, view: DataViewRef<BlockOperation>) => (
 						<>
 							<Button primary onClick={e => this.showDetails(op, view)}>
-								{_t("Details")}
-							</Button>{" "}
+								{_t('Details')}
+							</Button>{' '}
 							{op.status === BlockOperation.StatusEnum.RUNNING ||
 							op.status === BlockOperation.StatusEnum.PAUSED ? (
 								<Button
@@ -257,19 +257,19 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 									<Icon
 										name={
 											op.status === BlockOperation.StatusEnum.RUNNING
-												? "pause"
-												: "play"
+												? 'pause'
+												: 'play'
 										}
-									/>{" "}
+									/>{' '}
 									{op.status === BlockOperation.StatusEnum.RUNNING
-										? _t("Pause")
-										: _t("Resume")}
+										? _t('Pause')
+										: _t('Resume')}
 								</Button>
-							) : null}{" "}
+							) : null}{' '}
 							{op.status === BlockOperation.StatusEnum.RUNNING ||
 							op.status === BlockOperation.StatusEnum.PAUSED ? (
 								<Button negative onClick={e => view.delete(op)}>
-									<Icon name="stop" /> {_t("Stop")}
+									<Icon name="stop" /> {_t('Stop')}
 								</Button>
 							) : null}
 						</>
@@ -296,12 +296,12 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 				/>
 				{this.renderModal()}
 			</>
-		)
+		);
 	}
 
 	renderModal() {
 		if (!this.state.operation) {
-			return null
+			return null;
 		}
 
 		return (
@@ -334,7 +334,7 @@ class BlockOperations extends React.Component<FullProps, OwnState> {
 					)}
 				</Modal.Content>
 			</Modal>
-		)
+		);
 	}
 }
 
@@ -344,24 +344,24 @@ const mapStateToProps = (state: AppState) => {
 		blockTypes: state.api.types[CatalogTypeKeys.Block],
 		types: [
 			{
-				text: "Get",
+				text: 'Get',
 				value: BlockOperation.TypeEnum.GET
 			},
 			{
-				text: "Change",
+				text: 'Change',
 				value: BlockOperation.TypeEnum.CHANGE
 			}
 		]
-	}
-}
+	};
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
-		requestWorlds: () => dispatch(requestList("world", true)),
+		requestWorlds: () => dispatch(requestList('world', true)),
 		requestCatalog: (type: string) => dispatch(requestCatalog(type))
-	}
-}
+	};
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-	translate("BlockOperations")(BlockOperations)
-)
+	translate('BlockOperations')(BlockOperations)
+);

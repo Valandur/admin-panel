@@ -1,10 +1,10 @@
-import * as React from "react"
-import { translate } from "react-i18next"
-import { connect, Dispatch } from "react-redux"
-import { Form, Grid, Header, Icon, Segment } from "semantic-ui-react"
+import * as React from 'react';
+import { translate } from 'react-i18next';
+import { connect, Dispatch } from 'react-redux';
+import { Form, Grid, Header, Icon, Segment } from 'semantic-ui-react';
 
-import { AppAction } from "../../actions"
-import { setPreference } from "../../actions/preferences"
+import { AppAction } from '../../actions';
+import { setPreference } from '../../actions/preferences';
 import {
 	AppState,
 	Lang,
@@ -12,21 +12,21 @@ import {
 	PreferenceKey,
 	Theme,
 	themesArray
-} from "../../types"
+} from '../../types';
 
 interface Props extends reactI18Next.InjectedTranslateProps {
-	lang: Lang
-	theme: Theme
-	showServerUsage: boolean
-	hideWIPNote: boolean
-	hidePluginsNote: boolean
-	hideServerSettingsNote: boolean
-	setPref: (key: PreferenceKey, value: any) => AppAction
+	lang: Lang;
+	theme: Theme;
+	showServerUsage: boolean;
+	hideWIPNote: boolean;
+	hidePluginsNote: boolean;
+	hideServerSettingsNote: boolean;
+	setPref: (key: PreferenceKey, value: any) => AppAction;
 }
 
 class Settings extends React.Component<Props> {
 	render() {
-		const { t, setPref } = this.props
+		const { t, setPref } = this.props;
 
 		return (
 			<Segment basic>
@@ -44,7 +44,7 @@ class Settings extends React.Component<Props> {
 								<Form.Dropdown
 									item
 									selection
-									placeholder={t("ChangeTheme")}
+									placeholder={t('ChangeTheme')}
 									options={themesArray}
 									value={this.props.theme}
 									onChange={(e, data) =>
@@ -64,7 +64,7 @@ class Settings extends React.Component<Props> {
 								<Form.Dropdown
 									item
 									selection
-									placeholder={t("ChangeLanguage")}
+									placeholder={t('ChangeLanguage')}
 									options={langArray}
 									value={this.props.lang}
 									onChange={(e, data) =>
@@ -137,7 +137,7 @@ class Settings extends React.Component<Props> {
 					</Grid.Column>
 				</Grid>
 			</Segment>
-		)
+		);
 	}
 }
 
@@ -149,16 +149,16 @@ const mapStateToProps = (state: AppState) => {
 		hideWIPNote: state.preferences.hideWIPNote,
 		hidePluginsNote: state.preferences.hidePluginsNote,
 		hideServerSettingsNote: state.preferences.hideServerSettingsNote
-	}
-}
+	};
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		setPref: (key: PreferenceKey, value: any): AppAction =>
 			dispatch(setPreference(key, value))
-	}
-}
+	};
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-	translate("Preferences")(Settings)
-)
+	translate('Preferences')(Settings)
+);

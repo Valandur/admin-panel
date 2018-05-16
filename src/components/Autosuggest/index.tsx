@@ -1,80 +1,80 @@
-import * as React from "react"
-import * as enhanceWithClickOutside from "react-click-outside"
+import * as React from 'react';
+import * as enhanceWithClickOutside from 'react-click-outside';
 
-import { AutosuggestChangeData, AutosuggestItem } from "../../types"
+import { AutosuggestChangeData, AutosuggestItem } from '../../types';
 
 export interface AppProps {
-	id: string
-	name: string
-	placeholder: string,
-	getSuggestions: (newValue: string) => Array<AutosuggestItem>
-	onChange: (event: React.SyntheticEvent<HTMLElement>, newValue: AutosuggestChangeData) => void
-	onKeyPress: (event: React.KeyboardEvent<HTMLInputElement>) => void
+	id: string;
+	name: string;
+	placeholder: string;
+	getSuggestions: (newValue: string) => Array<AutosuggestItem>;
+	onChange: (event: React.SyntheticEvent<HTMLElement>, newValue: AutosuggestChangeData) => void;
+	onKeyPress: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 interface AppState {
-	value: string,
-	suggestions: Array<AutosuggestItem>
+	value: string;
+	suggestions: Array<AutosuggestItem>;
 }
 
 class Autosuggest extends React.Component<AppProps, AppState> {
 
-	input: HTMLInputElement
+	input: HTMLInputElement;
 
 	constructor(props: AppProps) {
-		super(props)
+		super(props);
 
 		this.state = {
-			value: "",
+			value: '',
 			suggestions: [],
-		}
+		};
 	}
 
 	handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-		const newValue = event.target.value
+		const newValue = event.target.value;
 
 		this.setState({
 			value: newValue,
 			suggestions: this.props.getSuggestions(newValue),
-		})
+		});
 		this.props.onChange(event, {
 			id: this.props.id,
 			name: this.props.name,
 			value: newValue,
-		})
+		});
 	}
 
 	handleClick(event: React.MouseEvent<HTMLDivElement>, sugg: AutosuggestItem) {
-		this.setState({ value: sugg.value, suggestions: [] }, () => this.input.focus())
+		this.setState({ value: sugg.value, suggestions: [] }, () => this.input.focus());
 
 		this.props.onChange(event, {
 			id: this.props.id,
 			name: this.props.name,
 			value: sugg.value,
-		})
+		});
 	}
 
 	handleFocus() {
 		this.setState({
 			suggestions: this.props.getSuggestions(this.state.value),
-		})
+		});
 	}
 
 	handleClickOutside() {
 		this.setState({
 			suggestions: [],
-		})
+		});
 	}
 
 	render() {
 		return (
-			<div style={{ width: "100%", position: "relative" }}>
+			<div style={{ width: '100%', position: 'relative' }}>
 				<input
 					type="text"
 					placeholder={this.props.placeholder}
 					value={this.state.value}
-					style={{ width: "100%" }}
-					ref={input => { if (input !== null) { this.input = input }}}
+					style={{ width: '100%' }}
+					ref={input => { if (input !== null) { this.input = input; }}}
 					onFocus={() => this.handleFocus()}
 					onChange={e => this.handleChange(e)}
 					onKeyPress={this.props.onKeyPress}
@@ -89,8 +89,8 @@ class Autosuggest extends React.Component<AppProps, AppState> {
 					</div>
 				: null }
 			</div>
-		)
+		);
 	}
 }
 
-export default enhanceWithClickOutside(Autosuggest)
+export default enhanceWithClickOutside(Autosuggest);
