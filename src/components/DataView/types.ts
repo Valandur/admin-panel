@@ -25,7 +25,7 @@ export interface OwnProps<T> {
 	checkCreatePerm?: boolean;
 	actions?: (data: T, view: DataViewRef<T>) => JSX.Element | undefined;
 	onCreate?: (data: any, view: DataViewRef<T>) => void;
-	onEdit?: (data: T | null, view: DataViewRef<T>) => void;
+	onEdit?: (data: T | undefined, view: DataViewRef<T>) => void;
 	onSave?: (data: T, newData: any, view: DataViewRef<T>) => void;
 	onDelete?: (data: T, view: DataViewRef<T>) => void;
 }
@@ -54,12 +54,12 @@ export interface DispatchProps<T> {
 	requestChange: (data: T, newData: any) => AppAction;
 	requestDelete: (data: T) => AppAction;
 	setFilter: (filter: string, value: string) => AppAction;
-	equals: (o1: T | null, o2: T | null) => boolean;
+	equals: (o1: T | undefined, o2: T | undefined) => boolean;
 }
 
 export interface FullProps<T> extends Props<T>, DispatchProps<T> {}
 
 export interface OwnState<T> {
 	page: 0;
-	data: T | null;
+	data: T | undefined;
 }

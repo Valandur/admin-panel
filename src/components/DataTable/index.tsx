@@ -19,10 +19,10 @@ export interface Props<T> extends reactI18Next.InjectedTranslateProps {
 	canEdit?: (data: T) => boolean;
 	canDelete?: (data: T) => boolean;
 	fields: {
-		[key: string]: DataFieldRaw<T>
+		[key: string]: DataFieldRaw<T>;
 	};
 	actions?: (data: T, view: DataTableRef) => JSX.Element | undefined;
-	onEdit?: (data: T | null, view: DataTableRef) => void;
+	onEdit?: (data: T | undefined, view: DataTableRef) => void;
 	onSave?: (data: T, newData: any, view: DataTableRef) => void;
 	onDelete?: (data: T, view: DataTableRef) => void;
 	idFunc: IdFunction<T>;
@@ -67,7 +67,7 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 		});
 	}
 
-	onEdit(obj: T | null, view: DataTableRef): void {
+	onEdit(obj: T | undefined, view: DataTableRef): void {
 		const newData = {};
 		if (obj) {
 			Object.keys(this.props.fields).forEach(name => {

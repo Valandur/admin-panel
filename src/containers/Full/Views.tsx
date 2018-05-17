@@ -37,6 +37,7 @@ const Permissions = load(() => import('../../views/Permissions'));
 const BlockOperations = load(() => import('../../views/BlockOperations'));
 const Plugins = load(() => import('../../views/Plugins'));
 const ServerSettings = load(() => import('../../views/ServerSettings'));
+const Users = load(() => import('../../views/Users'));
 
 const HuskyCratesCrates = load(() =>
 	import('../../views/Integrations/HuskyCrates/Crates')
@@ -70,7 +71,7 @@ export const views: Array<ViewDefinition> = [
 		title: 'Chat',
 		path: '/chat',
 		icon: 'chat',
-		perms: ['history', 'chat'],
+		perms: ['history', 'message'],
 		servlets: ['/history'],
 		component: Chat
 	},
@@ -78,7 +79,7 @@ export const views: Array<ViewDefinition> = [
 		title: 'Commands',
 		path: '/commands',
 		icon: 'terminal',
-		perms: [['history', 'cmd'], ['cmd', 'run']],
+		perms: [['history', 'cmd'], ['cmd', 'list']],
 		servlets: [['/history'], ['/cmd']],
 		component: Commands
 	},
@@ -137,6 +138,14 @@ export const views: Array<ViewDefinition> = [
 		perms: ['info', 'properties'],
 		servlets: ['/info'],
 		component: ServerSettings
+	},
+	{
+		title: 'Users',
+		path: '/users',
+		icon: 'users',
+		perms: ['user', 'list'],
+		servlets: ['/user'],
+		component: Users
 	},
 
 	{

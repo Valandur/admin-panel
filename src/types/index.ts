@@ -83,7 +83,7 @@ export interface DataViewRef<T> extends DataTableRef {
 	create: (data: any) => void;
 	details: (data: T) => void;
 	save: (data: T, newData: any) => void;
-	edit: (data: T | null) => void;
+	edit: (data: T | undefined) => void;
 	endEdit: () => void;
 	delete: (data: T) => void;
 }
@@ -214,3 +214,115 @@ export const themesArray = Object.keys(Theme).map(t => ({
 	text: t.substring(0, 1).toLocaleUpperCase() + t.substring(1),
 	value: t
 }));
+
+export const KnownPermissions = {
+	block: {
+		one: true,
+		op: {
+			list: true,
+			one: true,
+			create: true,
+			modify: true,
+			delete: true
+		}
+	},
+	chunk: {
+		list: true,
+		one: true,
+		create: true
+	},
+	cmd: {
+		list: true,
+		one: true,
+		run: true
+	},
+	economy: {
+		currency: {
+			list: true
+		},
+		account: {
+			one: true
+		}
+	},
+	entity: {
+		list: true,
+		one: true,
+		create: true,
+		modify: true,
+		delete: true,
+		method: true
+	},
+	history: {
+		cmd: true,
+		message: true
+	},
+	info: {
+		info: true,
+		stats: true,
+		servlets: true
+	},
+	'interactive-message': {
+		list: true,
+		one: true,
+		create: true
+	},
+	map: {
+		map: true
+	},
+	permission: {
+		collection: {
+			list: true,
+			one: true,
+			subject: {
+				list: true,
+				one: true
+			}
+		}
+	},
+	player: {
+		list: true,
+		one: true,
+		modify: true,
+		method: true
+	},
+	plugin: {
+		list: true,
+		one: true,
+		toggle: true,
+		config: {
+			get: true,
+			modify: true
+		}
+	},
+	recipe: {
+		list: true
+	},
+	registry: {
+		one: true
+	},
+	server: {
+		properties: {
+			list: true,
+			modify: true
+		}
+	},
+	'tile-entity': {
+		list: true,
+		one: true,
+		method: true
+	},
+	user: {
+		list: true,
+		create: true,
+		modify: true,
+		delete: true
+	},
+	world: {
+		list: true,
+		one: true,
+		create: true,
+		modify: true,
+		delete: true,
+		method: true
+	}
+};

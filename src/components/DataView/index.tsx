@@ -42,7 +42,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 
 		this.state = {
 			page: 0,
-			data: null
+			data: undefined
 		};
 
 		this.details = this.details.bind(this);
@@ -91,10 +91,8 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 	}
 
 	// Select a data entry for editing
-	edit(data: T | null) {
-		this.setState({
-			data: data
-		});
+	edit(data: T | undefined) {
+		this.setState({ data });
 	}
 
 	// Save/Update an existing data entry
@@ -106,7 +104,7 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 	// End editing an entry
 	endEdit() {
 		this.setState({
-			data: null
+			data: undefined
 		});
 	}
 
