@@ -58,7 +58,7 @@ class Commands extends React.Component<Props, {}> {
 	getSuggestions(newValue: string) {
 		const val = newValue.trim().toLowerCase();
 		const parts = val.split(' ');
-		const isExact = newValue.endsWith(' ') || parts.length > 1;
+		const isExact = _.endsWith(newValue, ' ') || parts.length > 1;
 
 		if (parts.length > 2) {
 			return [];
@@ -81,7 +81,9 @@ class Commands extends React.Component<Props, {}> {
 		if (cmds.length > 0 && cmds[0].name.toLowerCase() === parts[0]) {
 			let subs = cmds[0].usage.replace(/(\[.*?])/g, '').split('|');
 			subs = subs.map(sub => sub.toLowerCase().trim());
-			subs = subs.filter(sub => sub !== '/' + cmds[0].name.toLowerCase() + ' ?');
+			subs = subs.filter(
+				sub => sub !== '/' + cmds[0].name.toLowerCase() + ' ?'
+			);
 
 			if (parts.length > 1 && !_.isEmpty(parts[1])) {
 				subs = subs.filter(sub => sub.startsWith(parts[1]));
