@@ -1,15 +1,15 @@
-import { Action } from "redux"
+import { Action } from 'redux';
 
-import { PreferenceKey } from "../types"
+import { PreferenceKey } from '../types';
 
 export enum TypeKeys {
-	SET_PREFERENCE = "SET_PREFERENCE"
+	SET_PREFERENCE = 'SET_PREFERENCE'
 }
 
 export interface SetPreferenceAction extends Action {
-	type: TypeKeys.SET_PREFERENCE
-	key: PreferenceKey
-	value: any
+	type: TypeKeys.SET_PREFERENCE;
+	key: PreferenceKey;
+	value: any;
 }
 export function setPreference(
 	key: PreferenceKey,
@@ -19,7 +19,7 @@ export function setPreference(
 		type: TypeKeys.SET_PREFERENCE,
 		key,
 		value
-	}
+	};
 }
 
-export type PreferencesAction = SetPreferenceAction
+export type PreferencesAction = SetPreferenceAction;

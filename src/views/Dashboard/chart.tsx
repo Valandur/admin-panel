@@ -1,28 +1,28 @@
-import { TranslationFunction } from "react-i18next"
+import { TranslationFunction } from 'react-i18next';
 
 export default (_t: TranslationFunction) => ({
 	// Line for the info chart
 	lineInfo: {
 		datasets: [
 			{
-				label: _t("AverageTPS"),
+				label: _t('AverageTPS'),
 				fill: false,
-				backgroundColor: "rgb(219, 40, 40)",
-				borderColor: "rgb(219, 40, 40)",
+				backgroundColor: 'rgb(219, 40, 40)',
+				borderColor: 'rgb(219, 40, 40)',
 				pointRadius: 0,
 				pointHitRadius: 10,
-				xAxisID: "time",
-				yAxisID: "tps"
+				xAxisID: 'time',
+				yAxisID: 'tps'
 			},
 			{
-				label: _t("OnlinePlayers"),
+				label: _t('OnlinePlayers'),
 				fill: false,
-				backgroundColor: "rgb(33, 133, 208)",
-				borderColor: "rgb(33, 133, 208)",
+				backgroundColor: 'rgb(33, 133, 208)',
+				borderColor: 'rgb(33, 133, 208)',
 				pointRadius: 0,
 				pointHitRadius: 10,
-				xAxisID: "time",
-				yAxisID: "players"
+				xAxisID: 'time',
+				yAxisID: 'players'
 			}
 		]
 	},
@@ -31,28 +31,28 @@ export default (_t: TranslationFunction) => ({
 	optionsInfo: {
 		maintainAspectRatio: false,
 		legend: {
-			position: "bottom"
+			position: 'bottom'
 		},
 		scales: {
 			xAxes: [
 				{
-					id: "time",
-					type: "time",
+					id: 'time',
+					type: 'time',
 					time: {
 						displayFormats: {
-							second: "HH:mm:ss",
-							minute: "HH:mm",
-							hour: "HH:mm",
-							day: "DD.MM.YYYY"
+							second: 'HH:mm:ss',
+							minute: 'HH:mm',
+							hour: 'HH:mm',
+							day: 'DD.MM.YYYY'
 						},
-						tooltipFormat: "DD.MM.YYYY HH:mm:ss"
+						tooltipFormat: 'DD.MM.YYYY HH:mm:ss'
 					}
 				}
 			],
 			yAxes: [
 				{
-					type: "linear",
-					id: "tps",
+					type: 'linear',
+					id: 'tps',
 					ticks: {
 						beginAtZero: true,
 						max: 20,
@@ -60,12 +60,12 @@ export default (_t: TranslationFunction) => ({
 					},
 					scaleLabel: {
 						display: true,
-						labelString: _t("NumTPS")
+						labelString: _t('NumTPS')
 					}
 				},
 				{
-					type: "linear",
-					id: "players",
+					type: 'linear',
+					id: 'players',
 					gridLines: {
 						drawOnChartArea: false
 					},
@@ -76,9 +76,9 @@ export default (_t: TranslationFunction) => ({
 					},
 					scaleLabel: {
 						display: true,
-						labelString: _t("NumPlayers")
+						labelString: _t('NumPlayers')
 					},
-					position: "right"
+					position: 'right'
 				}
 			]
 		}
@@ -88,34 +88,34 @@ export default (_t: TranslationFunction) => ({
 	lineStats: {
 		datasets: [
 			{
-				label: _t("CPULoad"),
+				label: _t('CPULoad'),
 				fill: false,
-				backgroundColor: "rgb(33, 133, 208)",
-				borderColor: "rgb(33, 133, 208)",
+				backgroundColor: 'rgb(33, 133, 208)',
+				borderColor: 'rgb(33, 133, 208)',
 				pointRadius: 0,
 				pointHitRadius: 10,
-				xAxisID: "time",
-				yAxisID: "load"
+				xAxisID: 'time',
+				yAxisID: 'load'
 			},
 			{
-				label: _t("MemoryLoad"),
+				label: _t('MemoryLoad'),
 				fill: false,
-				backgroundColor: "rgb(219, 40, 40)",
-				borderColor: "rgb(219, 40, 40)",
+				backgroundColor: 'rgb(219, 40, 40)',
+				borderColor: 'rgb(219, 40, 40)',
 				pointRadius: 0,
 				pointHitRadius: 10,
-				xAxisID: "time",
-				yAxisID: "load"
+				xAxisID: 'time',
+				yAxisID: 'load'
 			},
 			{
-				label: _t("DiskUsage"),
+				label: _t('DiskUsage'),
 				fill: false,
-				backgroundColor: "rgb(33, 186, 69)",
-				borderColor: "rgb(33, 186, 69)",
+				backgroundColor: 'rgb(33, 186, 69)',
+				borderColor: 'rgb(33, 186, 69)',
 				pointRadius: 0,
 				pointHitRadius: 10,
-				xAxisID: "time",
-				yAxisID: "load"
+				xAxisID: 'time',
+				yAxisID: 'load'
 			}
 		]
 	},
@@ -124,45 +124,45 @@ export default (_t: TranslationFunction) => ({
 	optionsStats: {
 		maintainAspectRatio: false,
 		legend: {
-			position: "bottom"
+			position: 'bottom'
 		},
 		tooltips: {
-			mode: "label",
+			mode: 'label',
 			callbacks: {
 				label: function(
 					tooltipItem: { datasetIndex: number; yLabel: number },
 					data: any
 				) {
 					return (
-						" " +
+						' ' +
 						data.datasets[tooltipItem.datasetIndex].label +
-						": " +
+						': ' +
 						tooltipItem.yLabel.toFixed(2) +
-						"%"
-					)
+						'%'
+					);
 				}
 			}
 		},
 		scales: {
 			xAxes: [
 				{
-					id: "time",
-					type: "time",
+					id: 'time',
+					type: 'time',
 					time: {
 						displayFormats: {
-							second: "HH:mm:ss",
-							minute: "HH:mm",
-							hour: "HH:mm",
-							day: "DD.MM.YYYY"
+							second: 'HH:mm:ss',
+							minute: 'HH:mm',
+							hour: 'HH:mm',
+							day: 'DD.MM.YYYY'
 						},
-						tooltipFormat: "DD.MM.YYYY HH:mm:ss"
+						tooltipFormat: 'DD.MM.YYYY HH:mm:ss'
 					}
 				}
 			],
 			yAxes: [
 				{
-					type: "linear",
-					id: "load",
+					type: 'linear',
+					id: 'load',
 					ticks: {
 						beginAtZero: true,
 						max: 100,
@@ -170,10 +170,10 @@ export default (_t: TranslationFunction) => ({
 					},
 					scaleLabel: {
 						display: true,
-						labelString: _t("Load")
+						labelString: _t('Load')
 					}
 				}
 			]
 		}
 	}
-})
+});

@@ -1,15 +1,15 @@
-import * as moment from "moment"
-import * as React from "react"
-import { translate } from "react-i18next"
-import { connect, Dispatch } from "react-redux"
+import * as moment from 'moment';
+import * as React from 'react';
+import { translate } from 'react-i18next';
+import { connect, Dispatch } from 'react-redux';
 
-import { AppAction } from "../../../actions"
-import ItemStack from "../../../components/ItemStack"
-import { UniversalMarketItem } from "../../../fetch"
-import { AppState } from "../../../types"
+import { AppAction } from '../../../actions';
+import ItemStack from '../../../components/ItemStack';
+import { UniversalMarketItem } from '../../../fetch';
+import { AppState } from '../../../types';
 
-import DataViewFunc from "../../../components/DataView"
-const DataView = DataViewFunc("universal-market/item", "id")
+import DataViewFunc from '../../../components/DataView';
+const DataView = DataViewFunc('universal-market/item', 'id');
 
 interface Props extends reactI18Next.InjectedTranslateProps {}
 
@@ -17,42 +17,42 @@ interface OwnState {}
 
 class Items extends React.Component<Props, OwnState> {
 	render() {
-		const _t = this.props.t
+		const _t = this.props.t;
 
 		return (
 			<DataView
 				icon="shopping cart"
-				title={_t("Items")}
-				filterTitle={_t("FilterItems")}
+				title={_t('Items')}
+				filterTitle={_t('FilterItems')}
 				fields={{
 					item: {
-						label: _t("Item"),
+						label: _t('Item'),
 						filter: true,
 						filterValue: (mi: UniversalMarketItem) =>
-							mi.item.type.name + " (" + mi.item.type.id + ")",
+							mi.item.type.name + ' (' + mi.item.type.id + ')',
 						view: (mi: UniversalMarketItem) => <ItemStack item={mi.item} />
 					},
-					price: _t("Price"),
+					price: _t('Price'),
 					expires: {
-						label: _t("Expires"),
+						label: _t('Expires'),
 						view: (mi: UniversalMarketItem) =>
 							moment.unix(mi.expires).calendar()
 					},
-					"owner.name": _t("Seller")
+					'owner.name': _t('Seller')
 				}}
 			/>
-		)
+		);
 	}
 }
 
 const mapStateToProps = (state: AppState) => {
-	return {}
-}
+	return {};
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
-	return {}
-}
+	return {};
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-	translate("Integrations.UniversalMarket")(Items)
-)
+	translate('Integrations.UniversalMarket')(Items)
+);

@@ -1,26 +1,26 @@
-import { routerReducer } from "react-router-redux"
+import { routerReducer } from 'react-router-redux';
 
-import { AppAction, initAction } from "../actions"
-import { AppState } from "../types"
+import { AppAction, initAction } from '../actions';
+import { AppState } from '../types';
 
-import api from "./api"
-import cmd from "./command"
-import dashboard from "./dashboard"
-import dataview from "./dataview"
-import permission from "./permission"
-import player from "./player"
-import plugin from "./plugin"
-import serverSettings from "./server-settings"
+import api from './api';
+import cmd from './command';
+import dashboard from './dashboard';
+import dataview from './dataview';
+import permission from './permission';
+import player from './player';
+import plugin from './plugin';
+import serverSettings from './server-settings';
 
-import preferences from "./preferences"
+import preferences from './preferences';
 
-const initAcc = initAction()
+const initAcc = initAction();
 
 const dataState = {
 	creating: false,
 	filter: {},
 	list: []
-}
+};
 
 const initialState: AppState = {
 	api: api(undefined, initAcc),
@@ -36,10 +36,10 @@ const initialState: AppState = {
 
 	preferences: preferences(undefined, initAcc),
 	router: routerReducer({ location: null }, initAcc)
-}
+};
 
 const app = (state: AppState = initialState, action: AppAction): AppState => {
-	const data = dataview(state, action)
+	const data = dataview(state, action);
 
 	return {
 		...data,
@@ -56,7 +56,7 @@ const app = (state: AppState = initialState, action: AppAction): AppState => {
 
 		preferences: preferences(data.preferences, action),
 		router: routerReducer(data.router, action)
-	}
-}
+	};
+};
 
-export default app
+export default app;

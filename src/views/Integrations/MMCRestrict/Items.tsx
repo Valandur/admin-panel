@@ -1,23 +1,23 @@
-import * as React from "react"
-import { translate } from "react-i18next"
-import { connect, Dispatch } from "react-redux"
-import { Icon, Radio } from "semantic-ui-react"
+import * as React from 'react';
+import { translate } from 'react-i18next';
+import { connect, Dispatch } from 'react-redux';
+import { Icon, Radio } from 'semantic-ui-react';
 
 import {
 	AppAction,
 	CatalogRequestAction,
 	requestCatalog
-} from "../../../actions"
-import { renderCatalogTypeOptions } from "../../../components/Util"
-import { CatalogType, MMCRestrictItem } from "../../../fetch"
-import { AppState, CatalogTypeKeys, DataTableRef } from "../../../types"
+} from '../../../actions';
+import { renderCatalogTypeOptions } from '../../../components/Util';
+import { CatalogType, MMCRestrictItem } from '../../../fetch';
+import { AppState, CatalogTypeKeys, DataTableRef } from '../../../types';
 
-import DataViewFunc from "../../../components/DataView"
-const DataView = DataViewFunc("mmc-restrict/item", "item.id")
+import DataViewFunc from '../../../components/DataView';
+const DataView = DataViewFunc('mmc-restrict/item', 'item.id');
 
 const getIcon = (ban: boolean) => (
-	<Icon color={ban ? "red" : "green"} name={ban ? "ban" : "check"} />
-)
+	<Icon color={ban ? 'red' : 'green'} name={ban ? 'ban' : 'check'} />
+);
 
 const getEdit = (ban: MMCRestrictItem, view: DataTableRef, name: string) => (
 	<Radio
@@ -26,97 +26,97 @@ const getEdit = (ban: MMCRestrictItem, view: DataTableRef, name: string) => (
 		checked={view.state[name]}
 		onChange={() => view.setState({ [name]: !view.state[name] })}
 	/>
-)
+);
 
 interface Props extends reactI18Next.InjectedTranslateProps {
-	itemTypes: CatalogType[]
-	requestCatalog: (type: string) => CatalogRequestAction
+	itemTypes: CatalogType[];
+	requestCatalog: (type: string) => CatalogRequestAction;
 }
 
 interface OwnState {}
 
 class Items extends React.Component<Props, OwnState> {
 	componentDidMount() {
-		this.props.requestCatalog(CatalogTypeKeys.Item)
+		this.props.requestCatalog(CatalogTypeKeys.Item);
 	}
 
 	render() {
-		const _t = this.props.t
+		const _t = this.props.t;
 
 		return (
 			<DataView
 				canEdit
 				canDelete
 				icon="ban"
-				title={_t("RestrictedItems")}
-				createTitle={_t("CreateRestrictedItem")}
+				title={_t('RestrictedItems')}
+				createTitle={_t('CreateRestrictedItem')}
 				fields={{
-					"item.name": {
+					'item.name': {
 						create: true,
-						createName: "item.id",
-						label: _t("Item"),
+						createName: 'item.id',
+						label: _t('Item'),
 						required: true,
 						options: renderCatalogTypeOptions(this.props.itemTypes)
 					},
 					banReason: {
-						label: _t("Reason"),
+						label: _t('Reason'),
 						create: true,
 						edit: true
 					},
 					usageBanned: {
-						label: _t("Usage"),
+						label: _t('Usage'),
 						view: (ban: MMCRestrictItem) => getIcon(ban.usageBanned),
 						edit: (ban: MMCRestrictItem, view) =>
-							getEdit(ban, view, "usageBanned")
+							getEdit(ban, view, 'usageBanned')
 					},
 					breakingBanned: {
-						label: _t("Breaking"),
+						label: _t('Breaking'),
 						view: (ban: MMCRestrictItem) => getIcon(ban.breakingBanned),
 						edit: (ban: MMCRestrictItem, view) =>
-							getEdit(ban, view, "breakingBanned")
+							getEdit(ban, view, 'breakingBanned')
 					},
 					placingBanned: {
-						label: _t("Placing"),
+						label: _t('Placing'),
 						view: (ban: MMCRestrictItem) => getIcon(ban.placingBanned),
 						edit: (ban: MMCRestrictItem, view) =>
-							getEdit(ban, view, "placingBanned")
+							getEdit(ban, view, 'placingBanned')
 					},
 					ownershipBanned: {
-						label: _t("Ownership"),
+						label: _t('Ownership'),
 						view: (ban: MMCRestrictItem) => getIcon(ban.ownershipBanned),
 						edit: (ban: MMCRestrictItem, view) =>
-							getEdit(ban, view, "ownershipBanned")
+							getEdit(ban, view, 'ownershipBanned')
 					},
 					dropBanned: {
-						label: _t("Drop"),
+						label: _t('Drop'),
 						view: (ban: MMCRestrictItem) => getIcon(ban.dropBanned),
 						edit: (ban: MMCRestrictItem, view) =>
-							getEdit(ban, view, "dropBanned")
+							getEdit(ban, view, 'dropBanned')
 					},
 					worldBanned: {
-						label: _t("World"),
+						label: _t('World'),
 						view: (ban: MMCRestrictItem) => getIcon(ban.worldBanned),
 						edit: (ban: MMCRestrictItem, view) =>
-							getEdit(ban, view, "worldBanned")
+							getEdit(ban, view, 'worldBanned')
 					}
 				}}
 			/>
-		)
+		);
 	}
 }
 
 const mapStateToProps = (state: AppState) => {
 	return {
 		itemTypes: state.api.types[CatalogTypeKeys.Item]
-	}
-}
+	};
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		requestCatalog: (type: string) => dispatch(requestCatalog(type))
-	}
-}
+	};
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-	translate("Integrations.MMCRestrict")(Items)
-)
+	translate('Integrations.MMCRestrict')(Items)
+);

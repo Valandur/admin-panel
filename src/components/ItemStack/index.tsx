@@ -1,45 +1,45 @@
-import * as React from "react"
-import { Button, ButtonProps, Label, Progress } from "semantic-ui-react"
+import * as React from 'react';
+import { Button, ButtonProps, Label, Progress } from 'semantic-ui-react';
 
-import { ItemStack, PotionEffect } from "../../fetch"
-import { formatRange } from "../Util"
+import { ItemStack, PotionEffect } from '../../fetch';
+import { formatRange } from '../Util';
 
 const getRoman: (num: number) => string = (num: number) => {
 	if (num === 1) {
-		return "I"
+		return 'I';
 	}
 	if (num === 2) {
-		return "II"
+		return 'II';
 	}
 	if (num === 3) {
-		return "III"
+		return 'III';
 	}
 	if (num === 4) {
-		return "IV"
+		return 'IV';
 	}
 	if (num === 5) {
-		return "V"
+		return 'V';
 	}
-	return ""
-}
+	return '';
+};
 const getAmplifier: (effect: PotionEffect) => string = (effect: PotionEffect) =>
-	getRoman(effect.amplifier + 1)
+	getRoman(effect.amplifier + 1);
 
 const itemStackStyle = {
-	display: "inline-block",
-	verticalAlign: "top",
-	margin: "0.1em",
-	padding: "0.2em",
-	border: "1px solid rgba(34,36,38,.1)",
-	borderRadius: ".28571429rem"
-}
+	display: 'inline-block',
+	verticalAlign: 'top',
+	margin: '0.1em',
+	padding: '0.2em',
+	border: '1px solid rgba(34,36,38,.1)',
+	borderRadius: '.28571429rem'
+};
 
 export interface Props {
-	item: ItemStack
+	item: ItemStack;
 	onRemove?: (
 		event: React.MouseEvent<HTMLButtonElement>,
 		data: ButtonProps
-	) => void
+	) => void;
 }
 
 export default ({ item, onRemove }: Props) => (
@@ -55,7 +55,7 @@ export default ({ item, onRemove }: Props) => (
 				onClick={onRemove}
 			/>
 		)}
-		<div style={{ color: "gray", marginBottom: "0.5em" }}>{item.type.id}</div>
+		<div style={{ color: 'gray', marginBottom: '0.5em' }}>{item.type.id}</div>
 		<div>
 			{item.durability &&
 				(item.durability.unbreakable ? (
@@ -68,7 +68,7 @@ export default ({ item, onRemove }: Props) => (
 							item.durability.durability,
 							item.useLimit ? item.useLimit : 0
 						)}
-						style={{ margin: "0 0 .5em 0" }}
+						style={{ margin: '0 0 .5em 0' }}
 					/>
 				))}
 			{item.quantity > 1 && (
@@ -106,4 +106,4 @@ export default ({ item, onRemove }: Props) => (
 			)}
 		</div>
 	</div>
-)
+);

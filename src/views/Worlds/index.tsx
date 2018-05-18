@@ -1,8 +1,8 @@
-import * as _ from "lodash"
-import * as moment from "moment"
-import * as React from "react"
-import { Trans, translate } from "react-i18next"
-import { connect, Dispatch } from "react-redux"
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import * as React from 'react';
+import { Trans, translate } from 'react-i18next';
+import { connect, Dispatch } from 'react-redux';
 import {
 	Button,
 	Form,
@@ -12,49 +12,49 @@ import {
 	Modal,
 	Radio,
 	Table
-} from "semantic-ui-react"
+} from 'semantic-ui-react';
 
-import { AppAction, CatalogRequestAction, requestCatalog } from "../../actions"
-import { renderCatalogTypeOptions } from "../../components/Util"
-import { CatalogType, WorldFull } from "../../fetch"
-import { AppState, CatalogTypeKeys, DataViewRef } from "../../types"
+import { AppAction, CatalogRequestAction, requestCatalog } from '../../actions';
+import { renderCatalogTypeOptions } from '../../components/Util';
+import { CatalogType, WorldFull } from '../../fetch';
+import { AppState, CatalogTypeKeys, DataViewRef } from '../../types';
 
-import DataViewFunc from "../../components/DataView"
-const DataView = DataViewFunc("world", "uuid")
+import DataViewFunc from '../../components/DataView';
+const DataView = DataViewFunc('world', 'uuid');
 
 interface Props extends reactI18Next.InjectedTranslateProps {
-	dimTypes: CatalogType[] | undefined
-	genTypes: CatalogType[] | undefined
-	diffTypes: CatalogType[] | undefined
-	gmTypes: CatalogType[] | undefined
-	requestCatalog: (type: string) => CatalogRequestAction
+	dimTypes: CatalogType[] | undefined;
+	genTypes: CatalogType[] | undefined;
+	diffTypes: CatalogType[] | undefined;
+	gmTypes: CatalogType[] | undefined;
+	requestCatalog: (type: string) => CatalogRequestAction;
 }
 
 interface OwnState {
-	modal: boolean
-	rules: { name: string; value: string }[]
-	rulesWorld?: WorldFull
-	rulesView?: DataViewRef<WorldFull>
+	modal: boolean;
+	rules: { name: string; value: string }[];
+	rulesWorld?: WorldFull;
+	rulesView?: DataViewRef<WorldFull>;
 }
 
 class Worlds extends React.Component<Props, OwnState> {
 	constructor(props: Props) {
-		super(props)
+		super(props);
 
 		this.state = {
 			modal: false,
 			rules: []
-		}
+		};
 
-		this.toggleModal = this.toggleModal.bind(this)
-		this.saveGameRules = this.saveGameRules.bind(this)
+		this.toggleModal = this.toggleModal.bind(this);
+		this.saveGameRules = this.saveGameRules.bind(this);
 	}
 
 	componentDidMount() {
-		this.props.requestCatalog(CatalogTypeKeys.Dimension)
-		this.props.requestCatalog(CatalogTypeKeys.Generator)
-		this.props.requestCatalog(CatalogTypeKeys.Difficulty)
-		this.props.requestCatalog(CatalogTypeKeys.GameMode)
+		this.props.requestCatalog(CatalogTypeKeys.Dimension);
+		this.props.requestCatalog(CatalogTypeKeys.Generator);
+		this.props.requestCatalog(CatalogTypeKeys.Difficulty);
+		this.props.requestCatalog(CatalogTypeKeys.GameMode);
 	}
 
 	showGameRules(world: WorldFull, view: DataViewRef<WorldFull>) {
@@ -66,89 +66,89 @@ class Worlds extends React.Component<Props, OwnState> {
 			})),
 			rulesWorld: world,
 			rulesView: view
-		})
+		});
 	}
 
 	toggleRule(name: string) {
-		const rules = this.state.rules
-		const rule = rules.find(r => r.name === name)
+		const rules = this.state.rules;
+		const rule = rules.find(r => r.name === name);
 		if (!rule) {
-			return
+			return;
 		}
 
-		rule.value = rule.value === "true" ? "false" : "true"
+		rule.value = rule.value === 'true' ? 'false' : 'true';
 
 		this.setState({
 			rules: rules
-		})
+		});
 	}
 
 	saveGameRules() {
 		if (!this.state.rulesView || !this.state.rulesWorld) {
-			return
+			return;
 		}
 
-		const rules = _.mapValues(_.keyBy(this.state.rules, "name"), "value")
+		const rules = _.mapValues(_.keyBy(this.state.rules, 'name'), 'value');
 
-		this.state.rulesView.save(this.state.rulesWorld, { gameRules: rules })
-		this.toggleModal()
+		this.state.rulesView.save(this.state.rulesWorld, { gameRules: rules });
+		this.toggleModal();
 	}
 
 	toggleModal() {
 		this.setState({
 			modal: !this.state.modal
-		})
+		});
 	}
 
 	render() {
-		const _t = this.props.t
+		const _t = this.props.t;
 
 		return (
 			<>
 				<DataView
 					icon="globe"
-					title={_t("Worlds")}
-					createTitle={_t("CreateWorld")}
+					title={_t('Worlds')}
+					createTitle={_t('CreateWorld')}
 					fields={{
 						name: {
-							label: _t("Name"),
+							label: _t('Name'),
 							create: true,
 							required: true,
 							view: (world: WorldFull) => (
 								<>
 									<b>{world.name}</b>
 									<br />
-									<p style={{ fontSize: "0.8em" }}>{world.uuid}</p>
+									<p style={{ fontSize: '0.8em' }}>{world.uuid}</p>
 								</>
 							)
 						},
-						"dimensionType.name": {
-							label: _t("Dimension"),
+						'dimensionType.name': {
+							label: _t('Dimension'),
 							create: true,
-							createName: "dimension.id",
+							createName: 'dimension.id',
 							required: true,
 							options: renderCatalogTypeOptions(this.props.dimTypes)
 						},
-						"generatorType.name": {
-							label: _t("Generator"),
+						'generatorType.name': {
+							label: _t('Generator'),
 							create: true,
-							createName: "generator.id",
+							createName: 'generator.id',
 							view: false,
 							required: true,
 							options: renderCatalogTypeOptions(this.props.genTypes)
 						},
-						"difficulty.name": {
-							label: _t("Difficulty"),
+						'difficulty.name': {
+							label: _t('Difficulty'),
 							create: true,
-							createName: "difficulty.id",
+							createName: 'difficulty.id',
 							view: false,
 							required: true,
 							options: renderCatalogTypeOptions(this.props.diffTypes)
 						},
-						"gameMode.name": {
-							label: _t("GameMode"),
+						'gameMode.name': {
+							label: _t('GameMode'),
 							create: true,
-							createName: "gameMode.id",
+							createName: 'gameMode.id',
 							view: false,
 							required: true,
 							options: renderCatalogTypeOptions(this.props.gmTypes)
@@ -158,34 +158,34 @@ class Worlds extends React.Component<Props, OwnState> {
 							view: false,
 							create: view => (
 								<Form.Group inline>
-									<label>{_t("Features")}:</label>
+									<label>{_t('Features')}:</label>
 									<Form.Checkbox
 										name="loadOnStartup"
-										label={_t("LoadOnStartup")}
+										label={_t('LoadOnStartup')}
 										checked={view.state.loadOnStartup}
 										onChange={view.handleChange}
 									/>
 									<Form.Checkbox
 										name="keepSpawnLoaded"
-										label={_t("KeepSpawnLoaded")}
+										label={_t('KeepSpawnLoaded')}
 										checked={view.state.keepSpawnLoaded}
 										onChange={view.handleChange}
 									/>
 									<Form.Checkbox
 										name="allowCommands"
-										label={_t("CommandsAllowed")}
+										label={_t('CommandsAllowed')}
 										checked={view.state.allowCommands}
 										onChange={view.handleChange}
 									/>
 									<Form.Checkbox
 										name="generateBonusChest"
-										label={_t("GenerateBonusChest")}
+										label={_t('GenerateBonusChest')}
 										checked={view.state.generateBonusChest}
 										onChange={view.handleChange}
 									/>
 									<Form.Checkbox
 										name="usesMapFeatures"
-										label={_t("EnableMapFeatures")}
+										label={_t('EnableMapFeatures')}
 										checked={view.state.usesMapFeatures}
 										onChange={view.handleChange}
 									/>
@@ -193,10 +193,10 @@ class Worlds extends React.Component<Props, OwnState> {
 							)
 						},
 						info: {
-							label: _t("Info"),
+							label: _t('Info'),
 							view: (world: WorldFull) => (
 								<>
-									<div style={{ display: "inline-block", marginRight: "1em" }}>
+									<div style={{ display: 'inline-block', marginRight: '1em' }}>
 										<Icon name="signal" />
 										{world.difficulty && world.difficulty.name}
 										<br />
@@ -206,16 +206,16 @@ class Worlds extends React.Component<Props, OwnState> {
 										<Icon name="cloud" />
 										{world.weather && world.weather.name}
 									</div>
-									<div style={{ display: "inline-block" }}>
+									<div style={{ display: 'inline-block' }}>
 										<Icon name="calendar" />
 										Day {Math.floor(world.time / 24000)}
 										<br />
 										<Icon name="clock" />
 										{moment
 											.unix((world.time % 24000) / 1200 * 86400)
-											.format("HH:mm")}
+											.format('HH:mm')}
 										<br />
-										<p style={{ fontSize: "0.8em" }}>
+										<p style={{ fontSize: '0.8em' }}>
 											<Icon name="leaf" />
 											{world.seed}
 										</p>
@@ -224,10 +224,10 @@ class Worlds extends React.Component<Props, OwnState> {
 							)
 						},
 						status: {
-							label: _t("Status"),
+							label: _t('Status'),
 							view: (world: WorldFull) => (
-								<Label color={world.loaded ? "green" : "yellow"}>
-									{world.loaded ? _t("Loaded") : _t("Unloaded")}
+								<Label color={world.loaded ? 'green' : 'yellow'}>
+									{world.loaded ? _t('Loaded') : _t('Unloaded')}
 								</Label>
 							)
 						}
@@ -239,24 +239,24 @@ class Worlds extends React.Component<Props, OwnState> {
 								disabled={(world as any).updating}
 								onClick={() => this.showGameRules(world, view)}
 							>
-								{_t("GameRules")}
-							</Button>{" "}
+								{_t('GameRules')}
+							</Button>{' '}
 							<Button
 								secondary
 								onClick={() => view.save(world, { loaded: !world.loaded })}
 								disabled={(world as any).updating}
 							>
-								{world.loaded ? _t("Unload") : _t("Load")}&nbsp;
-							</Button>{" "}
+								{world.loaded ? _t('Unload') : _t('Load')}&nbsp;
+							</Button>{' '}
 							{!world.loaded ? (
 								<Button
 									negative
 									disabled={(world as any).updating}
 									onClick={() => view.delete(world)}
 								>
-									{_t("Delete")}
+									{_t('Delete')}
 								</Button>
-							) : null}{" "}
+							) : null}{' '}
 							{(world as any).updating ? <Icon name="spinner" loading /> : null}
 						</>
 					)}
@@ -281,8 +281,8 @@ class Worlds extends React.Component<Props, OwnState> {
 									<Table>
 										<Table.Header>
 											<Table.Row>
-												<Table.HeaderCell>{_t("Name")}</Table.HeaderCell>
-												<Table.HeaderCell>{_t("Value")}</Table.HeaderCell>
+												<Table.HeaderCell>{_t('Name')}</Table.HeaderCell>
+												<Table.HeaderCell>{_t('Value')}</Table.HeaderCell>
 											</Table.Row>
 										</Table.Header>
 										<Table.Body>
@@ -294,10 +294,10 @@ class Worlds extends React.Component<Props, OwnState> {
 												<Table.Row key={rule.name}>
 													<Table.Cell>{rule.name}</Table.Cell>
 													<Table.Cell>
-														{rule.value === "true" || rule.value === "false" ? (
+														{rule.value === 'true' || rule.value === 'false' ? (
 															<Radio
 																toggle
-																checked={rule.value === "true"}
+																checked={rule.value === 'true'}
 																onClick={() => this.toggleRule(rule.name)}
 															/>
 														) : (
@@ -314,8 +314,8 @@ class Worlds extends React.Component<Props, OwnState> {
 									<Table>
 										<Table.Header>
 											<Table.Row>
-												<Table.HeaderCell>{_t("Name")}</Table.HeaderCell>
-												<Table.HeaderCell>{_t("Value")}</Table.HeaderCell>
+												<Table.HeaderCell>{_t('Name')}</Table.HeaderCell>
+												<Table.HeaderCell>{_t('Value')}</Table.HeaderCell>
 											</Table.Row>
 										</Table.Header>
 										<Table.Body>
@@ -326,10 +326,10 @@ class Worlds extends React.Component<Props, OwnState> {
 												<Table.Row key={rule.name}>
 													<Table.Cell>{rule.name}</Table.Cell>
 													<Table.Cell>
-														{rule.value === "true" || rule.value === "false" ? (
+														{rule.value === 'true' || rule.value === 'false' ? (
 															<Radio
 																toggle
-																checked={rule.value === "true"}
+																checked={rule.value === 'true'}
 																onClick={() => this.toggleRule(rule.name)}
 															/>
 														) : (
@@ -345,16 +345,16 @@ class Worlds extends React.Component<Props, OwnState> {
 						</Modal.Content>
 						<Modal.Actions>
 							<Button primary onClick={this.saveGameRules}>
-								{_t("Save")}
+								{_t('Save')}
 							</Button>&nbsp;
 							<Button secondary onClick={this.toggleModal}>
-								{_t("Cancel")}
+								{_t('Cancel')}
 							</Button>
 						</Modal.Actions>
 					</Modal>
 				) : null}
 			</>
-		)
+		);
 	}
 }
 
@@ -364,15 +364,15 @@ const mapStateToProps = (state: AppState) => {
 		genTypes: state.api.types[CatalogTypeKeys.Generator],
 		diffTypes: state.api.types[CatalogTypeKeys.Difficulty],
 		gmTypes: state.api.types[CatalogTypeKeys.GameMode]
-	}
-}
+	};
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {
 		requestCatalog: (type: string) => dispatch(requestCatalog(type))
-	}
-}
+	};
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-	translate("Worlds")(Worlds)
-)
+	translate('Worlds')(Worlds)
+);

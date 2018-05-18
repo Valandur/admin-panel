@@ -1,15 +1,15 @@
-import * as React from "react"
-import { Dropdown, DropdownProps, Form } from "semantic-ui-react"
+import * as React from 'react';
+import { Dropdown, DropdownProps, Form } from 'semantic-ui-react';
 
-import { renderCatalogTypeOptions } from "../../../components/Util"
-import { CatalogType } from "../../../fetch"
+import { renderCatalogTypeOptions } from '../../../components/Util';
+import { CatalogType } from '../../../fetch';
 
 export interface Props {
-	name: string
-	value: string
-	placeholder: string
-	itemTypes: CatalogType[]
-	onChange: (e: React.SyntheticEvent<HTMLElement>, data?: DropdownProps) => void
+	name: string;
+	value: string;
+	placeholder: string;
+	itemTypes: CatalogType[];
+	onChange: (e: React.SyntheticEvent<HTMLElement>, data?: DropdownProps) => void;
 }
 
 export default class ItemTypeDropdown extends React.Component<Props> {
@@ -17,7 +17,7 @@ export default class ItemTypeDropdown extends React.Component<Props> {
 		return (
 			nextProps.value !== this.props.value ||
 			nextProps.itemTypes !== this.props.itemTypes
-		)
+		);
 	}
 
 	render() {
@@ -34,6 +34,6 @@ export default class ItemTypeDropdown extends React.Component<Props> {
 				value={this.props.value}
 				options={renderCatalogTypeOptions(this.props.itemTypes)}
 			/>
-		)
+		);
 	}
 }

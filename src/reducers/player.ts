@@ -1,14 +1,14 @@
-import { AppAction } from "../actions"
-import { TypeKeys } from "../actions/player"
-import { PlayerFull } from "../fetch"
+import { AppAction } from '../actions';
+import { TypeKeys } from '../actions/player';
+import { PlayerFull } from '../fetch';
 
-import { DataViewState } from "./dataview"
+import { DataViewState } from './dataview';
 
 const initialState: DataViewState<PlayerFull> = {
 	creating: false,
 	filter: {},
 	list: [],
-}
+};
 
 export default (state = initialState, action: AppAction) => {
 	switch (action.type) {
@@ -17,11 +17,11 @@ export default (state = initialState, action: AppAction) => {
 				...state,
 				list: state.list.map(p => {
 					if (p.uuid !== action.player.uuid) {
-						return p
+						return p;
 					}
-					return { ...p, updating: true }
+					return { ...p, updating: true };
 				})
-			}
+			};
 
 		case TypeKeys.KICK_RESPONSE:
 			if (!action.ok) {
@@ -29,27 +29,27 @@ export default (state = initialState, action: AppAction) => {
 					...state,
 					list: state.list.map(p => {
 						if (p.uuid !== action.player.uuid) {
-							return p
+							return p;
 						}
-						return { ...p, updating: false }
+						return { ...p, updating: false };
 					})
-				}
+				};
 			}
 			return {
 				...state,
 				list: state.list.filter(p => p.uuid !== action.player.uuid)
-			}
+			};
 
 		case TypeKeys.BAN_REQUEST:
 			return {
 				...state,
 				list: state.list.map(p => {
 					if (p.uuid !== action.player.uuid) {
-						return p
+						return p;
 					}
-					return { ...p, updating: true }
+					return { ...p, updating: true };
 				})
-			}
+			};
 
 		case TypeKeys.BAN_RESPONSE:
 			if (!action.ok) {
@@ -57,18 +57,18 @@ export default (state = initialState, action: AppAction) => {
 					...state,
 					list: state.list.map(p => {
 						if (p.uuid !== action.player.uuid) {
-							return p
+							return p;
 						}
-						return { ...p, updating: false }
+						return { ...p, updating: false };
 					})
-				}
+				};
 			}
 			return {
 				...state,
 				list: state.list.filter(p => p.uuid !== action.player.uuid)
-			}
+			};
 
 		default:
-			return state
+			return state;
 	}
-}
+};

@@ -1,11 +1,11 @@
-import { AppAction } from "../actions"
-import { TypeKeys } from "../actions/command"
-import { Command } from "../fetch"
+import { AppAction } from '../actions';
+import { TypeKeys } from '../actions/command';
+import { Command } from '../fetch';
 
-import { DataViewState } from "./dataview"
+import { DataViewState } from './dataview';
 
 export interface CommandState extends DataViewState<Command> {
-	executing: boolean
+	executing: boolean;
 }
 
 const initialState: CommandState = {
@@ -13,7 +13,7 @@ const initialState: CommandState = {
 	executing: false,
 	filter: {},
 	list: [],
-}
+};
 
 export default (state = initialState, action: AppAction) => {
 	switch (action.type) {
@@ -21,15 +21,15 @@ export default (state = initialState, action: AppAction) => {
 			return {
 				...state,
 				executing: true,
-			}
+			};
 
 		case TypeKeys.EXECUTE_RESPONSE:
 			return {
 				...state,
 				executing: false,
-			}
+			};
 
 		default:
-			return state
+			return state;
 	}
-}
+};

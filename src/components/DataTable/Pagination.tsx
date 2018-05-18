@@ -1,28 +1,28 @@
-import * as React from "react"
-import { Menu } from "semantic-ui-react"
+import * as React from 'react';
+import { Menu } from 'semantic-ui-react';
 
 export interface Props {
-	page: number
-	maxPage: number
-	changePage: (event: React.MouseEvent<HTMLElement>, page: number) => void
+	page: number;
+	maxPage: number;
+	changePage: (event: React.MouseEvent<HTMLElement>, page: number) => void;
 }
 
 export default class Pagination extends React.Component<Props> {
 	shouldComponentUpdate(nextProps: Props, nextState: any) {
-		return nextProps.page !== this.props.page || nextProps.maxPage !== this.props.maxPage
+		return nextProps.page !== this.props.page || nextProps.maxPage !== this.props.maxPage;
 	}
 
 	render() {
 		if (this.props.maxPage <= 1) {
-			return null
+			return null;
 		}
 
-		const { page, maxPage } = this.props
-		const from = Math.max(0, page - 4)
-		const to = Math.min(maxPage, page + 5)
-		const pages = []
+		const { page, maxPage } = this.props;
+		const from = Math.max(0, page - 4);
+		const to = Math.min(maxPage, page + 5);
+		const pages = [];
 		for (let i = from; i < to; i++) {
-			pages.push(i)
+			pages.push(i);
 		}
 
 		return (
@@ -43,6 +43,6 @@ export default class Pagination extends React.Component<Props> {
 					<Menu.Item onClick={e => this.props.changePage(e, maxPage - 1)}>{maxPage}</Menu.Item>
 				) : null}
 			</Menu>
-		)
+		);
 	}
 }

@@ -1,37 +1,37 @@
-import * as copy from "copy-to-clipboard"
-import * as React from "react"
-import { translate } from "react-i18next"
-import { connect, Dispatch } from "react-redux"
-import { Button, Input, List } from "semantic-ui-react"
+import * as copy from 'copy-to-clipboard';
+import * as React from 'react';
+import { translate } from 'react-i18next';
+import { connect, Dispatch } from 'react-redux';
+import { Button, Input, List } from 'semantic-ui-react';
 
-import { AppAction } from "../../../actions"
-import { WebBooksBook } from "../../../fetch"
-import { AppState, DataViewRef } from "../../../types"
+import { AppAction } from '../../../actions';
+import { WebBooksBook } from '../../../fetch';
+import { AppState, DataViewRef } from '../../../types';
 
-import DataViewFunc from "../../../components/DataView"
-const DataView = DataViewFunc("web-books/book", "id")
+import DataViewFunc from '../../../components/DataView';
+const DataView = DataViewFunc('web-books/book', 'id');
 
 interface Props extends reactI18Next.InjectedTranslateProps {
-	apiUrl: string
+	apiUrl: string;
 }
 
 interface OwnState {
-	lines: string[]
-	newItem: ""
+	lines: string[];
+	newItem: '';
 }
 
 class Books extends React.Component<Props, OwnState> {
 	constructor(props: Props) {
-		super(props)
+		super(props);
 
-		this.renderEditContent = this.renderEditContent.bind(this)
+		this.renderEditContent = this.renderEditContent.bind(this);
 	}
 
 	addLine(view: DataViewRef<WebBooksBook>) {
 		view.setState({
 			lines: view.state.lines.concat(view.state.newItem),
-			newItem: ""
-		})
+			newItem: ''
+		});
 	}
 
 	moveLineUp(view: DataViewRef<WebBooksBook>, index: number) {
@@ -44,7 +44,7 @@ class Books extends React.Component<Props, OwnState> {
 							? view.state.lines[index]
 							: line
 			)
-		})
+		});
 	}
 
 	moveLineDown(view: DataViewRef<WebBooksBook>, index: number) {
@@ -57,40 +57,40 @@ class Books extends React.Component<Props, OwnState> {
 							? view.state.lines[index]
 							: line
 			)
-		})
+		});
 	}
 
 	deleteLine(view: DataViewRef<WebBooksBook>, index: number) {
 		view.setState({
 			lines: view.state.lines.filter((line: string, i: number) => i !== index),
-			newItem: ""
-		})
+			newItem: ''
+		});
 	}
 
 	copy(book: WebBooksBook) {
-		copy(this.props.apiUrl + "/api/v5/web-books/book/" + book.id + "/html")
+		copy(this.props.apiUrl + '/api/v5/web-books/book/' + book.id + '/html');
 	}
 
 	render() {
-		const _t = this.props.t
+		const _t = this.props.t;
 
 		return (
 			<DataView
 				canEdit
 				canDelete
 				icon="book"
-				title={_t("WebBooks")}
-				filterTitle={_t("FilterBooks")}
-				createTitle={_t("CreateBook")}
+				title={_t('WebBooks')}
+				filterTitle={_t('FilterBooks')}
+				createTitle={_t('CreateBook')}
 				fields={{
 					id: {
-						label: _t("Id"),
+						label: _t('Id'),
 						create: true,
 						filter: true,
 						required: true
 					},
 					title: {
-						label: _t("Title"),
+						label: _t('Title'),
 						edit: true,
 						create: true,
 						required: true,
@@ -101,7 +101,7 @@ class Books extends React.Component<Props, OwnState> {
 						edit: true
 					},
 					content: {
-						label: _t("Content"),
+						label: _t('Content'),
 						wide: true,
 						view: (book: WebBooksBook) => (
 							<div dangerouslySetInnerHTML={{ __html: book.html }} />
@@ -109,7 +109,7 @@ class Books extends React.Component<Props, OwnState> {
 						edit: this.renderEditContent
 					},
 					link: {
-						label: _t("Link"),
+						label: _t('Link'),
 						wide: true,
 						view: (book: WebBooksBook) => (
 							<Input
@@ -118,15 +118,15 @@ class Books extends React.Component<Props, OwnState> {
 									(e.target as any).select()
 								}
 								action={{
-									color: "teal",
-									icon: "linkify",
+									color: 'teal',
+									icon: 'linkify',
 									onClick: () => this.copy(book)
 								}}
 								value={
 									this.props.apiUrl +
-									"/api/v5/web-books/book/" +
+									'/api/v5/web-books/book/' +
 									book.id +
-									"/html"
+									'/html'
 								}
 							/>
 						)
@@ -141,14 +141,14 @@ class Books extends React.Component<Props, OwnState> {
 						id: obj.id,
 						title: newData.title,
 						lines: newData.lines
-					})
+					});
 				}}
 			/>
-		)
+		);
 	}
 
 	renderEditContent(book: WebBooksBook, view: DataViewRef<WebBooksBook>) {
-		const _t = this.props.t
+		const _t = this.props.t;
 
 		return (
 			<>
@@ -186,30 +186,30 @@ class Books extends React.Component<Props, OwnState> {
 				</List>
 				<Input
 					name="newItem"
-					placeholder={_t("NewLine")}
+					placeholder={_t('NewLine')}
 					onChange={view.handleChange}
-					value={view.state.newItem ? view.state.newItem : ""}
+					value={view.state.newItem ? view.state.newItem : ''}
 					action={{
-						color: "green",
-						icon: "plus",
+						color: 'green',
+						icon: 'plus',
 						onClick: () => this.addLine(view)
 					}}
 				/>
 			</>
-		)
+		);
 	}
 }
 
 const mapStateToProps = (state: AppState) => {
 	return {
 		apiUrl: state.api.server.apiUrl
-	}
-}
+	};
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
-	return {}
-}
+	return {};
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-	translate("Integrations.WebBooks")(Books)
-)
+	translate('Integrations.WebBooks')(Books)
+);

@@ -1,17 +1,17 @@
-import { Action } from "redux"
+import { Action } from 'redux';
 
-import { ExecuteCommandResponse } from "../fetch"
+import { ExecuteCommandResponse } from '../fetch';
 
 export enum TypeKeys {
-	EXECUTE_REQUEST = "EXECUTE_REQUEST",
-	EXECUTE_RESPONSE = "EXECUTE_RESPONSE"
+	EXECUTE_REQUEST = 'EXECUTE_REQUEST',
+	EXECUTE_RESPONSE = 'EXECUTE_RESPONSE'
 }
 
 export interface ExecuteRequestAction extends Action {
-	type: TypeKeys.EXECUTE_REQUEST
-	command: string
-	waitLines: number
-	waitTime: number
+	type: TypeKeys.EXECUTE_REQUEST;
+	command: string;
+	waitLines: number;
+	waitTime: number;
 }
 export function requestExecute(
 	cmd: string,
@@ -23,12 +23,12 @@ export function requestExecute(
 		command: cmd,
 		waitLines: waitLines,
 		waitTime: waitTime
-	}
+	};
 }
 
 export interface ExecuteResponseAction extends Action {
-	type: TypeKeys.EXECUTE_RESPONSE
-	response: ExecuteCommandResponse
+	type: TypeKeys.EXECUTE_RESPONSE;
+	response: ExecuteCommandResponse;
 }
 export function respondExecute(
 	response: ExecuteCommandResponse
@@ -36,7 +36,7 @@ export function respondExecute(
 	return {
 		type: TypeKeys.EXECUTE_RESPONSE,
 		response
-	}
+	};
 }
 
-export type CommandAction = ExecuteRequestAction | ExecuteResponseAction
+export type CommandAction = ExecuteRequestAction | ExecuteResponseAction;
