@@ -1119,17 +1119,17 @@ export interface CreateEntityRequest {
  */
 export interface CreateUserRequest {
     /**
+     * The password of the user
+     * @type {string}
+     * @memberof CreateUserRequest
+     */
+    password: string;
+    /**
      * The username of the user
      * @type {string}
      * @memberof CreateUserRequest
      */
     username: string;
-    /**
-     * The password of the user. Will be generated if not specified.
-     * @type {string}
-     * @memberof CreateUserRequest
-     */
-    password?: string;
 }
 
 /**
@@ -6852,6 +6852,20 @@ export interface ModifyBlockOperationRequest {
 /**
  * 
  * @export
+ * @interface ModifyUserRequest
+ */
+export interface ModifyUserRequest {
+    /**
+     * The permissions of the user
+     * @type {any}
+     * @memberof ModifyUserRequest
+     */
+    permissions?: any;
+}
+
+/**
+ * 
+ * @export
  * @interface NucleusKit
  */
 export interface NucleusKit {
@@ -11414,17 +11428,17 @@ export interface WorldFull {
      */
     uuid: string;
     /**
-     * True if the spawn of this world is always kept loaded, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    keepSpawnLoaded: boolean;
-    /**
      * True if this world is loaded when the server starts, false otherwise
      * @type {boolean}
      * @memberof WorldFull
      */
     loadOnStartup: boolean;
+    /**
+     * True if the spawn of this world is always kept loaded, false otherwise
+     * @type {boolean}
+     * @memberof WorldFull
+     */
+    keepSpawnLoaded: boolean;
     /**
      * True if commands are allowed to be executed in this world, false otherwise
      * @type {boolean}
@@ -13714,7 +13728,7 @@ export class BlockApi extends BaseAPI {
 export const ChunkApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.chunk.create**   
+         * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.create**   
          * @summary Load & Generate a chunk
          * @param {string} world The uuid of the world in which to create the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
@@ -13786,7 +13800,7 @@ export const ChunkApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Get detailed information about a chunk     **Required permissions:**    - **chunk.chunk.one **   
+         * Get detailed information about a chunk     **Required permissions:**    - **chunk.one**   
          * @summary Get a chunk
          * @param {string} world The uuid of the world in which to get the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
@@ -13858,7 +13872,7 @@ export const ChunkApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**   
+         * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.list**   
          * @summary List chunks
          * @param {string} world The uuid of the for which to get all chunks
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
@@ -13927,7 +13941,7 @@ export const ChunkApiFetchParamCreator = function (configuration?: Configuration
 export const ChunkApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.chunk.create**   
+         * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.create**   
          * @summary Load & Generate a chunk
          * @param {string} world The uuid of the world in which to create the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
@@ -13951,7 +13965,7 @@ export const ChunkApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get detailed information about a chunk     **Required permissions:**    - **chunk.chunk.one **   
+         * Get detailed information about a chunk     **Required permissions:**    - **chunk.one**   
          * @summary Get a chunk
          * @param {string} world The uuid of the world in which to get the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
@@ -13975,7 +13989,7 @@ export const ChunkApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**   
+         * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.list**   
          * @summary List chunks
          * @param {string} world The uuid of the for which to get all chunks
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
@@ -14006,7 +14020,7 @@ export const ChunkApiFp = function(configuration?: Configuration) {
 export const ChunkApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.chunk.create**   
+         * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.create**   
          * @summary Load & Generate a chunk
          * @param {string} world The uuid of the world in which to create the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
@@ -14021,7 +14035,7 @@ export const ChunkApiFactory = function (configuration?: Configuration, fetch?: 
             return ChunkApiFp(configuration).createChunkAt(world, x, z, details, accept, pretty, options)(fetch, basePath);
         },
         /**
-         * Get detailed information about a chunk     **Required permissions:**    - **chunk.chunk.one **   
+         * Get detailed information about a chunk     **Required permissions:**    - **chunk.one**   
          * @summary Get a chunk
          * @param {string} world The uuid of the world in which to get the chunk
          * @param {number} x The x-coordinate of the chunk (in chunk coordinates)
@@ -14036,7 +14050,7 @@ export const ChunkApiFactory = function (configuration?: Configuration, fetch?: 
             return ChunkApiFp(configuration).getChunkAt(world, x, z, details, accept, pretty, options)(fetch, basePath);
         },
         /**
-         * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**   
+         * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.list**   
          * @summary List chunks
          * @param {string} world The uuid of the for which to get all chunks
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
@@ -14059,7 +14073,7 @@ export const ChunkApiFactory = function (configuration?: Configuration, fetch?: 
  */
 export class ChunkApi extends BaseAPI {
     /**
-     * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.chunk.create**   
+     * Forces a chunk to be loaded into memory, and created if it does not exist.     **Required permissions:**    - **chunk.create**   
      * @summary Load & Generate a chunk
      * @param {} world The uuid of the world in which to create the chunk
      * @param {} x The x-coordinate of the chunk (in chunk coordinates)
@@ -14076,7 +14090,7 @@ export class ChunkApi extends BaseAPI {
     }
 
     /**
-     * Get detailed information about a chunk     **Required permissions:**    - **chunk.chunk.one **   
+     * Get detailed information about a chunk     **Required permissions:**    - **chunk.one**   
      * @summary Get a chunk
      * @param {} world The uuid of the world in which to get the chunk
      * @param {} x The x-coordinate of the chunk (in chunk coordinates)
@@ -14093,7 +14107,7 @@ export class ChunkApi extends BaseAPI {
     }
 
     /**
-     * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.chunk.list**   
+     * Gets a list of all the loaded chunks for the specified world.     **Required permissions:**    - **chunk.list**   
      * @summary List chunks
      * @param {} world The uuid of the for which to get all chunks
      * @param {} [details] Add to include additional details, omit or false otherwise
@@ -19485,7 +19499,7 @@ export const PermissionApiFetchParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
+         * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.one**   
          * @summary Get subject
          * @param {string} id 
          * @param {string} subId 
@@ -19696,7 +19710,7 @@ export const PermissionApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
+         * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.one**   
          * @summary Get subject
          * @param {string} id 
          * @param {string} subId 
@@ -19784,7 +19798,7 @@ export const PermissionApiFactory = function (configuration?: Configuration, fet
             return PermissionApiFp(configuration).getCollection(id, details, accept, pretty, options)(fetch, basePath);
         },
         /**
-         * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
+         * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.one**   
          * @summary Get subject
          * @param {string} id 
          * @param {string} subId 
@@ -19848,7 +19862,7 @@ export class PermissionApi extends BaseAPI {
     }
 
     /**
-     * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.list**   
+     * Gets one specific subject belonging to a certain collection     **Required permissions:**    - **permission.collection.subject.one**   
      * @summary Get subject
      * @param {} id 
      * @param {} subId 
@@ -22686,7 +22700,7 @@ export class UniversalMarketApi extends BaseAPI {
 export const UserApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Creates a new Web-API user with the specified permissions     **Required permissions:**    - **user.create**   
+         * Creates a new Web-API user with the specified username and password.     **Required permissions:**    - **user.create**   
          * @summary Create a user
          * @param {CreateUserRequest} [body] 
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
@@ -22745,9 +22759,9 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Deletes a Web-API user     **Required permissions:**    - **user.delete**   
+         * Removes a Web-API user.     **Required permissions:**    - **user.delete**   
          * @summary Delete a user
-         * @param {string} name The name of the user to delete
+         * @param {string} name The username of the user to delete
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
          * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
@@ -22805,7 +22819,7 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.me**   
+         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key
          * @summary Check info
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -22819,22 +22833,6 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyHeader required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-					? configuration.apiKey("X-WebAPI-Key")
-					: configuration.apiKey;
-                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
-            }
-
-            // authentication ApiKeyQuery required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-					? configuration.apiKey("key")
-					: configuration.apiKey;
-                localVarQueryParameter["key"] = localVarApiKeyValue;
-            }
 
             if (details !== undefined) {
                 localVarQueryParameter['details'] = details;
@@ -22859,8 +22857,8 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Gets a list of all the Web-API users     **Required permissions:**    - **user.list**   
-         * @summary Get users
+         * Gets a list of all the Web-API users.     **Required permissions:**    - **user.list**   
+         * @summary List users
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
          * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
@@ -22956,7 +22954,7 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Invalidate the current API key, logging out the active user.
+         * Invalidate the current API key, logging out the active user.     **Required permissions:**    - **user.**   
          * @summary Logout
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -22970,6 +22968,22 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
 
             if (details !== undefined) {
                 localVarQueryParameter['details'] = details;
@@ -22993,6 +23007,129 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * null     **Required permissions:**    - **user.**   
+         * @param {string} [redirect] The URL the client should be redirect to after logout
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logoutRedirect(redirect?: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            const localVarPath = `/user/logout`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (redirect !== undefined) {
+                localVarQueryParameter['redirect'] = redirect;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Changes the properties of a Web-API user     **Required permissions:**    - **user.modify**   
+         * @summary Update a user
+         * @param {string} name The username of the user to delete
+         * @param {ModifyUserRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        modifyUser(name: string, body?: ModifyUserRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'name' is not null or undefined
+            if (name === null || name === undefined) {
+                throw new RequiredError('name','Required parameter name was null or undefined when calling modifyUser.');
+            }
+            const localVarPath = `/user/{name}`
+                .replace(`{${"name"}}`, encodeURIComponent(String(name)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"ModifyUserRequest" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -23003,7 +23140,7 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
 export const UserApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * Creates a new Web-API user with the specified permissions     **Required permissions:**    - **user.create**   
+         * Creates a new Web-API user with the specified username and password.     **Required permissions:**    - **user.create**   
          * @summary Create a user
          * @param {CreateUserRequest} [body] 
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
@@ -23025,9 +23162,9 @@ export const UserApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Deletes a Web-API user     **Required permissions:**    - **user.delete**   
+         * Removes a Web-API user.     **Required permissions:**    - **user.delete**   
          * @summary Delete a user
-         * @param {string} name The name of the user to delete
+         * @param {string} name The username of the user to delete
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
          * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
@@ -23047,7 +23184,7 @@ export const UserApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.me**   
+         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key
          * @summary Check info
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -23068,8 +23205,8 @@ export const UserApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Gets a list of all the Web-API users     **Required permissions:**    - **user.list**   
-         * @summary Get users
+         * Gets a list of all the Web-API users.     **Required permissions:**    - **user.list**   
+         * @summary List users
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
          * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
@@ -23111,7 +23248,7 @@ export const UserApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Invalidate the current API key, logging out the active user.
+         * Invalidate the current API key, logging out the active user.     **Required permissions:**    - **user.**   
          * @summary Logout
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -23121,6 +23258,50 @@ export const UserApiFp = function(configuration?: Configuration) {
          */
         logout(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PermissionStruct> {
             const localVarFetchArgs = UserApiFetchParamCreator(configuration).logout(details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * null     **Required permissions:**    - **user.**   
+         * @param {string} [redirect] The URL the client should be redirect to after logout
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logoutRedirect(redirect?: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = UserApiFetchParamCreator(configuration).logoutRedirect(redirect, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Changes the properties of a Web-API user     **Required permissions:**    - **user.modify**   
+         * @summary Update a user
+         * @param {string} name The username of the user to delete
+         * @param {ModifyUserRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        modifyUser(name: string, body?: ModifyUserRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UserPermissionStruct> {
+            const localVarFetchArgs = UserApiFetchParamCreator(configuration).modifyUser(name, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -23141,7 +23322,7 @@ export const UserApiFp = function(configuration?: Configuration) {
 export const UserApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * Creates a new Web-API user with the specified permissions     **Required permissions:**    - **user.create**   
+         * Creates a new Web-API user with the specified username and password.     **Required permissions:**    - **user.create**   
          * @summary Create a user
          * @param {CreateUserRequest} [body] 
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
@@ -23154,9 +23335,9 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
             return UserApiFp(configuration).createUser(body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
-         * Deletes a Web-API user     **Required permissions:**    - **user.delete**   
+         * Removes a Web-API user.     **Required permissions:**    - **user.delete**   
          * @summary Delete a user
-         * @param {string} name The name of the user to delete
+         * @param {string} name The username of the user to delete
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
          * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
@@ -23167,7 +23348,7 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
             return UserApiFp(configuration).deleteUser(name, details, accept, pretty, options)(fetch, basePath);
         },
         /**
-         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.me**   
+         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key
          * @summary Check info
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -23179,8 +23360,8 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
             return UserApiFp(configuration).getMe(details, accept, pretty, options)(fetch, basePath);
         },
         /**
-         * Gets a list of all the Web-API users     **Required permissions:**    - **user.list**   
-         * @summary Get users
+         * Gets a list of all the Web-API users.     **Required permissions:**    - **user.list**   
+         * @summary List users
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
          * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
@@ -23204,7 +23385,7 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
             return UserApiFp(configuration).login(body, details, accept, pretty, options)(fetch, basePath);
         },
         /**
-         * Invalidate the current API key, logging out the active user.
+         * Invalidate the current API key, logging out the active user.     **Required permissions:**    - **user.**   
          * @summary Logout
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -23214,6 +23395,32 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
          */
         logout(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
             return UserApiFp(configuration).logout(details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * null     **Required permissions:**    - **user.**   
+         * @param {string} [redirect] The URL the client should be redirect to after logout
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logoutRedirect(redirect?: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return UserApiFp(configuration).logoutRedirect(redirect, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Changes the properties of a Web-API user     **Required permissions:**    - **user.modify**   
+         * @summary Update a user
+         * @param {string} name The username of the user to delete
+         * @param {ModifyUserRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        modifyUser(name: string, body?: ModifyUserRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return UserApiFp(configuration).modifyUser(name, body, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -23226,7 +23433,7 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
  */
 export class UserApi extends BaseAPI {
     /**
-     * Creates a new Web-API user with the specified permissions     **Required permissions:**    - **user.create**   
+     * Creates a new Web-API user with the specified username and password.     **Required permissions:**    - **user.create**   
      * @summary Create a user
      * @param {} [body] 
      * @param {} [details] Add to include additional details, omit or false otherwise
@@ -23241,9 +23448,9 @@ export class UserApi extends BaseAPI {
     }
 
     /**
-     * Deletes a Web-API user     **Required permissions:**    - **user.delete**   
+     * Removes a Web-API user.     **Required permissions:**    - **user.delete**   
      * @summary Delete a user
-     * @param {} name The name of the user to delete
+     * @param {} name The username of the user to delete
      * @param {} [details] Add to include additional details, omit or false otherwise
      * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
      * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
@@ -23256,7 +23463,7 @@ export class UserApi extends BaseAPI {
     }
 
     /**
-     * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.me**   
+     * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key
      * @summary Check info
      * @param {} [details] Add to include additional details, omit or false otherwise
      * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -23270,8 +23477,8 @@ export class UserApi extends BaseAPI {
     }
 
     /**
-     * Gets a list of all the Web-API users     **Required permissions:**    - **user.list**   
-     * @summary Get users
+     * Gets a list of all the Web-API users.     **Required permissions:**    - **user.list**   
+     * @summary List users
      * @param {} [details] Add to include additional details, omit or false otherwise
      * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
      * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
@@ -23299,7 +23506,7 @@ export class UserApi extends BaseAPI {
     }
 
     /**
-     * Invalidate the current API key, logging out the active user.
+     * Invalidate the current API key, logging out the active user.     **Required permissions:**    - **user.**   
      * @summary Logout
      * @param {} [details] Add to include additional details, omit or false otherwise
      * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -23310,6 +23517,36 @@ export class UserApi extends BaseAPI {
      */
     public logout(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
         return UserApiFp(this.configuration).logout(details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * null     **Required permissions:**    - **user.**   
+     * @param {} [redirect] The URL the client should be redirect to after logout
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public logoutRedirect(redirect?: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return UserApiFp(this.configuration).logoutRedirect(redirect, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Changes the properties of a Web-API user     **Required permissions:**    - **user.modify**   
+     * @summary Update a user
+     * @param {} name The username of the user to delete
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public modifyUser(name: string, body?: ModifyUserRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return UserApiFp(this.configuration).modifyUser(name, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }

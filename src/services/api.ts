@@ -112,6 +112,10 @@ const api = ({
 				.catch(err => next(respondLogin(undefined, err)));
 			break;
 
+		case TypeKeys.LOGOUT_REQUEST:
+			state.api.apis.user.logout();
+			break;
+
 		case TypeKeys.CATALOG_REQUEST:
 			if (state.api.types[action.class]) {
 				break;
