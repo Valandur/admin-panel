@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import * as React from 'react';
 import {
 	Button,
@@ -171,7 +172,10 @@ class CrateReward extends React.Component<Props, State> {
 											onClick: () =>
 												addRewardObject(reward, {
 													type: this.state.newObjectType,
-													command: this.state.newObjectCommand.startsWith('/')
+													command: _.startsWith(
+														this.state.newObjectCommand,
+														'/'
+													)
 														? this.state.newObjectCommand.substring(1)
 														: this.state.newObjectCommand
 												})

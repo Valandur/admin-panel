@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import * as React from 'react';
 import { translate } from 'react-i18next';
 import { connect, Dispatch } from 'react-redux';
@@ -8,6 +9,7 @@ import {
 	CatalogRequestAction,
 	requestCatalog
 } from '../../../actions';
+import DataViewFunc from '../../../components/DataView';
 import ItemStack from '../../../components/ItemStack';
 import {
 	handleChange,
@@ -17,7 +19,6 @@ import {
 import { CatalogType, NucleusKit } from '../../../fetch';
 import { AppState, CatalogTypeKeys, DataViewRef } from '../../../types';
 
-import DataViewFunc from '../../../components/DataView';
 const DataView = DataViewFunc('nucleus/kit', 'name');
 
 interface Props extends reactI18Next.InjectedTranslateProps {
@@ -54,7 +55,7 @@ class Kits extends React.Component<Props, OwnState> {
 
 	addCmd(view: DataViewRef<NucleusKit>, kit: NucleusKit) {
 		let cmd = this.state.newKitCmd;
-		if (cmd.startsWith('/')) {
+		if (_.startsWith(cmd, '/')) {
 			cmd = cmd.substring(1);
 		}
 
