@@ -72,7 +72,7 @@ class Commands extends React.Component<Props, {}> {
 				);
 			} else {
 				return (
-					cmd.name.toLowerCase().startsWith(parts[0]) &&
+					_.startsWith(cmd.name.toLowerCase(), parts[0]) &&
 					checkPermissions(this.props.perms, ['cmd', 'run', cmd.name])
 				);
 			}
@@ -86,7 +86,7 @@ class Commands extends React.Component<Props, {}> {
 			);
 
 			if (parts.length > 1 && !_.isEmpty(parts[1])) {
-				subs = subs.filter(sub => sub.startsWith(parts[1]));
+				subs = subs.filter(sub => _.startsWith(sub, parts[1]));
 			}
 			cmds = subs.map(sub => ({
 				name: sub,
