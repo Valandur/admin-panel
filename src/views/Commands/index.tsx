@@ -151,7 +151,7 @@ class Commands extends React.Component<Props, {}> {
 				fields={{
 					timestamp: {
 						label: _t('Timestamp'),
-						view: (cmd: CommandCall) => moment.unix(cmd.timestamp).calendar()
+						view: (cmd: CommandCall) => moment(cmd.timestamp).calendar()
 					},
 					source: {
 						label: _t('Source'),
