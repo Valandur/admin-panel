@@ -133,8 +133,8 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 					<TableHeader
 						fields={fields}
 						hasActions={typeof actions !== 'undefined'}
-						canEdit={!!canEdit}
-						canDelete={!!canDelete}
+						canEdit={_.some(list, canEdit)}
+						canDelete={_.some(list, canDelete)}
 						t={_t}
 					/>
 					<Table.Body>
@@ -150,7 +150,7 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 								onEdit={(d: T, v) => this.onEdit(d, v)}
 								onSave={this.props.onSave}
 								onDelete={this.props.onDelete}
-								actions={this.props.actions}
+								actions={actions}
 								newData={this.state.newData}
 								handleChange={this.handleChange}
 								t={_t}

@@ -14,22 +14,22 @@ import {
 import InventoryComp from '../../components/Inventory';
 import Location from '../../components/Location';
 import { formatRange, renderWorldOptions } from '../../components/Util';
-import { Inventory, Player, PlayerFull, WorldFull } from '../../fetch';
+import { Inventory, Player, World } from '../../fetch';
 import { AppState, DataViewRef } from '../../types';
 
 import DataViewFunc from '../../components/DataView';
 const DataView = DataViewFunc('player', 'uuid');
 
 interface Props extends reactI18Next.InjectedTranslateProps {
-	worlds: WorldFull[];
-	requestKickPlayer: (player: PlayerFull) => KickPlayerRequestAction;
-	requestBanPlayer: (player: PlayerFull) => BanPlayerRequestAction;
+	worlds: World[];
+	requestKickPlayer: (player: Player) => KickPlayerRequestAction;
+	requestBanPlayer: (player: Player) => BanPlayerRequestAction;
 	requestWorlds: () => ListRequestAction;
 }
 
 interface OwnState {
 	modal: boolean;
-	player?: PlayerFull;
+	player?: Player;
 	inventory?: Inventory;
 }
 
@@ -49,15 +49,15 @@ class Players extends React.Component<Props, OwnState> {
 		this.props.requestWorlds();
 	}
 
-	kick(player: PlayerFull) {
+	kick(player: Player) {
 		this.props.requestKickPlayer(player);
 	}
 
-	ban(player: PlayerFull) {
+	ban(player: Player) {
 		this.props.requestBanPlayer(player);
 	}
 
-	showInventory(player: PlayerFull, view: DataViewRef<PlayerFull>) {
+	showInventory(player: Player, view: DataViewRef<Player>) {
 		view.details(player);
 
 		this.setState({
@@ -86,7 +86,7 @@ class Players extends React.Component<Props, OwnState> {
 						name: {
 							label: _t('NameUUID'),
 							filter: true,
-							view: (player: PlayerFull) => (
+							view: (player: Player) => (
 								<Popup
 									flowing
 									hoverable
@@ -107,14 +107,12 @@ class Players extends React.Component<Props, OwnState> {
 						},
 						location: {
 							label: _t('Location'),
-							view: (player: PlayerFull) => (
-								<Location location={player.location} />
-							)
+							view: (player: Player) => <Location location={player.location} />
 						},
 						health: {
 							label: _t('HealthFood'),
 							wide: true,
-							view: (player: PlayerFull) => {
+							view: (player: Player) => {
 								if (!player.health || !player.food) {
 									return;
 								}
@@ -142,7 +140,7 @@ class Players extends React.Component<Props, OwnState> {
 						info: {
 							label: _t('Info'),
 							wide: true,
-							view: (player: PlayerFull) => (
+							view: (player: Player) => (
 								<Label.Group>
 									<Label>
 										{_t('IP')}
@@ -159,7 +157,7 @@ class Players extends React.Component<Props, OwnState> {
 							)
 						}
 					}}
-					actions={(player: PlayerFull, view: DataViewRef<PlayerFull>) => (
+					actions={(player: Player, view: DataViewRef<Player>) => (
 						<>
 							<Button
 								secondary

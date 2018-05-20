@@ -16,7 +16,7 @@ import {
 
 import { AppAction, CatalogRequestAction, requestCatalog } from '../../actions';
 import { renderCatalogTypeOptions } from '../../components/Util';
-import { CatalogType, WorldFull } from '../../fetch';
+import { CatalogType, World } from '../../fetch';
 import { AppState, CatalogTypeKeys, DataViewRef } from '../../types';
 
 import DataViewFunc from '../../components/DataView';
@@ -33,8 +33,8 @@ interface Props extends reactI18Next.InjectedTranslateProps {
 interface OwnState {
 	modal: boolean;
 	rules: { name: string; value: string }[];
-	rulesWorld?: WorldFull;
-	rulesView?: DataViewRef<WorldFull>;
+	rulesWorld?: World;
+	rulesView?: DataViewRef<World>;
 }
 
 class Worlds extends React.Component<Props, OwnState> {
@@ -57,7 +57,7 @@ class Worlds extends React.Component<Props, OwnState> {
 		this.props.requestCatalog(CatalogTypeKeys.GameMode);
 	}
 
-	showGameRules(world: WorldFull, view: DataViewRef<WorldFull>) {
+	showGameRules(world: World, view: DataViewRef<World>) {
 		this.setState({
 			modal: true,
 			rules: Object.keys(world.gameRules).map((key: string) => ({
@@ -114,7 +114,7 @@ class Worlds extends React.Component<Props, OwnState> {
 							label: _t('Name'),
 							create: true,
 							required: true,
-							view: (world: WorldFull) => (
+							view: (world: World) => (
 								<>
 									<b>{world.name}</b>
 									<br />
@@ -194,7 +194,7 @@ class Worlds extends React.Component<Props, OwnState> {
 						},
 						info: {
 							label: _t('Info'),
-							view: (world: WorldFull) => (
+							view: (world: World) => (
 								<>
 									<div style={{ display: 'inline-block', marginRight: '1em' }}>
 										<Icon name="signal" />
@@ -225,14 +225,14 @@ class Worlds extends React.Component<Props, OwnState> {
 						},
 						status: {
 							label: _t('Status'),
-							view: (world: WorldFull) => (
+							view: (world: World) => (
 								<Label color={world.loaded ? 'green' : 'yellow'}>
 									{world.loaded ? _t('Loaded') : _t('Unloaded')}
 								</Label>
 							)
 						}
 					}}
-					actions={(world: WorldFull, view) => (
+					actions={(world: World, view) => (
 						<>
 							<Button
 								primary

@@ -27,7 +27,9 @@ export default class DataTableHeader<T> extends React.Component<Props<T>> {
 							</Table.HeaderCell>
 						);
 					})}
-					{this.props.hasActions || this.props.canEdit || this.props.canDelete ? (
+					{this.props.hasActions ||
+					this.props.canEdit ||
+					this.props.canDelete ? (
 						<Table.HeaderCell>{this.props.t('Actions')}</Table.HeaderCell>
 					) : null}
 				</Table.Row>

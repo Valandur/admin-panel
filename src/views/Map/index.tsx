@@ -16,7 +16,7 @@ import { AppAction } from '../../actions';
 import { requestDelete, requestList } from '../../actions/dataview';
 import Inventory from '../../components/Inventory';
 import { formatRange, renderWorldOptions } from '../../components/Util';
-import { Entity, PlayerFull, TileEntity, WorldFull } from '../../fetch';
+import { Entity, Player, TileEntity, World } from '../../fetch';
 import { AppState } from '../../types';
 
 const TILE_SIZE = 512;
@@ -54,8 +54,8 @@ const marks = {
 
 interface OwnProps {
 	entities: Entity[];
-	worlds: WorldFull[];
-	players: PlayerFull[];
+	worlds: World[];
+	players: Player[];
 	tileEntities: TileEntity[];
 	apiKey?: string;
 	apiUrl: string;
@@ -244,14 +244,14 @@ class Map extends React.Component<Props, OwnState> {
 	handleObjMouseDown(
 		{ evt }: { evt: React.MouseEvent<HTMLElement> },
 		type: 'player' | 'entity' | 'tile-entity',
-		obj: Entity | PlayerFull | TileEntity
+		obj: Entity | Player | TileEntity
 	) {
 		this.objClicked = true;
 		const loc = this.worldToScreen(obj.location.position);
 
 		let content;
 		if (type === 'player') {
-			content = this.renderPlayerInfo(obj as PlayerFull);
+			content = this.renderPlayerInfo(obj as Player);
 		} else if (type === 'entity') {
 			content = this.renderEntityInfo(obj as Entity);
 		} else if (type === 'tile-entity') {
@@ -266,7 +266,7 @@ class Map extends React.Component<Props, OwnState> {
 		});
 	}
 
-	renderPlayerInfo(player: PlayerFull) {
+	renderPlayerInfo(player: Player) {
 		return (
 			<Segment>
 				<Header>{player.name}</Header>

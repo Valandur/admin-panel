@@ -2,13 +2,7 @@ import { RouterState } from 'react-router-redux';
 import { SemanticICONS } from 'semantic-ui-react';
 
 import { HandleChangeFunc } from '../components/Util';
-import {
-	Entity,
-	PlayerFull,
-	ServerProperty,
-	TileEntity,
-	WorldFull
-} from '../fetch';
+import { Entity, Player, ServerProperty, TileEntity, World } from '../fetch';
 import { ApiState } from '../reducers/api';
 import { CommandState } from '../reducers/command';
 import { DashboardState } from '../reducers/dashboard';
@@ -60,9 +54,9 @@ export interface AppState {
 	cmd: CommandState;
 	entity: DataViewState<Entity>;
 	permission: PermissionState;
-	player: DataViewState<PlayerFull>;
+	player: DataViewState<Player>;
 	plugin: PluginState;
-	world: DataViewState<WorldFull>;
+	world: DataViewState<World>;
 	tileentity: DataViewState<TileEntity>;
 	server_properties: SettingsState;
 

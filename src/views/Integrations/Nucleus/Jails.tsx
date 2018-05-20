@@ -7,14 +7,14 @@ import { AppAction } from '../../../actions';
 import { ListRequestAction, requestList } from '../../../actions/dataview';
 import Location from '../../../components/Location';
 import { renderWorldOptions } from '../../../components/Util';
-import { NucleusNamedLocation, WorldFull } from '../../../fetch';
+import { NucleusNamedLocation, World } from '../../../fetch';
 import { AppState } from '../../../types';
 
 import DataViewFunc from '../../../components/DataView';
 const DataView = DataViewFunc('nucleus/jail', 'name');
 
 interface Props extends reactI18Next.InjectedTranslateProps {
-	worlds: WorldFull[];
+	worlds: World[];
 	requestWorlds: () => ListRequestAction;
 }
 

@@ -18,7 +18,7 @@ import {
 	renderCatalogTypeOptions,
 	renderWorldOptions
 } from '../../components/Util';
-import { BlockOperation, CatalogType, WorldFull } from '../../fetch';
+import { BlockOperation, CatalogType, World } from '../../fetch';
 import { AppState, CatalogTypeKeys, DataViewRef } from '../../types';
 
 import DataViewFunc from '../../components/DataView';
@@ -27,7 +27,7 @@ const DataView = DataViewFunc('block/op', 'uuid', true);
 interface OwnProps {}
 
 interface StateProps {
-	worlds: WorldFull[];
+	worlds: World[];
 	blockTypes: CatalogType[];
 	types: {
 		text: string
