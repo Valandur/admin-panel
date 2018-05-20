@@ -169,12 +169,6 @@ export interface Advancement {
      */
     id: string;
     /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof Advancement
-     */
-    link: string;
-    /**
      * The name of the advancement
      * @type {string}
      * @memberof Advancement
@@ -394,12 +388,6 @@ export interface BlockOperation {
      * @memberof BlockOperation
      */
     error: string;
-    /**
-     * True if this block operation produced errors, false otherwise.
-     * @type {boolean}
-     * @memberof BlockOperation
-     */
-    errored: boolean;
     /**
      * The estimated amount of time remaining until this block operation is complete (in seconds)
      * @type {number}
@@ -755,12 +743,6 @@ export interface Cause {
      * @memberof Cause
      */
     context: { [key: string]: any; };
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof Cause
-     */
-    link: string;
 }
 
 /**
@@ -932,12 +914,6 @@ export interface CommandCall {
      */
     command: string;
     /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof CommandCall
-     */
-    link: string;
-    /**
      * The result of the command execution
      * @type {CommandResult}
      * @memberof CommandCall
@@ -989,12 +965,6 @@ export interface CommandData {
  * @interface CommandResult
  */
 export interface CommandResult {
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof CommandResult
-     */
-    link: string;
     /**
      * The number of blocks that were affected by this command
      * @type {number}
@@ -4976,17 +4946,17 @@ export interface InteractiveMessage {
  */
 export interface InteractiveMessageOption {
     /**
-     * The key of the option (this is sent to the webhook)
+     * The key of the option (this is sent to the WebHook)
      * @type {string}
      * @memberof InteractiveMessageOption
      */
     key: string;
     /**
-     * The value of the option (this is displayed to the player)
+     * 
      * @type {string}
      * @memberof InteractiveMessageOption
      */
-    value: string;
+    value?: string;
 }
 
 /**
@@ -5007,12 +4977,6 @@ export interface Inventory {
      * @memberof Inventory
      */
     itemStacks: Array<ItemStack>;
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof Inventory
-     */
-    link: string;
     /**
      * The name of the inventory
      * @type {string}
@@ -6692,10 +6656,10 @@ export interface MMCTicketsTicket {
     notified?: number;
     /**
      * The sender of this ticket
-     * @type {PlayerFull}
+     * @type {Player}
      * @memberof MMCTicketsTicket
      */
-    sender?: PlayerFull;
+    sender?: Player;
     /**
      * The staff member that was assigned to this ticket
      * @type {Player}
@@ -6733,12 +6697,6 @@ export interface Message {
      * @memberof Message
      */
     content: string;
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof Message
-     */
-    link: string;
     /**
      * The receivers of this message
      * @type {Array&lt;any&gt;}
@@ -7056,11 +7014,35 @@ export interface PickupDelayData {
  */
 export interface Player {
     /**
+     * The player's IP address and port
+     * @type {string}
+     * @memberof Player
+     */
+    address: string;
+    /**
+     * 
+     * @type {Inventory}
+     * @memberof Player
+     */
+    inventory?: Inventory;
+    /**
+     * The latency (in milliseconds) of the player
+     * @type {number}
+     * @memberof Player
+     */
+    latency: number;
+    /**
      * The API link that can be used to obtain more information about this object
      * @type {string}
      * @memberof Player
      */
     link: string;
+    /**
+     * The current Location of the player
+     * @type {Location}
+     * @memberof Player
+     */
+    location: Location;
     /**
      * The players name
      * @type {string}
@@ -7074,11 +7056,1298 @@ export interface Player {
      */
     online: boolean;
     /**
+     * The current rotation of the player
+     * @type {Vector3d}
+     * @memberof Player
+     */
+    rotation: Vector3d;
+    /**
+     * The current scale of the player
+     * @type {Vector3d}
+     * @memberof Player
+     */
+    scale: Vector3d;
+    /**
+     * A list of all unlocked advancements of this player
+     * @type {Array&lt;Advancement&gt;}
+     * @memberof Player
+     */
+    unlockedAdvancements: Array<Advancement>;
+    /**
      * The unique UUID of this player
      * @type {string}
      * @memberof Player
      */
     uuid: string;
+    /**
+     * The current velocity of the player
+     * @type {Vector3d}
+     * @memberof Player
+     */
+    velocity: Vector3d;
+    /**
+     * The item stack that the player is wearing as boots
+     * @type {ItemStack}
+     * @memberof Player
+     */
+    boots?: ItemStack;
+    /**
+     * The item stack that the player is wearing as chestplate
+     * @type {ItemStack}
+     * @memberof Player
+     */
+    chestplate?: ItemStack;
+    /**
+     * The item stack that the player is wearing as a helmet
+     * @type {ItemStack}
+     * @memberof Player
+     */
+    helmet?: ItemStack;
+    /**
+     * The item stack that the player is wearing as leggings
+     * @type {ItemStack}
+     * @memberof Player
+     */
+    leggings?: ItemStack;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    absorption?: number;
+    /**
+     * 
+     * @type {AgeableData}
+     * @memberof Player
+     */
+    age?: AgeableData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    aggressive?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    aiEnabled?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    angerLevel?: number;
+    /**
+     * 
+     * @type {ArmorStandData}
+     * @memberof Player
+     */
+    armorStand?: ArmorStandData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    art?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    attached?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof Player
+     */
+    author?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Player
+     */
+    axis?: Player.AxisEnum;
+    /**
+     * 
+     * @type {BannerData}
+     * @memberof Player
+     */
+    banner?: BannerData;
+    /**
+     * 
+     * @type {BeaconData}
+     * @memberof Player
+     */
+    beacon?: BeaconData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    bigMushroom?: CatalogType;
+    /**
+     * 
+     * @type {BlockState}
+     * @memberof Player
+     */
+    block?: BlockState;
+    /**
+     * 
+     * @type {BreathingData}
+     * @memberof Player
+     */
+    breathing?: BreathingData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    breedable?: boolean;
+    /**
+     * 
+     * @type {BrewingStandData}
+     * @memberof Player
+     */
+    brewingStand?: BrewingStandData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    brick?: CatalogType;
+    /**
+     * 
+     * @type {Career}
+     * @memberof Player
+     */
+    career?: Career;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    charged?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    coal?: CatalogType;
+    /**
+     * 
+     * @type {Color}
+     * @memberof Player
+     */
+    color?: Color;
+    /**
+     * 
+     * @type {CommandData}
+     * @memberof Player
+     */
+    command?: CommandData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    comparator?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof Player
+     */
+    connectedDirection?: Array<Player.ConnectedDirectionEnum>;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    cookedFish?: CatalogType;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    cooldown?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    criticalHit?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    customName?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    damage?: number;
+    /**
+     * 
+     * @type {DamageableData}
+     * @memberof Player
+     */
+    damageable?: DamageableData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    decayable?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    delay?: number;
+    /**
+     * 
+     * @type {DespawnDelayData}
+     * @memberof Player
+     */
+    despawnDelay?: DespawnDelayData;
+    /**
+     * 
+     * @type {string}
+     * @memberof Player
+     */
+    direction?: Player.DirectionEnum;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    dirt?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    disarmed?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    disguisedBlock?: CatalogType;
+    /**
+     * 
+     * @type {string}
+     * @memberof Player
+     */
+    displayName?: string;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    dominantHand?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    doublePlant?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    drops?: boolean;
+    /**
+     * 
+     * @type {DurabilityData}
+     * @memberof Player
+     */
+    durability?: DurabilityData;
+    /**
+     * 
+     * @type {DyeColor}
+     * @memberof Player
+     */
+    dye?: DyeColor;
+    /**
+     * 
+     * @type {Array&lt;Enchantment&gt;}
+     * @memberof Player
+     */
+    enchantments?: Array<Enchantment>;
+    /**
+     * 
+     * @type {EndGatewayData}
+     * @memberof Player
+     */
+    endGateway?: EndGatewayData;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    expOrb?: number;
+    /**
+     * 
+     * @type {ExperienceHolderData}
+     * @memberof Player
+     */
+    experience?: ExperienceHolderData;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    expireTicks?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    explosionRadius?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    extended?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    fallDistance?: number;
+    /**
+     * 
+     * @type {FallingBlockData}
+     * @memberof Player
+     */
+    fallingBlock?: FallingBlockData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    filled?: boolean;
+    /**
+     * 
+     * @type {Array&lt;FireworkEffect&gt;}
+     * @memberof Player
+     */
+    fireworkEffects?: Array<FireworkEffect>;
+    /**
+     * 
+     * @type {FireworkRocketData}
+     * @memberof Player
+     */
+    fireworkRocket?: FireworkRocketData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    fish?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    flammable?: boolean;
+    /**
+     * 
+     * @type {FluidStack}
+     * @memberof Player
+     */
+    fluid?: FluidStack;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    fluidLevel?: number;
+    /**
+     * 
+     * @type {{ [key: string]: Array&lt;FluidStack&gt;; }}
+     * @memberof Player
+     */
+    fluidTanks?: { [key: string]: Array<FluidStack>; };
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    flying?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    flyingAbility?: boolean;
+    /**
+     * 
+     * @type {FoodData}
+     * @memberof Player
+     */
+    food?: FoodData;
+    /**
+     * 
+     * @type {FurnaceData}
+     * @memberof Player
+     */
+    furnace?: FurnaceData;
+    /**
+     * 
+     * @type {FuseData}
+     * @memberof Player
+     */
+    fuse?: FuseData;
+    /**
+     * 
+     * @type {GameMode}
+     * @memberof Player
+     */
+    gameMode?: GameMode;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    generation?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    glowing?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    goldenApple?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    griefs?: boolean;
+    /**
+     * 
+     * @type {GrowthData}
+     * @memberof Player
+     */
+    growth?: GrowthData;
+    /**
+     * 
+     * @type {HealthData}
+     * @memberof Player
+     */
+    health?: HealthData;
+    /**
+     * 
+     * @type {HideData}
+     * @memberof Player
+     */
+    hide?: HideData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    hinge?: CatalogType;
+    /**
+     * 
+     * @type {HorseData}
+     * @memberof Player
+     */
+    horse?: HorseData;
+    /**
+     * 
+     * @type {IgniteableData}
+     * @memberof Player
+     */
+    igniteable?: IgniteableData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    inWall?: boolean;
+    /**
+     * 
+     * @type {InvisibilityData}
+     * @memberof Player
+     */
+    invisibility?: InvisibilityData;
+    /**
+     * 
+     * @type {InvulnerabilityData}
+     * @memberof Player
+     */
+    invulnerability?: InvulnerabilityData;
+    /**
+     * 
+     * @type {JoinData}
+     * @memberof Player
+     */
+    joined?: JoinData;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    knockback?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    layer?: number;
+    /**
+     * 
+     * @type {LeashData}
+     * @memberof Player
+     */
+    leash?: LeashData;
+    /**
+     * 
+     * @type {string}
+     * @memberof Player
+     */
+    lockToken?: string;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    logAxis?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof Player
+     */
+    lore?: Array<string>;
+    /**
+     * 
+     * @type {MinecartBlockData}
+     * @memberof Player
+     */
+    minecartBlock?: MinecartBlockData;
+    /**
+     * 
+     * @type {MobSpawnerData}
+     * @memberof Player
+     */
+    mobSpawner?: MobSpawnerData;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    moisture?: number;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    note?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    occupied?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    ocelot?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    open?: boolean;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof Player
+     */
+    pages?: Array<string>;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof Player
+     */
+    passengers?: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    persists?: boolean;
+    /**
+     * 
+     * @type {PickupDelayData}
+     * @memberof Player
+     */
+    pickupDelay?: PickupDelayData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    pickupRule?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    pigSaddle?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    piston?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;CatalogType&gt;}
+     * @memberof Player
+     */
+    placeableOn?: Array<CatalogType>;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    plant?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    playerCreated?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    playing?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    portion?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;PotionEffect&gt;}
+     * @memberof Player
+     */
+    potionEffects?: Array<PotionEffect>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    powered?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    prismarine?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    quartz?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    rabbit?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    railDirection?: CatalogType;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    redstonePower?: number;
+    /**
+     * 
+     * @type {ItemStack}
+     * @memberof Player
+     */
+    representedItem?: ItemStack;
+    /**
+     * 
+     * @type {string}
+     * @memberof Player
+     */
+    representedPlayer?: string;
+    /**
+     * 
+     * @type {{ [key: string]: Location; }}
+     * @memberof Player
+     */
+    respawnLocations?: { [key: string]: Location; };
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    sand?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    sandStone?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    screaming?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    seamless?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    shatters?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    sheared?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    shrub?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof Player
+     */
+    sign?: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    silent?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    sitting?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof Player
+     */
+    skin?: string;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    skull?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    slab?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    sleeping?: boolean;
+    /**
+     * 
+     * @type {SlimeData}
+     * @memberof Player
+     */
+    slime?: SlimeData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    sneaking?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    snow?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    spawn?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    sprinting?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    stairShape?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;Stat&gt;}
+     * @memberof Player
+     */
+    statistics?: Array<Stat>;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    stone?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;Enchantment&gt;}
+     * @memberof Player
+     */
+    storedEnchantments?: Array<Enchantment>;
+    /**
+     * 
+     * @type {StructureData}
+     * @memberof Player
+     */
+    structure?: StructureData;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    stuckArrows?: number;
+    /**
+     * 
+     * @type {TameableData}
+     * @memberof Player
+     */
+    tamed?: TameableData;
+    /**
+     * 
+     * @type {Vector3d}
+     * @memberof Player
+     */
+    target?: Vector3d;
+    /**
+     * 
+     * @type {Array&lt;TradeOffer&gt;}
+     * @memberof Player
+     */
+    trades?: Array<TradeOffer>;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    tree?: CatalogType;
+    /**
+     * 
+     * @type {VehicleData}
+     * @memberof Player
+     */
+    vehicle?: VehicleData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    wall?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    wet?: boolean;
+    /**
+     * 
+     * @type {WireAttachmentData}
+     * @memberof Player
+     */
+    wires?: WireAttachmentData;
+    /**
+     * 
+     * @type {AcceptsItems}
+     * @memberof Player
+     */
+    acceptsItems?: AcceptsItems;
+    /**
+     * 
+     * @type {Array&lt;PotionEffect&gt;}
+     * @memberof Player
+     */
+    applicableEffect?: Array<PotionEffect>;
+    /**
+     * 
+     * @type {ArmorSlotType}
+     * @memberof Player
+     */
+    armorSlotType?: ArmorSlotType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    armorType?: CatalogType;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    blastResistance?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    burningFuel?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    damageAbsorption?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    efficiency?: number;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    equipmentType?: CatalogType;
+    /**
+     * 
+     * @type {EquipmentSlotType}
+     * @memberof Player
+     */
+    equiptmentSlotType?: EquipmentSlotType;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    eyeHeight?: number;
+    /**
+     * 
+     * @type {Vector3d}
+     * @memberof Player
+     */
+    eyeLocation?: Vector3d;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    fluidTemperature?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    fluidViscosity?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    foodRestoration?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    fullBlockSelectionBox?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    gravityAffected?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    groundLuminance?: number;
+    /**
+     * 
+     * @type {GuiIdProperty}
+     * @memberof Player
+     */
+    guiId?: GuiIdProperty;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    hardness?: number;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    heldItem?: CatalogType;
+    /**
+     * 
+     * @type {Identifiable}
+     * @memberof Player
+     */
+    identifiable?: Identifiable;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    indirectlyPowered?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    instrument?: CatalogType;
+    /**
+     * 
+     * @type {InventoryCapacity}
+     * @memberof Player
+     */
+    inventoryCapacity?: InventoryCapacity;
+    /**
+     * 
+     * @type {InventoryDimension}
+     * @memberof Player
+     */
+    inventoryDimension?: InventoryDimension;
+    /**
+     * 
+     * @type {InventoryTitle}
+     * @memberof Player
+     */
+    inventoryTitle?: InventoryTitle;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    lightEmission?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Player
+     */
+    matter?: Player.MatterEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    passable?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    record?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    replaceable?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    saturationProperty?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    skyLuminance?: number;
+    /**
+     * 
+     * @type {SlotIndex}
+     * @memberof Player
+     */
+    slotIndex?: SlotIndex;
+    /**
+     * 
+     * @type {SlotPos}
+     * @memberof Player
+     */
+    slotPos?: SlotPos;
+    /**
+     * 
+     * @type {SlotSide}
+     * @memberof Player
+     */
+    slotSide?: SlotSide;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    smeltable?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    solidCube?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    statisticsTracked?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    surrogateBlock?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    temperature?: number;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Player
+     */
+    toolType?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Player
+     */
+    unbreakable?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Player
+     */
+    useLimit?: number;
+}
+
+/**
+ * @export
+ * @namespace Player
+ */
+export namespace Player {
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum AxisEnum {
+        X = <any> 'X',
+        Y = <any> 'Y',
+        Z = <any> 'Z'
+    }
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum ConnectedDirectionEnum {
+        NORTH = <any> 'NORTH',
+        NORTHNORTHEAST = <any> 'NORTH_NORTHEAST',
+        NORTHEAST = <any> 'NORTHEAST',
+        EASTNORTHEAST = <any> 'EAST_NORTHEAST',
+        EAST = <any> 'EAST',
+        EASTSOUTHEAST = <any> 'EAST_SOUTHEAST',
+        SOUTHEAST = <any> 'SOUTHEAST',
+        SOUTHSOUTHEAST = <any> 'SOUTH_SOUTHEAST',
+        SOUTH = <any> 'SOUTH',
+        SOUTHSOUTHWEST = <any> 'SOUTH_SOUTHWEST',
+        SOUTHWEST = <any> 'SOUTHWEST',
+        WESTSOUTHWEST = <any> 'WEST_SOUTHWEST',
+        WEST = <any> 'WEST',
+        WESTNORTHWEST = <any> 'WEST_NORTHWEST',
+        NORTHWEST = <any> 'NORTHWEST',
+        NORTHNORTHWEST = <any> 'NORTH_NORTHWEST',
+        UP = <any> 'UP',
+        DOWN = <any> 'DOWN',
+        NONE = <any> 'NONE'
+    }
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum DirectionEnum {
+        NORTH = <any> 'NORTH',
+        NORTHNORTHEAST = <any> 'NORTH_NORTHEAST',
+        NORTHEAST = <any> 'NORTHEAST',
+        EASTNORTHEAST = <any> 'EAST_NORTHEAST',
+        EAST = <any> 'EAST',
+        EASTSOUTHEAST = <any> 'EAST_SOUTHEAST',
+        SOUTHEAST = <any> 'SOUTHEAST',
+        SOUTHSOUTHEAST = <any> 'SOUTH_SOUTHEAST',
+        SOUTH = <any> 'SOUTH',
+        SOUTHSOUTHWEST = <any> 'SOUTH_SOUTHWEST',
+        SOUTHWEST = <any> 'SOUTHWEST',
+        WESTSOUTHWEST = <any> 'WEST_SOUTHWEST',
+        WEST = <any> 'WEST',
+        WESTNORTHWEST = <any> 'WEST_NORTHWEST',
+        NORTHWEST = <any> 'NORTHWEST',
+        NORTHNORTHWEST = <any> 'NORTH_NORTHWEST',
+        UP = <any> 'UP',
+        DOWN = <any> 'DOWN',
+        NONE = <any> 'NONE'
+    }
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum MatterEnum {
+        SOLID = <any> 'SOLID',
+        LIQUID = <any> 'LIQUID',
+        GAS = <any> 'GAS'
+    }
 }
 
 /**
@@ -7194,12 +8463,6 @@ export interface PluginDependency {
      * @memberof PluginDependency
      */
     id: string;
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof PluginDependency
-     */
-    link: string;
     /**
      * The load order of the original plugin in relation to the dependency
      * @type {string}
@@ -9887,11 +11150,71 @@ export interface WireAttachmentData {
  */
 export interface World {
     /**
+     * True if commands are allowed to be executed in this world, false otherwise
+     * @type {boolean}
+     * @memberof World
+     */
+    allowCommands: boolean;
+    /**
+     * The border of the world
+     * @type {WorldBorder}
+     * @memberof World
+     */
+    border: WorldBorder;
+    /**
+     * The difficulty of the world
+     * @type {CatalogTypeDifficulty}
+     * @memberof World
+     */
+    difficulty: CatalogTypeDifficulty;
+    /**
+     * The dimension of the world
+     * @type {CatalogTypeDimensionType}
+     * @memberof World
+     */
+    dimensionType: CatalogTypeDimensionType;
+    /**
+     * 
+     * @type {GameMode}
+     * @memberof World
+     */
+    gameMode?: GameMode;
+    /**
+     * A map of world rule names to values
+     * @type {{ [key: string]: string; }}
+     * @memberof World
+     */
+    gameRules: { [key: string]: string; };
+    /**
+     * True if bonus chests are generated for this world, false otherwise
+     * @type {boolean}
+     * @memberof World
+     */
+    generateBonusChests: boolean;
+    /**
+     * The generator type used for this world
+     * @type {CatalogTypeGeneratorType}
+     * @memberof World
+     */
+    generatorType: CatalogTypeGeneratorType;
+    /**
+     * True if the spawn of this world is always kept loaded, false otherwise
+     * @type {boolean}
+     * @memberof World
+     */
+    keepSpawnLoaded: boolean;
+    /**
      * The API link that can be used to obtain more information about this object
      * @type {string}
      * @memberof World
      */
     link: string;
+    /**
+     * True if this world is loaded when the server starts, false otherwise
+     * @type {boolean}
+     * @memberof World
+     */
+    loadOnStartup: boolean;
     /**
      * True if the world is loaded, false otherwise
      * @type {boolean}
@@ -9899,17 +11222,1280 @@ export interface World {
      */
     loaded: boolean;
     /**
+     * True if map specific features are enabled for this world, false otherwise
+     * @type {boolean}
+     * @memberof World
+     */
+    mapFeaturesEnabled: boolean;
+    /**
      * The name of this world
      * @type {string}
      * @memberof World
      */
     name: string;
     /**
+     * The seed of the world
+     * @type {number}
+     * @memberof World
+     */
+    seed: number;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    spawn?: CatalogType;
+    /**
+     * The current time in the world
+     * @type {number}
+     * @memberof World
+     */
+    time: number;
+    /**
      * The unique UUID that identifies this world
      * @type {string}
      * @memberof World
      */
     uuid: string;
+    /**
+     * The current weather in the world
+     * @type {CatalogTypeWeather}
+     * @memberof World
+     */
+    weather: CatalogTypeWeather;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    absorption?: number;
+    /**
+     * 
+     * @type {AgeableData}
+     * @memberof World
+     */
+    age?: AgeableData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    aggressive?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    aiEnabled?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    angerLevel?: number;
+    /**
+     * 
+     * @type {ArmorStandData}
+     * @memberof World
+     */
+    armorStand?: ArmorStandData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    art?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    attached?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof World
+     */
+    author?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof World
+     */
+    axis?: World.AxisEnum;
+    /**
+     * 
+     * @type {BannerData}
+     * @memberof World
+     */
+    banner?: BannerData;
+    /**
+     * 
+     * @type {BeaconData}
+     * @memberof World
+     */
+    beacon?: BeaconData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    bigMushroom?: CatalogType;
+    /**
+     * 
+     * @type {BlockState}
+     * @memberof World
+     */
+    block?: BlockState;
+    /**
+     * 
+     * @type {BreathingData}
+     * @memberof World
+     */
+    breathing?: BreathingData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    breedable?: boolean;
+    /**
+     * 
+     * @type {BrewingStandData}
+     * @memberof World
+     */
+    brewingStand?: BrewingStandData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    brick?: CatalogType;
+    /**
+     * 
+     * @type {Career}
+     * @memberof World
+     */
+    career?: Career;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    charged?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    coal?: CatalogType;
+    /**
+     * 
+     * @type {Color}
+     * @memberof World
+     */
+    color?: Color;
+    /**
+     * 
+     * @type {CommandData}
+     * @memberof World
+     */
+    command?: CommandData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    comparator?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof World
+     */
+    connectedDirection?: Array<World.ConnectedDirectionEnum>;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    cookedFish?: CatalogType;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    cooldown?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    criticalHit?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    customName?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    damage?: number;
+    /**
+     * 
+     * @type {DamageableData}
+     * @memberof World
+     */
+    damageable?: DamageableData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    decayable?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    delay?: number;
+    /**
+     * 
+     * @type {DespawnDelayData}
+     * @memberof World
+     */
+    despawnDelay?: DespawnDelayData;
+    /**
+     * 
+     * @type {string}
+     * @memberof World
+     */
+    direction?: World.DirectionEnum;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    dirt?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    disarmed?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    disguisedBlock?: CatalogType;
+    /**
+     * 
+     * @type {string}
+     * @memberof World
+     */
+    displayName?: string;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    dominantHand?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    doublePlant?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    drops?: boolean;
+    /**
+     * 
+     * @type {DurabilityData}
+     * @memberof World
+     */
+    durability?: DurabilityData;
+    /**
+     * 
+     * @type {DyeColor}
+     * @memberof World
+     */
+    dye?: DyeColor;
+    /**
+     * 
+     * @type {Array&lt;Enchantment&gt;}
+     * @memberof World
+     */
+    enchantments?: Array<Enchantment>;
+    /**
+     * 
+     * @type {EndGatewayData}
+     * @memberof World
+     */
+    endGateway?: EndGatewayData;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    expOrb?: number;
+    /**
+     * 
+     * @type {ExperienceHolderData}
+     * @memberof World
+     */
+    experience?: ExperienceHolderData;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    expireTicks?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    explosionRadius?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    extended?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    fallDistance?: number;
+    /**
+     * 
+     * @type {FallingBlockData}
+     * @memberof World
+     */
+    fallingBlock?: FallingBlockData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    filled?: boolean;
+    /**
+     * 
+     * @type {Array&lt;FireworkEffect&gt;}
+     * @memberof World
+     */
+    fireworkEffects?: Array<FireworkEffect>;
+    /**
+     * 
+     * @type {FireworkRocketData}
+     * @memberof World
+     */
+    fireworkRocket?: FireworkRocketData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    fish?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    flammable?: boolean;
+    /**
+     * 
+     * @type {FluidStack}
+     * @memberof World
+     */
+    fluid?: FluidStack;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    fluidLevel?: number;
+    /**
+     * 
+     * @type {{ [key: string]: Array&lt;FluidStack&gt;; }}
+     * @memberof World
+     */
+    fluidTanks?: { [key: string]: Array<FluidStack>; };
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    flying?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    flyingAbility?: boolean;
+    /**
+     * 
+     * @type {FoodData}
+     * @memberof World
+     */
+    food?: FoodData;
+    /**
+     * 
+     * @type {FurnaceData}
+     * @memberof World
+     */
+    furnace?: FurnaceData;
+    /**
+     * 
+     * @type {FuseData}
+     * @memberof World
+     */
+    fuse?: FuseData;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    generation?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    glowing?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    goldenApple?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    griefs?: boolean;
+    /**
+     * 
+     * @type {GrowthData}
+     * @memberof World
+     */
+    growth?: GrowthData;
+    /**
+     * 
+     * @type {HealthData}
+     * @memberof World
+     */
+    health?: HealthData;
+    /**
+     * 
+     * @type {HideData}
+     * @memberof World
+     */
+    hide?: HideData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    hinge?: CatalogType;
+    /**
+     * 
+     * @type {HorseData}
+     * @memberof World
+     */
+    horse?: HorseData;
+    /**
+     * 
+     * @type {IgniteableData}
+     * @memberof World
+     */
+    igniteable?: IgniteableData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    inWall?: boolean;
+    /**
+     * 
+     * @type {Inventory}
+     * @memberof World
+     */
+    inventory?: Inventory;
+    /**
+     * 
+     * @type {InvisibilityData}
+     * @memberof World
+     */
+    invisibility?: InvisibilityData;
+    /**
+     * 
+     * @type {InvulnerabilityData}
+     * @memberof World
+     */
+    invulnerability?: InvulnerabilityData;
+    /**
+     * 
+     * @type {JoinData}
+     * @memberof World
+     */
+    joined?: JoinData;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    knockback?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    layer?: number;
+    /**
+     * 
+     * @type {LeashData}
+     * @memberof World
+     */
+    leash?: LeashData;
+    /**
+     * 
+     * @type {string}
+     * @memberof World
+     */
+    lockToken?: string;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    logAxis?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof World
+     */
+    lore?: Array<string>;
+    /**
+     * 
+     * @type {MinecartBlockData}
+     * @memberof World
+     */
+    minecartBlock?: MinecartBlockData;
+    /**
+     * 
+     * @type {MobSpawnerData}
+     * @memberof World
+     */
+    mobSpawner?: MobSpawnerData;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    moisture?: number;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    note?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    occupied?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    ocelot?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    open?: boolean;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof World
+     */
+    pages?: Array<string>;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof World
+     */
+    passengers?: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    persists?: boolean;
+    /**
+     * 
+     * @type {PickupDelayData}
+     * @memberof World
+     */
+    pickupDelay?: PickupDelayData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    pickupRule?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    pigSaddle?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    piston?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;CatalogType&gt;}
+     * @memberof World
+     */
+    placeableOn?: Array<CatalogType>;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    plant?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    playerCreated?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    playing?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    portion?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;PotionEffect&gt;}
+     * @memberof World
+     */
+    potionEffects?: Array<PotionEffect>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    powered?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    prismarine?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    quartz?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    rabbit?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    railDirection?: CatalogType;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    redstonePower?: number;
+    /**
+     * 
+     * @type {ItemStack}
+     * @memberof World
+     */
+    representedItem?: ItemStack;
+    /**
+     * 
+     * @type {string}
+     * @memberof World
+     */
+    representedPlayer?: string;
+    /**
+     * 
+     * @type {{ [key: string]: Location; }}
+     * @memberof World
+     */
+    respawnLocations?: { [key: string]: Location; };
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    sand?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    sandStone?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    screaming?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    seamless?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    shatters?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    sheared?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    shrub?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof World
+     */
+    sign?: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    silent?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    sitting?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof World
+     */
+    skin?: string;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    skull?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    slab?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    sleeping?: boolean;
+    /**
+     * 
+     * @type {SlimeData}
+     * @memberof World
+     */
+    slime?: SlimeData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    sneaking?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    snow?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    sprinting?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    stairShape?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;Stat&gt;}
+     * @memberof World
+     */
+    statistics?: Array<Stat>;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    stone?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;Enchantment&gt;}
+     * @memberof World
+     */
+    storedEnchantments?: Array<Enchantment>;
+    /**
+     * 
+     * @type {StructureData}
+     * @memberof World
+     */
+    structure?: StructureData;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    stuckArrows?: number;
+    /**
+     * 
+     * @type {TameableData}
+     * @memberof World
+     */
+    tamed?: TameableData;
+    /**
+     * 
+     * @type {Vector3d}
+     * @memberof World
+     */
+    target?: Vector3d;
+    /**
+     * 
+     * @type {Array&lt;TradeOffer&gt;}
+     * @memberof World
+     */
+    trades?: Array<TradeOffer>;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    tree?: CatalogType;
+    /**
+     * 
+     * @type {VehicleData}
+     * @memberof World
+     */
+    vehicle?: VehicleData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    wall?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    wet?: boolean;
+    /**
+     * 
+     * @type {WireAttachmentData}
+     * @memberof World
+     */
+    wires?: WireAttachmentData;
+    /**
+     * 
+     * @type {AcceptsItems}
+     * @memberof World
+     */
+    acceptsItems?: AcceptsItems;
+    /**
+     * 
+     * @type {Array&lt;PotionEffect&gt;}
+     * @memberof World
+     */
+    applicableEffect?: Array<PotionEffect>;
+    /**
+     * 
+     * @type {ArmorSlotType}
+     * @memberof World
+     */
+    armorSlotType?: ArmorSlotType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    armorType?: CatalogType;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    blastResistance?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    burningFuel?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    damageAbsorption?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    efficiency?: number;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    equipmentType?: CatalogType;
+    /**
+     * 
+     * @type {EquipmentSlotType}
+     * @memberof World
+     */
+    equiptmentSlotType?: EquipmentSlotType;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    eyeHeight?: number;
+    /**
+     * 
+     * @type {Vector3d}
+     * @memberof World
+     */
+    eyeLocation?: Vector3d;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    fluidTemperature?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    fluidViscosity?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    foodRestoration?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    fullBlockSelectionBox?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    gravityAffected?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    groundLuminance?: number;
+    /**
+     * 
+     * @type {GuiIdProperty}
+     * @memberof World
+     */
+    guiId?: GuiIdProperty;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    hardness?: number;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    heldItem?: CatalogType;
+    /**
+     * 
+     * @type {Identifiable}
+     * @memberof World
+     */
+    identifiable?: Identifiable;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    indirectlyPowered?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    instrument?: CatalogType;
+    /**
+     * 
+     * @type {InventoryCapacity}
+     * @memberof World
+     */
+    inventoryCapacity?: InventoryCapacity;
+    /**
+     * 
+     * @type {InventoryDimension}
+     * @memberof World
+     */
+    inventoryDimension?: InventoryDimension;
+    /**
+     * 
+     * @type {InventoryTitle}
+     * @memberof World
+     */
+    inventoryTitle?: InventoryTitle;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    lightEmission?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof World
+     */
+    matter?: World.MatterEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    passable?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    record?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    replaceable?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    saturationProperty?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    skyLuminance?: number;
+    /**
+     * 
+     * @type {SlotIndex}
+     * @memberof World
+     */
+    slotIndex?: SlotIndex;
+    /**
+     * 
+     * @type {SlotPos}
+     * @memberof World
+     */
+    slotPos?: SlotPos;
+    /**
+     * 
+     * @type {SlotSide}
+     * @memberof World
+     */
+    slotSide?: SlotSide;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    smeltable?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    solidCube?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    statisticsTracked?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    surrogateBlock?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    temperature?: number;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof World
+     */
+    toolType?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof World
+     */
+    unbreakable?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof World
+     */
+    useLimit?: number;
+}
+
+/**
+ * @export
+ * @namespace World
+ */
+export namespace World {
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum AxisEnum {
+        X = <any> 'X',
+        Y = <any> 'Y',
+        Z = <any> 'Z'
+    }
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum ConnectedDirectionEnum {
+        NORTH = <any> 'NORTH',
+        NORTHNORTHEAST = <any> 'NORTH_NORTHEAST',
+        NORTHEAST = <any> 'NORTHEAST',
+        EASTNORTHEAST = <any> 'EAST_NORTHEAST',
+        EAST = <any> 'EAST',
+        EASTSOUTHEAST = <any> 'EAST_SOUTHEAST',
+        SOUTHEAST = <any> 'SOUTHEAST',
+        SOUTHSOUTHEAST = <any> 'SOUTH_SOUTHEAST',
+        SOUTH = <any> 'SOUTH',
+        SOUTHSOUTHWEST = <any> 'SOUTH_SOUTHWEST',
+        SOUTHWEST = <any> 'SOUTHWEST',
+        WESTSOUTHWEST = <any> 'WEST_SOUTHWEST',
+        WEST = <any> 'WEST',
+        WESTNORTHWEST = <any> 'WEST_NORTHWEST',
+        NORTHWEST = <any> 'NORTHWEST',
+        NORTHNORTHWEST = <any> 'NORTH_NORTHWEST',
+        UP = <any> 'UP',
+        DOWN = <any> 'DOWN',
+        NONE = <any> 'NONE'
+    }
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum DirectionEnum {
+        NORTH = <any> 'NORTH',
+        NORTHNORTHEAST = <any> 'NORTH_NORTHEAST',
+        NORTHEAST = <any> 'NORTHEAST',
+        EASTNORTHEAST = <any> 'EAST_NORTHEAST',
+        EAST = <any> 'EAST',
+        EASTSOUTHEAST = <any> 'EAST_SOUTHEAST',
+        SOUTHEAST = <any> 'SOUTHEAST',
+        SOUTHSOUTHEAST = <any> 'SOUTH_SOUTHEAST',
+        SOUTH = <any> 'SOUTH',
+        SOUTHSOUTHWEST = <any> 'SOUTH_SOUTHWEST',
+        SOUTHWEST = <any> 'SOUTHWEST',
+        WESTSOUTHWEST = <any> 'WEST_SOUTHWEST',
+        WEST = <any> 'WEST',
+        WESTNORTHWEST = <any> 'WEST_NORTHWEST',
+        NORTHWEST = <any> 'NORTHWEST',
+        NORTHNORTHWEST = <any> 'NORTH_NORTHWEST',
+        UP = <any> 'UP',
+        DOWN = <any> 'DOWN',
+        NONE = <any> 'NONE'
+    }
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum MatterEnum {
+        SOLID = <any> 'SOLID',
+        LIQUID = <any> 'LIQUID',
+        GAS = <any> 'GAS'
+    }
 }
 
 /**
@@ -9943,12 +12529,6 @@ export interface WorldBorder {
      */
     diameter: number;
     /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof WorldBorder
-     */
-    link: string;
-    /**
      * The new diameter of the border, in case it is collapsing/expanding
      * @type {number}
      * @memberof WorldBorder
@@ -9977,6 +12557,42 @@ export interface WorldBorder {
 /**
  * 
  * @export
+ * @interface BlockChangeOperation
+ */
+export interface BlockChangeOperation extends BlockOperation {
+}
+
+/**
+ * @export
+ * @namespace BlockChangeOperation
+ */
+export namespace BlockChangeOperation {
+}
+
+/**
+ * 
+ * @export
+ * @interface BlockGetOperation
+ */
+export interface BlockGetOperation extends BlockOperation {
+    /**
+     * 
+     * @type {Array&lt;Array&lt;Array&lt;BlockState&gt;&gt;&gt;}
+     * @memberof BlockGetOperation
+     */
+    blocks?: Array<Array<Array<BlockState>>>;
+}
+
+/**
+ * @export
+ * @namespace BlockGetOperation
+ */
+export namespace BlockGetOperation {
+}
+
+/**
+ * 
+ * @export
  * @interface ChatMessage
  */
 export interface ChatMessage {
@@ -9986,12 +12602,6 @@ export interface ChatMessage {
      * @memberof ChatMessage
      */
     content: string;
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof ChatMessage
-     */
-    link: string;
     /**
      * The receivers of this message
      * @type {Array&lt;any&gt;}
@@ -10052,2704 +12662,6 @@ export interface HuskyCratesItemReward extends HuskyCratesCrateRewardObject {
  * @namespace HuskyCratesItemReward
  */
 export namespace HuskyCratesItemReward {
-}
-
-/**
- * 
- * @export
- * @interface PlayerFull
- */
-export interface PlayerFull {
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof PlayerFull
-     */
-    link: string;
-    /**
-     * The players name
-     * @type {string}
-     * @memberof PlayerFull
-     */
-    name: string;
-    /**
-     * True if the player is online, false otherwise
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    online: boolean;
-    /**
-     * The unique UUID of this player
-     * @type {string}
-     * @memberof PlayerFull
-     */
-    uuid: string;
-    /**
-     * A list of all unlocked advancements of this player
-     * @type {Array&lt;Advancement&gt;}
-     * @memberof PlayerFull
-     */
-    unlockedAdvancements: Array<Advancement>;
-    /**
-     * The latency (in milliseconds) of the player
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    latency: number;
-    /**
-     * The current rotation of the player
-     * @type {Vector3d}
-     * @memberof PlayerFull
-     */
-    rotation: Vector3d;
-    /**
-     * The current scale of the player
-     * @type {Vector3d}
-     * @memberof PlayerFull
-     */
-    scale: Vector3d;
-    /**
-     * The current velocity of the player
-     * @type {Vector3d}
-     * @memberof PlayerFull
-     */
-    velocity: Vector3d;
-    /**
-     * 
-     * @type {Inventory}
-     * @memberof PlayerFull
-     */
-    inventory?: Inventory;
-    /**
-     * The item stack that the player is wearing as a helmet
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    helmet?: ItemStack;
-    /**
-     * The item stack that the player is wearing as chestplate
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    chestplate?: ItemStack;
-    /**
-     * The item stack that the player is wearing as leggings
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    leggings?: ItemStack;
-    /**
-     * The item stack that the player is wearing as boots
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    boots?: ItemStack;
-    /**
-     * The player's IP address and port
-     * @type {string}
-     * @memberof PlayerFull
-     */
-    address: string;
-    /**
-     * The current Location of the player
-     * @type {Location}
-     * @memberof PlayerFull
-     */
-    location: Location;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    absorption?: number;
-    /**
-     * 
-     * @type {AgeableData}
-     * @memberof PlayerFull
-     */
-    age?: AgeableData;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    aggressive?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    aiEnabled?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    angerLevel?: number;
-    /**
-     * 
-     * @type {ArmorStandData}
-     * @memberof PlayerFull
-     */
-    armorStand?: ArmorStandData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    art?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    attached?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof PlayerFull
-     */
-    author?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PlayerFull
-     */
-    axis?: PlayerFull.AxisEnum;
-    /**
-     * 
-     * @type {BannerData}
-     * @memberof PlayerFull
-     */
-    banner?: BannerData;
-    /**
-     * 
-     * @type {BeaconData}
-     * @memberof PlayerFull
-     */
-    beacon?: BeaconData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    bigMushroom?: CatalogType;
-    /**
-     * 
-     * @type {BlockState}
-     * @memberof PlayerFull
-     */
-    block?: BlockState;
-    /**
-     * 
-     * @type {BreathingData}
-     * @memberof PlayerFull
-     */
-    breathing?: BreathingData;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    breedable?: boolean;
-    /**
-     * 
-     * @type {BrewingStandData}
-     * @memberof PlayerFull
-     */
-    brewingStand?: BrewingStandData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    brick?: CatalogType;
-    /**
-     * 
-     * @type {Career}
-     * @memberof PlayerFull
-     */
-    career?: Career;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    charged?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    coal?: CatalogType;
-    /**
-     * 
-     * @type {Color}
-     * @memberof PlayerFull
-     */
-    color?: Color;
-    /**
-     * 
-     * @type {CommandData}
-     * @memberof PlayerFull
-     */
-    command?: CommandData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    comparator?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;string&gt;}
-     * @memberof PlayerFull
-     */
-    connectedDirection?: Array<PlayerFull.ConnectedDirectionEnum>;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    cookedFish?: CatalogType;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    cooldown?: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    criticalHit?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    customName?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    damage?: number;
-    /**
-     * 
-     * @type {DamageableData}
-     * @memberof PlayerFull
-     */
-    damageable?: DamageableData;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    decayable?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    delay?: number;
-    /**
-     * 
-     * @type {DespawnDelayData}
-     * @memberof PlayerFull
-     */
-    despawnDelay?: DespawnDelayData;
-    /**
-     * 
-     * @type {string}
-     * @memberof PlayerFull
-     */
-    direction?: PlayerFull.DirectionEnum;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    dirt?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    disarmed?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    disguisedBlock?: CatalogType;
-    /**
-     * 
-     * @type {string}
-     * @memberof PlayerFull
-     */
-    displayName?: string;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    dominantHand?: CatalogType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    doublePlant?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    drops?: boolean;
-    /**
-     * 
-     * @type {DurabilityData}
-     * @memberof PlayerFull
-     */
-    durability?: DurabilityData;
-    /**
-     * 
-     * @type {DyeColor}
-     * @memberof PlayerFull
-     */
-    dye?: DyeColor;
-    /**
-     * 
-     * @type {Array&lt;Enchantment&gt;}
-     * @memberof PlayerFull
-     */
-    enchantments?: Array<Enchantment>;
-    /**
-     * 
-     * @type {EndGatewayData}
-     * @memberof PlayerFull
-     */
-    endGateway?: EndGatewayData;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    expOrb?: number;
-    /**
-     * 
-     * @type {ExperienceHolderData}
-     * @memberof PlayerFull
-     */
-    experience?: ExperienceHolderData;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    expireTicks?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    explosionRadius?: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    extended?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    fallDistance?: number;
-    /**
-     * 
-     * @type {FallingBlockData}
-     * @memberof PlayerFull
-     */
-    fallingBlock?: FallingBlockData;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    filled?: boolean;
-    /**
-     * 
-     * @type {Array&lt;FireworkEffect&gt;}
-     * @memberof PlayerFull
-     */
-    fireworkEffects?: Array<FireworkEffect>;
-    /**
-     * 
-     * @type {FireworkRocketData}
-     * @memberof PlayerFull
-     */
-    fireworkRocket?: FireworkRocketData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    fish?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    flammable?: boolean;
-    /**
-     * 
-     * @type {FluidStack}
-     * @memberof PlayerFull
-     */
-    fluid?: FluidStack;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    fluidLevel?: number;
-    /**
-     * 
-     * @type {{ [key: string]: Array&lt;FluidStack&gt;; }}
-     * @memberof PlayerFull
-     */
-    fluidTanks?: { [key: string]: Array<FluidStack>; };
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    flying?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    flyingAbility?: boolean;
-    /**
-     * 
-     * @type {FoodData}
-     * @memberof PlayerFull
-     */
-    food?: FoodData;
-    /**
-     * 
-     * @type {FurnaceData}
-     * @memberof PlayerFull
-     */
-    furnace?: FurnaceData;
-    /**
-     * 
-     * @type {FuseData}
-     * @memberof PlayerFull
-     */
-    fuse?: FuseData;
-    /**
-     * 
-     * @type {GameMode}
-     * @memberof PlayerFull
-     */
-    gameMode?: GameMode;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    generation?: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    glowing?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    goldenApple?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    griefs?: boolean;
-    /**
-     * 
-     * @type {GrowthData}
-     * @memberof PlayerFull
-     */
-    growth?: GrowthData;
-    /**
-     * 
-     * @type {HealthData}
-     * @memberof PlayerFull
-     */
-    health?: HealthData;
-    /**
-     * 
-     * @type {HideData}
-     * @memberof PlayerFull
-     */
-    hide?: HideData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    hinge?: CatalogType;
-    /**
-     * 
-     * @type {HorseData}
-     * @memberof PlayerFull
-     */
-    horse?: HorseData;
-    /**
-     * 
-     * @type {IgniteableData}
-     * @memberof PlayerFull
-     */
-    igniteable?: IgniteableData;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    inWall?: boolean;
-    /**
-     * 
-     * @type {InvisibilityData}
-     * @memberof PlayerFull
-     */
-    invisibility?: InvisibilityData;
-    /**
-     * 
-     * @type {InvulnerabilityData}
-     * @memberof PlayerFull
-     */
-    invulnerability?: InvulnerabilityData;
-    /**
-     * 
-     * @type {JoinData}
-     * @memberof PlayerFull
-     */
-    joined?: JoinData;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    knockback?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    layer?: number;
-    /**
-     * 
-     * @type {LeashData}
-     * @memberof PlayerFull
-     */
-    leash?: LeashData;
-    /**
-     * 
-     * @type {string}
-     * @memberof PlayerFull
-     */
-    lockToken?: string;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    logAxis?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;string&gt;}
-     * @memberof PlayerFull
-     */
-    lore?: Array<string>;
-    /**
-     * 
-     * @type {MinecartBlockData}
-     * @memberof PlayerFull
-     */
-    minecartBlock?: MinecartBlockData;
-    /**
-     * 
-     * @type {MobSpawnerData}
-     * @memberof PlayerFull
-     */
-    mobSpawner?: MobSpawnerData;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    moisture?: number;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    note?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    occupied?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    ocelot?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    open?: boolean;
-    /**
-     * 
-     * @type {Array&lt;string&gt;}
-     * @memberof PlayerFull
-     */
-    pages?: Array<string>;
-    /**
-     * 
-     * @type {Array&lt;string&gt;}
-     * @memberof PlayerFull
-     */
-    passengers?: Array<string>;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    persists?: boolean;
-    /**
-     * 
-     * @type {PickupDelayData}
-     * @memberof PlayerFull
-     */
-    pickupDelay?: PickupDelayData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    pickupRule?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    pigSaddle?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    piston?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;CatalogType&gt;}
-     * @memberof PlayerFull
-     */
-    placeableOn?: Array<CatalogType>;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    plant?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    playerCreated?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    playing?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    portion?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;PotionEffect&gt;}
-     * @memberof PlayerFull
-     */
-    potionEffects?: Array<PotionEffect>;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    powered?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    prismarine?: CatalogType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    quartz?: CatalogType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    rabbit?: CatalogType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    railDirection?: CatalogType;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    redstonePower?: number;
-    /**
-     * 
-     * @type {ItemStack}
-     * @memberof PlayerFull
-     */
-    representedItem?: ItemStack;
-    /**
-     * 
-     * @type {string}
-     * @memberof PlayerFull
-     */
-    representedPlayer?: string;
-    /**
-     * 
-     * @type {{ [key: string]: Location; }}
-     * @memberof PlayerFull
-     */
-    respawnLocations?: { [key: string]: Location; };
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    sand?: CatalogType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    sandStone?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    screaming?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    seamless?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    shatters?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    sheared?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    shrub?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;string&gt;}
-     * @memberof PlayerFull
-     */
-    sign?: Array<string>;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    silent?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    sitting?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof PlayerFull
-     */
-    skin?: string;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    skull?: CatalogType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    slab?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    sleeping?: boolean;
-    /**
-     * 
-     * @type {SlimeData}
-     * @memberof PlayerFull
-     */
-    slime?: SlimeData;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    sneaking?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    snow?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    spawn?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    sprinting?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    stairShape?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;Stat&gt;}
-     * @memberof PlayerFull
-     */
-    statistics?: Array<Stat>;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    stone?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;Enchantment&gt;}
-     * @memberof PlayerFull
-     */
-    storedEnchantments?: Array<Enchantment>;
-    /**
-     * 
-     * @type {StructureData}
-     * @memberof PlayerFull
-     */
-    structure?: StructureData;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    stuckArrows?: number;
-    /**
-     * 
-     * @type {TameableData}
-     * @memberof PlayerFull
-     */
-    tamed?: TameableData;
-    /**
-     * 
-     * @type {Vector3d}
-     * @memberof PlayerFull
-     */
-    target?: Vector3d;
-    /**
-     * 
-     * @type {Array&lt;TradeOffer&gt;}
-     * @memberof PlayerFull
-     */
-    trades?: Array<TradeOffer>;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    tree?: CatalogType;
-    /**
-     * 
-     * @type {VehicleData}
-     * @memberof PlayerFull
-     */
-    vehicle?: VehicleData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    wall?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    wet?: boolean;
-    /**
-     * 
-     * @type {WireAttachmentData}
-     * @memberof PlayerFull
-     */
-    wires?: WireAttachmentData;
-    /**
-     * 
-     * @type {AcceptsItems}
-     * @memberof PlayerFull
-     */
-    acceptsItems?: AcceptsItems;
-    /**
-     * 
-     * @type {Array&lt;PotionEffect&gt;}
-     * @memberof PlayerFull
-     */
-    applicableEffect?: Array<PotionEffect>;
-    /**
-     * 
-     * @type {ArmorSlotType}
-     * @memberof PlayerFull
-     */
-    armorSlotType?: ArmorSlotType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    armorType?: CatalogType;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    blastResistance?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    burningFuel?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    damageAbsorption?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    efficiency?: number;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    equipmentType?: CatalogType;
-    /**
-     * 
-     * @type {EquipmentSlotType}
-     * @memberof PlayerFull
-     */
-    equiptmentSlotType?: EquipmentSlotType;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    eyeHeight?: number;
-    /**
-     * 
-     * @type {Vector3d}
-     * @memberof PlayerFull
-     */
-    eyeLocation?: Vector3d;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    fluidTemperature?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    fluidViscosity?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    foodRestoration?: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    fullBlockSelectionBox?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    gravityAffected?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    groundLuminance?: number;
-    /**
-     * 
-     * @type {GuiIdProperty}
-     * @memberof PlayerFull
-     */
-    guiId?: GuiIdProperty;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    hardness?: number;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    heldItem?: CatalogType;
-    /**
-     * 
-     * @type {Identifiable}
-     * @memberof PlayerFull
-     */
-    identifiable?: Identifiable;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    indirectlyPowered?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    instrument?: CatalogType;
-    /**
-     * 
-     * @type {InventoryCapacity}
-     * @memberof PlayerFull
-     */
-    inventoryCapacity?: InventoryCapacity;
-    /**
-     * 
-     * @type {InventoryDimension}
-     * @memberof PlayerFull
-     */
-    inventoryDimension?: InventoryDimension;
-    /**
-     * 
-     * @type {InventoryTitle}
-     * @memberof PlayerFull
-     */
-    inventoryTitle?: InventoryTitle;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    lightEmission?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof PlayerFull
-     */
-    matter?: PlayerFull.MatterEnum;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    passable?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    record?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    replaceable?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    saturationProperty?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    skyLuminance?: number;
-    /**
-     * 
-     * @type {SlotIndex}
-     * @memberof PlayerFull
-     */
-    slotIndex?: SlotIndex;
-    /**
-     * 
-     * @type {SlotPos}
-     * @memberof PlayerFull
-     */
-    slotPos?: SlotPos;
-    /**
-     * 
-     * @type {SlotSide}
-     * @memberof PlayerFull
-     */
-    slotSide?: SlotSide;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    smeltable?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    solidCube?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    statisticsTracked?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    surrogateBlock?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    temperature?: number;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof PlayerFull
-     */
-    toolType?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PlayerFull
-     */
-    unbreakable?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof PlayerFull
-     */
-    useLimit?: number;
-}
-
-/**
- * @export
- * @namespace PlayerFull
- */
-export namespace PlayerFull {
-    /**
-     * @export
-     * @enum {string}
-     */
-    export enum AxisEnum {
-        X = <any> 'X',
-        Y = <any> 'Y',
-        Z = <any> 'Z'
-    }
-    /**
-     * @export
-     * @enum {string}
-     */
-    export enum ConnectedDirectionEnum {
-        NORTH = <any> 'NORTH',
-        NORTHNORTHEAST = <any> 'NORTH_NORTHEAST',
-        NORTHEAST = <any> 'NORTHEAST',
-        EASTNORTHEAST = <any> 'EAST_NORTHEAST',
-        EAST = <any> 'EAST',
-        EASTSOUTHEAST = <any> 'EAST_SOUTHEAST',
-        SOUTHEAST = <any> 'SOUTHEAST',
-        SOUTHSOUTHEAST = <any> 'SOUTH_SOUTHEAST',
-        SOUTH = <any> 'SOUTH',
-        SOUTHSOUTHWEST = <any> 'SOUTH_SOUTHWEST',
-        SOUTHWEST = <any> 'SOUTHWEST',
-        WESTSOUTHWEST = <any> 'WEST_SOUTHWEST',
-        WEST = <any> 'WEST',
-        WESTNORTHWEST = <any> 'WEST_NORTHWEST',
-        NORTHWEST = <any> 'NORTHWEST',
-        NORTHNORTHWEST = <any> 'NORTH_NORTHWEST',
-        UP = <any> 'UP',
-        DOWN = <any> 'DOWN',
-        NONE = <any> 'NONE'
-    }
-    /**
-     * @export
-     * @enum {string}
-     */
-    export enum DirectionEnum {
-        NORTH = <any> 'NORTH',
-        NORTHNORTHEAST = <any> 'NORTH_NORTHEAST',
-        NORTHEAST = <any> 'NORTHEAST',
-        EASTNORTHEAST = <any> 'EAST_NORTHEAST',
-        EAST = <any> 'EAST',
-        EASTSOUTHEAST = <any> 'EAST_SOUTHEAST',
-        SOUTHEAST = <any> 'SOUTHEAST',
-        SOUTHSOUTHEAST = <any> 'SOUTH_SOUTHEAST',
-        SOUTH = <any> 'SOUTH',
-        SOUTHSOUTHWEST = <any> 'SOUTH_SOUTHWEST',
-        SOUTHWEST = <any> 'SOUTHWEST',
-        WESTSOUTHWEST = <any> 'WEST_SOUTHWEST',
-        WEST = <any> 'WEST',
-        WESTNORTHWEST = <any> 'WEST_NORTHWEST',
-        NORTHWEST = <any> 'NORTHWEST',
-        NORTHNORTHWEST = <any> 'NORTH_NORTHWEST',
-        UP = <any> 'UP',
-        DOWN = <any> 'DOWN',
-        NONE = <any> 'NONE'
-    }
-    /**
-     * @export
-     * @enum {string}
-     */
-    export enum MatterEnum {
-        SOLID = <any> 'SOLID',
-        LIQUID = <any> 'LIQUID',
-        GAS = <any> 'GAS'
-    }
-}
-
-/**
- * 
- * @export
- * @interface WorldFull
- */
-export interface WorldFull {
-    /**
-     * The API link that can be used to obtain more information about this object
-     * @type {string}
-     * @memberof WorldFull
-     */
-    link: string;
-    /**
-     * True if the world is loaded, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    loaded: boolean;
-    /**
-     * The name of this world
-     * @type {string}
-     * @memberof WorldFull
-     */
-    name: string;
-    /**
-     * The unique UUID that identifies this world
-     * @type {string}
-     * @memberof WorldFull
-     */
-    uuid: string;
-    /**
-     * True if this world is loaded when the server starts, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    loadOnStartup: boolean;
-    /**
-     * True if the spawn of this world is always kept loaded, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    keepSpawnLoaded: boolean;
-    /**
-     * True if commands are allowed to be executed in this world, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    allowCommands: boolean;
-    /**
-     * True if bonus chests are generated for this world, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    generateBonusChests: boolean;
-    /**
-     * True if map specific features are enabled for this world, false otherwise
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    mapFeaturesEnabled: boolean;
-    /**
-     * The border of the world
-     * @type {WorldBorder}
-     * @memberof WorldFull
-     */
-    border: WorldBorder;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    spawn?: CatalogType;
-    /**
-     * The seed of the world
-     * @type {number}
-     * @memberof WorldFull
-     */
-    seed: number;
-    /**
-     * The current time in the world
-     * @type {number}
-     * @memberof WorldFull
-     */
-    time: number;
-    /**
-     * The dimension of the world
-     * @type {CatalogTypeDimensionType}
-     * @memberof WorldFull
-     */
-    dimensionType: CatalogTypeDimensionType;
-    /**
-     * The difficulty of the world
-     * @type {CatalogTypeDifficulty}
-     * @memberof WorldFull
-     */
-    difficulty: CatalogTypeDifficulty;
-    /**
-     * A map of world rule names to values
-     * @type {{ [key: string]: string; }}
-     * @memberof WorldFull
-     */
-    gameRules: { [key: string]: string; };
-    /**
-     * The current weather in the world
-     * @type {CatalogTypeWeather}
-     * @memberof WorldFull
-     */
-    weather: CatalogTypeWeather;
-    /**
-     * The generator type used for this world
-     * @type {CatalogTypeGeneratorType}
-     * @memberof WorldFull
-     */
-    generatorType: CatalogTypeGeneratorType;
-    /**
-     * 
-     * @type {GameMode}
-     * @memberof WorldFull
-     */
-    gameMode?: GameMode;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    absorption?: number;
-    /**
-     * 
-     * @type {AgeableData}
-     * @memberof WorldFull
-     */
-    age?: AgeableData;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    aggressive?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    aiEnabled?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    angerLevel?: number;
-    /**
-     * 
-     * @type {ArmorStandData}
-     * @memberof WorldFull
-     */
-    armorStand?: ArmorStandData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    art?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    attached?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorldFull
-     */
-    author?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorldFull
-     */
-    axis?: WorldFull.AxisEnum;
-    /**
-     * 
-     * @type {BannerData}
-     * @memberof WorldFull
-     */
-    banner?: BannerData;
-    /**
-     * 
-     * @type {BeaconData}
-     * @memberof WorldFull
-     */
-    beacon?: BeaconData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    bigMushroom?: CatalogType;
-    /**
-     * 
-     * @type {BlockState}
-     * @memberof WorldFull
-     */
-    block?: BlockState;
-    /**
-     * 
-     * @type {BreathingData}
-     * @memberof WorldFull
-     */
-    breathing?: BreathingData;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    breedable?: boolean;
-    /**
-     * 
-     * @type {BrewingStandData}
-     * @memberof WorldFull
-     */
-    brewingStand?: BrewingStandData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    brick?: CatalogType;
-    /**
-     * 
-     * @type {Career}
-     * @memberof WorldFull
-     */
-    career?: Career;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    charged?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    coal?: CatalogType;
-    /**
-     * 
-     * @type {Color}
-     * @memberof WorldFull
-     */
-    color?: Color;
-    /**
-     * 
-     * @type {CommandData}
-     * @memberof WorldFull
-     */
-    command?: CommandData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    comparator?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;string&gt;}
-     * @memberof WorldFull
-     */
-    connectedDirection?: Array<WorldFull.ConnectedDirectionEnum>;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    cookedFish?: CatalogType;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    cooldown?: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    criticalHit?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    customName?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    damage?: number;
-    /**
-     * 
-     * @type {DamageableData}
-     * @memberof WorldFull
-     */
-    damageable?: DamageableData;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    decayable?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    delay?: number;
-    /**
-     * 
-     * @type {DespawnDelayData}
-     * @memberof WorldFull
-     */
-    despawnDelay?: DespawnDelayData;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorldFull
-     */
-    direction?: WorldFull.DirectionEnum;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    dirt?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    disarmed?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    disguisedBlock?: CatalogType;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorldFull
-     */
-    displayName?: string;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    dominantHand?: CatalogType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    doublePlant?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    drops?: boolean;
-    /**
-     * 
-     * @type {DurabilityData}
-     * @memberof WorldFull
-     */
-    durability?: DurabilityData;
-    /**
-     * 
-     * @type {DyeColor}
-     * @memberof WorldFull
-     */
-    dye?: DyeColor;
-    /**
-     * 
-     * @type {Array&lt;Enchantment&gt;}
-     * @memberof WorldFull
-     */
-    enchantments?: Array<Enchantment>;
-    /**
-     * 
-     * @type {EndGatewayData}
-     * @memberof WorldFull
-     */
-    endGateway?: EndGatewayData;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    expOrb?: number;
-    /**
-     * 
-     * @type {ExperienceHolderData}
-     * @memberof WorldFull
-     */
-    experience?: ExperienceHolderData;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    expireTicks?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    explosionRadius?: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    extended?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    fallDistance?: number;
-    /**
-     * 
-     * @type {FallingBlockData}
-     * @memberof WorldFull
-     */
-    fallingBlock?: FallingBlockData;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    filled?: boolean;
-    /**
-     * 
-     * @type {Array&lt;FireworkEffect&gt;}
-     * @memberof WorldFull
-     */
-    fireworkEffects?: Array<FireworkEffect>;
-    /**
-     * 
-     * @type {FireworkRocketData}
-     * @memberof WorldFull
-     */
-    fireworkRocket?: FireworkRocketData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    fish?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    flammable?: boolean;
-    /**
-     * 
-     * @type {FluidStack}
-     * @memberof WorldFull
-     */
-    fluid?: FluidStack;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    fluidLevel?: number;
-    /**
-     * 
-     * @type {{ [key: string]: Array&lt;FluidStack&gt;; }}
-     * @memberof WorldFull
-     */
-    fluidTanks?: { [key: string]: Array<FluidStack>; };
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    flying?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    flyingAbility?: boolean;
-    /**
-     * 
-     * @type {FoodData}
-     * @memberof WorldFull
-     */
-    food?: FoodData;
-    /**
-     * 
-     * @type {FurnaceData}
-     * @memberof WorldFull
-     */
-    furnace?: FurnaceData;
-    /**
-     * 
-     * @type {FuseData}
-     * @memberof WorldFull
-     */
-    fuse?: FuseData;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    generation?: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    glowing?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    goldenApple?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    griefs?: boolean;
-    /**
-     * 
-     * @type {GrowthData}
-     * @memberof WorldFull
-     */
-    growth?: GrowthData;
-    /**
-     * 
-     * @type {HealthData}
-     * @memberof WorldFull
-     */
-    health?: HealthData;
-    /**
-     * 
-     * @type {HideData}
-     * @memberof WorldFull
-     */
-    hide?: HideData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    hinge?: CatalogType;
-    /**
-     * 
-     * @type {HorseData}
-     * @memberof WorldFull
-     */
-    horse?: HorseData;
-    /**
-     * 
-     * @type {IgniteableData}
-     * @memberof WorldFull
-     */
-    igniteable?: IgniteableData;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    inWall?: boolean;
-    /**
-     * 
-     * @type {Inventory}
-     * @memberof WorldFull
-     */
-    inventory?: Inventory;
-    /**
-     * 
-     * @type {InvisibilityData}
-     * @memberof WorldFull
-     */
-    invisibility?: InvisibilityData;
-    /**
-     * 
-     * @type {InvulnerabilityData}
-     * @memberof WorldFull
-     */
-    invulnerability?: InvulnerabilityData;
-    /**
-     * 
-     * @type {JoinData}
-     * @memberof WorldFull
-     */
-    joined?: JoinData;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    knockback?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    layer?: number;
-    /**
-     * 
-     * @type {LeashData}
-     * @memberof WorldFull
-     */
-    leash?: LeashData;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorldFull
-     */
-    lockToken?: string;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    logAxis?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;string&gt;}
-     * @memberof WorldFull
-     */
-    lore?: Array<string>;
-    /**
-     * 
-     * @type {MinecartBlockData}
-     * @memberof WorldFull
-     */
-    minecartBlock?: MinecartBlockData;
-    /**
-     * 
-     * @type {MobSpawnerData}
-     * @memberof WorldFull
-     */
-    mobSpawner?: MobSpawnerData;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    moisture?: number;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    note?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    occupied?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    ocelot?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    open?: boolean;
-    /**
-     * 
-     * @type {Array&lt;string&gt;}
-     * @memberof WorldFull
-     */
-    pages?: Array<string>;
-    /**
-     * 
-     * @type {Array&lt;string&gt;}
-     * @memberof WorldFull
-     */
-    passengers?: Array<string>;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    persists?: boolean;
-    /**
-     * 
-     * @type {PickupDelayData}
-     * @memberof WorldFull
-     */
-    pickupDelay?: PickupDelayData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    pickupRule?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    pigSaddle?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    piston?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;CatalogType&gt;}
-     * @memberof WorldFull
-     */
-    placeableOn?: Array<CatalogType>;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    plant?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    playerCreated?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    playing?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    portion?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;PotionEffect&gt;}
-     * @memberof WorldFull
-     */
-    potionEffects?: Array<PotionEffect>;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    powered?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    prismarine?: CatalogType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    quartz?: CatalogType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    rabbit?: CatalogType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    railDirection?: CatalogType;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    redstonePower?: number;
-    /**
-     * 
-     * @type {ItemStack}
-     * @memberof WorldFull
-     */
-    representedItem?: ItemStack;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorldFull
-     */
-    representedPlayer?: string;
-    /**
-     * 
-     * @type {{ [key: string]: Location; }}
-     * @memberof WorldFull
-     */
-    respawnLocations?: { [key: string]: Location; };
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    sand?: CatalogType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    sandStone?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    screaming?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    seamless?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    shatters?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    sheared?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    shrub?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;string&gt;}
-     * @memberof WorldFull
-     */
-    sign?: Array<string>;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    silent?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    sitting?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorldFull
-     */
-    skin?: string;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    skull?: CatalogType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    slab?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    sleeping?: boolean;
-    /**
-     * 
-     * @type {SlimeData}
-     * @memberof WorldFull
-     */
-    slime?: SlimeData;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    sneaking?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    snow?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    sprinting?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    stairShape?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;Stat&gt;}
-     * @memberof WorldFull
-     */
-    statistics?: Array<Stat>;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    stone?: CatalogType;
-    /**
-     * 
-     * @type {Array&lt;Enchantment&gt;}
-     * @memberof WorldFull
-     */
-    storedEnchantments?: Array<Enchantment>;
-    /**
-     * 
-     * @type {StructureData}
-     * @memberof WorldFull
-     */
-    structure?: StructureData;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    stuckArrows?: number;
-    /**
-     * 
-     * @type {TameableData}
-     * @memberof WorldFull
-     */
-    tamed?: TameableData;
-    /**
-     * 
-     * @type {Vector3d}
-     * @memberof WorldFull
-     */
-    target?: Vector3d;
-    /**
-     * 
-     * @type {Array&lt;TradeOffer&gt;}
-     * @memberof WorldFull
-     */
-    trades?: Array<TradeOffer>;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    tree?: CatalogType;
-    /**
-     * 
-     * @type {VehicleData}
-     * @memberof WorldFull
-     */
-    vehicle?: VehicleData;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    wall?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    wet?: boolean;
-    /**
-     * 
-     * @type {WireAttachmentData}
-     * @memberof WorldFull
-     */
-    wires?: WireAttachmentData;
-    /**
-     * 
-     * @type {AcceptsItems}
-     * @memberof WorldFull
-     */
-    acceptsItems?: AcceptsItems;
-    /**
-     * 
-     * @type {Array&lt;PotionEffect&gt;}
-     * @memberof WorldFull
-     */
-    applicableEffect?: Array<PotionEffect>;
-    /**
-     * 
-     * @type {ArmorSlotType}
-     * @memberof WorldFull
-     */
-    armorSlotType?: ArmorSlotType;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    armorType?: CatalogType;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    blastResistance?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    burningFuel?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    damageAbsorption?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    efficiency?: number;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    equipmentType?: CatalogType;
-    /**
-     * 
-     * @type {EquipmentSlotType}
-     * @memberof WorldFull
-     */
-    equiptmentSlotType?: EquipmentSlotType;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    eyeHeight?: number;
-    /**
-     * 
-     * @type {Vector3d}
-     * @memberof WorldFull
-     */
-    eyeLocation?: Vector3d;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    fluidTemperature?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    fluidViscosity?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    foodRestoration?: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    fullBlockSelectionBox?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    gravityAffected?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    groundLuminance?: number;
-    /**
-     * 
-     * @type {GuiIdProperty}
-     * @memberof WorldFull
-     */
-    guiId?: GuiIdProperty;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    hardness?: number;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    heldItem?: CatalogType;
-    /**
-     * 
-     * @type {Identifiable}
-     * @memberof WorldFull
-     */
-    identifiable?: Identifiable;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    indirectlyPowered?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    instrument?: CatalogType;
-    /**
-     * 
-     * @type {InventoryCapacity}
-     * @memberof WorldFull
-     */
-    inventoryCapacity?: InventoryCapacity;
-    /**
-     * 
-     * @type {InventoryDimension}
-     * @memberof WorldFull
-     */
-    inventoryDimension?: InventoryDimension;
-    /**
-     * 
-     * @type {InventoryTitle}
-     * @memberof WorldFull
-     */
-    inventoryTitle?: InventoryTitle;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    lightEmission?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof WorldFull
-     */
-    matter?: WorldFull.MatterEnum;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    passable?: boolean;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    record?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    replaceable?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    saturationProperty?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    skyLuminance?: number;
-    /**
-     * 
-     * @type {SlotIndex}
-     * @memberof WorldFull
-     */
-    slotIndex?: SlotIndex;
-    /**
-     * 
-     * @type {SlotPos}
-     * @memberof WorldFull
-     */
-    slotPos?: SlotPos;
-    /**
-     * 
-     * @type {SlotSide}
-     * @memberof WorldFull
-     */
-    slotSide?: SlotSide;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    smeltable?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    solidCube?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    statisticsTracked?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    surrogateBlock?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    temperature?: number;
-    /**
-     * 
-     * @type {CatalogType}
-     * @memberof WorldFull
-     */
-    toolType?: CatalogType;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof WorldFull
-     */
-    unbreakable?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof WorldFull
-     */
-    useLimit?: number;
-}
-
-/**
- * @export
- * @namespace WorldFull
- */
-export namespace WorldFull {
-    /**
-     * @export
-     * @enum {string}
-     */
-    export enum AxisEnum {
-        X = <any> 'X',
-        Y = <any> 'Y',
-        Z = <any> 'Z'
-    }
-    /**
-     * @export
-     * @enum {string}
-     */
-    export enum ConnectedDirectionEnum {
-        NORTH = <any> 'NORTH',
-        NORTHNORTHEAST = <any> 'NORTH_NORTHEAST',
-        NORTHEAST = <any> 'NORTHEAST',
-        EASTNORTHEAST = <any> 'EAST_NORTHEAST',
-        EAST = <any> 'EAST',
-        EASTSOUTHEAST = <any> 'EAST_SOUTHEAST',
-        SOUTHEAST = <any> 'SOUTHEAST',
-        SOUTHSOUTHEAST = <any> 'SOUTH_SOUTHEAST',
-        SOUTH = <any> 'SOUTH',
-        SOUTHSOUTHWEST = <any> 'SOUTH_SOUTHWEST',
-        SOUTHWEST = <any> 'SOUTHWEST',
-        WESTSOUTHWEST = <any> 'WEST_SOUTHWEST',
-        WEST = <any> 'WEST',
-        WESTNORTHWEST = <any> 'WEST_NORTHWEST',
-        NORTHWEST = <any> 'NORTHWEST',
-        NORTHNORTHWEST = <any> 'NORTH_NORTHWEST',
-        UP = <any> 'UP',
-        DOWN = <any> 'DOWN',
-        NONE = <any> 'NONE'
-    }
-    /**
-     * @export
-     * @enum {string}
-     */
-    export enum DirectionEnum {
-        NORTH = <any> 'NORTH',
-        NORTHNORTHEAST = <any> 'NORTH_NORTHEAST',
-        NORTHEAST = <any> 'NORTHEAST',
-        EASTNORTHEAST = <any> 'EAST_NORTHEAST',
-        EAST = <any> 'EAST',
-        EASTSOUTHEAST = <any> 'EAST_SOUTHEAST',
-        SOUTHEAST = <any> 'SOUTHEAST',
-        SOUTHSOUTHEAST = <any> 'SOUTH_SOUTHEAST',
-        SOUTH = <any> 'SOUTH',
-        SOUTHSOUTHWEST = <any> 'SOUTH_SOUTHWEST',
-        SOUTHWEST = <any> 'SOUTHWEST',
-        WESTSOUTHWEST = <any> 'WEST_SOUTHWEST',
-        WEST = <any> 'WEST',
-        WESTNORTHWEST = <any> 'WEST_NORTHWEST',
-        NORTHWEST = <any> 'NORTHWEST',
-        NORTHNORTHWEST = <any> 'NORTH_NORTHWEST',
-        UP = <any> 'UP',
-        DOWN = <any> 'DOWN',
-        NONE = <any> 'NONE'
-    }
-    /**
-     * @export
-     * @enum {string}
-     */
-    export enum MatterEnum {
-        SOLID = <any> 'SOLID',
-        LIQUID = <any> 'LIQUID',
-        GAS = <any> 'GAS'
-    }
 }
 
 
@@ -20200,7 +20112,7 @@ export const PlayerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlayer(player: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PlayerFull> {
+        getPlayer(player: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Player> {
             const localVarFetchArgs = PlayerApiFetchParamCreator(configuration).getPlayer(player, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -20221,7 +20133,7 @@ export const PlayerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listPlayers(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<PlayerFull>> {
+        listPlayers(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<Player>> {
             const localVarFetchArgs = PlayerApiFetchParamCreator(configuration).listPlayers(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -20244,7 +20156,7 @@ export const PlayerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyPlayer(player: string, body?: UpdatePlayerRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PlayerFull> {
+        modifyPlayer(player: string, body?: UpdatePlayerRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Player> {
             const localVarFetchArgs = PlayerApiFetchParamCreator(configuration).modifyPlayer(player, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -22819,7 +22731,7 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key
+         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.**   
          * @summary Check info
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -22833,6 +22745,22 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
 
             if (details !== undefined) {
                 localVarQueryParameter['details'] = details;
@@ -23184,7 +23112,7 @@ export const UserApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key
+         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.**   
          * @summary Check info
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -23348,7 +23276,7 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
             return UserApiFp(configuration).deleteUser(name, details, accept, pretty, options)(fetch, basePath);
         },
         /**
-         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key
+         * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.**   
          * @summary Check info
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
          * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -23463,7 +23391,7 @@ export class UserApi extends BaseAPI {
     }
 
     /**
-     * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key
+     * Checks to see if the passed api key is still valid and retrieves the user info and permissions associated with this key     **Required permissions:**    - **user.**   
      * @summary Check info
      * @param {} [details] Add to include additional details, omit or false otherwise
      * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
@@ -24711,7 +24639,7 @@ export const WorldApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWorld(body?: CreateWorldRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WorldFull> {
+        createWorld(body?: CreateWorldRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<World> {
             const localVarFetchArgs = WorldApiFetchParamCreator(configuration).createWorld(body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -24733,7 +24661,7 @@ export const WorldApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteWorld(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WorldFull> {
+        deleteWorld(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<World> {
             const localVarFetchArgs = WorldApiFetchParamCreator(configuration).deleteWorld(world, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -24778,7 +24706,7 @@ export const WorldApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWorld(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WorldFull> {
+        getWorld(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<World> {
             const localVarFetchArgs = WorldApiFetchParamCreator(configuration).getWorld(world, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -24799,7 +24727,7 @@ export const WorldApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listWorlds(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<WorldFull>> {
+        listWorlds(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<World>> {
             const localVarFetchArgs = WorldApiFetchParamCreator(configuration).listWorlds(details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -24822,7 +24750,7 @@ export const WorldApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        modifyWorld(world: string, body?: UpdateWorldRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<WorldFull> {
+        modifyWorld(world: string, body?: UpdateWorldRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<World> {
             const localVarFetchArgs = WorldApiFetchParamCreator(configuration).modifyWorld(world, body, details, accept, pretty, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {

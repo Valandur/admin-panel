@@ -1,10 +1,10 @@
 import { AppAction } from '../actions';
 import { TypeKeys } from '../actions/player';
-import { PlayerFull } from '../fetch';
+import { Player } from '../fetch';
 
 import { DataViewState } from './dataview';
 
-const initialState: DataViewState<PlayerFull> = {
+const initialState: DataViewState<Player> = {
 	creating: false,
 	filter: {},
 	list: [],

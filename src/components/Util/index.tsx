@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { CheckboxProps, Icon, InputProps, Label } from 'semantic-ui-react';
 
-import { CatalogType, WorldFull } from '../../fetch';
+import { CatalogType, World } from '../../fetch';
 import { PermissionTree } from '../../types';
 
 // Format a number to a certain accuracy as a ratio
@@ -129,7 +129,7 @@ export function renderCatalogTypeOptions(
 
 // Render worlds as dropdown options
 export function renderWorldOptions(
-	worlds: WorldFull[] | undefined
+	worlds: World[] | undefined
 ): { value: string; text: string }[] {
 	if (!worlds) {
 		return [];
