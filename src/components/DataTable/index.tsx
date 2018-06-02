@@ -120,6 +120,8 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 		};
 
 		const _t = this.props.t;
+		const editable = _.some(list, canEdit);
+		const deletable = _.some(list, canDelete);
 
 		return (
 			<div style={{ marginTop: '2em' }}>
@@ -132,9 +134,9 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 				<Table striped={true} stackable>
 					<TableHeader
 						fields={fields}
-						hasActions={typeof actions !== 'undefined'}
-						canEdit={_.some(list, canEdit)}
-						canDelete={_.some(list, canDelete)}
+						hasActions={typeof actions !== typeof undefined}
+						canEdit={editable}
+						canDelete={deletable}
 						t={_t}
 					/>
 					<Table.Body>
@@ -143,6 +145,7 @@ class DataTable<T> extends React.Component<Props<T>, OwnState> {
 								key={this.props.idFunc(obj)}
 								obj={obj}
 								tableRef={thisRef}
+								actionable={editable || deletable}
 								canEdit={canEdit}
 								canDelete={canDelete}
 								editing={this.props.isEditing(obj)}

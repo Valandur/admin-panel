@@ -39,6 +39,9 @@ const Plugins = load(() => import('../../views/Plugins'));
 const ServerSettings = load(() => import('../../views/ServerSettings'));
 const Users = load(() => import('../../views/Users'));
 
+const CmdScheduler = load(() =>
+	import('../../views/Integrations/CmdScheduler')
+);
 const HuskyCratesCrates = load(() =>
 	import('../../views/Integrations/HuskyCrates/Crates')
 );
@@ -148,6 +151,24 @@ export const views: Array<ViewDefinition> = [
 		component: Users
 	},
 
+	// ----------------
+	//   Integrations
+	// ----------------
+	{
+		title: 'CmdScheduler',
+		path: '/cmd-scheduler',
+		perms: ['cmd-scheduler'],
+		servlets: ['/cmd-scheduler'],
+		views: [
+			{
+				title: 'Commands',
+				path: '/cmd-scheduler',
+				icon: 'calendar',
+				perms: ['cmd-scheduler', 'list'],
+				component: CmdScheduler
+			}
+		]
+	},
 	{
 		title: 'HuskyCrates',
 		path: '/husky-crates',

@@ -1000,6 +1000,32 @@ export interface CommandResult {
 /**
  * 
  * @export
+ * @interface CommandTask
+ */
+export interface CommandTask {
+    /**
+     * The command that is executed
+     * @type {string}
+     * @memberof CommandTask
+     */
+    command?: string;
+    /**
+     * The name of this task
+     * @type {string}
+     * @memberof CommandTask
+     */
+    name?: string;
+    /**
+     * The command that is executed
+     * @type {Schedule}
+     * @memberof CommandTask
+     */
+    schedule?: Schedule;
+}
+
+/**
+ * 
+ * @export
  * @interface CreateBlockOperationRequest
  */
 export interface CreateBlockOperationRequest {
@@ -8626,6 +8652,26 @@ export interface RedProtectRegion {
 /**
  * 
  * @export
+ * @interface Schedule
+ */
+export interface Schedule {
+    /**
+     * 
+     * @type {number}
+     * @memberof Schedule
+     */
+    delay?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Schedule
+     */
+    interval?: number;
+}
+
+/**
+ * 
+ * @export
  * @interface ServerInfo
  */
 export interface ServerInfo {
@@ -14031,6 +14077,143 @@ export class ChunkApi extends BaseAPI {
      */
     public listChunks(world: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
         return ChunkApiFp(this.configuration).listChunks(world, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+}
+
+/**
+ * CmdSchedulerApi - fetch parameter creator
+ * @export
+ */
+export const CmdSchedulerApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Gets a list of all the registered tasks.     **Required permissions:**    - **cmd-scheduler.list**   
+         * @summary List tasks
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listTasks(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            const localVarPath = `/cmd-scheduler`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CmdSchedulerApi - functional programming interface
+ * @export
+ */
+export const CmdSchedulerApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * Gets a list of all the registered tasks.     **Required permissions:**    - **cmd-scheduler.list**   
+         * @summary List tasks
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listTasks(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<CommandTask>> {
+            const localVarFetchArgs = CmdSchedulerApiFetchParamCreator(configuration).listTasks(details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * CmdSchedulerApi - factory interface
+ * @export
+ */
+export const CmdSchedulerApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * Gets a list of all the registered tasks.     **Required permissions:**    - **cmd-scheduler.list**   
+         * @summary List tasks
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listTasks(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return CmdSchedulerApiFp(configuration).listTasks(details, accept, pretty, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * CmdSchedulerApi - object-oriented interface
+ * @export
+ * @class CmdSchedulerApi
+ * @extends {BaseAPI}
+ */
+export class CmdSchedulerApi extends BaseAPI {
+    /**
+     * Gets a list of all the registered tasks.     **Required permissions:**    - **cmd-scheduler.list**   
+     * @summary List tasks
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CmdSchedulerApi
+     */
+    public listTasks(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return CmdSchedulerApiFp(this.configuration).listTasks(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }

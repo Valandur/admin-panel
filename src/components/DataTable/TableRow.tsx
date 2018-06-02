@@ -7,6 +7,7 @@ import { get, HandleChangeFunc } from '../Util';
 export interface Props<T> extends reactI18Next.InjectedTranslateProps {
 	obj: T;
 	tableRef: DataTableRef;
+	actionable: boolean;
 	canEdit?: (data: T) => boolean;
 	canDelete?: (data: T) => boolean;
 	editing: boolean;
@@ -62,6 +63,7 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 			actions,
 			fields,
 			obj,
+			actionable,
 			canEdit,
 			canDelete,
 			editing,
@@ -85,7 +87,7 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 								: get(obj, field.name)}
 					</Table.Cell>
 				))}
-				{actions || canEdit || canDelete ? (
+				{actions || actionable ? (
 					<Table.Cell collapsing>
 						{_canEdit && editing ? (
 							[
@@ -136,7 +138,7 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 								<Icon name="trash" /> {this.props.t('Remove')}
 							</Button>
 						)}
-						{actions && actions(obj, tableRef)}
+						{actions ? actions(obj, tableRef) : null}
 					</Table.Cell>
 				) : null}
 			</Table.Row>
