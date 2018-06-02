@@ -102,6 +102,8 @@ class Permissions extends React.Component<Props, OwnState> {
 										list={this.props.subjects}
 										idFunc={(subj: Subject) => subj.id}
 										isEditing={(subj: Subject) => false}
+										canEdit={() => false}
+										canDelete={() => false}
 										fields={{
 											id: {
 												name: 'id',

@@ -88,7 +88,7 @@ class Main extends React.Component {
 		}
 
 		return (
-			<div>
+			<>
 				<Provider store={store}>
 					<ConnectedRouter history={history} basename={window.config.basePath}>
 						<Switch>
@@ -118,7 +118,7 @@ class Main extends React.Component {
 						store.dispatch(saveNotifRef(ref))
 					}
 				/>
-			</div>
+			</>
 		);
 	}
 }
