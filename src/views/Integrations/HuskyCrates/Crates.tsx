@@ -2,7 +2,8 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
 import { Trans, translate } from 'react-i18next';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import {
 	Button,
 	Dropdown,
@@ -258,7 +259,7 @@ class Crates extends React.Component<Props, OwnState> {
 
 	renderRewards(crate: HuskyCratesCrate) {
 		const tc = _.sumBy(crate.rewards, 'chance');
-		const fmt = (chance: number) => (chance / tc * 100).toFixed(3) + '%';
+		const fmt = (chance: number) => ((chance / tc) * 100).toFixed(3) + '%';
 
 		return (
 			<Table compact size="small">
@@ -478,6 +479,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('Integrations.HuskyCrates')(Crates)
-);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(translate('Integrations.HuskyCrates')(Crates));

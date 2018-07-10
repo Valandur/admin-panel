@@ -3,7 +3,7 @@ import * as React from 'react';
 import { translate } from 'react-i18next';
 import { Accordion, Button, Radio } from 'semantic-ui-react';
 
-import { ItemStack } from '../../fetch';
+import { Inventory, ItemStack } from '../../fetch';
 import ItemStackComp from '../ItemStack';
 
 const customizer: (
@@ -17,7 +17,7 @@ const customizer: (
 };
 
 export interface AppProps extends reactI18Next.InjectedTranslateProps {
-	items: ItemStack[];
+	inventory: Inventory;
 	dontStack?: boolean;
 	stackOption?: boolean;
 	dontCollapse?: boolean;
@@ -28,7 +28,7 @@ interface AppState {
 	stacked: boolean;
 }
 
-class Inventory extends React.Component<AppProps, AppState> {
+class InventoryComp extends React.Component<AppProps, AppState> {
 	constructor(props: AppProps) {
 		super(props);
 
@@ -47,17 +47,17 @@ class Inventory extends React.Component<AppProps, AppState> {
 	}
 
 	render() {
-		const _t = this.props.t;
+		const { t, inventory } = this.props;
 
-		if (this.props.items.length === 0) {
+		if (inventory.slots.length === 0) {
 			return (
 				<Button primary disabled>
-					{_t('EmptyInventory')}
+					{t('EmptyInventory')}
 				</Button>
 			);
 		}
 
-		let items = _.sortBy(this.props.items, 'type.name');
+		let items = _.sortBy(inventory.slots.map(s => s.stack), 'type.name');
 		if (!this.props.dontStack && this.state.stacked) {
 			const itemGroups = _.groupBy(items, 'type.id');
 			items = _.map(itemGroups, itemGroup => {
@@ -96,7 +96,7 @@ class Inventory extends React.Component<AppProps, AppState> {
 					active={this.state.shown}
 					onClick={this.toggle}
 				>
-					{this.state.shown ? _t('HideInventory') : _t('ShowInventory')}
+					{this.state.shown ? t('HideInventory') : t('ShowInventory')}
 				</Accordion.Title>
 				<Accordion.Content active={this.state.shown}>
 					{content}
@@ -106,4 +106,4 @@ class Inventory extends React.Component<AppProps, AppState> {
 	}
 }
 
-export default translate('Inventory')(Inventory);
+export default translate('Inventory')(InventoryComp);

@@ -2,7 +2,8 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
 import { Trans, translate } from 'react-i18next';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import {
 	Button,
 	Form,
@@ -212,7 +213,7 @@ class Worlds extends React.Component<Props, OwnState> {
 										<br />
 										<Icon name="clock" />
 										{moment
-											.unix((world.time % 24000) / 1200 * 86400)
+											.unix(((world.time % 24000) / 1200) * 86400)
 											.format('HH:mm')}
 										<br />
 										<p style={{ fontSize: '0.8em' }}>
@@ -286,26 +287,25 @@ class Worlds extends React.Component<Props, OwnState> {
 											</Table.Row>
 										</Table.Header>
 										<Table.Body>
-											{_.slice(
-												this.state.rules,
-												0,
-												this.state.rules.length / 2
-											).map(rule => (
-												<Table.Row key={rule.name}>
-													<Table.Cell>{rule.name}</Table.Cell>
-													<Table.Cell>
-														{rule.value === 'true' || rule.value === 'false' ? (
-															<Radio
-																toggle
-																checked={rule.value === 'true'}
-																onClick={() => this.toggleRule(rule.name)}
-															/>
-														) : (
-															rule.value
-														)}
-													</Table.Cell>
-												</Table.Row>
-											))}
+											{_
+												.slice(this.state.rules, 0, this.state.rules.length / 2)
+												.map(rule => (
+													<Table.Row key={rule.name}>
+														<Table.Cell>{rule.name}</Table.Cell>
+														<Table.Cell>
+															{rule.value === 'true' ||
+															rule.value === 'false' ? (
+																<Radio
+																	toggle
+																	checked={rule.value === 'true'}
+																	onClick={() => this.toggleRule(rule.name)}
+																/>
+															) : (
+																rule.value
+															)}
+														</Table.Cell>
+													</Table.Row>
+												))}
 										</Table.Body>
 									</Table>
 								</Grid.Column>
@@ -319,25 +319,25 @@ class Worlds extends React.Component<Props, OwnState> {
 											</Table.Row>
 										</Table.Header>
 										<Table.Body>
-											{_.slice(
-												this.state.rules,
-												this.state.rules.length / 2
-											).map(rule => (
-												<Table.Row key={rule.name}>
-													<Table.Cell>{rule.name}</Table.Cell>
-													<Table.Cell>
-														{rule.value === 'true' || rule.value === 'false' ? (
-															<Radio
-																toggle
-																checked={rule.value === 'true'}
-																onClick={() => this.toggleRule(rule.name)}
-															/>
-														) : (
-															rule.value
-														)}
-													</Table.Cell>
-												</Table.Row>
-											))}
+											{_
+												.slice(this.state.rules, this.state.rules.length / 2)
+												.map(rule => (
+													<Table.Row key={rule.name}>
+														<Table.Cell>{rule.name}</Table.Cell>
+														<Table.Cell>
+															{rule.value === 'true' ||
+															rule.value === 'false' ? (
+																<Radio
+																	toggle
+																	checked={rule.value === 'true'}
+																	onClick={() => this.toggleRule(rule.name)}
+																/>
+															) : (
+																rule.value
+															)}
+														</Table.Cell>
+													</Table.Row>
+												))}
 										</Table.Body>
 									</Table>
 								</Grid.Column>
@@ -373,6 +373,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('Worlds')(Worlds)
-);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(translate('Worlds')(Worlds));

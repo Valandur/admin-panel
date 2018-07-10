@@ -1,7 +1,8 @@
 import * as _ from 'lodash';
 import * as React from 'react';
 import { translate } from 'react-i18next';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { Button, Dropdown, Form, Input, Label, Popup } from 'semantic-ui-react';
 
 import {
@@ -230,6 +231,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('Integrations.Nucleus')(Kits)
-);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(translate('Integrations.Nucleus')(Kits));

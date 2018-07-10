@@ -1,7 +1,8 @@
 import * as moment from 'moment';
 import * as React from 'react';
 import { translate } from 'react-i18next';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import { AppAction } from '../../../actions';
 import { MMCTicketsTicket } from '../../../fetch';
@@ -96,6 +97,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('Integrations.MMCTickets')(Tickets)
-);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(translate('Integrations.MMCTickets')(Tickets));

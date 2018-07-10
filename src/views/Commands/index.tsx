@@ -2,7 +2,8 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
 import { translate } from 'react-i18next';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { Form } from 'semantic-ui-react';
 
 import { AppAction } from '../../actions';
@@ -251,6 +252,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('Commands')(Commands)
-);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(translate('Commands')(Commands));

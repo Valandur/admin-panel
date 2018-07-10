@@ -1,6 +1,5 @@
-import { Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Action, MiddlewareAPI } from 'redux';
+import { Action, Dispatch, MiddlewareAPI } from 'redux';
 
 import { AppAction, TypeKeys } from '../actions';
 import { TypeKeys as PreferencesTypeKeys } from '../actions/preferences';

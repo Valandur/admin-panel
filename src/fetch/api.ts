@@ -688,6 +688,26 @@ export interface CatalogTypeGeneratorType {
 /**
  * 
  * @export
+ * @interface CatalogTypeInventoryArchetype
+ */
+export interface CatalogTypeInventoryArchetype {
+    /**
+     * The unique id that indexes this catalog type
+     * @type {string}
+     * @memberof CatalogTypeInventoryArchetype
+     */
+    id: string;
+    /**
+     * The name of the catalog type
+     * @type {string}
+     * @memberof CatalogTypeInventoryArchetype
+     */
+    name: string;
+}
+
+/**
+ * 
+ * @export
  * @interface CatalogTypeItemType
  */
 export interface CatalogTypeItemType {
@@ -701,6 +721,26 @@ export interface CatalogTypeItemType {
      * The name of the catalog type
      * @type {string}
      * @memberof CatalogTypeItemType
+     */
+    name: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface CatalogTypeSoundType
+ */
+export interface CatalogTypeSoundType {
+    /**
+     * The unique id that indexes this catalog type
+     * @type {string}
+     * @memberof CatalogTypeSoundType
+     */
+    id: string;
+    /**
+     * The name of the catalog type
+     * @type {string}
+     * @memberof CatalogTypeSoundType
      */
     name: string;
 }
@@ -4998,17 +5038,17 @@ export interface Inventory {
      */
     capacity: number;
     /**
-     * Gets a list of item stacks in the inventory
-     * @type {Array&lt;ItemStack&gt;}
-     * @memberof Inventory
-     */
-    itemStacks: Array<ItemStack>;
-    /**
      * The name of the inventory
      * @type {string}
      * @memberof Inventory
      */
     name: string;
+    /**
+     * Gets a list of slots in the inventory (with their items)
+     * @type {Array&lt;Slot&gt;}
+     * @memberof Inventory
+     */
+    slots: Array<Slot>;
     /**
      * The total amount of items currently in the inventory
      * @type {number}
@@ -5017,10 +5057,10 @@ export interface Inventory {
     totalItems: number;
     /**
      * The type of the inventory
-     * @type {CatalogType}
+     * @type {CatalogTypeInventoryArchetype}
      * @memberof Inventory
      */
-    type: CatalogType;
+    type: CatalogTypeInventoryArchetype;
 }
 
 /**
@@ -8934,6 +8974,1265 @@ export interface SlimeData {
 /**
  * 
  * @export
+ * @interface Slot
+ */
+export interface Slot {
+    /**
+     * The item stack that is in this slot
+     * @type {ItemStack}
+     * @memberof Slot
+     */
+    stack: ItemStack;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    absorption?: number;
+    /**
+     * 
+     * @type {AgeableData}
+     * @memberof Slot
+     */
+    age?: AgeableData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    aggressive?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    aiEnabled?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    angerLevel?: number;
+    /**
+     * 
+     * @type {ArmorStandData}
+     * @memberof Slot
+     */
+    armorStand?: ArmorStandData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    art?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    attached?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof Slot
+     */
+    author?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Slot
+     */
+    axis?: Slot.AxisEnum;
+    /**
+     * 
+     * @type {BannerData}
+     * @memberof Slot
+     */
+    banner?: BannerData;
+    /**
+     * 
+     * @type {BeaconData}
+     * @memberof Slot
+     */
+    beacon?: BeaconData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    bigMushroom?: CatalogType;
+    /**
+     * 
+     * @type {BlockState}
+     * @memberof Slot
+     */
+    block?: BlockState;
+    /**
+     * 
+     * @type {BreathingData}
+     * @memberof Slot
+     */
+    breathing?: BreathingData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    breedable?: boolean;
+    /**
+     * 
+     * @type {BrewingStandData}
+     * @memberof Slot
+     */
+    brewingStand?: BrewingStandData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    brick?: CatalogType;
+    /**
+     * 
+     * @type {Career}
+     * @memberof Slot
+     */
+    career?: Career;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    charged?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    coal?: CatalogType;
+    /**
+     * 
+     * @type {Color}
+     * @memberof Slot
+     */
+    color?: Color;
+    /**
+     * 
+     * @type {CommandData}
+     * @memberof Slot
+     */
+    command?: CommandData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    comparator?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof Slot
+     */
+    connectedDirection?: Array<Slot.ConnectedDirectionEnum>;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    cookedFish?: CatalogType;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    cooldown?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    criticalHit?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    customName?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    damage?: number;
+    /**
+     * 
+     * @type {DamageableData}
+     * @memberof Slot
+     */
+    damageable?: DamageableData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    decayable?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    delay?: number;
+    /**
+     * 
+     * @type {DespawnDelayData}
+     * @memberof Slot
+     */
+    despawnDelay?: DespawnDelayData;
+    /**
+     * 
+     * @type {string}
+     * @memberof Slot
+     */
+    direction?: Slot.DirectionEnum;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    dirt?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    disarmed?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    disguisedBlock?: CatalogType;
+    /**
+     * 
+     * @type {string}
+     * @memberof Slot
+     */
+    displayName?: string;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    dominantHand?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    doublePlant?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    drops?: boolean;
+    /**
+     * 
+     * @type {DurabilityData}
+     * @memberof Slot
+     */
+    durability?: DurabilityData;
+    /**
+     * 
+     * @type {DyeColor}
+     * @memberof Slot
+     */
+    dye?: DyeColor;
+    /**
+     * 
+     * @type {Array&lt;Enchantment&gt;}
+     * @memberof Slot
+     */
+    enchantments?: Array<Enchantment>;
+    /**
+     * 
+     * @type {EndGatewayData}
+     * @memberof Slot
+     */
+    endGateway?: EndGatewayData;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    expOrb?: number;
+    /**
+     * 
+     * @type {ExperienceHolderData}
+     * @memberof Slot
+     */
+    experience?: ExperienceHolderData;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    expireTicks?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    explosionRadius?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    extended?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    fallDistance?: number;
+    /**
+     * 
+     * @type {FallingBlockData}
+     * @memberof Slot
+     */
+    fallingBlock?: FallingBlockData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    filled?: boolean;
+    /**
+     * 
+     * @type {Array&lt;FireworkEffect&gt;}
+     * @memberof Slot
+     */
+    fireworkEffects?: Array<FireworkEffect>;
+    /**
+     * 
+     * @type {FireworkRocketData}
+     * @memberof Slot
+     */
+    fireworkRocket?: FireworkRocketData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    fish?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    flammable?: boolean;
+    /**
+     * 
+     * @type {FluidStack}
+     * @memberof Slot
+     */
+    fluid?: FluidStack;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    fluidLevel?: number;
+    /**
+     * 
+     * @type {{ [key: string]: Array&lt;FluidStack&gt;; }}
+     * @memberof Slot
+     */
+    fluidTanks?: { [key: string]: Array<FluidStack>; };
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    flying?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    flyingAbility?: boolean;
+    /**
+     * 
+     * @type {FoodData}
+     * @memberof Slot
+     */
+    food?: FoodData;
+    /**
+     * 
+     * @type {FurnaceData}
+     * @memberof Slot
+     */
+    furnace?: FurnaceData;
+    /**
+     * 
+     * @type {FuseData}
+     * @memberof Slot
+     */
+    fuse?: FuseData;
+    /**
+     * 
+     * @type {GameMode}
+     * @memberof Slot
+     */
+    gameMode?: GameMode;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    generation?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    glowing?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    goldenApple?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    griefs?: boolean;
+    /**
+     * 
+     * @type {GrowthData}
+     * @memberof Slot
+     */
+    growth?: GrowthData;
+    /**
+     * 
+     * @type {HealthData}
+     * @memberof Slot
+     */
+    health?: HealthData;
+    /**
+     * 
+     * @type {HideData}
+     * @memberof Slot
+     */
+    hide?: HideData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    hinge?: CatalogType;
+    /**
+     * 
+     * @type {HorseData}
+     * @memberof Slot
+     */
+    horse?: HorseData;
+    /**
+     * 
+     * @type {IgniteableData}
+     * @memberof Slot
+     */
+    igniteable?: IgniteableData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    inWall?: boolean;
+    /**
+     * 
+     * @type {Inventory}
+     * @memberof Slot
+     */
+    inventory?: Inventory;
+    /**
+     * 
+     * @type {InvisibilityData}
+     * @memberof Slot
+     */
+    invisibility?: InvisibilityData;
+    /**
+     * 
+     * @type {InvulnerabilityData}
+     * @memberof Slot
+     */
+    invulnerability?: InvulnerabilityData;
+    /**
+     * 
+     * @type {JoinData}
+     * @memberof Slot
+     */
+    joined?: JoinData;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    knockback?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    layer?: number;
+    /**
+     * 
+     * @type {LeashData}
+     * @memberof Slot
+     */
+    leash?: LeashData;
+    /**
+     * 
+     * @type {string}
+     * @memberof Slot
+     */
+    lockToken?: string;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    logAxis?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof Slot
+     */
+    lore?: Array<string>;
+    /**
+     * 
+     * @type {MinecartBlockData}
+     * @memberof Slot
+     */
+    minecartBlock?: MinecartBlockData;
+    /**
+     * 
+     * @type {MobSpawnerData}
+     * @memberof Slot
+     */
+    mobSpawner?: MobSpawnerData;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    moisture?: number;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    note?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    occupied?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    ocelot?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    open?: boolean;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof Slot
+     */
+    pages?: Array<string>;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof Slot
+     */
+    passengers?: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    persists?: boolean;
+    /**
+     * 
+     * @type {PickupDelayData}
+     * @memberof Slot
+     */
+    pickupDelay?: PickupDelayData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    pickupRule?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    pigSaddle?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    piston?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;CatalogType&gt;}
+     * @memberof Slot
+     */
+    placeableOn?: Array<CatalogType>;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    plant?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    playerCreated?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    playing?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    portion?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;PotionEffect&gt;}
+     * @memberof Slot
+     */
+    potionEffects?: Array<PotionEffect>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    powered?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    prismarine?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    quartz?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    rabbit?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    railDirection?: CatalogType;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    redstonePower?: number;
+    /**
+     * 
+     * @type {ItemStack}
+     * @memberof Slot
+     */
+    representedItem?: ItemStack;
+    /**
+     * 
+     * @type {string}
+     * @memberof Slot
+     */
+    representedPlayer?: string;
+    /**
+     * 
+     * @type {{ [key: string]: Location; }}
+     * @memberof Slot
+     */
+    respawnLocations?: { [key: string]: Location; };
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    sand?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    sandStone?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    screaming?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    seamless?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    shatters?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    sheared?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    shrub?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof Slot
+     */
+    sign?: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    silent?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    sitting?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof Slot
+     */
+    skin?: string;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    skull?: CatalogType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    slab?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    sleeping?: boolean;
+    /**
+     * 
+     * @type {SlimeData}
+     * @memberof Slot
+     */
+    slime?: SlimeData;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    sneaking?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    snow?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    spawn?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    sprinting?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    stairShape?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;Stat&gt;}
+     * @memberof Slot
+     */
+    statistics?: Array<Stat>;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    stone?: CatalogType;
+    /**
+     * 
+     * @type {Array&lt;Enchantment&gt;}
+     * @memberof Slot
+     */
+    storedEnchantments?: Array<Enchantment>;
+    /**
+     * 
+     * @type {StructureData}
+     * @memberof Slot
+     */
+    structure?: StructureData;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    stuckArrows?: number;
+    /**
+     * 
+     * @type {TameableData}
+     * @memberof Slot
+     */
+    tamed?: TameableData;
+    /**
+     * 
+     * @type {Vector3d}
+     * @memberof Slot
+     */
+    target?: Vector3d;
+    /**
+     * 
+     * @type {Array&lt;TradeOffer&gt;}
+     * @memberof Slot
+     */
+    trades?: Array<TradeOffer>;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    tree?: CatalogType;
+    /**
+     * 
+     * @type {VehicleData}
+     * @memberof Slot
+     */
+    vehicle?: VehicleData;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    wall?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    wet?: boolean;
+    /**
+     * 
+     * @type {WireAttachmentData}
+     * @memberof Slot
+     */
+    wires?: WireAttachmentData;
+    /**
+     * 
+     * @type {AcceptsItems}
+     * @memberof Slot
+     */
+    acceptsItems?: AcceptsItems;
+    /**
+     * 
+     * @type {Array&lt;PotionEffect&gt;}
+     * @memberof Slot
+     */
+    applicableEffect?: Array<PotionEffect>;
+    /**
+     * 
+     * @type {ArmorSlotType}
+     * @memberof Slot
+     */
+    armorSlotType?: ArmorSlotType;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    armorType?: CatalogType;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    blastResistance?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    burningFuel?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    damageAbsorption?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    efficiency?: number;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    equipmentType?: CatalogType;
+    /**
+     * 
+     * @type {EquipmentSlotType}
+     * @memberof Slot
+     */
+    equiptmentSlotType?: EquipmentSlotType;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    eyeHeight?: number;
+    /**
+     * 
+     * @type {Vector3d}
+     * @memberof Slot
+     */
+    eyeLocation?: Vector3d;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    fluidTemperature?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    fluidViscosity?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    foodRestoration?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    fullBlockSelectionBox?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    gravityAffected?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    groundLuminance?: number;
+    /**
+     * 
+     * @type {GuiIdProperty}
+     * @memberof Slot
+     */
+    guiId?: GuiIdProperty;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    hardness?: number;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    heldItem?: CatalogType;
+    /**
+     * 
+     * @type {Identifiable}
+     * @memberof Slot
+     */
+    identifiable?: Identifiable;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    indirectlyPowered?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    instrument?: CatalogType;
+    /**
+     * 
+     * @type {InventoryCapacity}
+     * @memberof Slot
+     */
+    inventoryCapacity?: InventoryCapacity;
+    /**
+     * 
+     * @type {InventoryDimension}
+     * @memberof Slot
+     */
+    inventoryDimension?: InventoryDimension;
+    /**
+     * 
+     * @type {InventoryTitle}
+     * @memberof Slot
+     */
+    inventoryTitle?: InventoryTitle;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    lightEmission?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Slot
+     */
+    matter?: Slot.MatterEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    passable?: boolean;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    record?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    replaceable?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    saturationProperty?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    skyLuminance?: number;
+    /**
+     * 
+     * @type {SlotIndex}
+     * @memberof Slot
+     */
+    slotIndex?: SlotIndex;
+    /**
+     * 
+     * @type {SlotPos}
+     * @memberof Slot
+     */
+    slotPos?: SlotPos;
+    /**
+     * 
+     * @type {SlotSide}
+     * @memberof Slot
+     */
+    slotSide?: SlotSide;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    smeltable?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    solidCube?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    statisticsTracked?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    surrogateBlock?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    temperature?: number;
+    /**
+     * 
+     * @type {CatalogType}
+     * @memberof Slot
+     */
+    toolType?: CatalogType;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Slot
+     */
+    unbreakable?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Slot
+     */
+    useLimit?: number;
+}
+
+/**
+ * @export
+ * @namespace Slot
+ */
+export namespace Slot {
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum AxisEnum {
+        X = <any> 'X',
+        Y = <any> 'Y',
+        Z = <any> 'Z'
+    }
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum ConnectedDirectionEnum {
+        NORTH = <any> 'NORTH',
+        NORTHNORTHEAST = <any> 'NORTH_NORTHEAST',
+        NORTHEAST = <any> 'NORTHEAST',
+        EASTNORTHEAST = <any> 'EAST_NORTHEAST',
+        EAST = <any> 'EAST',
+        EASTSOUTHEAST = <any> 'EAST_SOUTHEAST',
+        SOUTHEAST = <any> 'SOUTHEAST',
+        SOUTHSOUTHEAST = <any> 'SOUTH_SOUTHEAST',
+        SOUTH = <any> 'SOUTH',
+        SOUTHSOUTHWEST = <any> 'SOUTH_SOUTHWEST',
+        SOUTHWEST = <any> 'SOUTHWEST',
+        WESTSOUTHWEST = <any> 'WEST_SOUTHWEST',
+        WEST = <any> 'WEST',
+        WESTNORTHWEST = <any> 'WEST_NORTHWEST',
+        NORTHWEST = <any> 'NORTHWEST',
+        NORTHNORTHWEST = <any> 'NORTH_NORTHWEST',
+        UP = <any> 'UP',
+        DOWN = <any> 'DOWN',
+        NONE = <any> 'NONE'
+    }
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum DirectionEnum {
+        NORTH = <any> 'NORTH',
+        NORTHNORTHEAST = <any> 'NORTH_NORTHEAST',
+        NORTHEAST = <any> 'NORTHEAST',
+        EASTNORTHEAST = <any> 'EAST_NORTHEAST',
+        EAST = <any> 'EAST',
+        EASTSOUTHEAST = <any> 'EAST_SOUTHEAST',
+        SOUTHEAST = <any> 'SOUTHEAST',
+        SOUTHSOUTHEAST = <any> 'SOUTH_SOUTHEAST',
+        SOUTH = <any> 'SOUTH',
+        SOUTHSOUTHWEST = <any> 'SOUTH_SOUTHWEST',
+        SOUTHWEST = <any> 'SOUTHWEST',
+        WESTSOUTHWEST = <any> 'WEST_SOUTHWEST',
+        WEST = <any> 'WEST',
+        WESTNORTHWEST = <any> 'WEST_NORTHWEST',
+        NORTHWEST = <any> 'NORTHWEST',
+        NORTHNORTHWEST = <any> 'NORTH_NORTHWEST',
+        UP = <any> 'UP',
+        DOWN = <any> 'DOWN',
+        NONE = <any> 'NONE'
+    }
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum MatterEnum {
+        SOLID = <any> 'SOLID',
+        LIQUID = <any> 'LIQUID',
+        GAS = <any> 'GAS'
+    }
+}
+
+/**
+ * 
+ * @export
  * @interface SlotIndex
  */
 export interface SlotIndex {
@@ -9033,6 +10332,26 @@ export namespace SlotPos {
         LESS = <any> 'LESS',
         LEQUAL = <any> 'LEQUAL'
     }
+}
+
+/**
+ * 
+ * @export
+ * @interface SlotRequest
+ */
+export interface SlotRequest {
+    /**
+     * The index of the slot to change
+     * @type {number}
+     * @memberof SlotRequest
+     */
+    slotIndex?: number;
+    /**
+     * The ItemStack that should be in the slot. null for an empty slot
+     * @type {ItemStack}
+     * @memberof SlotRequest
+     */
+    stack?: ItemStack;
 }
 
 /**
@@ -10718,11 +12037,11 @@ export interface UpdateEntityRequest {
      */
     damage?: DamageRequest;
     /**
-     * The ItemStacks in the inventory of the entity
-     * @type {Array&lt;ItemStack&gt;}
+     * The slots in the inventory of the entity to modify
+     * @type {Array&lt;SlotRequest&gt;}
      * @memberof UpdateEntityRequest
      */
-    inventory?: Array<ItemStack>;
+    inventory?: Array<SlotRequest>;
     /**
      * The position that the entity will be moved to
      * @type {Vector3d}
@@ -10786,17 +12105,23 @@ export interface UpdatePlayerRequest {
      */
     foodLevel?: number;
     /**
+     * The game mode of the player
+     * @type {string}
+     * @memberof UpdatePlayerRequest
+     */
+    gameMode?: string;
+    /**
      * The current amount of health the player has
      * @type {number}
      * @memberof UpdatePlayerRequest
      */
     health?: number;
     /**
-     * The ItemStacks in the inventory of the entity
-     * @type {Array&lt;ItemStack&gt;}
+     * The slots in the inventory of the entity to modify
+     * @type {Array&lt;SlotRequest&gt;}
      * @memberof UpdatePlayerRequest
      */
-    inventory?: Array<ItemStack>;
+    inventory?: Array<SlotRequest>;
     /**
      * The player level
      * @type {number}
@@ -10851,6 +12176,20 @@ export interface UpdatePlayerRequest {
      * @memberof UpdatePlayerRequest
      */
     world?: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface UpdateTileEntityRequest
+ */
+export interface UpdateTileEntityRequest {
+    /**
+     * The ItemStacks in the inventory of the tile entity
+     * @type {Array&lt;ItemStack&gt;}
+     * @memberof UpdateTileEntityRequest
+     */
+    inventory?: Array<ItemStack>;
 }
 
 /**
@@ -14088,6 +15427,66 @@ export class ChunkApi extends BaseAPI {
 export const CmdSchedulerApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Deletes a task.     **Required permissions:**    - **cmd-scheduler.delete**   
+         * @summary Delete a task
+         * @param {string} name The name of the task
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteTask(name: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'name' is not null or undefined
+            if (name === null || name === undefined) {
+                throw new RequiredError('name','Required parameter name was null or undefined when calling deleteTask.');
+            }
+            const localVarPath = `/cmd-scheduler/{name}`
+                .replace(`{${"name"}}`, encodeURIComponent(String(name)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'DELETE' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Gets a list of all the registered tasks.     **Required permissions:**    - **cmd-scheduler.list**   
          * @summary List tasks
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
@@ -14151,6 +15550,28 @@ export const CmdSchedulerApiFetchParamCreator = function (configuration?: Config
 export const CmdSchedulerApiFp = function(configuration?: Configuration) {
     return {
         /**
+         * Deletes a task.     **Required permissions:**    - **cmd-scheduler.delete**   
+         * @summary Delete a task
+         * @param {string} name The name of the task
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteTask(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CommandTask> {
+            const localVarFetchArgs = CmdSchedulerApiFetchParamCreator(configuration).deleteTask(name, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
          * Gets a list of all the registered tasks.     **Required permissions:**    - **cmd-scheduler.list**   
          * @summary List tasks
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
@@ -14181,6 +15602,19 @@ export const CmdSchedulerApiFp = function(configuration?: Configuration) {
 export const CmdSchedulerApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
+         * Deletes a task.     **Required permissions:**    - **cmd-scheduler.delete**   
+         * @summary Delete a task
+         * @param {string} name The name of the task
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteTask(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return CmdSchedulerApiFp(configuration).deleteTask(name, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
          * Gets a list of all the registered tasks.     **Required permissions:**    - **cmd-scheduler.list**   
          * @summary List tasks
          * @param {boolean} [details] Add to include additional details, omit or false otherwise
@@ -14202,6 +15636,21 @@ export const CmdSchedulerApiFactory = function (configuration?: Configuration, f
  * @extends {BaseAPI}
  */
 export class CmdSchedulerApi extends BaseAPI {
+    /**
+     * Deletes a task.     **Required permissions:**    - **cmd-scheduler.delete**   
+     * @summary Delete a task
+     * @param {} name The name of the task
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CmdSchedulerApi
+     */
+    public deleteTask(name: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return CmdSchedulerApiFp(this.configuration).deleteTask(name, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
     /**
      * Gets a list of all the registered tasks.     **Required permissions:**    - **cmd-scheduler.list**   
      * @summary List tasks
@@ -15559,6 +17008,143 @@ export class EntityApi extends BaseAPI {
      */
     public removeEntity(entity: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
         return EntityApiFp(this.configuration).removeEntity(entity, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+}
+
+/**
+ * GWMCratesApi - fetch parameter creator
+ * @export
+ */
+export const GWMCratesApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Get a list of all the managers on the server.     **Required permissions:**    - **gwm-crates.manager.list**   
+         * @summary List managers
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listCrates(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            const localVarPath = `/gwm-crates/manager`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * GWMCratesApi - functional programming interface
+ * @export
+ */
+export const GWMCratesApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * Get a list of all the managers on the server.     **Required permissions:**    - **gwm-crates.manager.list**   
+         * @summary List managers
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listCrates(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<CachedObject>> {
+            const localVarFetchArgs = GWMCratesApiFetchParamCreator(configuration).listCrates(details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * GWMCratesApi - factory interface
+ * @export
+ */
+export const GWMCratesApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * Get a list of all the managers on the server.     **Required permissions:**    - **gwm-crates.manager.list**   
+         * @summary List managers
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listCrates(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return GWMCratesApiFp(configuration).listCrates(details, accept, pretty, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * GWMCratesApi - object-oriented interface
+ * @export
+ * @class GWMCratesApi
+ * @extends {BaseAPI}
+ */
+export class GWMCratesApi extends BaseAPI {
+    /**
+     * Get a list of all the managers on the server.     **Required permissions:**    - **gwm-crates.manager.list**   
+     * @summary List managers
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GWMCratesApi
+     */
+    public listCrates(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return GWMCratesApiFp(this.configuration).listCrates(details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }
@@ -22438,6 +24024,89 @@ export const TileEntityApiFetchParamCreator = function (configuration?: Configur
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Modify the properties of an existing tile entity.     **Required permissions:**    - **tile-entity.modify**   
+         * @summary Modify tile entity
+         * @param {string} world The world the tile entity is in
+         * @param {number} x The x-coordinate of the tile-entity
+         * @param {number} y The y-coordinate of the tile-entity
+         * @param {number} z The z-coordinate of the tile-entity
+         * @param {UpdateTileEntityRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        modifyTileEntity(world: string, x: number, y: number, z: number, body?: UpdateTileEntityRequest, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'world' is not null or undefined
+            if (world === null || world === undefined) {
+                throw new RequiredError('world','Required parameter world was null or undefined when calling modifyTileEntity.');
+            }
+            // verify required parameter 'x' is not null or undefined
+            if (x === null || x === undefined) {
+                throw new RequiredError('x','Required parameter x was null or undefined when calling modifyTileEntity.');
+            }
+            // verify required parameter 'y' is not null or undefined
+            if (y === null || y === undefined) {
+                throw new RequiredError('y','Required parameter y was null or undefined when calling modifyTileEntity.');
+            }
+            // verify required parameter 'z' is not null or undefined
+            if (z === null || z === undefined) {
+                throw new RequiredError('z','Required parameter z was null or undefined when calling modifyTileEntity.');
+            }
+            const localVarPath = `/tile-entity/{world}/{x}/{y}/{z}`
+                .replace(`{${"world"}}`, encodeURIComponent(String(world)))
+                .replace(`{${"x"}}`, encodeURIComponent(String(x)))
+                .replace(`{${"y"}}`, encodeURIComponent(String(y)))
+                .replace(`{${"z"}}`, encodeURIComponent(String(z)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"UpdateTileEntityRequest" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -22524,6 +24193,32 @@ export const TileEntityApiFp = function(configuration?: Configuration) {
                 });
             };
         },
+        /**
+         * Modify the properties of an existing tile entity.     **Required permissions:**    - **tile-entity.modify**   
+         * @summary Modify tile entity
+         * @param {string} world The world the tile entity is in
+         * @param {number} x The x-coordinate of the tile-entity
+         * @param {number} y The y-coordinate of the tile-entity
+         * @param {number} z The z-coordinate of the tile-entity
+         * @param {UpdateTileEntityRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        modifyTileEntity(world: string, x: number, y: number, z: number, body?: UpdateTileEntityRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<TileEntity> {
+            const localVarFetchArgs = TileEntityApiFetchParamCreator(configuration).modifyTileEntity(world, x, y, z, body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
     }
 };
 
@@ -22582,6 +24277,23 @@ export const TileEntityApiFactory = function (configuration?: Configuration, fet
          */
         listTileEntities(world?: string, type?: string, min?: string, max?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
             return TileEntityApiFp(configuration).listTileEntities(world, type, min, max, limit, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Modify the properties of an existing tile entity.     **Required permissions:**    - **tile-entity.modify**   
+         * @summary Modify tile entity
+         * @param {string} world The world the tile entity is in
+         * @param {number} x The x-coordinate of the tile-entity
+         * @param {number} y The y-coordinate of the tile-entity
+         * @param {number} z The z-coordinate of the tile-entity
+         * @param {UpdateTileEntityRequest} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        modifyTileEntity(world: string, x: number, y: number, z: number, body?: UpdateTileEntityRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return TileEntityApiFp(configuration).modifyTileEntity(world, x, y, z, body, details, accept, pretty, options)(fetch, basePath);
         },
     };
 };
@@ -22647,6 +24359,25 @@ export class TileEntityApi extends BaseAPI {
      */
     public listTileEntities(world?: string, type?: string, min?: string, max?: string, limit?: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
         return TileEntityApiFp(this.configuration).listTileEntities(world, type, min, max, limit, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Modify the properties of an existing tile entity.     **Required permissions:**    - **tile-entity.modify**   
+     * @summary Modify tile entity
+     * @param {} world The world the tile entity is in
+     * @param {} x The x-coordinate of the tile-entity
+     * @param {} y The y-coordinate of the tile-entity
+     * @param {} z The z-coordinate of the tile-entity
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TileEntityApi
+     */
+    public modifyTileEntity(world: string, x: number, y: number, z: number, body?: UpdateTileEntityRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return TileEntityApiFp(this.configuration).modifyTileEntity(world, x, y, z, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Line } from 'react-chartjs-2';
 import { Trans, translate } from 'react-i18next';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import {
 	Card,
 	Grid,
@@ -290,6 +291,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('Dashboard')(Dashboard)
-);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(translate('Dashboard')(Dashboard));

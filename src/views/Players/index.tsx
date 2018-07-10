@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Trans, translate } from 'react-i18next';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { Button, Label, Modal, Popup, Progress } from 'semantic-ui-react';
 
 import { AppAction } from '../../actions';
@@ -201,7 +202,7 @@ class Players extends React.Component<Props, OwnState> {
 						</Modal.Header>
 						<Modal.Content>
 							<InventoryComp
-								items={this.state.inventory.itemStacks}
+								inventory={this.state.inventory}
 								dontCollapse={true}
 							/>
 						</Modal.Content>
@@ -226,6 +227,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('Players')(Players)
-);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(translate('Players')(Players));
