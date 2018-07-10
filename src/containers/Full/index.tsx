@@ -2,10 +2,10 @@ import * as _ from 'lodash';
 import * as Raven from 'raven-js';
 import * as React from 'react';
 import { translate } from 'react-i18next';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { Action } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { Button, Message, Segment, Sidebar } from 'semantic-ui-react';
 
 import { AppAction } from '../../actions';

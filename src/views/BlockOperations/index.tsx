@@ -1,7 +1,8 @@
 import * as moment from 'moment';
 import * as React from 'react';
 import { Trans, translate } from 'react-i18next';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import {
 	Button,
 	Dropdown,
@@ -30,8 +31,8 @@ interface StateProps {
 	worlds: World[];
 	blockTypes: CatalogType[];
 	types: {
-		text: string
-		value: BlockOperation.TypeEnum
+		text: string;
+		value: BlockOperation.TypeEnum;
 	}[];
 }
 
@@ -362,6 +363,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('BlockOperations')(BlockOperations)
-);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(translate('BlockOperations')(BlockOperations));

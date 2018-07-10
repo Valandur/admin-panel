@@ -1,7 +1,8 @@
 import * as _ from 'lodash';
 import * as React from 'react';
 import { translate } from 'react-i18next';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { Button, Form, Modal } from 'semantic-ui-react';
 
 import { AppAction } from '../../actions';
@@ -173,6 +174,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('Users')(Users)
-);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(translate('Users')(Users));

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { translate } from 'react-i18next';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { Dispatch } from 'redux';
 import {
 	Button,
 	Dropdown,
@@ -198,6 +199,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('Login')(Login)
-);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(translate('Login')(Login));

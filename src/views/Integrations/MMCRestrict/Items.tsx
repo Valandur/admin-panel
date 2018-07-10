@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { translate } from 'react-i18next';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { Icon, Radio } from 'semantic-ui-react';
 
 import {
@@ -117,6 +118,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('Integrations.MMCRestrict')(Items)
-);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(translate('Integrations.MMCRestrict')(Items));

@@ -1,7 +1,8 @@
 import * as copy from 'copy-to-clipboard';
 import * as React from 'react';
 import { translate } from 'react-i18next';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { Button, Input, List } from 'semantic-ui-react';
 
 import { AppAction } from '../../../actions';
@@ -210,6 +211,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 	return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('Integrations.WebBooks')(Books)
-);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(translate('Integrations.WebBooks')(Books));

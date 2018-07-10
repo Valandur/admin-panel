@@ -2,7 +2,8 @@ import * as _ from 'lodash';
 import Slider from 'rc-slider';
 import * as React from 'react';
 import { Circle, Image, Layer, Line, Stage } from 'react-konva';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import {
 	Button,
 	Dropdown,
@@ -185,11 +186,11 @@ class Map extends React.Component<Props, OwnState> {
 				)
 			},
 			() => {
-				min.x = min.x - min.x % TILE_SIZE - TILE_SIZE;
-				min.z = min.z - min.z % TILE_SIZE - TILE_SIZE;
+				min.x = min.x - (min.x % TILE_SIZE) - TILE_SIZE;
+				min.z = min.z - (min.z % TILE_SIZE) - TILE_SIZE;
 
-				max.x = max.x - max.x % TILE_SIZE + TILE_SIZE;
-				max.z = max.z - max.z % TILE_SIZE + TILE_SIZE;
+				max.x = max.x - (max.x % TILE_SIZE) + TILE_SIZE;
+				max.z = max.z - (max.z % TILE_SIZE) + TILE_SIZE;
 
 				let index = 0;
 				this.timeouts = [];
@@ -270,7 +271,7 @@ class Map extends React.Component<Props, OwnState> {
 		return (
 			<Segment>
 				<Header>{player.name}</Header>
-				{player.inventory && <Inventory items={player.inventory.itemStacks} />}
+				{player.inventory && <Inventory inventory={player.inventory} />}
 				{player.health && (
 					<Progress
 						progress
@@ -623,4 +624,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>): DispatchProps => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Map);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(Map);
