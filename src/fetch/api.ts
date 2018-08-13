@@ -4956,7 +4956,7 @@ export interface InlineResponse501 {
  */
 export interface InteractiveMessage {
     /**
-     * The id of the message. Used for sender of the message to identify responses.
+     * The id of the message. Used to identify responses.
      * @type {string}
      * @memberof InteractiveMessage
      */
@@ -6622,6 +6622,12 @@ export interface MMCRestrictItem {
      * @memberof MMCRestrictItem
      */
     breakingBanned: boolean;
+    /**
+     * True if crafting this item is banned, false otherwise
+     * @type {boolean}
+     * @memberof MMCRestrictItem
+     */
+    craftBanned: boolean;
     /**
      * True if dropping this item is banned, false otherwise
      * @type {boolean}

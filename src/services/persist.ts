@@ -27,6 +27,7 @@ const persist = ({
 
 	switch (action.type) {
 		case TypeKeys.LOGIN_RESPONSE:
+		case TypeKeys.SERVLETS_RESPONSE:
 		case TypeKeys.CHANGE_SERVER:
 			if (window.localStorage) {
 				window.localStorage.setItem('api', formatApi(getState().api));

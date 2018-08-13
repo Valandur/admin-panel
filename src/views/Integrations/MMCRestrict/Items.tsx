@@ -94,6 +94,12 @@ class Items extends React.Component<Props, OwnState> {
 						edit: (ban: MMCRestrictItem, view) =>
 							getEdit(ban, view, 'dropBanned')
 					},
+					craftBanned: {
+						label: _t('Craft'),
+						view: (ban: MMCRestrictItem) => getIcon(ban.craftBanned),
+						edit: (ban: MMCRestrictItem, view) =>
+							getEdit(ban, view, 'craftBanned')
+					},
 					worldBanned: {
 						label: _t('World'),
 						view: (ban: MMCRestrictItem) => getIcon(ban.worldBanned),
