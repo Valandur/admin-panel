@@ -64,7 +64,9 @@ const api = ({
 	const state = getState();
 
 	const makeUrl = (path: string) =>
-		state.api.server.apiUrl +
+		(window.location.protocol === 'https:' && state.api.server.apiUrlHttps
+			? state.api.server.apiUrlHttps
+			: state.api.server.apiUrl) +
 		'/api/v5/' +
 		path +
 		(path.indexOf('?') >= 0 ? '&' : '?') +
