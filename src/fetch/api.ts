@@ -608,6 +608,26 @@ export interface CatalogTypeAdvancementTree {
 /**
  * 
  * @export
+ * @interface CatalogTypeCurrency
+ */
+export interface CatalogTypeCurrency {
+    /**
+     * The unique id that indexes this catalog type
+     * @type {string}
+     * @memberof CatalogTypeCurrency
+     */
+    id: string;
+    /**
+     * The name of the catalog type
+     * @type {string}
+     * @memberof CatalogTypeCurrency
+     */
+    name: string;
+}
+
+/**
+ * 
+ * @export
  * @interface CatalogTypeDifficulty
  */
 export interface CatalogTypeDifficulty {
@@ -641,6 +661,26 @@ export interface CatalogTypeDimensionType {
      * The name of the catalog type
      * @type {string}
      * @memberof CatalogTypeDimensionType
+     */
+    name: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface CatalogTypeEntityType
+ */
+export interface CatalogTypeEntityType {
+    /**
+     * The unique id that indexes this catalog type
+     * @type {string}
+     * @memberof CatalogTypeEntityType
+     */
+    id: string;
+    /**
+     * The name of the catalog type
+     * @type {string}
+     * @memberof CatalogTypeEntityType
      */
     name: string;
 }
@@ -12462,6 +12502,142 @@ export interface VehicleData {
      * @memberof VehicleData
      */
     vehicle: EntitySnapshot;
+}
+
+/**
+ * 
+ * @export
+ * @interface VillagerShopsShop
+ */
+export interface VillagerShopsShop {
+    /**
+     * The minecraft entity type string for this shops visual entity
+     * @type {CatalogTypeEntityType}
+     * @memberof VillagerShopsShop
+     */
+    entityType: CatalogTypeEntityType;
+    /**
+     * The API link that can be used to obtain more information about this object
+     * @type {string}
+     * @memberof VillagerShopsShop
+     */
+    link: string;
+    /**
+     * A very dynamic variant string for vanilla mobs, most variants as in the minecraft wiki should be supported
+     * @type {string}
+     * @memberof VillagerShopsShop
+     */
+    entityVariant?: string;
+    /**
+     * Where the shop is currently located
+     * @type {Location}
+     * @memberof VillagerShopsShop
+     */
+    location?: Location;
+    /**
+     * The escaped shop name
+     * @type {string}
+     * @memberof VillagerShopsShop
+     */
+    name?: string;
+    /**
+     * If this shop is a player shop this conatins the UUID of this shops owner. Omitting this field or setting it to null will remove the player-shop association.
+     * @type {string}
+     * @memberof VillagerShopsShop
+     */
+    owner?: string;
+    /**
+     * The mobs roations around their up-axis
+     * @type {number}
+     * @memberof VillagerShopsShop
+     */
+    rotation?: number;
+    /**
+     * Location where a container should reside for stocking items. Omitting this field or setting it to null will remove the stock container. Having a player-shop without container is undefined behaviour!
+     * @type {Location}
+     * @memberof VillagerShopsShop
+     */
+    stockContainer?: Location;
+    /**
+     * Returns a list of all stock items currently listed. This property is read only.
+     * @type {Array&lt;VillagerShopsStockItem&gt;}
+     * @memberof VillagerShopsShop
+     */
+    stockItems?: Array<VillagerShopsStockItem>;
+    /**
+     * The unique shop identifier; this is not the mob uuid
+     * @type {string}
+     * @memberof VillagerShopsShop
+     */
+    uid?: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface VillagerShopsStockItem
+ */
+export interface VillagerShopsStockItem {
+    /**
+     * The amount of money this stack consts to buy as player
+     * @type {number}
+     * @memberof VillagerShopsStockItem
+     */
+    buyPrice: number;
+    /**
+     * The currency for this item listing
+     * @type {CatalogTypeCurrency}
+     * @memberof VillagerShopsStockItem
+     */
+    currency: CatalogTypeCurrency;
+    /**
+     * Returns wether this shop has a limited stock
+     * @type {boolean}
+     * @memberof VillagerShopsStockItem
+     */
+    hasStock: boolean;
+    /**
+     * The raw ItemStack data for this shop listing
+     * @type {ItemStack}
+     * @memberof VillagerShopsStockItem
+     */
+    item: ItemStack;
+    /**
+     * If this shop has a limited stock, returns how many of these items can be stocked, 0 is unlimited
+     * @type {number}
+     * @memberof VillagerShopsStockItem
+     */
+    maxStock: number;
+    /**
+     * The amount of money this stack earns the player when selling
+     * @type {number}
+     * @memberof VillagerShopsStockItem
+     */
+    sellPrice: number;
+    /**
+     * The shop uuid offering this item listing
+     * @type {string}
+     * @memberof VillagerShopsStockItem
+     */
+    shopId: string;
+    /**
+     * If this shop has a limited stock, returns how many items are stocked, otherwise returns items stack size
+     * @type {number}
+     * @memberof VillagerShopsStockItem
+     */
+    stock: number;
+    /**
+     * The index of this item withing the shops inventory
+     * @type {number}
+     * @memberof VillagerShopsStockItem
+     */
+    id?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VillagerShopsStockItem
+     */
+    link?: string;
 }
 
 /**
@@ -25395,6 +25571,3501 @@ export class UserApi extends BaseAPI {
      */
     public modifyUser(name: string, body?: ModifyUserRequest, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
         return UserApiFp(this.configuration).modifyUser(name, body, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+}
+
+/**
+ * VShopsApi - fetch parameter creator
+ * @export
+ */
+export const VShopsApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Add a item to the shops listing     **Required permissions:**    - **vshop.vshop.item.create**   
+         * @summary Add Shop Item
+         * @param {string} id 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addShopItem(id: string, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling addShopItem.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"VillagerShopsStockItem" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Spawn a new shop with base values; Some values are only set by update     **Required permissions:**    - **vshop.vshop.create**   
+         * @summary Create Shops
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createShop(body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            const localVarPath = `/vshop/shop`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"VillagerShopsShop" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Permanently delete a shop from the server     **Required permissions:**    - **vshop.vshop.delete**   
+         * @summary Delete a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteShop.');
+            }
+            const localVarPath = `/vshop/shop/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'DELETE' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Remove an item from this shop     **Required permissions:**    - **vshop.vshop.item.delete**   
+         * @summary Removes a Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteShopItem.');
+            }
+            // verify required parameter 'item' is not null or undefined
+            if (item === null || item === undefined) {
+                throw new RequiredError('item','Required parameter item was null or undefined when calling deleteShopItem.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item/{item}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"item"}}`, encodeURIComponent(String(item)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'DELETE' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get detailed information about a shop     **Required permissions:**    - **vshop.vshop.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getShop.');
+            }
+            const localVarPath = `/vshop/shop/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get detailed information about a shop item     **Required permissions:**    - **vshop.vshop.item.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getShopItem.');
+            }
+            // verify required parameter 'item' is not null or undefined
+            if (item === null || item === undefined) {
+                throw new RequiredError('item','Required parameter item was null or undefined when calling getShopItem.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item/{item}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"item"}}`, encodeURIComponent(String(item)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Return a list of all shops items     **Required permissions:**    - **vshop.vshop.item.list**   
+         * @summary List Shop Items
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShopItems(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling listShopItems.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Return a list of all shops     **Required permissions:**    - **vshop.vshop.list**   
+         * @summary List Shops
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShops(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            const localVarPath = `/vshop/shop`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Modifies values for this shop, but items     **Required permissions:**    - **vshop.vshop.edit**   
+         * @summary Change Shop
+         * @param {string} id 
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShop(id: string, body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling updateShop.');
+            }
+            const localVarPath = `/vshop/shop/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"VillagerShopsShop" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Modifies values for this shop item     **Required permissions:**    - **vshop.vshop.item.edit**   
+         * @summary Change Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShopItem(id: string, item: number, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling updateShopItem.');
+            }
+            // verify required parameter 'item' is not null or undefined
+            if (item === null || item === undefined) {
+                throw new RequiredError('item','Required parameter item was null or undefined when calling updateShopItem.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item/{item}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"item"}}`, encodeURIComponent(String(item)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"VillagerShopsStockItem" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * VShopsApi - functional programming interface
+ * @export
+ */
+export const VShopsApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * Add a item to the shops listing     **Required permissions:**    - **vshop.vshop.item.create**   
+         * @summary Add Shop Item
+         * @param {string} id 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addShopItem(id: string, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsStockItem> {
+            const localVarFetchArgs = VShopsApiFetchParamCreator(configuration).addShopItem(id, body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Spawn a new shop with base values; Some values are only set by update     **Required permissions:**    - **vshop.vshop.create**   
+         * @summary Create Shops
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createShop(body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VShopsApiFetchParamCreator(configuration).createShop(body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Permanently delete a shop from the server     **Required permissions:**    - **vshop.vshop.delete**   
+         * @summary Delete a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VShopsApiFetchParamCreator(configuration).deleteShop(id, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Remove an item from this shop     **Required permissions:**    - **vshop.vshop.item.delete**   
+         * @summary Removes a Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VShopsApiFetchParamCreator(configuration).deleteShopItem(id, item, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Get detailed information about a shop     **Required permissions:**    - **vshop.vshop.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VShopsApiFetchParamCreator(configuration).getShop(id, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Get detailed information about a shop item     **Required permissions:**    - **vshop.vshop.item.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsStockItem> {
+            const localVarFetchArgs = VShopsApiFetchParamCreator(configuration).getShopItem(id, item, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Return a list of all shops items     **Required permissions:**    - **vshop.vshop.item.list**   
+         * @summary List Shop Items
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShopItems(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<VillagerShopsStockItem>> {
+            const localVarFetchArgs = VShopsApiFetchParamCreator(configuration).listShopItems(id, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Return a list of all shops     **Required permissions:**    - **vshop.vshop.list**   
+         * @summary List Shops
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShops(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<VillagerShopsShop>> {
+            const localVarFetchArgs = VShopsApiFetchParamCreator(configuration).listShops(details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Modifies values for this shop, but items     **Required permissions:**    - **vshop.vshop.edit**   
+         * @summary Change Shop
+         * @param {string} id 
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShop(id: string, body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VShopsApiFetchParamCreator(configuration).updateShop(id, body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Modifies values for this shop item     **Required permissions:**    - **vshop.vshop.item.edit**   
+         * @summary Change Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShopItem(id: string, item: number, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsStockItem> {
+            const localVarFetchArgs = VShopsApiFetchParamCreator(configuration).updateShopItem(id, item, body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * VShopsApi - factory interface
+ * @export
+ */
+export const VShopsApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * Add a item to the shops listing     **Required permissions:**    - **vshop.vshop.item.create**   
+         * @summary Add Shop Item
+         * @param {string} id 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addShopItem(id: string, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VShopsApiFp(configuration).addShopItem(id, body, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Spawn a new shop with base values; Some values are only set by update     **Required permissions:**    - **vshop.vshop.create**   
+         * @summary Create Shops
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createShop(body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VShopsApiFp(configuration).createShop(body, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Permanently delete a shop from the server     **Required permissions:**    - **vshop.vshop.delete**   
+         * @summary Delete a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VShopsApiFp(configuration).deleteShop(id, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Remove an item from this shop     **Required permissions:**    - **vshop.vshop.item.delete**   
+         * @summary Removes a Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VShopsApiFp(configuration).deleteShopItem(id, item, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Get detailed information about a shop     **Required permissions:**    - **vshop.vshop.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VShopsApiFp(configuration).getShop(id, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Get detailed information about a shop item     **Required permissions:**    - **vshop.vshop.item.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VShopsApiFp(configuration).getShopItem(id, item, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Return a list of all shops items     **Required permissions:**    - **vshop.vshop.item.list**   
+         * @summary List Shop Items
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShopItems(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VShopsApiFp(configuration).listShopItems(id, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Return a list of all shops     **Required permissions:**    - **vshop.vshop.list**   
+         * @summary List Shops
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShops(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VShopsApiFp(configuration).listShops(details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Modifies values for this shop, but items     **Required permissions:**    - **vshop.vshop.edit**   
+         * @summary Change Shop
+         * @param {string} id 
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShop(id: string, body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VShopsApiFp(configuration).updateShop(id, body, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Modifies values for this shop item     **Required permissions:**    - **vshop.vshop.item.edit**   
+         * @summary Change Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShopItem(id: string, item: number, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VShopsApiFp(configuration).updateShopItem(id, item, body, details, accept, pretty, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * VShopsApi - object-oriented interface
+ * @export
+ * @class VShopsApi
+ * @extends {BaseAPI}
+ */
+export class VShopsApi extends BaseAPI {
+    /**
+     * Add a item to the shops listing     **Required permissions:**    - **vshop.vshop.item.create**   
+     * @summary Add Shop Item
+     * @param {} id 
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VShopsApi
+     */
+    public addShopItem(id: string, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VShopsApiFp(this.configuration).addShopItem(id, body, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Spawn a new shop with base values; Some values are only set by update     **Required permissions:**    - **vshop.vshop.create**   
+     * @summary Create Shops
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VShopsApi
+     */
+    public createShop(body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VShopsApiFp(this.configuration).createShop(body, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Permanently delete a shop from the server     **Required permissions:**    - **vshop.vshop.delete**   
+     * @summary Delete a Shop
+     * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VShopsApi
+     */
+    public deleteShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VShopsApiFp(this.configuration).deleteShop(id, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Remove an item from this shop     **Required permissions:**    - **vshop.vshop.item.delete**   
+     * @summary Removes a Shop Item
+     * @param {} id 
+     * @param {} item 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VShopsApi
+     */
+    public deleteShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VShopsApiFp(this.configuration).deleteShopItem(id, item, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Get detailed information about a shop     **Required permissions:**    - **vshop.vshop.one**   
+     * @summary Get a Shop
+     * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VShopsApi
+     */
+    public getShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VShopsApiFp(this.configuration).getShop(id, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Get detailed information about a shop item     **Required permissions:**    - **vshop.vshop.item.one**   
+     * @summary Get a Shop
+     * @param {} id 
+     * @param {} item 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VShopsApi
+     */
+    public getShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VShopsApiFp(this.configuration).getShopItem(id, item, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Return a list of all shops items     **Required permissions:**    - **vshop.vshop.item.list**   
+     * @summary List Shop Items
+     * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VShopsApi
+     */
+    public listShopItems(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VShopsApiFp(this.configuration).listShopItems(id, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Return a list of all shops     **Required permissions:**    - **vshop.vshop.list**   
+     * @summary List Shops
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VShopsApi
+     */
+    public listShops(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VShopsApiFp(this.configuration).listShops(details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Modifies values for this shop, but items     **Required permissions:**    - **vshop.vshop.edit**   
+     * @summary Change Shop
+     * @param {} id 
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VShopsApi
+     */
+    public updateShop(id: string, body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VShopsApiFp(this.configuration).updateShop(id, body, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Modifies values for this shop item     **Required permissions:**    - **vshop.vshop.item.edit**   
+     * @summary Change Shop Item
+     * @param {} id 
+     * @param {} item 
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VShopsApi
+     */
+    public updateShopItem(id: string, item: number, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VShopsApiFp(this.configuration).updateShopItem(id, item, body, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+}
+
+/**
+ * VillagerShopsApi - fetch parameter creator
+ * @export
+ */
+export const VillagerShopsApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Add a item to the shops listing     **Required permissions:**    - **vshop.vshop.item.create**   
+         * @summary Add Shop Item
+         * @param {string} id 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addShopItem(id: string, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling addShopItem.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"VillagerShopsStockItem" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Add a item to the shops listing     **Required permissions:**    - **vshop.vshop.item.create**   
+         * @summary Add Shop Item
+         * @param {string} id 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addShopItem_1(id: string, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling addShopItem_1.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"VillagerShopsStockItem" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Spawn a new shop with base values; Some values are only set by update     **Required permissions:**    - **vshop.vshop.create**   
+         * @summary Create Shops
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createShop(body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            const localVarPath = `/vshop/shop`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"VillagerShopsShop" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Spawn a new shop with base values; Some values are only set by update     **Required permissions:**    - **vshop.vshop.create**   
+         * @summary Create Shops
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createShop_2(body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            const localVarPath = `/vshop/shop`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"VillagerShopsShop" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Permanently delete a shop from the server     **Required permissions:**    - **vshop.vshop.delete**   
+         * @summary Delete a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteShop.');
+            }
+            const localVarPath = `/vshop/shop/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'DELETE' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Remove an item from this shop     **Required permissions:**    - **vshop.vshop.item.delete**   
+         * @summary Removes a Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteShopItem.');
+            }
+            // verify required parameter 'item' is not null or undefined
+            if (item === null || item === undefined) {
+                throw new RequiredError('item','Required parameter item was null or undefined when calling deleteShopItem.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item/{item}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"item"}}`, encodeURIComponent(String(item)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'DELETE' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Remove an item from this shop     **Required permissions:**    - **vshop.vshop.item.delete**   
+         * @summary Removes a Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShopItem_3(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteShopItem_3.');
+            }
+            // verify required parameter 'item' is not null or undefined
+            if (item === null || item === undefined) {
+                throw new RequiredError('item','Required parameter item was null or undefined when calling deleteShopItem_3.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item/{item}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"item"}}`, encodeURIComponent(String(item)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'DELETE' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Permanently delete a shop from the server     **Required permissions:**    - **vshop.vshop.delete**   
+         * @summary Delete a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShop_4(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteShop_4.');
+            }
+            const localVarPath = `/vshop/shop/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'DELETE' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get detailed information about a shop     **Required permissions:**    - **vshop.vshop.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getShop.');
+            }
+            const localVarPath = `/vshop/shop/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get detailed information about a shop item     **Required permissions:**    - **vshop.vshop.item.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getShopItem.');
+            }
+            // verify required parameter 'item' is not null or undefined
+            if (item === null || item === undefined) {
+                throw new RequiredError('item','Required parameter item was null or undefined when calling getShopItem.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item/{item}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"item"}}`, encodeURIComponent(String(item)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get detailed information about a shop item     **Required permissions:**    - **vshop.vshop.item.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShopItem_5(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getShopItem_5.');
+            }
+            // verify required parameter 'item' is not null or undefined
+            if (item === null || item === undefined) {
+                throw new RequiredError('item','Required parameter item was null or undefined when calling getShopItem_5.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item/{item}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"item"}}`, encodeURIComponent(String(item)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get detailed information about a shop     **Required permissions:**    - **vshop.vshop.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShop_6(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getShop_6.');
+            }
+            const localVarPath = `/vshop/shop/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Return a list of all shops items     **Required permissions:**    - **vshop.vshop.item.list**   
+         * @summary List Shop Items
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShopItems(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling listShopItems.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Return a list of all shops items     **Required permissions:**    - **vshop.vshop.item.list**   
+         * @summary List Shop Items
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShopItems_7(id: string, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling listShopItems_7.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Return a list of all shops     **Required permissions:**    - **vshop.vshop.list**   
+         * @summary List Shops
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShops(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            const localVarPath = `/vshop/shop`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Return a list of all shops     **Required permissions:**    - **vshop.vshop.list**   
+         * @summary List Shops
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShops_8(details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            const localVarPath = `/vshop/shop`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Modifies values for this shop, but items     **Required permissions:**    - **vshop.vshop.edit**   
+         * @summary Change Shop
+         * @param {string} id 
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShop(id: string, body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling updateShop.');
+            }
+            const localVarPath = `/vshop/shop/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"VillagerShopsShop" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Modifies values for this shop item     **Required permissions:**    - **vshop.vshop.item.edit**   
+         * @summary Change Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShopItem(id: string, item: number, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling updateShopItem.');
+            }
+            // verify required parameter 'item' is not null or undefined
+            if (item === null || item === undefined) {
+                throw new RequiredError('item','Required parameter item was null or undefined when calling updateShopItem.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item/{item}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"item"}}`, encodeURIComponent(String(item)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"VillagerShopsStockItem" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Modifies values for this shop item     **Required permissions:**    - **vshop.vshop.item.edit**   
+         * @summary Change Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShopItem_9(id: string, item: number, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling updateShopItem_9.');
+            }
+            // verify required parameter 'item' is not null or undefined
+            if (item === null || item === undefined) {
+                throw new RequiredError('item','Required parameter item was null or undefined when calling updateShopItem_9.');
+            }
+            const localVarPath = `/vshop/shop/{id}/item/{item}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"item"}}`, encodeURIComponent(String(item)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"VillagerShopsStockItem" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Modifies values for this shop, but items     **Required permissions:**    - **vshop.vshop.edit**   
+         * @summary Change Shop
+         * @param {string} id 
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShop_10(id: string, body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling updateShop_10.');
+            }
+            const localVarPath = `/vshop/shop/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyHeader required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("X-WebAPI-Key")
+					: configuration.apiKey;
+                localVarHeaderParameter["X-WebAPI-Key"] = localVarApiKeyValue;
+            }
+
+            // authentication ApiKeyQuery required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+					? configuration.apiKey("key")
+					: configuration.apiKey;
+                localVarQueryParameter["key"] = localVarApiKeyValue;
+            }
+
+            if (details !== undefined) {
+                localVarQueryParameter['details'] = details;
+            }
+
+            if (accept !== undefined) {
+                localVarQueryParameter['accept'] = accept;
+            }
+
+            if (pretty !== undefined) {
+                localVarQueryParameter['pretty'] = pretty;
+            }
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"VillagerShopsShop" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * VillagerShopsApi - functional programming interface
+ * @export
+ */
+export const VillagerShopsApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * Add a item to the shops listing     **Required permissions:**    - **vshop.vshop.item.create**   
+         * @summary Add Shop Item
+         * @param {string} id 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addShopItem(id: string, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsStockItem> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).addShopItem(id, body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Add a item to the shops listing     **Required permissions:**    - **vshop.vshop.item.create**   
+         * @summary Add Shop Item
+         * @param {string} id 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addShopItem_1(id: string, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsStockItem> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).addShopItem_1(id, body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Spawn a new shop with base values; Some values are only set by update     **Required permissions:**    - **vshop.vshop.create**   
+         * @summary Create Shops
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createShop(body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).createShop(body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Spawn a new shop with base values; Some values are only set by update     **Required permissions:**    - **vshop.vshop.create**   
+         * @summary Create Shops
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createShop_2(body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).createShop_2(body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Permanently delete a shop from the server     **Required permissions:**    - **vshop.vshop.delete**   
+         * @summary Delete a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).deleteShop(id, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Remove an item from this shop     **Required permissions:**    - **vshop.vshop.item.delete**   
+         * @summary Removes a Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).deleteShopItem(id, item, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Remove an item from this shop     **Required permissions:**    - **vshop.vshop.item.delete**   
+         * @summary Removes a Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShopItem_3(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).deleteShopItem_3(id, item, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Permanently delete a shop from the server     **Required permissions:**    - **vshop.vshop.delete**   
+         * @summary Delete a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShop_4(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).deleteShop_4(id, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Get detailed information about a shop     **Required permissions:**    - **vshop.vshop.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).getShop(id, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Get detailed information about a shop item     **Required permissions:**    - **vshop.vshop.item.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsStockItem> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).getShopItem(id, item, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Get detailed information about a shop item     **Required permissions:**    - **vshop.vshop.item.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShopItem_5(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsStockItem> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).getShopItem_5(id, item, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Get detailed information about a shop     **Required permissions:**    - **vshop.vshop.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShop_6(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).getShop_6(id, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Return a list of all shops items     **Required permissions:**    - **vshop.vshop.item.list**   
+         * @summary List Shop Items
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShopItems(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<VillagerShopsStockItem>> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).listShopItems(id, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Return a list of all shops items     **Required permissions:**    - **vshop.vshop.item.list**   
+         * @summary List Shop Items
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShopItems_7(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<VillagerShopsStockItem>> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).listShopItems_7(id, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Return a list of all shops     **Required permissions:**    - **vshop.vshop.list**   
+         * @summary List Shops
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShops(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<VillagerShopsShop>> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).listShops(details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Return a list of all shops     **Required permissions:**    - **vshop.vshop.list**   
+         * @summary List Shops
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShops_8(details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<VillagerShopsShop>> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).listShops_8(details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Modifies values for this shop, but items     **Required permissions:**    - **vshop.vshop.edit**   
+         * @summary Change Shop
+         * @param {string} id 
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShop(id: string, body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).updateShop(id, body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Modifies values for this shop item     **Required permissions:**    - **vshop.vshop.item.edit**   
+         * @summary Change Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShopItem(id: string, item: number, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsStockItem> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).updateShopItem(id, item, body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Modifies values for this shop item     **Required permissions:**    - **vshop.vshop.item.edit**   
+         * @summary Change Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShopItem_9(id: string, item: number, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsStockItem> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).updateShopItem_9(id, item, body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Modifies values for this shop, but items     **Required permissions:**    - **vshop.vshop.edit**   
+         * @summary Change Shop
+         * @param {string} id 
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShop_10(id: string, body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VillagerShopsShop> {
+            const localVarFetchArgs = VillagerShopsApiFetchParamCreator(configuration).updateShop_10(id, body, details, accept, pretty, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * VillagerShopsApi - factory interface
+ * @export
+ */
+export const VillagerShopsApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * Add a item to the shops listing     **Required permissions:**    - **vshop.vshop.item.create**   
+         * @summary Add Shop Item
+         * @param {string} id 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addShopItem(id: string, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).addShopItem(id, body, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Add a item to the shops listing     **Required permissions:**    - **vshop.vshop.item.create**   
+         * @summary Add Shop Item
+         * @param {string} id 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addShopItem_1(id: string, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).addShopItem_1(id, body, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Spawn a new shop with base values; Some values are only set by update     **Required permissions:**    - **vshop.vshop.create**   
+         * @summary Create Shops
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createShop(body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).createShop(body, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Spawn a new shop with base values; Some values are only set by update     **Required permissions:**    - **vshop.vshop.create**   
+         * @summary Create Shops
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createShop_2(body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).createShop_2(body, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Permanently delete a shop from the server     **Required permissions:**    - **vshop.vshop.delete**   
+         * @summary Delete a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).deleteShop(id, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Remove an item from this shop     **Required permissions:**    - **vshop.vshop.item.delete**   
+         * @summary Removes a Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).deleteShopItem(id, item, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Remove an item from this shop     **Required permissions:**    - **vshop.vshop.item.delete**   
+         * @summary Removes a Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShopItem_3(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).deleteShopItem_3(id, item, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Permanently delete a shop from the server     **Required permissions:**    - **vshop.vshop.delete**   
+         * @summary Delete a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShop_4(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).deleteShop_4(id, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Get detailed information about a shop     **Required permissions:**    - **vshop.vshop.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).getShop(id, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Get detailed information about a shop item     **Required permissions:**    - **vshop.vshop.item.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).getShopItem(id, item, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Get detailed information about a shop item     **Required permissions:**    - **vshop.vshop.item.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {number} item 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShopItem_5(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).getShopItem_5(id, item, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Get detailed information about a shop     **Required permissions:**    - **vshop.vshop.one**   
+         * @summary Get a Shop
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getShop_6(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).getShop_6(id, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Return a list of all shops items     **Required permissions:**    - **vshop.vshop.item.list**   
+         * @summary List Shop Items
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShopItems(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).listShopItems(id, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Return a list of all shops items     **Required permissions:**    - **vshop.vshop.item.list**   
+         * @summary List Shop Items
+         * @param {string} id 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShopItems_7(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).listShopItems_7(id, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Return a list of all shops     **Required permissions:**    - **vshop.vshop.list**   
+         * @summary List Shops
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShops(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).listShops(details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Return a list of all shops     **Required permissions:**    - **vshop.vshop.list**   
+         * @summary List Shops
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listShops_8(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).listShops_8(details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Modifies values for this shop, but items     **Required permissions:**    - **vshop.vshop.edit**   
+         * @summary Change Shop
+         * @param {string} id 
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShop(id: string, body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).updateShop(id, body, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Modifies values for this shop item     **Required permissions:**    - **vshop.vshop.item.edit**   
+         * @summary Change Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShopItem(id: string, item: number, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).updateShopItem(id, item, body, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Modifies values for this shop item     **Required permissions:**    - **vshop.vshop.item.edit**   
+         * @summary Change Shop Item
+         * @param {string} id 
+         * @param {number} item 
+         * @param {VillagerShopsStockItem} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShopItem_9(id: string, item: number, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).updateShopItem_9(id, item, body, details, accept, pretty, options)(fetch, basePath);
+        },
+        /**
+         * Modifies values for this shop, but items     **Required permissions:**    - **vshop.vshop.edit**   
+         * @summary Change Shop
+         * @param {string} id 
+         * @param {VillagerShopsShop} [body] 
+         * @param {boolean} [details] Add to include additional details, omit or false otherwise
+         * @param {string} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+         * @param {boolean} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateShop_10(id: string, body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+            return VillagerShopsApiFp(configuration).updateShop_10(id, body, details, accept, pretty, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * VillagerShopsApi - object-oriented interface
+ * @export
+ * @class VillagerShopsApi
+ * @extends {BaseAPI}
+ */
+export class VillagerShopsApi extends BaseAPI {
+    /**
+     * Add a item to the shops listing     **Required permissions:**    - **vshop.vshop.item.create**   
+     * @summary Add Shop Item
+     * @param {} id 
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public addShopItem(id: string, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).addShopItem(id, body, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Add a item to the shops listing     **Required permissions:**    - **vshop.vshop.item.create**   
+     * @summary Add Shop Item
+     * @param {} id 
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public addShopItem_1(id: string, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).addShopItem_1(id, body, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Spawn a new shop with base values; Some values are only set by update     **Required permissions:**    - **vshop.vshop.create**   
+     * @summary Create Shops
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public createShop(body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).createShop(body, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Spawn a new shop with base values; Some values are only set by update     **Required permissions:**    - **vshop.vshop.create**   
+     * @summary Create Shops
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public createShop_2(body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).createShop_2(body, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Permanently delete a shop from the server     **Required permissions:**    - **vshop.vshop.delete**   
+     * @summary Delete a Shop
+     * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public deleteShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).deleteShop(id, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Remove an item from this shop     **Required permissions:**    - **vshop.vshop.item.delete**   
+     * @summary Removes a Shop Item
+     * @param {} id 
+     * @param {} item 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public deleteShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).deleteShopItem(id, item, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Remove an item from this shop     **Required permissions:**    - **vshop.vshop.item.delete**   
+     * @summary Removes a Shop Item
+     * @param {} id 
+     * @param {} item 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public deleteShopItem_3(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).deleteShopItem_3(id, item, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Permanently delete a shop from the server     **Required permissions:**    - **vshop.vshop.delete**   
+     * @summary Delete a Shop
+     * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public deleteShop_4(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).deleteShop_4(id, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Get detailed information about a shop     **Required permissions:**    - **vshop.vshop.one**   
+     * @summary Get a Shop
+     * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public getShop(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).getShop(id, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Get detailed information about a shop item     **Required permissions:**    - **vshop.vshop.item.one**   
+     * @summary Get a Shop
+     * @param {} id 
+     * @param {} item 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public getShopItem(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).getShopItem(id, item, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Get detailed information about a shop item     **Required permissions:**    - **vshop.vshop.item.one**   
+     * @summary Get a Shop
+     * @param {} id 
+     * @param {} item 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public getShopItem_5(id: string, item: number, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).getShopItem_5(id, item, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Get detailed information about a shop     **Required permissions:**    - **vshop.vshop.one**   
+     * @summary Get a Shop
+     * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public getShop_6(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).getShop_6(id, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Return a list of all shops items     **Required permissions:**    - **vshop.vshop.item.list**   
+     * @summary List Shop Items
+     * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public listShopItems(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).listShopItems(id, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Return a list of all shops items     **Required permissions:**    - **vshop.vshop.item.list**   
+     * @summary List Shop Items
+     * @param {} id 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public listShopItems_7(id: string, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).listShopItems_7(id, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Return a list of all shops     **Required permissions:**    - **vshop.vshop.list**   
+     * @summary List Shops
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public listShops(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).listShops(details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Return a list of all shops     **Required permissions:**    - **vshop.vshop.list**   
+     * @summary List Shops
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public listShops_8(details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).listShops_8(details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Modifies values for this shop, but items     **Required permissions:**    - **vshop.vshop.edit**   
+     * @summary Change Shop
+     * @param {} id 
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public updateShop(id: string, body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).updateShop(id, body, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Modifies values for this shop item     **Required permissions:**    - **vshop.vshop.item.edit**   
+     * @summary Change Shop Item
+     * @param {} id 
+     * @param {} item 
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public updateShopItem(id: string, item: number, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).updateShopItem(id, item, body, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Modifies values for this shop item     **Required permissions:**    - **vshop.vshop.item.edit**   
+     * @summary Change Shop Item
+     * @param {} id 
+     * @param {} item 
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public updateShopItem_9(id: string, item: number, body?: VillagerShopsStockItem, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).updateShopItem_9(id, item, body, details, accept, pretty, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Modifies values for this shop, but items     **Required permissions:**    - **vshop.vshop.edit**   
+     * @summary Change Shop
+     * @param {} id 
+     * @param {} [body] 
+     * @param {} [details] Add to include additional details, omit or false otherwise
+     * @param {} [accept] Override the &#39;Accept&#39; request header (useful for debugging your requests)
+     * @param {} [pretty] Add to make the Web-API pretty print the response (useful for debugging your requests)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VillagerShopsApi
+     */
+    public updateShop_10(id: string, body?: VillagerShopsShop, details?: boolean, accept?: string, pretty?: boolean, options?: any) {
+        return VillagerShopsApiFp(this.configuration).updateShop_10(id, body, details, accept, pretty, options)(this.fetch, this.basePath);
     }
 
 }

@@ -170,7 +170,8 @@ export enum CatalogTypeKeys {
 	GameMode = 'entity.living.player.gamemode.GameMode',
 	Generator = 'world.GeneratorType',
 	Item = 'item.ItemType',
-	TileEntity = 'block.tileentity.TileEntityType'
+	TileEntity = 'block.tileentity.TileEntityType',
+	Currency = 'service.economy.Currency'
 }
 
 export enum PreferenceKey {

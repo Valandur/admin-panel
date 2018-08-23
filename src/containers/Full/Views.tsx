@@ -61,6 +61,9 @@ const UMItems = load(() =>
 const WebBooksBooks = load(() =>
 	import('../../views/Integrations/WebBooks/Books')
 );
+const VShopsShops = load(() =>
+	import('../../views/Integrations/VillagerShops/Shops')
+);
 
 export const views: Array<ViewDefinition> = [
 	{
@@ -248,6 +251,21 @@ export const views: Array<ViewDefinition> = [
 				icon: 'shopping cart',
 				perms: ['universal-market', 'item'],
 				component: UMItems
+			}
+		]
+	},
+	{
+		title: 'VShops',
+		path: '/vshop',
+		perms: ['vshop'],
+		servlets: ['/vshop'],
+		views: [
+			{
+				title: 'VShopShops',
+				path: '/vshop/shop',
+				icon: 'shop',
+				perms: ['vshop', 'shop'],
+				component: VShopsShops
 			}
 		]
 	},
