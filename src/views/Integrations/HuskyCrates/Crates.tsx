@@ -106,7 +106,7 @@ class Crates extends React.Component<Props, OwnState> {
 			type: crate ? crate.type : undefined,
 			free: crate ? crate.free : undefined,
 			freeDelay: crate ? crate.freeDelay : undefined,
-			rewards: crate ? crate.rewards.map(r => _.assign({}, r)) : []
+			rewards: crate ? crate.rewards.map(r => ({ ...r })) : []
 		});
 	}
 
@@ -122,7 +122,7 @@ class Crates extends React.Component<Props, OwnState> {
 		data: DropdownProps
 	) {
 		const cb = (name: string, value: string) => {
-			const newReward = _.assign({}, reward);
+			const newReward = _.cloneDeep(reward);
 			_.set(newReward, name, value);
 
 			this.setState({
@@ -429,7 +429,8 @@ class Crates extends React.Component<Props, OwnState> {
 				<Modal.Actions>
 					<Button primary onClick={this.save}>
 						{_t('Save')}
-					</Button>&nbsp;
+					</Button>
+					&nbsp;
 					<Button secondary onClick={this.toggleModal}>
 						{_t('Cancel')}
 					</Button>
