@@ -1,6 +1,6 @@
-import { TranslationFunction } from 'react-i18next';
+import i18next from 'i18next';
 
-export default (_t: TranslationFunction) => ({
+export default (_t: i18next.TFunction) => ({
 	// Line for the info chart
 	lineInfo: {
 		datasets: [

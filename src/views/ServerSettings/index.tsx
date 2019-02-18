@@ -1,10 +1,14 @@
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Icon, Message, Segment } from 'semantic-ui-react';
 
 import { AppAction } from '../../actions';
+import { setPreference } from '../../actions/preferences';
+import { requestSaveProperty } from '../../actions/server-settings';
+import DataViewFunc from '../../components/DataView';
+import { checkPermissions } from '../../components/Util';
 import {
 	AppState,
 	EServerProperty,
@@ -12,11 +16,7 @@ import {
 	PreferenceKey
 } from '../../types';
 
-import { setPreference } from '../../actions/preferences';
-import { requestSaveProperty } from '../../actions/server-settings';
-import DataViewFunc from '../../components/DataView';
-import { checkPermissions } from '../../components/Util';
-
+// tslint:disable-next-line:variable-name
 const DataView = DataViewFunc('server/properties', 'key');
 
 interface OwnProps {
@@ -24,7 +24,7 @@ interface OwnProps {
 	hideNote: boolean;
 }
 
-interface Props extends OwnProps, reactI18Next.InjectedTranslateProps {
+interface Props extends OwnProps, WithTranslation {
 	requestSaveProperty: (prop: EServerProperty) => AppAction;
 	doHideNote: () => AppAction;
 }
@@ -32,7 +32,7 @@ interface Props extends OwnProps, reactI18Next.InjectedTranslateProps {
 interface OwnState {}
 
 class ServerSettings extends React.Component<Props, OwnState> {
-	render() {
+	public render() {
 		const _t = this.props.t;
 
 		return (
@@ -81,7 +81,7 @@ class ServerSettings extends React.Component<Props, OwnState> {
 											toggle
 											name="value"
 											checked={view.state.value === 'true'}
-											onClick={() => {
+											onChange={() => {
 												view.setState({
 													value: view.state.value === 'true' ? 'false' : 'true'
 												});
@@ -134,4 +134,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('ServerSettings')(ServerSettings));
+)(withTranslation('ServerSettings')(ServerSettings));

@@ -1,20 +1,20 @@
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form } from 'semantic-ui-react';
 
 import { AppAction } from '../../../actions';
 import { ListRequestAction, requestList } from '../../../actions/dataview';
+import DataViewFunc from '../../../components/DataView';
 import Location from '../../../components/Location';
 import { renderWorldOptions } from '../../../components/Util';
 import { NucleusNamedLocation, World } from '../../../fetch';
 import { AppState } from '../../../types';
 
-import DataViewFunc from '../../../components/DataView';
 const DataView = DataViewFunc('nucleus/jail', 'name');
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface Props extends WithTranslation {
 	worlds: World[];
 	requestWorlds: () => ListRequestAction;
 }
@@ -26,7 +26,7 @@ class Jails extends React.Component<Props, OwnState> {
 		this.props.requestWorlds();
 	}
 
-	render() {
+	public render() {
 		const _t = this.props.t;
 
 		return (
@@ -112,4 +112,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Integrations.Nucleus')(Jails));
+)(withTranslation('Integrations.Nucleus')(Jails));

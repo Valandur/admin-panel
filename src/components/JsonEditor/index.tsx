@@ -4,10 +4,9 @@
 // Wrapper By Ian Grossberg - https://gist.github.com/yoiang/6f82874f4fd8fc1a37631dc9cad27172
 // Wrapped into TypeScript definitions By Aleksey Musakhanov
 import JSONEditor, { JSONEditorNode } from 'jsoneditor';
+import 'jsoneditor/dist/jsoneditor.min.css';
 import * as _ from 'lodash';
 import * as React from 'react';
-
-import 'jsoneditor/dist/jsoneditor.min.css';
 
 // Ref: https://github.com/josdejong/jsoneditor/blob/master/docs/api.md
 // TODO: ace
@@ -28,7 +27,9 @@ interface Props {
 	height?: number | string;
 	width?: number | string;
 	onChange?: (value: string) => void;
-	onEditable?: (node: JSONEditorNode) => boolean | { field: boolean; value: boolean; };
+	onEditable?: (
+		node: JSONEditorNode
+	) => boolean | { field: boolean; value: boolean };
 	onError?: () => void;
 	onModeChange?: () => void;
 	escapeUnicode?: boolean;
@@ -71,7 +72,7 @@ export class ReactJSONEditor extends React.Component<Props, State> {
 		this.editor = undefined;
 	}
 
-	get json() {
+	public get json() {
 		return this.state.json;
 	}
 
@@ -101,7 +102,7 @@ export class ReactJSONEditor extends React.Component<Props, State> {
 		if (editorCreated) {
 			this.editor.destroy();
 			this.setState({
-				editorCreated: false,
+				editorCreated: false
 			});
 		}
 	}
@@ -118,7 +119,7 @@ export class ReactJSONEditor extends React.Component<Props, State> {
 		);
 	}
 
-	private getEditorRef = (node: any): void => {
+	private getEditorRef(node: any): void {
 		this.editorRef = node;
 	}
 
@@ -160,7 +161,7 @@ export class ReactJSONEditor extends React.Component<Props, State> {
 		});
 		this.editor.set(this.json);
 		this.setState({
-			editorCreated: true,
+			editorCreated: true
 		});
 	}
 }

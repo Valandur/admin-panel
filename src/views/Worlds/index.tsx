@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
-import { Trans, translate } from 'react-i18next';
+import { Trans, withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -16,14 +16,14 @@ import {
 } from 'semantic-ui-react';
 
 import { AppAction, CatalogRequestAction, requestCatalog } from '../../actions';
+import DataViewFunc from '../../components/DataView';
 import { renderCatalogTypeOptions } from '../../components/Util';
 import { CatalogType, World } from '../../fetch';
 import { AppState, CatalogTypeKeys, DataViewRef } from '../../types';
 
-import DataViewFunc from '../../components/DataView';
 const DataView = DataViewFunc('world', 'uuid');
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface Props extends WithTranslation {
 	dimTypes: CatalogType[] | undefined;
 	genTypes: CatalogType[] | undefined;
 	diffTypes: CatalogType[] | undefined;
@@ -101,7 +101,7 @@ class Worlds extends React.Component<Props, OwnState> {
 		});
 	}
 
-	render() {
+	public render() {
 		const _t = this.props.t;
 
 		return (
@@ -287,25 +287,26 @@ class Worlds extends React.Component<Props, OwnState> {
 											</Table.Row>
 										</Table.Header>
 										<Table.Body>
-											{_
-												.slice(this.state.rules, 0, this.state.rules.length / 2)
-												.map(rule => (
-													<Table.Row key={rule.name}>
-														<Table.Cell>{rule.name}</Table.Cell>
-														<Table.Cell>
-															{rule.value === 'true' ||
-															rule.value === 'false' ? (
-																<Radio
-																	toggle
-																	checked={rule.value === 'true'}
-																	onClick={() => this.toggleRule(rule.name)}
-																/>
-															) : (
-																rule.value
-															)}
-														</Table.Cell>
-													</Table.Row>
-												))}
+											{_.slice(
+												this.state.rules,
+												0,
+												this.state.rules.length / 2
+											).map(rule => (
+												<Table.Row key={rule.name}>
+													<Table.Cell>{rule.name}</Table.Cell>
+													<Table.Cell>
+														{rule.value === 'true' || rule.value === 'false' ? (
+															<Radio
+																toggle
+																checked={rule.value === 'true'}
+																onChange={() => this.toggleRule(rule.name)}
+															/>
+														) : (
+															rule.value
+														)}
+													</Table.Cell>
+												</Table.Row>
+											))}
 										</Table.Body>
 									</Table>
 								</Grid.Column>
@@ -319,25 +320,25 @@ class Worlds extends React.Component<Props, OwnState> {
 											</Table.Row>
 										</Table.Header>
 										<Table.Body>
-											{_
-												.slice(this.state.rules, this.state.rules.length / 2)
-												.map(rule => (
-													<Table.Row key={rule.name}>
-														<Table.Cell>{rule.name}</Table.Cell>
-														<Table.Cell>
-															{rule.value === 'true' ||
-															rule.value === 'false' ? (
-																<Radio
-																	toggle
-																	checked={rule.value === 'true'}
-																	onClick={() => this.toggleRule(rule.name)}
-																/>
-															) : (
-																rule.value
-															)}
-														</Table.Cell>
-													</Table.Row>
-												))}
+											{_.slice(
+												this.state.rules,
+												this.state.rules.length / 2
+											).map(rule => (
+												<Table.Row key={rule.name}>
+													<Table.Cell>{rule.name}</Table.Cell>
+													<Table.Cell>
+														{rule.value === 'true' || rule.value === 'false' ? (
+															<Radio
+																toggle
+																checked={rule.value === 'true'}
+																onChange={() => this.toggleRule(rule.name)}
+															/>
+														) : (
+															rule.value
+														)}
+													</Table.Cell>
+												</Table.Row>
+											))}
 										</Table.Body>
 									</Table>
 								</Grid.Column>
@@ -346,7 +347,8 @@ class Worlds extends React.Component<Props, OwnState> {
 						<Modal.Actions>
 							<Button primary onClick={this.saveGameRules}>
 								{_t('Save')}
-							</Button>&nbsp;
+							</Button>
+							&nbsp;
 							<Button secondary onClick={this.toggleModal}>
 								{_t('Cancel')}
 							</Button>
@@ -376,4 +378,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Worlds')(Worlds));
+)(withTranslation('Worlds')(Worlds));

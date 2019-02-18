@@ -1,17 +1,17 @@
 import * as moment from 'moment';
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { AppAction } from '../../../actions';
+import DataViewFunc from '../../../components/DataView';
 import { MMCTicketsTicket } from '../../../fetch';
 import { AppState } from '../../../types';
 
-import DataViewFunc from '../../../components/DataView';
 const DataView = DataViewFunc('mmc-tickets/ticket', 'id');
 
-interface Props extends reactI18Next.InjectedTranslateProps {}
+interface Props extends WithTranslation {}
 
 interface OwnState {}
 
@@ -43,7 +43,7 @@ class Tickets extends React.Component<Props, OwnState> {
 		];
 	}
 
-	render() {
+	public render() {
 		const _t = this.props.t;
 
 		return (
@@ -100,4 +100,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Integrations.MMCTickets')(Tickets));
+)(withTranslation('Integrations.MMCTickets')(Tickets));

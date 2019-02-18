@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import * as Raven from 'raven-js';
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
@@ -17,16 +17,15 @@ import { AppState, PermissionTree, ViewDefinition } from '../../types';
 
 import { load, views } from './Views';
 
+// tslint:disable-next-line:variable-name
 const Preferences = load(() => import('../../views/Preferences'));
 
 const baseIssueUrl = 'https://github.com/Valandur/admin-panel/issues/new?';
 
-export interface Props
-	extends reactI18Next.InjectedTranslateProps,
-		RouteComponentProps<any> {
+export interface Props extends WithTranslation, RouteComponentProps<any> {
 	perms: PermissionTree;
 	servlets: {
-		[x: string]: string
+		[x: string]: string;
 	};
 	requestStats: (limit?: number) => Action;
 }
@@ -39,9 +38,9 @@ interface OwnState {
 }
 
 class Full extends React.Component<Props, OwnState> {
-	interval: NodeJS.Timer;
+	private interval: NodeJS.Timer;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -53,20 +52,20 @@ class Full extends React.Component<Props, OwnState> {
 		this.renderRoute = this.renderRoute.bind(this);
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		if (checkPermissions(this.props.perms, ['info', 'stats'])) {
 			this.props.requestStats();
 			this.interval = setInterval(() => this.props.requestStats(3), 10000);
 		}
 	}
 
-	componentWillUnmount() {
+	public componentWillUnmount() {
 		if (this.interval) {
 			clearInterval(this.interval);
 		}
 	}
 
-	componentDidCatch(error: Error, info: React.ErrorInfo) {
+	public componentDidCatch(error: Error, info: React.ErrorInfo) {
 		Raven.captureException(error, { extra: info });
 		this.setState({
 			hasError: true,
@@ -75,13 +74,13 @@ class Full extends React.Component<Props, OwnState> {
 		});
 	}
 
-	toggleSidebar() {
+	private toggleSidebar() {
 		this.setState({
 			show: !this.state.show
 		});
 	}
 
-	getIssueUrl() {
+	private getIssueUrl() {
 		return (
 			baseIssueUrl +
 			'labels=bug' +
@@ -98,8 +97,16 @@ class Full extends React.Component<Props, OwnState> {
 		);
 	}
 
-	render() {
-		const _t = this.props.t;
+	public render() {
+		const { hasError } = this.state;
+
+		const sidebarStyle = {
+			width: this.state.show ? 'calc(100% - 260px)' : '100%',
+			transition: 'width 0.5s',
+			height: '100%',
+			overflowY: 'scroll',
+			float: 'right'
+		};
 
 		return (
 			<div>
@@ -111,52 +118,54 @@ class Full extends React.Component<Props, OwnState> {
 				<Sidebar.Pushable style={{ height: 'calc(100vh - 67px)' }}>
 					<SidebarMenu show={this.state.show} views={views} />
 
-					<Sidebar.Pusher
-						style={{
-							width: this.state.show ? 'calc(100% - 260px)' : '100%',
-							transition: 'width 0.5s',
-							height: '100%',
-							overflowY: 'scroll',
-							float: 'right'
-						}}
-					>
-						{this.state.hasError ? (
-							<Segment basic>
-								<Message negative size="huge">
-									<Message.Header>{_t('ErrorHeader')}</Message.Header>
-									<p>{this.state.error}</p>
-									<p>{this.state.stack}</p>
-								</Message>
-								<Message positive size="huge">
-									<Message.Header>{_t('FixHeader')}</Message.Header>
-									<p>{_t('FixText')}</p>
-									<Button
-										positive
-										as="a"
-										size="large"
-										icon="github"
-										content={_t('SubmitIssue')}
-										href={this.getIssueUrl()}
-										target="_blank"
-										rel="noopener noreferrer"
-									/>
-								</Message>
-							</Segment>
-						) : (
-							<Switch>
-								{views.map(this.renderRoute)}
-
-								<Route path="/preferences" component={Preferences} />
-								<Redirect from="/" to="/dashboard" />
-							</Switch>
-						)}
+					<Sidebar.Pusher style={sidebarStyle}>
+						{hasError ? this.renderError() : this.renderContent()}
 					</Sidebar.Pusher>
 				</Sidebar.Pushable>
 			</div>
 		);
 	}
 
-	renderRoute(view: ViewDefinition): JSX.Element | JSX.Element[] {
+	private renderContent() {
+		return (
+			<Switch>
+				{views.map(this.renderRoute)}
+
+				<Route path="/preferences" component={Preferences} />
+				<Redirect from="/" to="/dashboard" />
+			</Switch>
+		);
+	}
+
+	private renderError() {
+		const { t } = this.props;
+
+		return (
+			<Segment basic>
+				<Message negative size="huge">
+					<Message.Header>{t('ErrorHeader')}</Message.Header>
+					<p>{this.state.error}</p>
+					<p>{this.state.stack}</p>
+				</Message>
+				<Message positive size="huge">
+					<Message.Header>{t('FixHeader')}</Message.Header>
+					<p>{t('FixText')}</p>
+					<Button
+						positive
+						as="a"
+						size="large"
+						icon="github"
+						content={t('SubmitIssue')}
+						href={this.getIssueUrl()}
+						target="_blank"
+						rel="noopener noreferrer"
+					/>
+				</Message>
+			</Segment>
+		);
+	}
+
+	private renderRoute(view: ViewDefinition): JSX.Element | JSX.Element[] {
 		if (view.perms && !checkPermissions(this.props.perms, view.perms)) {
 			return <Redirect key={view.path} from={view.path} to="/dashboard" />;
 		}
@@ -185,6 +194,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('Main')(Full)
-);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(withTranslation('Main')(Full));

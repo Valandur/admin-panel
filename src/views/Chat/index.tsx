@@ -1,51 +1,50 @@
 import * as moment from 'moment';
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { AppAction } from '../../actions';
-import { ChatMessage, Message } from '../../fetch';
+import DataViewFunc, { DataViewFields } from '../../components/DataView';
+import { formatSource, sourceLabel } from '../../components/Util';
+import { ChatMessage } from '../../fetch';
 import { AppState } from '../../types';
 
-import DataViewFunc from '../../components/DataView';
-import { formatSource, sourceLabel } from '../../components/Util';
-
+// tslint:disable-next-line:variable-name
 const DataView = DataViewFunc('history/message', 'timestamp');
 
-interface Props extends reactI18Next.InjectedTranslateProps {}
+interface Props extends WithTranslation {}
 
 class Chat extends React.Component<Props, {}> {
-	render() {
-		const _t = this.props.t;
+	public render() {
+		const { t } = this.props;
+
+		const fields: DataViewFields<ChatMessage> = {
+			timestamp: {
+				label: t('Timestamp'),
+				view: msg => moment(msg.timestamp).calendar()
+			},
+			sender: {
+				label: t('Cause'),
+				filter: true,
+				filterValue: msg => formatSource(msg.sender),
+				view: msg => sourceLabel(msg.sender)
+			},
+			receivers: {
+				label: t('Receivers'),
+				filter: true,
+				filterValue: msg => msg.receivers.map(r => formatSource(r)).join(' '),
+				view: msg => <>{msg.receivers.map(r => sourceLabel(r))}</>
+			},
+			content: t('Message')
+		};
 
 		return (
 			<DataView
-				title={_t('Messages')}
+				title={t('Messages')}
 				icon="comments"
-				filterTitle={_t('FilterMessages')}
-				fields={{
-					timestamp: {
-						label: _t('Timestamp'),
-						view: (msg: ChatMessage) => moment(msg.timestamp).calendar()
-					},
-					sender: {
-						label: _t('Cause'),
-						filter: true,
-						filterValue: (msg: ChatMessage) => formatSource(msg.sender),
-						view: (msg: ChatMessage) => sourceLabel(msg.sender)
-					},
-					receivers: {
-						label: _t('Receivers'),
-						filter: true,
-						filterValue: (msg: Message) =>
-							msg.receivers.map(r => formatSource(r)).join(' '),
-						view: (msg: Message) => (
-							<>{msg.receivers.map(r => sourceLabel(r))}</>
-						)
-					},
-					content: _t('Message')
-				}}
+				filterTitle={t('FilterMessages')}
+				fields={fields}
 			/>
 		);
 	}
@@ -62,4 +61,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Chat')(Chat));
+)(withTranslation('Chat')(Chat));

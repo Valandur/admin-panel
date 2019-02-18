@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { WithTranslation } from 'react-i18next';
 import {
 	Button,
 	Dropdown,
@@ -11,7 +12,7 @@ import {
 import { renderCatalogTypeOptions } from '../../../components/Util';
 import { CatalogType, VillagerShopsStockItem } from '../../../fetch';
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface Props extends WithTranslation {
 	item: VillagerShopsStockItem;
 	itemTypes: CatalogType[];
 	currencies: CatalogType[];
@@ -25,7 +26,7 @@ interface Props extends reactI18Next.InjectedTranslateProps {
 interface OwnState {}
 
 class ShopItem extends React.Component<Props, OwnState> {
-	shouldComponentUpdate(nextProps: Props, nextState: OwnState) {
+	public shouldComponentUpdate(nextProps: Props, nextState: OwnState) {
 		console.log(this.props);
 		console.log(nextProps);
 		return (
@@ -42,7 +43,7 @@ class ShopItem extends React.Component<Props, OwnState> {
 		);
 	}
 
-	render() {
+	public render() {
 		const { item, t, onChange, onRemove } = this.props;
 
 		return (

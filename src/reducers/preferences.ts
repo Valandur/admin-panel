@@ -1,7 +1,6 @@
-import * as i18next from 'i18next';
-
 import { AppAction } from '../actions';
 import { TypeKeys } from '../actions/preferences';
+import i18n from '../services/i18n';
 import { Lang, PreferenceKey, Theme } from '../types';
 
 declare const swapThemeCss: (theme: Theme) => void;
@@ -42,7 +41,7 @@ export default (state = initialState, action: AppAction) => {
 			if (action.key === PreferenceKey.theme) {
 				swapThemeCss(action.value);
 			} else if (action.key === PreferenceKey.lang) {
-				i18next.changeLanguage(action.value);
+				i18n.changeLanguage(action.value);
 			}
 
 			return {

@@ -33,11 +33,12 @@ import {
 	OwnState,
 	StateProps
 } from './types';
+export { DataViewFields } from './types';
 
 class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
-	interval: NodeJS.Timer;
+	private interval: NodeJS.Timer;
 
-	constructor(props: FullProps<T>) {
+	public constructor(props: FullProps<T>) {
 		super(props);
 
 		this.state = {
@@ -53,24 +54,23 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 		this.delete = this.delete.bind(this);
 	}
 
-	createTable() {
-		return DataTable as React.ComponentClass<DataTableProps<T>>;
-	}
-
-	componentDidMount() {
+	public componentDidMount() {
 		if (!this.props.static) {
 			this.props.requestList();
 			this.interval = setInterval(this.props.requestList, 10000);
 		}
 	}
 
-	componentWillUnmount() {
+	public componentWillUnmount() {
 		if (this.interval) {
 			clearInterval(this.interval);
 		}
 	}
 
-	shouldComponentUpdate(nextProps: FullProps<T>, nextState: OwnState<T>) {
+	public shouldComponentUpdate(
+		nextProps: FullProps<T>,
+		nextState: OwnState<T>
+	) {
 		return (
 			nextProps.creating !== this.props.creating ||
 			nextProps.filter !== this.props.filter ||
@@ -81,68 +81,43 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 	}
 
 	// Create a new data entry
-	create(data: T) {
+	private create(data: T) {
 		this.props.requestCreate(data);
 	}
 
 	// Get the details for a data entry
-	details(data: T) {
+	private details(data: T) {
 		this.props.requestDetails(data);
 	}
 
 	// Select a data entry for editing
-	edit(data: T | undefined) {
+	private edit(data: T | undefined) {
 		this.setState({ data });
 	}
 
 	// Save/Update an existing data entry
-	save(data: T, newData: any) {
+	private save(data: T, newData: any) {
 		this.props.requestChange(data, newData);
 		this.endEdit();
 	}
 
 	// End editing an entry
-	endEdit() {
+	private endEdit() {
 		this.setState({
 			data: undefined
 		});
 	}
 
 	// Delete a data entry
-	delete(data: T) {
+	private delete(data: T) {
 		this.props.requestDelete(data);
 	}
 
-	render() {
-		const {
-			filter,
-			canEdit,
-			canDelete,
-			onCreate,
-			onEdit,
-			onDelete,
-			onSave,
-			perm,
-			perms,
-			title,
-			createTitle,
-			filterTitle,
-			checkCreatePerm
-		} = this.props;
+	public render() {
+		const { filter, title, createTitle, filterTitle } = this.props;
 
 		const checks: ((val: T) => boolean)[] = [];
 		let regsValid = false;
-
-		// Reference that we pass to our various functions
-		const expandRef = (tableRef: DataTableRef): DataViewRef<T> => ({
-			...tableRef,
-			create: this.create,
-			details: this.details,
-			save: this.save,
-			edit: this.edit,
-			endEdit: this.endEdit,
-			delete: this.delete
-		});
 
 		// Get all the fields of the table
 		const fields: { [x: string]: DataFieldRaw<T> } = _.mapValues(
@@ -160,13 +135,13 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 					val.label = value;
 				} else if (typeof value === 'function') {
 					val.view = (obj: T, tableRef: DataTableRef) =>
-						value(obj, expandRef(tableRef));
+						value(obj, this.expandRef(tableRef));
 				} else if (typeof value === 'object') {
 					val = { ...val, ...value };
 					if (typeof value.view === 'function') {
 						const func = value.view;
 						val.view = (obj: T, tableRef: DataTableRef) =>
-							func(obj, expandRef(tableRef));
+							func(obj, this.expandRef(tableRef));
 					}
 				}
 
@@ -239,75 +214,143 @@ class DataView<T> extends React.Component<FullProps<T>, OwnState<T>> {
 		const origActions = this.props.actions;
 		let actions = origActions;
 		if (typeof origActions === 'function') {
-			actions = (obj, tableRef) => origActions(obj, expandRef(tableRef));
+			actions = (obj, tableRef) => origActions(obj, this.expandRef(tableRef));
 		}
 
 		const DT = this.createTable();
 
+		const createForm = this.renderCreateForm(createTitle, createFields);
+		const filterForm = this.renderFilterForm(
+			filterTitle,
+			filterFields,
+			regsValid
+		);
+
 		return (
 			<Segment basic>
 				<Grid stackable doubling columns={cols}>
-					{createTitle &&
-						(!checkCreatePerm ||
-							checkPermissions(perms, perm.concat('create'))) && (
-							<Grid.Column>
-								<CreateForm
-									title={createTitle}
-									button={this.props.createButton}
-									creating={this.props.creating}
-									fields={createFields}
-									onCreate={(obj: any, tableRef: DataTableRef) =>
-										onCreate
-											? onCreate(obj, expandRef(tableRef))
-											: this.create(obj)
-									}
-								/>
-							</Grid.Column>
-						)}
-
-					{filterTitle && (
-						<Grid.Column>
-							<FilterForm
-								title={filterTitle}
-								fields={filterFields}
-								valid={regsValid}
-								values={filter}
-								onFilterChange={this.props.setFilter}
-							/>
-						</Grid.Column>
-					)}
+					{createForm}
+					{filterForm}
 				</Grid>
 
 				<DT
 					title={title}
 					icon={this.props.icon}
 					list={list}
-					t={this.props.t}
 					idFunc={this.props.idFunc}
 					fields={fields}
-					onEdit={(obj, tableRef) =>
-						onEdit ? onEdit(obj, expandRef(tableRef)) : this.edit(obj)
-					}
-					onSave={(obj, newObj, tableRef) =>
-						onSave
-							? onSave(obj, newObj, expandRef(tableRef))
-							: this.save(obj, newObj)
-					}
-					onDelete={(obj, tableRef) =>
-						onDelete ? onDelete(obj, expandRef(tableRef)) : this.delete(obj)
-					}
-					canEdit={(obj: T) =>
-						(typeof canEdit === 'function' ? canEdit(obj) : !!canEdit) &&
-						checkPermissions(perms, perm.concat('modify'))
-					}
-					canDelete={(obj: T) =>
-						(typeof canDelete === 'function' ? canDelete(obj) : !!canDelete) &&
-						checkPermissions(perms, perm.concat('delete'))
-					}
+					onEdit={this.onEdit}
+					onSave={this.onSave}
+					onDelete={this.onDelete}
+					canEdit={this.canEdit}
+					canDelete={this.canDelete}
 					actions={actions}
-					isEditing={obj => this.props.equals(obj, this.state.data)}
+					isEditing={this.isEditing}
 				/>
 			</Segment>
+		);
+	}
+
+	private createTable() {
+		return DataTable as React.ComponentClass<DataTableProps<T>>;
+	}
+
+	private expandRef = (tableRef: DataTableRef): DataViewRef<T> => ({
+		...tableRef,
+		create: this.create,
+		details: this.details,
+		save: this.save,
+		edit: this.edit,
+		endEdit: this.endEdit,
+		delete: this.delete
+	});
+
+	private onCreate = (obj: T, tableRef: DataTableRef) => {
+		this.props.onCreate
+			? this.props.onCreate(obj, this.expandRef(tableRef))
+			: this.create(obj);
+	};
+
+	private onEdit = (obj: T, tableRef: DataTableRef) => {
+		this.props.onEdit
+			? this.props.onEdit(obj, this.expandRef(tableRef))
+			: this.edit(obj);
+	};
+
+	private onSave = (obj: T, newObj: any, tableRef: DataTableRef) => {
+		this.props.onSave
+			? this.props.onSave(obj, newObj, this.expandRef(tableRef))
+			: this.save(obj, newObj);
+	};
+
+	private onDelete = (obj: T, tableRef: DataTableRef) => {
+		this.props.onDelete
+			? this.props.onDelete(obj, this.expandRef(tableRef))
+			: this.delete(obj);
+	};
+
+	private canEdit = (obj: T) => {
+		const { canEdit, perms, perm } = this.props;
+		return (
+			(typeof canEdit === 'function' ? canEdit(obj) : !!canEdit) &&
+			checkPermissions(perms, perm.concat('modify'))
+		);
+	};
+
+	private canDelete = (obj: T) => {
+		const { canDelete, perms, perm } = this.props;
+		return (
+			(typeof canDelete === 'function' ? canDelete(obj) : !!canDelete) &&
+			checkPermissions(perms, perm.concat('delete'))
+		);
+	};
+
+	private isEditing = (obj: T) => this.props.equals(obj, this.state.data);
+
+	private renderCreateForm(
+		createTitle: string | undefined,
+		createFields: { [x: string]: DataFieldRaw<T> }
+	) {
+		const { checkCreatePerm, perms, perm, createButton, creating } = this.props;
+		if (
+			!createTitle ||
+			(checkCreatePerm && !checkPermissions(perms, perm.concat('create')))
+		) {
+			return null;
+		}
+
+		return (
+			<Grid.Column>
+				<CreateForm
+					title={createTitle}
+					button={createButton}
+					creating={creating}
+					fields={createFields}
+					onCreate={this.onCreate}
+				/>
+			</Grid.Column>
+		);
+	}
+
+	private renderFilterForm(
+		filterTitle: string | undefined,
+		filterFields: { [x: string]: DataFieldRaw<T> },
+		regsValid: boolean
+	) {
+		if (!filterTitle) {
+			return null;
+		}
+
+		return (
+			<Grid.Column>
+				<FilterForm
+					title={filterTitle}
+					fields={filterFields}
+					valid={regsValid}
+					values={this.props.filter}
+					onFilterChange={this.props.setFilter}
+				/>
+			</Grid.Column>
 		);
 	}
 }

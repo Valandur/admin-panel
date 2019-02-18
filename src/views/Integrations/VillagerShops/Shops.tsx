@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { Trans, translate } from 'react-i18next';
+import { Trans, withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -26,13 +26,14 @@ import {
 	VillagerShopsShop,
 	VillagerShopsStockItem
 } from '../../../fetch';
+import i18n from '../../../services/i18n';
 import { AppState, CatalogTypeKeys, DataViewRef } from '../../../types';
 
 import ShopItem from './ShopItem';
 
 const DataView = DataViewFunc('vshop/shop', 'uid');
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface Props extends WithTranslation {
 	entityTypes: CatalogType[];
 	itemTypes: CatalogType[];
 	currencies: CatalogType[];
@@ -155,7 +156,7 @@ class Shops extends React.Component<Props, OwnState> {
 		});
 	}
 
-	render() {
+	public render() {
 		const _t = this.props.t;
 
 		return (
@@ -259,6 +260,7 @@ class Shops extends React.Component<Props, OwnState> {
 										key={i}
 										item={item}
 										t={_t}
+										i18n={i18n}
 										itemTypes={this.props.itemTypes}
 										currencies={this.props.currencies}
 										onChange={(e, d) => this.handleItemChange(item, e, d)}
@@ -310,4 +312,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Integrations.VShop')(Shops));
+)(withTranslation('Integrations.VShop')(Shops));

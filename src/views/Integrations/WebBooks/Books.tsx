@@ -1,18 +1,18 @@
 import * as copy from 'copy-to-clipboard';
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Button, Input, List } from 'semantic-ui-react';
 
 import { AppAction } from '../../../actions';
+import DataViewFunc from '../../../components/DataView';
 import { WebBooksBook } from '../../../fetch';
 import { AppState, DataViewRef } from '../../../types';
 
-import DataViewFunc from '../../../components/DataView';
 const DataView = DataViewFunc('web-books/book', 'id');
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface Props extends WithTranslation {
 	apiUrl: string;
 }
 
@@ -37,26 +37,24 @@ class Books extends React.Component<Props, OwnState> {
 
 	moveLineUp(view: DataViewRef<WebBooksBook>, index: number) {
 		view.setState({
-			lines: view.state.lines.map(
-				(line: string, i: number) =>
-					i === index
-						? view.state.lines[index - 1]
-						: i === index - 1
-							? view.state.lines[index]
-							: line
+			lines: view.state.lines.map((line: string, i: number) =>
+				i === index
+					? view.state.lines[index - 1]
+					: i === index - 1
+					? view.state.lines[index]
+					: line
 			)
 		});
 	}
 
 	moveLineDown(view: DataViewRef<WebBooksBook>, index: number) {
 		view.setState({
-			lines: view.state.lines.map(
-				(line: string, i: number) =>
-					i === index
-						? view.state.lines[index + 1]
-						: i === index + 1
-							? view.state.lines[index]
-							: line
+			lines: view.state.lines.map((line: string, i: number) =>
+				i === index
+					? view.state.lines[index + 1]
+					: i === index + 1
+					? view.state.lines[index]
+					: line
 			)
 		});
 	}
@@ -72,7 +70,7 @@ class Books extends React.Component<Props, OwnState> {
 		copy(this.props.apiUrl + '/api/v5/web-books/book/' + book.id + '/html');
 	}
 
-	render() {
+	public render() {
 		const _t = this.props.t;
 
 		return (
@@ -214,4 +212,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Integrations.WebBooks')(Books));
+)(withTranslation('Integrations.WebBooks')(Books));

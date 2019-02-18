@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Icon, Radio } from 'semantic-ui-react';
@@ -9,11 +9,11 @@ import {
 	CatalogRequestAction,
 	requestCatalog
 } from '../../../actions';
+import DataViewFunc from '../../../components/DataView';
 import { renderCatalogTypeOptions } from '../../../components/Util';
 import { CatalogType, MMCRestrictItem } from '../../../fetch';
 import { AppState, CatalogTypeKeys, DataTableRef } from '../../../types';
 
-import DataViewFunc from '../../../components/DataView';
 const DataView = DataViewFunc('mmc-restrict/item', 'item.id');
 
 const getIcon = (ban: boolean) => (
@@ -29,7 +29,7 @@ const getEdit = (ban: MMCRestrictItem, view: DataTableRef, name: string) => (
 	/>
 );
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface Props extends WithTranslation {
 	itemTypes: CatalogType[];
 	requestCatalog: (type: string) => CatalogRequestAction;
 }
@@ -41,7 +41,7 @@ class Items extends React.Component<Props, OwnState> {
 		this.props.requestCatalog(CatalogTypeKeys.Item);
 	}
 
-	render() {
+	public render() {
 		const _t = this.props.t;
 
 		return (
@@ -127,4 +127,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Integrations.MMCRestrict')(Items));
+)(withTranslation('Integrations.MMCRestrict')(Items));

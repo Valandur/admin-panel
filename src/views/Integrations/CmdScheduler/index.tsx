@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Label } from 'semantic-ui-react';
@@ -11,7 +11,7 @@ import { CommandTask } from '../../../fetch';
 import { AppState } from '../../../types';
 const DataView = DataViewFunc('cmd-scheduler', 'name');
 
-interface Props extends reactI18Next.InjectedTranslateProps {}
+interface Props extends WithTranslation {}
 
 interface OwnState {}
 
@@ -20,7 +20,7 @@ class Commands extends React.Component<Props, OwnState> {
 		return <>{JSON.stringify(units)}</>;
 	}
 
-	render() {
+	public render() {
 		const { t } = this.props;
 
 		return (
@@ -84,4 +84,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Integrations.CmdScheduler')(Commands));
+)(withTranslation('Integrations.CmdScheduler')(Commands));

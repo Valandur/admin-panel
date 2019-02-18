@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Line } from 'react-chartjs-2';
-import { Trans, translate } from 'react-i18next';
+import { Trans, withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -31,21 +31,18 @@ interface DispatchProps {
 	hideWIPNotice: () => AppAction;
 }
 
-interface Props
-	extends StateProps,
-		DispatchProps,
-		reactI18Next.InjectedTranslateProps {}
+interface Props extends StateProps, DispatchProps, WithTranslation {}
 
 class Dashboard extends React.Component<Props, {}> {
-	interval: NodeJS.Timer;
+	private interval: NodeJS.Timer;
 
-	lineInfo: any;
-	optionsInfo: any;
+	private lineInfo: any;
+	private optionsInfo: any;
 
-	lineStats: any;
-	optionsStats: any;
+	private lineStats: any;
+	private optionsStats: any;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		const config = graphConfig(props.t);
@@ -57,20 +54,20 @@ class Dashboard extends React.Component<Props, {}> {
 		this.optionsStats = config.optionsStats;
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		if (checkPermissions(this.props.perms, ['info', 'info'])) {
 			this.props.requestInfo();
 			this.interval = setInterval(this.props.requestInfo, 5000);
 		}
 	}
 
-	componentWillUnmount() {
+	public componentWillUnmount() {
 		if (this.interval) {
 			clearInterval(this.interval);
 		}
 	}
 
-	render() {
+	public render() {
 		const _t = this.props.t;
 
 		// Exit early if we have no data. No permissions?
@@ -104,165 +101,174 @@ class Dashboard extends React.Component<Props, {}> {
 			y: p.value * 100
 		}));
 
-		let playerState: SemanticCOLORS = 'blue';
-		if (this.props.data) {
-			const ratio = this.props.data.players / this.props.data.maxPlayers;
-			if (ratio > 0.95) {
-				playerState = 'red';
-			} else if (ratio > 0.8) {
-				playerState = 'yellow';
-			} else {
-				playerState = 'green';
-			}
-		}
+		return (
+			<Segment basic>
+				{this.renderWIPNote()}
+				<Grid columns={4} stackable doubling>
+					{this.renderData()}
+					{this.renderInfo()}
+					{this.renderStats()}
+				</Grid>
+			</Segment>
+		);
+	}
 
-		let tpsState: SemanticCOLORS = 'blue';
-		if (this.props.data) {
-			if (this.props.data.tps >= 19.5) {
-				tpsState = 'green';
-			} else if (this.props.data.tps >= 15) {
-				tpsState = 'yellow';
-			} else {
-				tpsState = 'red';
-			}
+	private renderWIPNote() {
+		if (this.props.hideNote) {
+			return null;
 		}
 
 		return (
-			<Segment basic>
-				{!this.props.hideNote && (
-					<Message info onDismiss={() => this.props.hideWIPNotice()}>
-						<Message.Header>{_t('WIPTitle')}</Message.Header>
-						<p>
-							<Trans i18nKey="WIPText">
-								The Web-API AdminPanel is still a work in progress, and not all
-								of it's functionality has been fully implemented yet. This means
-								there may be bugs and other issues when using the AdminPanel!
-								<br />
-								Please report any bugs you find
-								<a
-									href="https://github.com/Valandur/admin-panel/issues"
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									over on GitHub
-								</a>
-							</Trans>
-						</p>
-					</Message>
-				)}
+			<Message info onDismiss={this.props.hideWIPNotice}>
+				<Message.Header>{this.props.t('WIPTitle')}</Message.Header>
+				<p>
+					<Trans i18nKey="WIPText">
+						The Web-API AdminPanel is still a work in progress, and not all of
+						it's functionality has been fully implemented yet. This means there
+						may be bugs and other issues when using the AdminPanel!
+						<br />
+						Please report any bugs you find
+						<a
+							href="https://github.com/Valandur/admin-panel/issues"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							over on GitHub
+						</a>
+					</Trans>
+				</p>
+			</Message>
+		);
+	}
 
-				<Grid columns={4} stackable doubling>
-					{this.props.data && (
-						<>
-							<Grid.Column>
-								<Card color={playerState}>
-									<Card.Content>
-										<Card.Header>
-											{this.props.data.players}/{this.props.data.maxPlayers}
-										</Card.Header>
-										<Card.Description>{_t('PlayersOnline')}</Card.Description>
-									</Card.Content>
-								</Card>
-							</Grid.Column>
+	private renderData() {
+		const { data, t } = this.props;
 
-							<Grid.Column>
-								<Card color={tpsState}>
-									<Card.Content>
-										<Card.Header>{this.props.data.tps}</Card.Header>
-										<Card.Description>{_t('CurrentTPS')}</Card.Description>
-									</Card.Content>
-								</Card>
-							</Grid.Column>
+		if (!data) {
+			return null;
+		}
 
-							<Grid.Column>
-								<Card color="blue">
-									<Card.Content>
-										<Card.Header>{this.props.data.address}</Card.Header>
-										<Card.Description>{_t('ServerAddress')}</Card.Description>
-									</Card.Content>
-								</Card>
-							</Grid.Column>
+		const ratio = data.players / data.maxPlayers;
+		const playerState: SemanticCOLORS =
+			ratio > 0.95 ? 'red' : ratio > 0.8 ? 'yellow' : 'green';
 
-							<Grid.Column>
-								<Card color="blue">
-									<Card.Content>
-										<Card.Header>
-											{this.props.data.onlineMode ? 'Yes' : 'No'}
-										</Card.Header>
-										<Card.Description>{_t('OnlineMode')}</Card.Description>
-									</Card.Content>
-								</Card>
-							</Grid.Column>
+		const tpsState: SemanticCOLORS =
+			data.tps >= 19.5 ? 'green' : data.tps >= 15 ? 'yellow' : 'red';
 
-							<Grid.Column>
-								<Card color="blue">
-									<Card.Content>
-										<Card.Header>{this.props.data.uptimeTicks}</Card.Header>
-										<Card.Description>{_t('UptimeTicks')}</Card.Description>
-									</Card.Content>
-								</Card>
-							</Grid.Column>
+		return (
+			<>
+				<Grid.Column>
+					<Card color={playerState}>
+						<Card.Content>
+							<Card.Header>
+								{data.players}/{data.maxPlayers}
+							</Card.Header>
+							<Card.Description>{t('PlayersOnline')}</Card.Description>
+						</Card.Content>
+					</Card>
+				</Grid.Column>
 
-							<Grid.Column>
-								<Card color="blue">
-									<Card.Content>
-										<Card.Header>{this.props.data.game.version}</Card.Header>
-										<Card.Description>
-											{_t('MinecraftVersion')}
-										</Card.Description>
-									</Card.Content>
-								</Card>
-							</Grid.Column>
+				<Grid.Column>
+					<Card color={tpsState}>
+						<Card.Content>
+							<Card.Header>{data.tps}</Card.Header>
+							<Card.Description>{t('CurrentTPS')}</Card.Description>
+						</Card.Content>
+					</Card>
+				</Grid.Column>
 
-							<Grid.Column>
-								<Card color="blue">
-									<Card.Content>
-										<Card.Header>{this.props.data.api.version}</Card.Header>
-										<Card.Description>{_t('APIVersion')}</Card.Description>
-									</Card.Content>
-								</Card>
-							</Grid.Column>
+				<Grid.Column>
+					<Card color="blue">
+						<Card.Content>
+							<Card.Header>{data.address}</Card.Header>
+							<Card.Description>{t('ServerAddress')}</Card.Description>
+						</Card.Content>
+					</Card>
+				</Grid.Column>
 
-							<Grid.Column>
-								<Card color="blue">
-									<Card.Content>
-										<Card.Header>
-											{this.props.data.implementation.version}
-										</Card.Header>
-										<Card.Description>{_t('SpongeVersion')}</Card.Description>
-									</Card.Content>
-								</Card>
-							</Grid.Column>
-						</>
-					)}
+				<Grid.Column>
+					<Card color="blue">
+						<Card.Content>
+							<Card.Header>{data.onlineMode ? 'Yes' : 'No'}</Card.Header>
+							<Card.Description>{t('OnlineMode')}</Card.Description>
+						</Card.Content>
+					</Card>
+				</Grid.Column>
 
-					{checkPermissions(this.props.perms, ['info', 'stats']) && (
-						<Grid.Column width={8}>
-							<Card style={{ width: '100%', height: '50vh' }}>
-								<Card.Content>
-									<Card.Header>{_t('GraphTitleInfo')}</Card.Header>
-								</Card.Content>
-								<div style={{ width: '100%', height: '100%', padding: '1em' }}>
-									<Line data={this.lineInfo} options={this.optionsInfo} />
-								</div>
-							</Card>
-						</Grid.Column>
-					)}
+				<Grid.Column>
+					<Card color="blue">
+						<Card.Content>
+							<Card.Header>{data.uptimeTicks}</Card.Header>
+							<Card.Description>{t('UptimeTicks')}</Card.Description>
+						</Card.Content>
+					</Card>
+				</Grid.Column>
 
-					{checkPermissions(this.props.perms, ['info', 'stats']) && (
-						<Grid.Column width={8}>
-							<Card style={{ width: '100%', height: '50vh' }}>
-								<Card.Content>
-									<Card.Header>{_t('GraphTitleStats')}</Card.Header>
-								</Card.Content>
-								<div style={{ width: '100%', height: '100%', padding: '1em' }}>
-									<Line data={this.lineStats} options={this.optionsStats} />
-								</div>
-							</Card>
-						</Grid.Column>
-					)}
-				</Grid>
-			</Segment>
+				<Grid.Column>
+					<Card color="blue">
+						<Card.Content>
+							<Card.Header>{data.game.version}</Card.Header>
+							<Card.Description>{t('MinecraftVersion')}</Card.Description>
+						</Card.Content>
+					</Card>
+				</Grid.Column>
+
+				<Grid.Column>
+					<Card color="blue">
+						<Card.Content>
+							<Card.Header>{data.api.version}</Card.Header>
+							<Card.Description>{t('APIVersion')}</Card.Description>
+						</Card.Content>
+					</Card>
+				</Grid.Column>
+
+				<Grid.Column>
+					<Card color="blue">
+						<Card.Content>
+							<Card.Header>{data.implementation.version}</Card.Header>
+							<Card.Description>{t('SpongeVersion')}</Card.Description>
+						</Card.Content>
+					</Card>
+				</Grid.Column>
+			</>
+		);
+	}
+
+	private renderInfo() {
+		if (!checkPermissions(this.props.perms, ['info', 'stats'])) {
+			return null;
+		}
+
+		return (
+			<Grid.Column width={8}>
+				<Card style={{ width: '100%', height: '50vh' }}>
+					<Card.Content>
+						<Card.Header>{this.props.t('GraphTitleInfo')}</Card.Header>
+					</Card.Content>
+					<div style={{ width: '100%', height: '100%', padding: '1em' }}>
+						<Line data={this.lineInfo} options={this.optionsInfo} />
+					</div>
+				</Card>
+			</Grid.Column>
+		);
+	}
+
+	private renderStats() {
+		if (!checkPermissions(this.props.perms, ['info', 'stats'])) {
+			return null;
+		}
+
+		return (
+			<Grid.Column width={8}>
+				<Card style={{ width: '100%', height: '50vh' }}>
+					<Card.Content>
+						<Card.Header>{this.props.t('GraphTitleStats')}</Card.Header>
+					</Card.Content>
+					<div style={{ width: '100%', height: '100%', padding: '1em' }}>
+						<Line data={this.lineStats} options={this.optionsStats} />
+					</div>
+				</Card>
+			</Grid.Column>
 		);
 	}
 }
@@ -294,4 +300,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Dashboard')(Dashboard));
+)(withTranslation('Dashboard')(Dashboard));

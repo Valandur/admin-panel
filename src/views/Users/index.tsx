@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Button, Form, Modal } from 'semantic-ui-react';
@@ -13,7 +13,7 @@ import { AppState, DataViewRef } from '../../types';
 
 const DataView = DataViewFunc('user', 'name');
 
-interface Props extends reactI18Next.InjectedTranslateProps {}
+interface Props extends WithTranslation {}
 
 interface State {
 	modal: boolean;
@@ -76,7 +76,7 @@ class Users extends React.Component<Props, State> {
 		this.toggleModal();
 	}
 
-	render() {
+	public render() {
 		const { t } = this.props;
 
 		return (
@@ -156,7 +156,8 @@ class Users extends React.Component<Props, State> {
 				<Modal.Actions>
 					<Button primary onClick={() => this.savePermissions()}>
 						{t('Save')}
-					</Button>&nbsp;
+					</Button>
+					&nbsp;
 					<Button secondary onClick={() => this.toggleModal()}>
 						{t('Cancel')}
 					</Button>
@@ -177,4 +178,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Users')(Users));
+)(withTranslation('Users')(Users));

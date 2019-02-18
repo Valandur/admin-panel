@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Button, Dropdown, Form, Input, Label, Popup } from 'semantic-ui-react';
@@ -22,7 +22,7 @@ import { AppState, CatalogTypeKeys, DataViewRef } from '../../../types';
 
 const DataView = DataViewFunc('nucleus/kit', 'name');
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface Props extends WithTranslation {
 	itemTypes: CatalogType[];
 	requestCatalog: (type: string) => CatalogRequestAction;
 }
@@ -89,7 +89,7 @@ class Kits extends React.Component<Props, OwnState> {
 		});
 	}
 
-	render() {
+	public render() {
 		const _t = this.props.t;
 
 		return (
@@ -234,4 +234,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Integrations.Nucleus')(Kits));
+)(withTranslation('Integrations.Nucleus')(Kits));

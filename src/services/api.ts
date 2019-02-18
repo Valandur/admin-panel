@@ -49,7 +49,6 @@ import {
 	respondSaveProperty,
 	TypeKeys as SettingTypeKeys
 } from '../actions/server-settings';
-
 import { ExecuteMethodParam } from '../fetch';
 import { AppState } from '../types';
 
@@ -82,7 +81,7 @@ const api = ({
 				.then(servlets => next(respondServlets(true, servlets)))
 				.catch((err: Response) => {
 					if (err.status === 401 || err.status === 403) {
-						next(requestLogout());
+						next(requestLogout(action.history));
 					} else {
 						next(showNotification('error', 'Servlet error', err.statusText));
 					}
@@ -93,10 +92,10 @@ const api = ({
 		case TypeKeys.CHECK_USER_REQUEST:
 			state.api.apis.user
 				.getMe()
-				.then(perms => next(respondCheckUser(true, perms)))
+				.then(perms => next(respondCheckUser(action.history, true, perms)))
 				.catch((err: Response) => {
 					if (err.status === 401 || err.status === 403) {
-						next(requestLogout());
+						next(requestLogout(action.history));
 					} else {
 						next(showNotification('error', 'User error', err.statusText));
 					}
@@ -110,7 +109,7 @@ const api = ({
 					password: action.password
 				})
 				.then(perms => next(respondLogin(perms)))
-				.then(() => next(requestServlets()))
+				.then(() => next(requestServlets(action.history)))
 				.catch(err => next(respondLogin(undefined, err)));
 			break;
 

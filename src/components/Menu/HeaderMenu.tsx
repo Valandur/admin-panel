@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router';
+import { NavLink, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import { Dropdown, Icon, Image, Menu, MenuItemProps } from 'semantic-ui-react';
 
 import { AppAction, changeServer, requestLogout } from '../../actions';
 import { AppState, Lang, Server } from '../../types';
-import { handleChange, HandleChangeFunc } from '../Util';
 
 const apiLink = '/docs';
 const spongeLink =
@@ -18,44 +18,39 @@ const docsLink =
 const issuesLink = 'https://github.com/Valandur/admin-panel/issues';
 const imageUrl = require('../../assets/logo.png');
 
-export interface Props extends reactI18Next.InjectedTranslateProps {
-	lang: Lang;
-	username: string;
-	server: Server;
-	servers: Server[];
+export interface OwnProps {
 	showSidebar: boolean;
-	changeServer: (server: Server) => AppAction;
-	requestLogout: () => AppAction;
 	toggleSidebar?: (
 		event: React.MouseEvent<HTMLElement>,
 		data: MenuItemProps
 	) => void;
-	path: string;
 }
 
+interface StateProps {
+	lang: Lang;
+	username: string | undefined;
+	server: Server;
+	servers: Server[];
+}
+
+interface DispatchProps {
+	requestLogout: () => AppAction;
+	changeServer: (server: Server) => AppAction;
+}
+
+interface Props
+	extends OwnProps,
+		StateProps,
+		DispatchProps,
+		RouteComponentProps,
+		WithTranslation {}
+
 class HeaderMenu extends React.Component<Props> {
-	handleChange: HandleChangeFunc;
-
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
-
-		this.handleChangeServer = this.handleChangeServer.bind(this);
-		this.handleChange = handleChange.bind(this, this.handleChangeServer);
 	}
 
-	handleChangeServer(key: string, value: string) {
-		if (key === 'server') {
-			const server = this.props.servers.find(s => s.apiUrl === value);
-			if (server == null) {
-				return;
-			}
-			this.props.changeServer(server);
-		} else {
-			this.setState({ [key]: value });
-		}
-	}
-
-	render() {
+	public render() {
 		const _t = this.props.t;
 
 		return (
@@ -72,19 +67,6 @@ class HeaderMenu extends React.Component<Props> {
 				<Menu.Item name="sidebar" onClick={this.props.toggleSidebar}>
 					<Icon name="sidebar" size="large" />
 				</Menu.Item>
-
-				{/*this.props.servers.length > 1 ?
-					<Menu.Item>
-						<Dropdown
-							selection
-							name="server"
-							placeholder={_t("Server")}
-							value={this.props.server ? this.props.server.apiUrl : undefined}
-							onChange={this.handleChange}
-							options={this.props.servers.map(s => ({ value: s.apiUrl, text: s.name }))}
-						/>
-					</Menu.Item>
-				: null*/}
 
 				<Menu.Menu position="right">
 					<Dropdown item text={this.props.username}>
@@ -138,25 +120,25 @@ class HeaderMenu extends React.Component<Props> {
 	}
 }
 
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: AppState): StateProps => {
 	return {
 		lang: state.preferences.lang,
 		username: state.api.username,
 		server: state.api.server,
-		servers: state.api.servers,
-
-		// We include the pathname so this component updates when the path changes
-		path: state.router.location ? state.router.location.pathname : ''
+		servers: state.api.servers
 	};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<AppAction>, props: Props) => {
 	return {
-		requestLogout: (): AppAction => dispatch(requestLogout()),
+		requestLogout: (): AppAction => dispatch(requestLogout(props.history)),
 		changeServer: (server: Server): AppAction => dispatch(changeServer(server))
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-	translate('Menu')(HeaderMenu)
+export default withRouter(
+	connect<StateProps, DispatchProps, OwnProps, AppState>(
+		mapStateToProps,
+		mapDispatchToProps
+	)(withTranslation('Menu')(HeaderMenu))
 );

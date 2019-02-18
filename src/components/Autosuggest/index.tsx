@@ -8,7 +8,10 @@ export interface AppProps {
 	name: string;
 	placeholder: string;
 	getSuggestions: (newValue: string) => Array<AutosuggestItem>;
-	onChange: (event: React.SyntheticEvent<HTMLElement>, newValue: AutosuggestChangeData) => void;
+	onChange: (
+		event: React.SyntheticEvent<HTMLElement>,
+		newValue: AutosuggestChangeData
+	) => void;
 	onKeyPress: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
@@ -18,55 +21,65 @@ interface AppState {
 }
 
 class Autosuggest extends React.Component<AppProps, AppState> {
+	private input: HTMLInputElement;
 
-	input: HTMLInputElement;
-
-	constructor(props: AppProps) {
+	public constructor(props: AppProps) {
 		super(props);
 
 		this.state = {
 			value: '',
-			suggestions: [],
+			suggestions: []
 		};
 	}
 
-	handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+	private handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const newValue = event.target.value;
 
 		this.setState({
 			value: newValue,
-			suggestions: this.props.getSuggestions(newValue),
+			suggestions: this.props.getSuggestions(newValue)
 		});
 		this.props.onChange(event, {
 			id: this.props.id,
 			name: this.props.name,
-			value: newValue,
+			value: newValue
 		});
-	}
+	};
 
-	handleClick(event: React.MouseEvent<HTMLDivElement>, sugg: AutosuggestItem) {
-		this.setState({ value: sugg.value, suggestions: [] }, () => this.input.focus());
+	private handleClick(
+		event: React.MouseEvent<HTMLDivElement>,
+		sugg: AutosuggestItem
+	) {
+		this.setState({ value: sugg.value, suggestions: [] }, () =>
+			this.input.focus()
+		);
 
 		this.props.onChange(event, {
 			id: this.props.id,
 			name: this.props.name,
-			value: sugg.value,
+			value: sugg.value
 		});
 	}
 
-	handleFocus() {
+	private handleFocus = () => {
 		this.setState({
-			suggestions: this.props.getSuggestions(this.state.value),
+			suggestions: this.props.getSuggestions(this.state.value)
 		});
-	}
+	};
 
-	handleClickOutside() {
+	public handleClickOutside() {
 		this.setState({
-			suggestions: [],
+			suggestions: []
 		});
 	}
 
-	render() {
+	private setRef = (input: HTMLInputElement | null) => {
+		if (input !== null) {
+			this.input = input;
+		}
+	};
+
+	public render() {
 		return (
 			<div style={{ width: '100%', position: 'relative' }}>
 				<input
@@ -74,22 +87,33 @@ class Autosuggest extends React.Component<AppProps, AppState> {
 					placeholder={this.props.placeholder}
 					value={this.state.value}
 					style={{ width: '100%' }}
-					ref={input => { if (input !== null) { this.input = input; }}}
-					onFocus={() => this.handleFocus()}
-					onChange={e => this.handleChange(e)}
+					ref={this.setRef}
+					onFocus={this.handleFocus}
+					onChange={this.handleChange}
 					onKeyPress={this.props.onKeyPress}
 				/>
-				{ this.state.suggestions.length ?
-					<div className="autosuggest-list">
-						{this.state.suggestions.map((sugg, index) =>
-							<div key={index} onClick={event => this.handleClick(event, sugg)}>
-								{sugg.content}
-							</div>
-						)}
-					</div>
-				: null }
+				{this.renderSuggestions()}
 			</div>
 		);
+	}
+
+	private renderSuggestions() {
+		if (!this.state.suggestions.length) {
+			return null;
+		}
+
+		return (
+			<div className="autosuggest-list">{this.renderSuggestionItems()}</div>
+		);
+	}
+
+	private renderSuggestionItems() {
+		return this.state.suggestions.map((sugg, index) => (
+			// tslint:disable-next-line:jsx-no-lambda
+			<div key={index} onClick={event => this.handleClick(event, sugg)}>
+				{sugg.content}
+			</div>
+		));
 	}
 }
 
