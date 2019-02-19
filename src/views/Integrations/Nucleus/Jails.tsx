@@ -6,12 +6,13 @@ import { Form } from 'semantic-ui-react';
 
 import { AppAction } from '../../../actions';
 import { ListRequestAction, requestList } from '../../../actions/dataview';
-import DataViewFunc from '../../../components/DataView';
+import DataViewFunc, { DataViewFields } from '../../../components/DataView';
 import Location from '../../../components/Location';
 import { renderWorldOptions } from '../../../components/Util';
 import { NucleusNamedLocation, World } from '../../../fetch';
 import { AppState } from '../../../types';
 
+// tslint:disable-next-line: variable-name
 const DataView = DataViewFunc('nucleus/jail', 'name');
 
 interface Props extends WithTranslation {
@@ -22,76 +23,76 @@ interface Props extends WithTranslation {
 interface OwnState {}
 
 class Jails extends React.Component<Props, OwnState> {
-	componentDidMount() {
+	public componentDidMount() {
 		this.props.requestWorlds();
 	}
 
 	public render() {
-		const _t = this.props.t;
+		const { t } = this.props;
+
+		const fields: DataViewFields<NucleusNamedLocation> = {
+			name: {
+				label: t('Name'),
+				create: true,
+				filter: true,
+				required: true,
+				wide: true
+			},
+			world: {
+				label: t('World'),
+				view: false,
+				create: true,
+				createName: 'location.world',
+				filter: true,
+				filterName: 'location.world.uuid',
+				options: renderWorldOptions(this.props.worlds),
+				required: true
+			},
+			position: {
+				label: t('Location'),
+				isGroup: true,
+				wide: true,
+				view: jail => <Location location={jail.location} />,
+				create: view => (
+					<Form.Group inline>
+						<label>Position</label>
+						<Form.Input
+							type="number"
+							width={6}
+							name="location.position.x"
+							placeholder="X"
+							value={view.state['location.position.x']}
+							onChange={view.handleChange}
+						/>
+						<Form.Input
+							type="number"
+							width={6}
+							name="location.position.y"
+							placeholder="Y"
+							value={view.state['location.position.y']}
+							onChange={view.handleChange}
+						/>
+						<Form.Input
+							type="number"
+							width={6}
+							name="location.position.z"
+							placeholder="Z"
+							value={view.state['location.position.z']}
+							onChange={view.handleChange}
+						/>
+					</Form.Group>
+				)
+			}
+		};
 
 		return (
 			<DataView
 				canDelete
 				icon="wrench"
-				title={_t('Jails')}
-				filterTitle={_t('FilterJails')}
-				createTitle={_t('CreateJail')}
-				fields={{
-					name: {
-						label: _t('Name'),
-						create: true,
-						filter: true,
-						required: true,
-						wide: true
-					},
-					world: {
-						label: _t('World'),
-						view: false,
-						create: true,
-						createName: 'location.world',
-						filter: true,
-						filterName: 'location.world.uuid',
-						options: renderWorldOptions(this.props.worlds),
-						required: true
-					},
-					position: {
-						label: _t('Location'),
-						isGroup: true,
-						wide: true,
-						view: (jail: NucleusNamedLocation) => (
-							<Location location={jail.location} />
-						),
-						create: view => (
-							<Form.Group inline>
-								<label>Position</label>
-								<Form.Input
-									type="number"
-									width={6}
-									name="location.position.x"
-									placeholder="X"
-									value={view.state['location.position.x']}
-									onChange={view.handleChange}
-								/>
-								<Form.Input
-									type="number"
-									width={6}
-									name="location.position.y"
-									placeholder="Y"
-									value={view.state['location.position.y']}
-									onChange={view.handleChange}
-								/>
-								<Form.Input
-									type="number"
-									width={6}
-									name="location.position.z"
-									placeholder="Z"
-									value={view.state['location.position.z']}
-									onChange={view.handleChange}
-								/>
-							</Form.Group>
-						)
-					}
-				}}
+				title={t('Jails')}
+				filterTitle={t('FilterJails')}
+				createTitle={t('CreateJail')}
+				fields={fields}
 			/>
 		);
 	}

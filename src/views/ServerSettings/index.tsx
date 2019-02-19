@@ -7,10 +7,11 @@ import { Form, Icon, Message, Segment } from 'semantic-ui-react';
 import { AppAction } from '../../actions';
 import { setPreference } from '../../actions/preferences';
 import { requestSaveProperty } from '../../actions/server-settings';
-import DataViewFunc from '../../components/DataView';
+import DataViewFunc, { DataViewFields } from '../../components/DataView';
 import { checkPermissions } from '../../components/Util';
 import {
 	AppState,
+	DataViewRef,
 	EServerProperty,
 	PermissionTree,
 	PreferenceKey
@@ -33,86 +34,99 @@ interface OwnState {}
 
 class ServerSettings extends React.Component<Props, OwnState> {
 	public render() {
-		const _t = this.props.t;
+		const { t } = this.props;
+
+		const fields: DataViewFields<EServerProperty> = {
+			key: {
+				label: t('Key')
+			},
+			value: {
+				label: t('Value'),
+				view: obj => {
+					if (obj.value === 'true' || obj.value === 'false') {
+						return (
+							<Icon
+								color={obj.value === 'true' ? 'green' : 'red'}
+								name={obj.value === 'true' ? 'check' : 'delete'}
+							/>
+						);
+					}
+					return obj.value;
+				},
+				edit: (obj, view) => {
+					if (obj.value === 'true' || obj.value === 'false') {
+						const onChange = () => {
+							view.setState({
+								value: view.state.value === 'true' ? 'false' : 'true'
+							});
+						};
+						return (
+							<Form.Radio
+								toggle
+								name="value"
+								checked={view.state.value === 'true'}
+								onChange={onChange}
+							/>
+						);
+					}
+
+					return (
+						<Form.Input
+							name="value"
+							type="text"
+							placeholder="Value"
+							value={view.state.value}
+							onChange={view.handleChange}
+						/>
+					);
+				}
+			}
+		};
+
+		const note = !this.props.hideNote && (
+			<Segment basic>
+				<Message info onDismiss={this.props.doHideNote}>
+					<Message.Header>{t('InfoTitle')}</Message.Header>
+					<p>{t('InfoText')}</p>
+				</Message>
+			</Segment>
+		);
 
 		return (
 			<>
-				{!this.props.hideNote && (
-					<Segment basic>
-						<Message info onDismiss={() => this.props.doHideNote()}>
-							<Message.Header>{_t('InfoTitle')}</Message.Header>
-							<p>{_t('InfoText')}</p>
-						</Message>
-					</Segment>
-				)}
+				{note}
 
 				<DataView
-					canEdit={(obj: EServerProperty) =>
-						checkPermissions(this.props.perms, [
-							'server',
-							'properties',
-							'modify',
-							obj.key
-						])
-					}
+					canEdit={this.canEdit}
 					icon="cogs"
-					title={_t('ServerSettings')}
-					fields={{
-						key: {
-							label: _t('Key')
-						},
-						value: {
-							label: _t('Value'),
-							view: (obj: EServerProperty) => {
-								if (obj.value === 'true' || obj.value === 'false') {
-									return (
-										<Icon
-											color={obj.value === 'true' ? 'green' : 'red'}
-											name={obj.value === 'true' ? 'check' : 'delete'}
-										/>
-									);
-								}
-								return obj.value;
-							},
-							edit: (obj: EServerProperty, view) => {
-								if (obj.value === 'true' || obj.value === 'false') {
-									return (
-										<Form.Radio
-											toggle
-											name="value"
-											checked={view.state.value === 'true'}
-											onChange={() => {
-												view.setState({
-													value: view.state.value === 'true' ? 'false' : 'true'
-												});
-											}}
-										/>
-									);
-								}
-
-								return (
-									<Form.Input
-										name="value"
-										type="text"
-										placeholder="Value"
-										value={view.state.value}
-										onChange={view.handleChange}
-									/>
-								);
-							}
-						}
-					}}
-					onSave={(data: EServerProperty, newData, view) => {
-						this.props.requestSaveProperty({
-							...data,
-							value: newData.value
-						});
-						view.endEdit();
-					}}
+					title={t('ServerSettings')}
+					fields={fields}
+					onSave={this.onSave}
 				/>
 			</>
 		);
 	}
+
+	private canEdit = (obj: EServerProperty) => {
+		return checkPermissions(this.props.perms, [
+			'server',
+			'properties',
+			'modify',
+			obj.key
+		]);
+	};
+
+	private onSave = (
+		data: EServerProperty,
+		newData: any,
+		view: DataViewRef<EServerProperty>
+	) => {
+		this.props.requestSaveProperty({
+			...data,
+			value: newData.value
+		});
+		view.endEdit();
+	};
 }
 
 const mapStateToProps = (state: AppState): OwnProps => {
