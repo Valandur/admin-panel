@@ -1,5 +1,3 @@
-import { routerReducer } from 'react-router-redux';
-
 import { AppAction, initAction } from '../actions';
 import { AppState } from '../types';
 
@@ -10,9 +8,8 @@ import dataview from './dataview';
 import permission from './permission';
 import player from './player';
 import plugin from './plugin';
-import serverSettings from './server-settings';
-
 import preferences from './preferences';
+import serverSettings from './server-settings';
 
 const initAcc = initAction();
 
@@ -33,9 +30,7 @@ const initialState: AppState = {
 	world: dataState,
 	server_properties: serverSettings(undefined, initAcc),
 	tileentity: dataState,
-
-	preferences: preferences(undefined, initAcc),
-	router: routerReducer({ location: null }, initAcc)
+	preferences: preferences(undefined, initAcc)
 };
 
 const app = (state: AppState = initialState, action: AppAction): AppState => {
@@ -53,9 +48,7 @@ const app = (state: AppState = initialState, action: AppAction): AppState => {
 		world: data.world,
 		server_properties: serverSettings(data.server_properties, action),
 		tileentity: data.tileentity,
-
-		preferences: preferences(data.preferences, action),
-		router: routerReducer(data.router, action)
+		preferences: preferences(data.preferences, action)
 	};
 };
 

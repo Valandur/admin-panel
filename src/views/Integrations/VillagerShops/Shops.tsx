@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { Trans, translate } from 'react-i18next';
+import { Trans, withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -15,7 +15,7 @@ import {
 } from 'semantic-ui-react';
 
 import { AppAction, requestCatalog } from '../../../actions';
-import DataViewFunc from '../../../components/DataView';
+import DataViewFunc, { DataViewFields } from '../../../components/DataView';
 import {
 	handleChange,
 	HandleChangeFunc,
@@ -26,13 +26,15 @@ import {
 	VillagerShopsShop,
 	VillagerShopsStockItem
 } from '../../../fetch';
+import i18n from '../../../services/i18n';
 import { AppState, CatalogTypeKeys, DataViewRef } from '../../../types';
 
 import ShopItem from './ShopItem';
 
+// tslint:disable-next-line: variable-name
 const DataView = DataViewFunc('vshop/shop', 'uid');
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface Props extends WithTranslation {
 	entityTypes: CatalogType[];
 	itemTypes: CatalogType[];
 	currencies: CatalogType[];
@@ -48,10 +50,10 @@ interface OwnState {
 }
 
 class Shops extends React.Component<Props, OwnState> {
-	handleChange: HandleChangeFunc;
-	save: () => void;
+	private handleChange: HandleChangeFunc;
+	private save: () => void;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -66,19 +68,164 @@ class Shops extends React.Component<Props, OwnState> {
 		this.removeItem = this.removeItem.bind(this);
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		this.props.requestCatalog(CatalogTypeKeys.Entity);
 		this.props.requestCatalog(CatalogTypeKeys.Item);
 		this.props.requestCatalog(CatalogTypeKeys.Currency);
 	}
 
-	toggleModal() {
+	public render() {
+		const { t } = this.props;
+
+		const fields: DataViewFields<VillagerShopsShop> = {
+			uid: t('Id'),
+			name: {
+				label: t('Name'),
+				filter: true
+			},
+			entityType: {
+				label: t('Type'),
+				view: (shop: VillagerShopsShop) => shop.entityType.name,
+				filter: true,
+				options: renderCatalogTypeOptions(this.props.entityTypes)
+			}
+		};
+
+		return (
+			<>
+				<DataView
+					canEdit
+					canDelete
+					icon="shop"
+					title={t('Shops')}
+					filterTitle={t('FilterShops')}
+					fields={fields}
+					onEdit={this.handleEdit}
+				/>
+				{this.renderModal()}
+			</>
+		);
+	}
+
+	private renderModal() {
+		if (!this.state.modal || !this.state.shop) {
+			return;
+		}
+
+		const { t } = this.props;
+
+		const items = this.state.items.map((item, i) => (
+			<ShopItem
+				key={i}
+				item={item}
+				t={t}
+				i18n={i18n}
+				itemTypes={this.props.itemTypes}
+				currencies={this.props.currencies}
+				onChange={this.handleItemChange}
+				onRemove={this.removeItem}
+			/>
+		));
+
+		return (
+			<Modal
+				open={this.state.modal}
+				onClose={this.toggleModal}
+				size="fullscreen"
+				className="scrolling"
+			>
+				<Modal.Header>
+					<Trans i18nKey="ShopTitle">Edit '{this.state.shop.name}'</Trans>
+				</Modal.Header>
+				<Modal.Content>
+					<Form>
+						<Header>
+							<Icon fitted name="info" /> {t('General')}
+						</Header>
+
+						<Form.Group widths="equal">
+							<Form.Input
+								required
+								fluid
+								type="text"
+								name="name"
+								label={t('Name')}
+								placeholder={t('Name')}
+								onChange={this.handleChange}
+								value={this.state.name}
+							/>
+
+							<Form.Field
+								required
+								fluid
+								selection
+								search
+								control={Dropdown}
+								name="type"
+								label={t('Type')}
+								placeholder={t('Type')}
+								onChange={this.handleChange}
+								options={renderCatalogTypeOptions(this.props.entityTypes)}
+								value={this.state.type}
+							/>
+						</Form.Group>
+
+						<Header>
+							<Icon fitted name="cube" /> {t('Items')}
+						</Header>
+
+						<Table size="small">
+							<Table.Header>
+								<Table.Row>
+									<Table.HeaderCell>{t('Item')}</Table.HeaderCell>
+									<Table.HeaderCell>{t('Amount')}</Table.HeaderCell>
+									<Table.HeaderCell>{t('BuyPrice')}</Table.HeaderCell>
+									<Table.HeaderCell>{t('SellPrice')}</Table.HeaderCell>
+									<Table.HeaderCell>{t('Currency')}</Table.HeaderCell>
+									<Table.HeaderCell>{t('Stock')}</Table.HeaderCell>
+									<Table.HeaderCell>{t('MaxStock')}</Table.HeaderCell>
+									<Table.HeaderCell>{t('Actions')}</Table.HeaderCell>
+								</Table.Row>
+							</Table.Header>
+							<Table.Body>
+								{items}
+								<Table.Row>
+									<Table.Cell colSpan="8" textAlign="center">
+										<Button
+											positive
+											icon="plus"
+											content={t('Add')}
+											onClick={this.addItem}
+										/>
+									</Table.Cell>
+								</Table.Row>
+							</Table.Body>
+						</Table>
+					</Form>
+				</Modal.Content>
+				<Modal.Actions>
+					<Button primary onClick={this.save}>
+						{t('Save')}
+					</Button>
+					&nbsp;
+					<Button secondary onClick={this.toggleModal}>
+						{t('Cancel')}
+					</Button>
+				</Modal.Actions>
+			</Modal>
+		);
+	}
+
+	private toggleModal() {
 		this.setState({
 			modal: !this.state.modal
 		});
 	}
 
-	handleEdit(shop: VillagerShopsShop, view: DataViewRef<VillagerShopsShop>) {
+	private handleEdit(
+		shop: VillagerShopsShop,
+		view: DataViewRef<VillagerShopsShop>
+	) {
 		this.save = () => {
 			view.save(shop, {
 				name: this.state.name,
@@ -104,11 +251,11 @@ class Shops extends React.Component<Props, OwnState> {
 		});
 	}
 
-	handleItemChange(
+	private handleItemChange = (
 		item: VillagerShopsStockItem,
 		event: React.SyntheticEvent<HTMLElement>,
 		data?: DropdownProps
-	) {
+	) => {
 		const cb = (name: string, value: string) => {
 			const newItem = _.cloneDeep(item);
 			_.set(newItem, name, value);
@@ -118,9 +265,9 @@ class Shops extends React.Component<Props, OwnState> {
 			});
 		};
 		handleChange.call(this, cb, event, data);
-	}
+	};
 
-	addItem() {
+	private addItem() {
 		const newItem: VillagerShopsStockItem = {
 			item: {
 				type: {
@@ -149,148 +296,11 @@ class Shops extends React.Component<Props, OwnState> {
 		});
 	}
 
-	removeItem(item: VillagerShopsStockItem) {
+	private removeItem = (item: VillagerShopsStockItem) => {
 		this.setState({
 			items: this.state.items.filter(i => i !== item)
 		});
-	}
-
-	render() {
-		const _t = this.props.t;
-
-		return (
-			<>
-				<DataView
-					canEdit
-					canDelete
-					icon="shop"
-					title={_t('Shops')}
-					filterTitle={_t('FilterShops')}
-					fields={{
-						uid: _t('Id'),
-						name: {
-							label: _t('Name'),
-							filter: true
-						},
-						entityType: {
-							label: _t('Type'),
-							view: (shop: VillagerShopsShop) => shop.entityType.name,
-							filter: true,
-							options: renderCatalogTypeOptions(this.props.entityTypes)
-						}
-					}}
-					onEdit={this.handleEdit}
-				/>
-				{this.renderModal()}
-			</>
-		);
-	}
-
-	renderModal() {
-		if (!this.state.modal || !this.state.shop) {
-			return;
-		}
-
-		const _t = this.props.t;
-
-		return (
-			<Modal
-				open={this.state.modal}
-				onClose={this.toggleModal}
-				size="fullscreen"
-				className="scrolling"
-			>
-				<Modal.Header>
-					<Trans i18nKey="ShopTitle">Edit '{this.state.shop.name}'</Trans>
-				</Modal.Header>
-				<Modal.Content>
-					<Form>
-						<Header>
-							<Icon fitted name="info" /> {_t('General')}
-						</Header>
-
-						<Form.Group widths="equal">
-							<Form.Input
-								required
-								fluid
-								type="text"
-								name="name"
-								label={_t('Name')}
-								placeholder={_t('Name')}
-								onChange={this.handleChange}
-								value={this.state.name}
-							/>
-
-							<Form.Field
-								required
-								fluid
-								selection
-								search
-								control={Dropdown}
-								name="type"
-								label={_t('Type')}
-								placeholder={_t('Type')}
-								onChange={this.handleChange}
-								options={renderCatalogTypeOptions(this.props.entityTypes)}
-								value={this.state.type}
-							/>
-						</Form.Group>
-
-						<Header>
-							<Icon fitted name="cube" /> {_t('Items')}
-						</Header>
-
-						<Table size="small">
-							<Table.Header>
-								<Table.Row>
-									<Table.HeaderCell>{_t('Item')}</Table.HeaderCell>
-									<Table.HeaderCell>{_t('Amount')}</Table.HeaderCell>
-									<Table.HeaderCell>{_t('BuyPrice')}</Table.HeaderCell>
-									<Table.HeaderCell>{_t('SellPrice')}</Table.HeaderCell>
-									<Table.HeaderCell>{_t('Currency')}</Table.HeaderCell>
-									<Table.HeaderCell>{_t('Stock')}</Table.HeaderCell>
-									<Table.HeaderCell>{_t('MaxStock')}</Table.HeaderCell>
-									<Table.HeaderCell>{_t('Actions')}</Table.HeaderCell>
-								</Table.Row>
-							</Table.Header>
-							<Table.Body>
-								{this.state.items.map((item, i) => (
-									<ShopItem
-										key={i}
-										item={item}
-										t={_t}
-										itemTypes={this.props.itemTypes}
-										currencies={this.props.currencies}
-										onChange={(e, d) => this.handleItemChange(item, e, d)}
-										onRemove={() => this.removeItem(item)}
-									/>
-								))}
-								<Table.Row>
-									<Table.Cell colSpan="8" textAlign="center">
-										<Button
-											positive
-											icon="plus"
-											content={_t('Add')}
-											onClick={this.addItem}
-										/>
-									</Table.Cell>
-								</Table.Row>
-							</Table.Body>
-						</Table>
-					</Form>
-				</Modal.Content>
-				<Modal.Actions>
-					<Button primary onClick={this.save}>
-						{_t('Save')}
-					</Button>
-					&nbsp;
-					<Button secondary onClick={this.toggleModal}>
-						{_t('Cancel')}
-					</Button>
-				</Modal.Actions>
-			</Modal>
-		);
-	}
+	};
 }
 
 const mapStateToProps = (state: AppState) => {
@@ -310,4 +320,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Integrations.VShop')(Shops));
+)(withTranslation('Integrations.VShop')(Shops));

@@ -1,18 +1,18 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Accordion, Button, Dropdown, Form, Icon } from 'semantic-ui-react';
 
 import { DataFieldGroup, DataFieldRaw, DataTableRef } from '../../types';
 import { handleChange, HandleChangeFunc } from '../Util';
 
-export interface Props<T> extends reactI18Next.InjectedTranslateProps {
+export interface Props<T> extends WithTranslation {
 	title: string;
 	creating: boolean;
 	onCreate: (data: any, view: DataTableRef) => void;
 	button?: string;
 	fields: {
-		[x: string]: DataFieldRaw<T>
+		[x: string]: DataFieldRaw<T>;
 	};
 }
 
@@ -22,9 +22,9 @@ interface OwnState {
 }
 
 class CreateForm<T> extends React.Component<Props<T>, OwnState> {
-	handleChange: HandleChangeFunc;
+	private handleChange: HandleChangeFunc;
 
-	constructor(props: Props<T>) {
+	public constructor(props: Props<T>) {
 		super(props);
 
 		this.state = {
@@ -37,7 +37,7 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 		this.create = this.create.bind(this);
 	}
 
-	doHandleChange(key: string, value: string) {
+	private doHandleChange(key: string, value: string) {
 		this.setState({
 			newData: {
 				...this.state.newData,
@@ -46,7 +46,7 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 		});
 	}
 
-	shouldComponentUpdate(nextProps: Props<T>, nextState: OwnState) {
+	public shouldComponentUpdate(nextProps: Props<T>, nextState: OwnState) {
 		return (
 			nextProps.creating !== this.props.creating ||
 			nextProps.fields !== this.props.fields ||
@@ -55,7 +55,7 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 		);
 	}
 
-	create() {
+	private create() {
 		const data = {};
 		Object.keys(this.state.newData).forEach(key => {
 			_.set(data, key, this.state.newData[key]);
@@ -68,7 +68,7 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 		});
 	}
 
-	canCreate(): boolean {
+	private canCreate(): boolean {
 		return Object.keys(this.props.fields).every(name => {
 			const field = this.props.fields[name];
 			const key = field.createName ? field.createName : name;
@@ -78,20 +78,40 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 		});
 	}
 
-	handleClick() {
+	private handleClick = () => {
 		this.setState({
 			open: !this.state.open
 		});
-	}
+	};
 
-	render() {
-		const { title, creating, fields } = this.props;
+	public render() {
+		const { title, creating } = this.props;
 
 		const _t = this.props.t;
 
+		return (
+			<Accordion styled fluid>
+				<Accordion.Title active={this.state.open} onClick={this.handleClick}>
+					<Icon fitted name="plus" /> {title}
+				</Accordion.Title>
+
+				<Accordion.Content active={this.state.open}>
+					<Form loading={creating}>
+						{this.renderFieldGroups()}
+
+						<Button primary onClick={this.create} disabled={!this.canCreate()}>
+							{this.props.button || _t('Create')}
+						</Button>
+					</Form>
+				</Accordion.Content>
+			</Accordion>
+		);
+	}
+
+	private renderFieldGroups() {
 		const fieldGroups: DataFieldGroup<T>[] = [];
-		Object.keys(fields).forEach(name => {
-			const field = fields[name];
+		Object.keys(this.props.fields).forEach(name => {
+			const field = this.props.fields[name];
 			const newField: DataFieldRaw<T> = {
 				...field,
 				name: field.createName ? field.createName : name
@@ -109,41 +129,22 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 			}
 		});
 
-		return (
-			<Accordion styled fluid>
-				<Accordion.Title
-					active={this.state.open}
-					onClick={() => this.handleClick()}
-				>
-					<Icon fitted name="plus" /> {title}
-				</Accordion.Title>
+		return fieldGroups.map((fg, i) => {
+			if (fg.only) {
+				return <div key={i}>{this.renderField(fg.only)}</div>;
+			}
 
-				<Accordion.Content active={this.state.open}>
-					<Form loading={creating}>
-						{fieldGroups.map((fg, i) => {
-							if (fg.only) {
-								return <div key={i}>{this.renderField(fg.only)}</div>;
-							}
+			return (
+				<Form.Group key={i} widths="equal">
+					{fg.first && this.renderField(fg.first)}
 
-							return (
-								<Form.Group key={i} widths="equal">
-									{fg.first && this.renderField(fg.first)}
-
-									{fg.second && this.renderField(fg.second)}
-								</Form.Group>
-							);
-						})}
-
-						<Button primary onClick={this.create} disabled={!this.canCreate()}>
-							{this.props.button || _t('Create')}
-						</Button>
-					</Form>
-				</Accordion.Content>
-			</Accordion>
-		);
+					{fg.second && this.renderField(fg.second)}
+				</Form.Group>
+			);
+		});
 	}
 
-	renderField(field: DataFieldRaw<T>) {
+	private renderField(field: DataFieldRaw<T>) {
 		const state = this.state.newData;
 
 		if (typeof field.create === 'function') {
@@ -187,4 +188,4 @@ class CreateForm<T> extends React.Component<Props<T>, OwnState> {
 	}
 }
 
-export default translate('CreateForm')(CreateForm);
+export default withTranslation('CreateForm')(CreateForm);

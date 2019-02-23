@@ -1,4 +1,3 @@
-import { push } from 'react-router-redux';
 import { Action, Dispatch, MiddlewareAPI } from 'redux';
 
 import { AppAction, TypeKeys } from '../actions';
@@ -38,12 +37,12 @@ const persist = ({
 			if (window.localStorage) {
 				window.localStorage.removeItem('api');
 			}
-			dispatch(push('/login'));
+			action.history.push('/login');
 			break;
 
 		case TypeKeys.CHECK_USER_RESPONSE:
 			if (!action.ok) {
-				dispatch(push('/login'));
+				action.history.push('/login');
 			}
 			break;
 

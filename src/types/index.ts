@@ -1,4 +1,3 @@
-import { RouterState } from 'react-router-redux';
 import { SemanticICONS } from 'semantic-ui-react';
 
 import { HandleChangeFunc } from '../components/Util';
@@ -59,9 +58,7 @@ export interface AppState {
 	world: DataViewState<World>;
 	tileentity: DataViewState<TileEntity>;
 	server_properties: SettingsState;
-
 	preferences: PreferencesState;
-	router: RouterState;
 }
 
 // Data table
@@ -205,12 +202,12 @@ export enum Theme {
 	yeti = 'yeti'
 }
 
-export const themesArray = Object.keys(Theme).map(t => ({
+export const THEMES_ARRAY = Object.keys(Theme).map(t => ({
 	text: t.substring(0, 1).toLocaleUpperCase() + t.substring(1),
 	value: t
 }));
 
-export const KnownPermissions = {
+export const KNOWN_PERMISSIONS = {
 	block: {
 		one: true,
 		op: {
@@ -260,9 +257,6 @@ export const KnownPermissions = {
 		list: true,
 		one: true,
 		create: true
-	},
-	map: {
-		map: true
 	},
 	permission: {
 		collection: {

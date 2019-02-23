@@ -1,46 +1,48 @@
 import * as moment from 'moment';
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { AppAction } from '../../../actions';
+import DataViewFunc, { DataViewFields } from '../../../components/DataView';
 import ItemStack from '../../../components/ItemStack';
 import { UniversalMarketItem } from '../../../fetch';
 import { AppState } from '../../../types';
 
-import DataViewFunc from '../../../components/DataView';
+// tslint:disable-next-line: variable-name
 const DataView = DataViewFunc('universal-market/item', 'id');
 
-interface Props extends reactI18Next.InjectedTranslateProps {}
+interface Props extends WithTranslation {}
 
 interface OwnState {}
 
 class Items extends React.Component<Props, OwnState> {
-	render() {
-		const _t = this.props.t;
+	public render() {
+		const { t } = this.props;
+
+		const fields: DataViewFields<UniversalMarketItem> = {
+			item: {
+				label: t('Item'),
+				filter: true,
+				filterValue: (mi: UniversalMarketItem) =>
+					mi.item.type.name + ' (' + mi.item.type.id + ')',
+				view: (mi: UniversalMarketItem) => <ItemStack item={mi.item} />
+			},
+			price: t('Price'),
+			expires: {
+				label: t('Expires'),
+				view: (mi: UniversalMarketItem) => moment.unix(mi.expires).calendar()
+			},
+			'owner.name': t('Seller')
+		};
 
 		return (
 			<DataView
 				icon="shopping cart"
-				title={_t('Items')}
-				filterTitle={_t('FilterItems')}
-				fields={{
-					item: {
-						label: _t('Item'),
-						filter: true,
-						filterValue: (mi: UniversalMarketItem) =>
-							mi.item.type.name + ' (' + mi.item.type.id + ')',
-						view: (mi: UniversalMarketItem) => <ItemStack item={mi.item} />
-					},
-					price: _t('Price'),
-					expires: {
-						label: _t('Expires'),
-						view: (mi: UniversalMarketItem) =>
-							moment.unix(mi.expires).calendar()
-					},
-					'owner.name': _t('Seller')
-				}}
+				title={t('Items')}
+				filterTitle={t('FilterItems')}
+				fields={fields}
 			/>
 		);
 	}
@@ -57,4 +59,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Integrations.UniversalMarket')(Items));
+)(withTranslation('Integrations.UniversalMarket')(Items));

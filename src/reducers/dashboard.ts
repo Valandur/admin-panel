@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 
 import { AppAction } from '../actions';
 import { TypeKeys } from '../actions/dashboard';
-
 import { ServerInfo, ServerStats } from '../fetch';
 
 export interface DashboardState extends ServerStats {

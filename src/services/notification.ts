@@ -47,7 +47,7 @@ const notif = ({
 			break;
 
 		case NotifTypeKeys.SHOW_NOTIFICATION:
-			let msg = action.message;
+			const msg = action.message;
 			showNotif(action.level, action.title, msg);
 			break;
 

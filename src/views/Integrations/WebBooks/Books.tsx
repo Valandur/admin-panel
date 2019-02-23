@@ -1,18 +1,19 @@
 import * as copy from 'copy-to-clipboard';
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Button, Input, List } from 'semantic-ui-react';
 
 import { AppAction } from '../../../actions';
+import DataViewFunc, { DataViewFields } from '../../../components/DataView';
 import { WebBooksBook } from '../../../fetch';
 import { AppState, DataViewRef } from '../../../types';
 
-import DataViewFunc from '../../../components/DataView';
+// tslint:disable-next-line: variable-name
 const DataView = DataViewFunc('web-books/book', 'id');
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface Props extends WithTranslation {
 	apiUrl: string;
 }
 
@@ -22,182 +23,185 @@ interface OwnState {
 }
 
 class Books extends React.Component<Props, OwnState> {
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.renderEditContent = this.renderEditContent.bind(this);
 	}
 
-	addLine(view: DataViewRef<WebBooksBook>) {
-		view.setState({
-			lines: view.state.lines.concat(view.state.newItem),
-			newItem: ''
-		});
-	}
+	public render() {
+		const { t } = this.props;
 
-	moveLineUp(view: DataViewRef<WebBooksBook>, index: number) {
-		view.setState({
-			lines: view.state.lines.map(
-				(line: string, i: number) =>
-					i === index
-						? view.state.lines[index - 1]
-						: i === index - 1
-							? view.state.lines[index]
-							: line
-			)
-		});
-	}
+		const linkView = (book: WebBooksBook) => {
+			const action = {
+				color: 'teal',
+				icon: 'linkify',
+				onClick: () => this.copy(book)
+			};
+			const value =
+				this.props.apiUrl + '/api/v5/web-books/book/' + book.id + '/html';
+			return (
+				<Input fluid onFocus={this.onFocus} action={action} value={value} />
+			);
+		};
 
-	moveLineDown(view: DataViewRef<WebBooksBook>, index: number) {
-		view.setState({
-			lines: view.state.lines.map(
-				(line: string, i: number) =>
-					i === index
-						? view.state.lines[index + 1]
-						: i === index + 1
-							? view.state.lines[index]
-							: line
-			)
-		});
-	}
+		const fields: DataViewFields<WebBooksBook> = {
+			id: {
+				label: t('Id'),
+				create: true,
+				filter: true,
+				required: true
+			},
+			title: {
+				label: t('Title'),
+				edit: true,
+				create: true,
+				required: true,
+				wide: true
+			},
+			lines: {
+				view: false,
+				edit: true
+			},
+			content: {
+				label: t('Content'),
+				wide: true,
+				view: book => <div dangerouslySetInnerHTML={{ __html: book.html }} />,
+				edit: this.renderEditContent
+			},
+			link: {
+				label: t('Link'),
+				wide: true,
+				view: linkView
+			}
+		};
 
-	deleteLine(view: DataViewRef<WebBooksBook>, index: number) {
-		view.setState({
-			lines: view.state.lines.filter((line: string, i: number) => i !== index),
-			newItem: ''
-		});
-	}
-
-	copy(book: WebBooksBook) {
-		copy(this.props.apiUrl + '/api/v5/web-books/book/' + book.id + '/html');
-	}
-
-	render() {
-		const _t = this.props.t;
+		const onSave = (
+			obj: WebBooksBook,
+			newData: any,
+			view: DataViewRef<WebBooksBook>
+		) => {
+			view.save(obj, {
+				id: obj.id,
+				title: newData.title,
+				lines: newData.lines
+			});
+		};
 
 		return (
 			<DataView
 				canEdit
 				canDelete
 				icon="book"
-				title={_t('WebBooks')}
-				filterTitle={_t('FilterBooks')}
-				createTitle={_t('CreateBook')}
-				fields={{
-					id: {
-						label: _t('Id'),
-						create: true,
-						filter: true,
-						required: true
-					},
-					title: {
-						label: _t('Title'),
-						edit: true,
-						create: true,
-						required: true,
-						wide: true
-					},
-					lines: {
-						view: false,
-						edit: true
-					},
-					content: {
-						label: _t('Content'),
-						wide: true,
-						view: (book: WebBooksBook) => (
-							<div dangerouslySetInnerHTML={{ __html: book.html }} />
-						),
-						edit: this.renderEditContent
-					},
-					link: {
-						label: _t('Link'),
-						wide: true,
-						view: (book: WebBooksBook) => (
-							<Input
-								fluid
-								onFocus={(e: React.SyntheticEvent<HTMLInputElement>) =>
-									(e.target as any).select()
-								}
-								action={{
-									color: 'teal',
-									icon: 'linkify',
-									onClick: () => this.copy(book)
-								}}
-								value={
-									this.props.apiUrl +
-									'/api/v5/web-books/book/' +
-									book.id +
-									'/html'
-								}
-							/>
-						)
-					}
-				}}
-				onSave={(
-					obj: WebBooksBook,
-					newData: any,
-					view: DataViewRef<WebBooksBook>
-				) => {
-					view.save(obj, {
-						id: obj.id,
-						title: newData.title,
-						lines: newData.lines
-					});
-				}}
+				title={t('WebBooks')}
+				filterTitle={t('FilterBooks')}
+				createTitle={t('CreateBook')}
+				fields={fields}
+				onSave={onSave}
 			/>
 		);
 	}
 
-	renderEditContent(book: WebBooksBook, view: DataViewRef<WebBooksBook>) {
-		const _t = this.props.t;
+	private renderEditContent(
+		book: WebBooksBook,
+		view: DataViewRef<WebBooksBook>
+	) {
+		const { t } = this.props;
+
+		const lines = view.state.lines.map((line: string, index: number) => {
+			const onDel = () => this.deleteLine(view, index);
+			const onMoveDown = () => this.moveLineDown(view, index);
+			const onMoveLineUp = () => this.moveLineUp(view, index);
+			return (
+				<List.Item key={index}>
+					<Button compact negative icon="delete" size="mini" onClick={onDel} />
+					{line}
+					<Button
+						compact
+						primary
+						icon="arrow down"
+						size="mini"
+						floated="right"
+						onClick={onMoveDown}
+						disabled={index >= view.state.lines.length - 1}
+					/>
+					<Button
+						compact
+						primary
+						icon="arrow up"
+						size="mini"
+						floated="right"
+						onClick={onMoveLineUp}
+						disabled={index <= 0}
+					/>
+				</List.Item>
+			);
+		});
+
+		const action = {
+			color: 'green',
+			icon: 'plus',
+			onClick: () => this.addLine(view)
+		};
 
 		return (
 			<>
-				<List size="large">
-					{view.state.lines.map((line: string, index: number) => (
-						<List.Item key={index}>
-							<Button
-								compact
-								negative
-								icon="delete"
-								size="mini"
-								onClick={e => this.deleteLine(view, index)}
-							/>
-							{line}
-							<Button
-								compact
-								primary
-								icon="arrow down"
-								size="mini"
-								floated="right"
-								onClick={e => this.moveLineDown(view, index)}
-								disabled={index >= view.state.lines.length - 1}
-							/>
-							<Button
-								compact
-								primary
-								icon="arrow up"
-								size="mini"
-								floated="right"
-								onClick={e => this.moveLineUp(view, index)}
-								disabled={index <= 0}
-							/>
-						</List.Item>
-					))}
-				</List>
+				<List size="large">{lines}</List>
 				<Input
 					name="newItem"
-					placeholder={_t('NewLine')}
+					placeholder={t('NewLine')}
 					onChange={view.handleChange}
 					value={view.state.newItem ? view.state.newItem : ''}
-					action={{
-						color: 'green',
-						icon: 'plus',
-						onClick: () => this.addLine(view)
-					}}
+					action={action}
 				/>
 			</>
 		);
+	}
+
+	private onFocus = (e: React.SyntheticEvent<HTMLInputElement>) => {
+		(e.target as any).select();
+	};
+
+	private addLine(view: DataViewRef<WebBooksBook>) {
+		view.setState({
+			lines: view.state.lines.concat(view.state.newItem),
+			newItem: ''
+		});
+	}
+
+	private moveLineUp(view: DataViewRef<WebBooksBook>, index: number) {
+		view.setState({
+			lines: view.state.lines.map((line: string, i: number) =>
+				i === index
+					? view.state.lines[index - 1]
+					: i === index - 1
+					? view.state.lines[index]
+					: line
+			)
+		});
+	}
+
+	private moveLineDown(view: DataViewRef<WebBooksBook>, index: number) {
+		view.setState({
+			lines: view.state.lines.map((line: string, i: number) =>
+				i === index
+					? view.state.lines[index + 1]
+					: i === index + 1
+					? view.state.lines[index]
+					: line
+			)
+		});
+	}
+
+	private deleteLine(view: DataViewRef<WebBooksBook>, index: number) {
+		view.setState({
+			lines: view.state.lines.filter((line: string, i: number) => i !== index),
+			newItem: ''
+		});
+	}
+
+	private copy(book: WebBooksBook) {
+		copy(this.props.apiUrl + '/api/v5/web-books/book/' + book.id + '/html');
 	}
 }
 
@@ -214,4 +218,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Integrations.WebBooks')(Books));
+)(withTranslation('Integrations.WebBooks')(Books));

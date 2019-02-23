@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Grid, Header, Icon, Segment } from 'semantic-ui-react';
@@ -12,10 +12,10 @@ import {
 	langArray,
 	PreferenceKey,
 	Theme,
-	themesArray
+	THEMES_ARRAY
 } from '../../types';
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface Props extends WithTranslation {
 	lang: Lang;
 	theme: Theme;
 	showServerUsage: boolean;
@@ -26,8 +26,8 @@ interface Props extends reactI18Next.InjectedTranslateProps {
 }
 
 class Settings extends React.Component<Props> {
-	render() {
-		const { t, setPref } = this.props;
+	public render() {
+		const { t } = this.props;
 
 		return (
 			<Segment basic>
@@ -46,11 +46,9 @@ class Settings extends React.Component<Props> {
 									item
 									selection
 									placeholder={t('ChangeTheme')}
-									options={themesArray}
+									options={THEMES_ARRAY}
 									value={this.props.theme}
-									onChange={(e, data) =>
-										this.props.setPref(PreferenceKey.theme, data.value)
-									}
+									onChange={this.changeThemePref}
 								/>
 							</Form>
 						</Segment>
@@ -68,9 +66,7 @@ class Settings extends React.Component<Props> {
 									placeholder={t('ChangeLanguage')}
 									options={langArray}
 									value={this.props.lang}
-									onChange={(e, data) =>
-										this.props.setPref(PreferenceKey.lang, data.value)
-									}
+									onChange={this.changeLangPref}
 								/>
 							</Form>
 						</Segment>
@@ -86,31 +82,19 @@ class Settings extends React.Component<Props> {
 									toggle
 									label="Hide WIP notice on dashboard"
 									checked={this.props.hideWIPNote}
-									onClick={() =>
-										setPref(PreferenceKey.hideWIPNote, !this.props.hideWIPNote)
-									}
+									onChange={this.changeWIPNoticePref}
 								/>
 								<Form.Radio
 									toggle
 									label="Hide notice on plugins page"
 									checked={this.props.hidePluginsNote}
-									onClick={() =>
-										setPref(
-											PreferenceKey.hidePluginsNote,
-											!this.props.hidePluginsNote
-										)
-									}
+									onChange={this.changePluginsNotePref}
 								/>
 								<Form.Radio
 									toggle
 									label="Hide notice on server settings page"
 									checked={this.props.hideServerSettingsNote}
-									onClick={() =>
-										setPref(
-											PreferenceKey.hideServerSettingsNote,
-											!this.props.hideServerSettingsNote
-										)
-									}
+									onChange={this.changeServerSettingsNotePref}
 								/>
 							</Form>
 						</Segment>
@@ -126,12 +110,7 @@ class Settings extends React.Component<Props> {
 									toggle
 									label="Show server usage stats"
 									checked={this.props.showServerUsage}
-									onClick={() =>
-										setPref(
-											PreferenceKey.showServerUsage,
-											!this.props.showServerUsage
-										)
-									}
+									onChange={this.changeShowServerUsagePref}
 								/>
 							</Form>
 						</Segment>
@@ -140,6 +119,39 @@ class Settings extends React.Component<Props> {
 			</Segment>
 		);
 	}
+
+	private changeThemePref = (e: any, data: any) => {
+		this.props.setPref(PreferenceKey.theme, data.value);
+	};
+
+	private changeLangPref = (e: any, data: any) => {
+		this.props.setPref(PreferenceKey.lang, data.value);
+	};
+
+	private changeWIPNoticePref = () => {
+		this.props.setPref(PreferenceKey.hideWIPNote, !this.props.hideWIPNote);
+	};
+
+	private changePluginsNotePref = () => {
+		this.props.setPref(
+			PreferenceKey.hidePluginsNote,
+			!this.props.hidePluginsNote
+		);
+	};
+
+	private changeServerSettingsNotePref = () => {
+		this.props.setPref(
+			PreferenceKey.hideServerSettingsNote,
+			!this.props.hideServerSettingsNote
+		);
+	};
+
+	private changeShowServerUsagePref = () => {
+		this.props.setPref(
+			PreferenceKey.showServerUsage,
+			!this.props.showServerUsage
+		);
+	};
 }
 
 const mapStateToProps = (state: AppState) => {
@@ -163,4 +175,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Preferences')(Settings));
+)(withTranslation('Preferences')(Settings));

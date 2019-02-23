@@ -9,6 +9,10 @@ import {
 	PermissionTree
 } from '../../types';
 
+export type DataViewFields<T> = {
+	[key: string]: DataField<T> | DataFieldViewFunc<T> | string;
+};
+
 export interface OwnProps<T> {
 	title?: string;
 	icon?: SemanticICONS;
@@ -19,9 +23,7 @@ export interface OwnProps<T> {
 	filterTitle?: string;
 	filterButton?: string;
 	static?: boolean;
-	fields: {
-		[key: string]: DataField<T> | DataFieldViewFunc<T> | string;
-	};
+	fields: DataViewFields<T>;
 	checkCreatePerm?: boolean;
 	actions?: (data: T, view: DataViewRef<T>) => JSX.Element | undefined;
 	onCreate?: (data: any, view: DataViewRef<T>) => void;
@@ -42,10 +44,7 @@ export interface StateProps<T> {
 	};
 }
 
-export interface Props<T>
-	extends OwnProps<T>,
-		StateProps<T>,
-		reactI18Next.InjectedTranslateProps {}
+export interface Props<T> extends OwnProps<T>, StateProps<T> {}
 
 export interface DispatchProps<T> {
 	requestList: () => AppAction;

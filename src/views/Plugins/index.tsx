@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Trans, translate } from 'react-i18next';
+import { Trans, withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -19,7 +19,10 @@ import {
 	requestPluginConfigSave,
 	requestPluginToggle
 } from '../../actions/plugin';
+import { setPreference } from '../../actions/preferences';
+import DataViewFunc, { DataViewFields } from '../../components/DataView';
 import { JSON_EDITOR_MODE, ReactJSONEditor } from '../../components/JsonEditor';
+import { checkPermissions } from '../../components/Util';
 import { PluginContainer } from '../../fetch';
 import {
 	AppState,
@@ -28,10 +31,7 @@ import {
 	PreferenceKey
 } from '../../types';
 
-import { setPreference } from '../../actions/preferences';
-import { checkPermissions } from '../../components/Util';
-
-import DataViewFunc from '../../components/DataView';
+// tslint:disable-next-line:variable-name
 const DataView = DataViewFunc('plugin', 'id', true);
 
 const noDetailsIds = ['forge', 'minecraft', 'spongeapi', 'mcp'];
@@ -88,7 +88,7 @@ interface OwnProps {
 	perms?: PermissionTree;
 }
 
-interface Props extends OwnProps, reactI18Next.InjectedTranslateProps {
+interface Props extends OwnProps, WithTranslation {
 	requestPluginToggle: (id: string) => AppAction;
 	requestPluginConfig: (id: string) => AppAction;
 	requestPluginConfigSave: (
@@ -109,7 +109,7 @@ interface OwnState {
 }
 
 class Plugins extends React.Component<Props, OwnState> {
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -121,13 +121,13 @@ class Plugins extends React.Component<Props, OwnState> {
 		this.handleChange = this.handleChange.bind(this);
 	}
 
-	toggleModal() {
+	private toggleModal() {
 		this.setState({
 			modal: !this.state.modal
 		});
 	}
 
-	componentWillReceiveProps(nextProps: Props) {
+	public componentWillReceiveProps(nextProps: Props) {
 		if (nextProps.configs) {
 			this.setState({
 				configs: JSON.parse(JSON.stringify(nextProps.configs))
@@ -135,7 +135,10 @@ class Plugins extends React.Component<Props, OwnState> {
 		}
 	}
 
-	showDetails(plugin: PluginContainer, view: DataViewRef<PluginContainer>) {
+	private showDetails(
+		plugin: PluginContainer,
+		view: DataViewRef<PluginContainer>
+	) {
 		this.setState({
 			modal: true,
 			plugin: plugin,
@@ -144,15 +147,7 @@ class Plugins extends React.Component<Props, OwnState> {
 		this.props.requestPluginConfig(plugin.id);
 	}
 
-	toggle(tab: number) {
-		if (this.state.activeTab !== tab) {
-			this.setState({
-				activeTab: tab
-			});
-		}
-	}
-
-	handleChange(name: string, json: any) {
+	private handleChange(name: string, json: any) {
 		this.setState({
 			configs: {
 				[name]: json
@@ -160,7 +155,7 @@ class Plugins extends React.Component<Props, OwnState> {
 		});
 	}
 
-	save() {
+	private save() {
 		const plugin = this.state.plugin;
 		if (!plugin) {
 			return;
@@ -169,122 +164,79 @@ class Plugins extends React.Component<Props, OwnState> {
 		this.toggleModal();
 	}
 
-	typeToColor(plugin: PluginContainer) {
+	private typeToColor(plugin: PluginContainer) {
 		return plugin.type === PluginContainer.TypeEnum.Forge
 			? 'red'
 			: plugin.type === PluginContainer.TypeEnum.Minecraft
-				? 'blue'
-				: plugin.type === PluginContainer.TypeEnum.Sponge
-					? 'yellow'
-					: 'grey';
+			? 'blue'
+			: plugin.type === PluginContainer.TypeEnum.Sponge
+			? 'yellow'
+			: 'grey';
 	}
 
-	stateToColor(plugin: PluginContainer) {
+	private stateToColor(plugin: PluginContainer) {
 		return plugin.state === PluginContainer.StateEnum.Loaded
 			? 'green'
 			: plugin.state === PluginContainer.StateEnum.Unloaded
-				? 'red'
-				: 'yellow';
+			? 'red'
+			: 'yellow';
 	}
 
-	togglePlugin(plugin: PluginContainer) {
+	private togglePlugin(plugin: PluginContainer) {
 		this.props.requestPluginToggle(plugin.id);
 	}
 
-	render() {
-		const _t = this.props.t;
+	public render() {
+		const { t } = this.props;
+
+		const fields: DataViewFields<PluginContainer> = {
+			id: t('Id'),
+			name: t('Name'),
+			version: t('Version'),
+			type: {
+				label: t('Type'),
+				view: (p: PluginContainer) => (
+					<Label color={this.typeToColor(p)}>{p.type.toString()}</Label>
+				),
+				options: typeOptions,
+				filter: true
+			},
+			state: {
+				label: t('State'),
+				view: (plugin: PluginContainer) => (
+					<Label color={this.stateToColor(plugin)}>
+						{t(plugin.state.toString())}
+					</Label>
+				),
+				options: stateOptions,
+				filter: true
+			},
+			filter: {
+				view: false,
+				filter: view => (
+					<Form.Input
+						type="text"
+						name="filter"
+						label="Name"
+						placeholder="Name"
+						onChange={view.handleChange}
+						value={view.value}
+					/>
+				),
+				filterValue: (p: PluginContainer) => p.id + ' ' + p.name
+			}
+		};
 
 		return (
 			<>
-				{!this.props.hideNote && (
-					<Segment basic>
-						<Message warning onDismiss={() => this.props.doHideNote()}>
-							<Message.Header>{_t('WarnTitle')}</Message.Header>
-							<p>
-								<Trans i18nKey="WarnText">
-									Web-API automatically makes a backup of your configs before
-									saving them, but caution is still advised when changing config
-									values. To apply your new configs use{' '}
-									<b>/sponge plugins reload</b>. Plugins are not required to
-									implement the reload event, so this might not work for all
-									plugins. Use a server restart if required.
-								</Trans>
-							</p>
-						</Message>
-					</Segment>
-				)}
+				{this.renderNote()}
 
 				<DataView
 					icon="plug"
-					title={_t('Plugins')}
-					filterTitle={_t('Filter plugins')}
-					fields={{
-						id: _t('Id'),
-						name: _t('Name'),
-						version: _t('Version'),
-						type: {
-							label: _t('Type'),
-							view: (p: PluginContainer) => (
-								<Label color={this.typeToColor(p)}>{p.type.toString()}</Label>
-							),
-							options: typeOptions,
-							filter: true
-						},
-						state: {
-							label: _t('State'),
-							view: (plugin: PluginContainer) => (
-								<Label color={this.stateToColor(plugin)}>
-									{_t(plugin.state.toString())}
-								</Label>
-							),
-							options: stateOptions,
-							filter: true
-						},
-						filter: {
-							view: false,
-							filter: view => (
-								<Form.Input
-									type="text"
-									name="filter"
-									label="Name"
-									placeholder="Name"
-									onChange={view.handleChange}
-									value={view.value}
-								/>
-							),
-							filterValue: (p: PluginContainer) => p.id + ' ' + p.name
-						}
-					}}
-					actions={(plugin: PluginContainer, view) => (
-						<>
-							{noDetailsIds.indexOf(plugin.id) === -1 &&
-								checkPermissions(this.props.perms, [
-									'plugin',
-									'config',
-									'modify',
-									plugin.id
-								]) && (
-									<Button primary onClick={e => this.showDetails(plugin, view)}>
-										{_t('Configs')}
-									</Button>
-								)}
-							{noToggleIds.indexOf(plugin.id) === -1 &&
-								checkPermissions(this.props.perms, [
-									'plugin',
-									'config',
-									'toggle',
-									plugin.id
-								]) && (
-									<Button secondary onClick={() => this.togglePlugin(plugin)}>
-										{plugin.state === PluginContainer.StateEnum.Loaded
-											? _t('Unload')
-											: plugin.state === PluginContainer.StateEnum.Unloaded
-												? _t('Load')
-												: _t('Cancel')}
-									</Button>
-								)}
-						</>
-					)}
+					title={t('Plugins')}
+					filterTitle={t('Filter plugins')}
+					fields={fields}
+					actions={this.renderActions}
 				/>
 
 				{this.renderModal()}
@@ -292,7 +244,93 @@ class Plugins extends React.Component<Props, OwnState> {
 		);
 	}
 
-	renderModal() {
+	private renderNote() {
+		if (this.props.hideNote) {
+			return null;
+		}
+
+		return (
+			<Segment basic>
+				<Message warning onDismiss={this.props.doHideNote}>
+					<Message.Header>{this.props.t('WarnTitle')}</Message.Header>
+					<p>
+						<Trans i18nKey="WarnText">
+							Web-API automatically makes a backup of your configs before saving
+							them, but caution is still advised when changing config values. To
+							apply your new configs use <b>/sponge plugins reload</b>. Plugins
+							are not required to implement the reload event, so this might not
+							work for all plugins. Use a server restart if required.
+						</Trans>
+					</p>
+				</Message>
+			</Segment>
+		);
+	}
+
+	private renderActions = (
+		plugin: PluginContainer,
+		view: DataViewRef<PluginContainer>
+	) => {
+		return (
+			<>
+				{this.renderConfigButton(plugin, view)}
+				{this.renderToggleButton(plugin)}
+			</>
+		);
+	};
+	private renderConfigButton(
+		plugin: PluginContainer,
+		view: DataViewRef<PluginContainer>
+	) {
+		if (
+			noDetailsIds.indexOf(plugin.id) !== -1 ||
+			!checkPermissions(this.props.perms, [
+				'plugin',
+				'config',
+				'modify',
+				plugin.id
+			])
+		) {
+			return null;
+		}
+
+		const onShowDetails = () => this.showDetails(plugin, view);
+		return (
+			<Button primary onClick={onShowDetails}>
+				{this.props.t('Configs')}
+			</Button>
+		);
+	}
+	private renderToggleButton(plugin: PluginContainer) {
+		if (
+			noToggleIds.indexOf(plugin.id) !== -1 ||
+			!checkPermissions(this.props.perms, [
+				'plugin',
+				'config',
+				'toggle',
+				plugin.id
+			])
+		) {
+			return null;
+		}
+
+		const { t } = this.props;
+
+		const stateText =
+			plugin.state === PluginContainer.StateEnum.Loaded
+				? t('Unload')
+				: plugin.state === PluginContainer.StateEnum.Unloaded
+				? t('Load')
+				: t('Cancel');
+		const onTogglePlugin = () => this.togglePlugin(plugin);
+		return (
+			<Button secondary onClick={onTogglePlugin}>
+				{stateText}
+			</Button>
+		);
+	}
+
+	private renderModal() {
 		if (!this.state.plugin) {
 			return null;
 		}
@@ -310,33 +348,38 @@ class Plugins extends React.Component<Props, OwnState> {
 					{this.state.plugin.name}{' '}
 					<Label color="blue">{this.state.plugin.version}</Label>
 				</Modal.Header>
-				<Modal.Content>
-					{this.state.configs ? (
-						<Tab
-							panes={Object.keys(this.state.configs).map(name => ({
-								menuItem: name,
-								render: () => (
-									<ReactJSONEditor
-										key={name}
-										mode={JSON_EDITOR_MODE.tree}
-										json={this.props.configs[name]}
-										onChange={newConf => this.handleChange(name, newConf)}
-										width="100%"
-										height="calc(100vh - 20em)"
-									/>
-								)
-							}))}
-						/>
-					) : (
-						<Loader />
-					)}
-				</Modal.Content>
+				<Modal.Content>{this.renderModalTabs()}</Modal.Content>
 				<Modal.Actions>
 					<Button primary content={_t('Save')} onClick={this.save} />
 					<Button content={_t('Cancel')} onClick={this.toggleModal} />
 				</Modal.Actions>
 			</Modal>
 		);
+	}
+
+	private renderModalTabs() {
+		if (!this.state.configs) {
+			return <Loader />;
+		}
+
+		const panes = Object.keys(this.state.configs).map(name => {
+			const onChange = (newConf: string) => this.handleChange(name, newConf);
+			return {
+				menuItem: name,
+				render: () => (
+					<ReactJSONEditor
+						key={name}
+						mode={JSON_EDITOR_MODE.tree}
+						json={this.props.configs[name]}
+						onChange={onChange}
+						width="100%"
+						height="calc(100vh - 20em)"
+					/>
+				)
+			};
+		});
+
+		return <Tab panes={panes} />;
 	}
 }
 
@@ -367,4 +410,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Plugins')(Plugins));
+)(withTranslation('Plugins')(Plugins));

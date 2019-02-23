@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { Trans, translate } from 'react-i18next';
+import { Trans, withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -16,8 +16,6 @@ import {
 	TabProps
 } from 'semantic-ui-react';
 
-import DataTable from '../../components/DataTable';
-
 import { AppAction } from '../../actions';
 import {
 	CollectionsListRequestAction,
@@ -25,10 +23,11 @@ import {
 	requestSubjects,
 	SubjectsListRequestAction
 } from '../../actions/permission';
+import DataTable, { DataTableFields } from '../../components/DataTable';
 import { Subject, SubjectCollection } from '../../fetch';
 import { AppState } from '../../types';
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface Props extends WithTranslation {
 	collections: SubjectCollection[];
 	subjects: Subject[];
 	requestCollections: () => CollectionsListRequestAction;
@@ -42,7 +41,7 @@ interface OwnState {
 }
 
 class Permissions extends React.Component<Props, OwnState> {
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -53,11 +52,11 @@ class Permissions extends React.Component<Props, OwnState> {
 		this.onTabChange = this.onTabChange.bind(this);
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		this.props.requestCollections();
 	}
 
-	onTabChange(event: React.MouseEvent<HTMLDivElement>, data: TabProps) {
+	private onTabChange(event: React.MouseEvent<HTMLDivElement>, data: TabProps) {
 		if (!data.activeIndex && data.activeIndex !== 0) {
 			return;
 		}
@@ -66,22 +65,73 @@ class Permissions extends React.Component<Props, OwnState> {
 		this.props.requestSubjects(coll);
 	}
 
-	showSubject(subject: Subject) {
+	private showSubject = (subject: Subject) => {
 		this.setState({
 			modal: true,
 			subject
 		});
-	}
+	};
 
-	toggleModal() {
+	private toggleModal = () => {
 		this.setState({
 			modal: !this.state.modal
 		});
-	}
+	};
 
-	render() {
-		const _t = this.props.t;
-		const { modal, subject } = this.state;
+	public render() {
+		const { t } = this.props;
+		const { subject } = this.state;
+
+		const panes = this.props.collections.map(coll => ({
+			menuItem: (
+				<Menu.Item key={coll.id}>
+					{_.upperFirst(coll.id)}
+					<Label>{coll.loadedSubjectCount}</Label>
+				</Menu.Item>
+			),
+			render: () => {
+				const fields: DataTableFields<Subject> = {
+					id: {
+						name: 'id',
+						label: t('Id'),
+						view: true
+					},
+					friendlyId: {
+						name: 'friendlyId',
+						label: t('Name'),
+						view: true
+					},
+					permissions: {
+						name: 'permissions',
+						label: t('Permissions'),
+						view: (subj: Subject) => {
+							if (!subj.permissions || !Object.keys(subj.permissions).length) {
+								return t('No permissions');
+							}
+
+							const onShowSubject = () => this.showSubject(subj);
+							return <Button primary content="View" onClick={onShowSubject} />;
+						}
+					}
+				};
+
+				const idFunc = (subj: Subject) => subj.id;
+				const idFalse = () => false;
+
+				return (
+					<Segment basic>
+						<DataTable
+							list={this.props.subjects}
+							idFunc={idFunc}
+							isEditing={idFalse}
+							canEdit={idFalse}
+							canDelete={idFalse}
+							fields={fields}
+						/>
+					</Segment>
+				);
+			}
+		}));
 
 		return (
 			<Segment basic>
@@ -89,117 +139,65 @@ class Permissions extends React.Component<Props, OwnState> {
 					defaultActiveIndex={-1}
 					onTabChange={this.onTabChange}
 					menu={{ secondary: true, pointing: true }}
-					panes={this.props.collections.map(coll => ({
-						menuItem: (
-							<Menu.Item key={coll.id}>
-								{_.upperFirst(coll.id)}
-								<Label>{coll.loadedSubjectCount}</Label>
-							</Menu.Item>
-						),
-						render: () => {
-							return (
-								<Segment basic>
-									<DataTable
-										list={this.props.subjects}
-										idFunc={(subj: Subject) => subj.id}
-										isEditing={(subj: Subject) => false}
-										canEdit={() => false}
-										canDelete={() => false}
-										fields={{
-											id: {
-												name: 'id',
-												label: _t('Id'),
-												view: true
-											},
-											friendlyId: {
-												name: 'friendlyId',
-												label: _t('Name'),
-												view: true
-											},
-											permissions: {
-												name: 'permissions',
-												label: _t('Permissions'),
-												view: (subj: Subject) => {
-													if (
-														!subj.permissions ||
-														!Object.keys(subj.permissions).length
-													) {
-														return _t('No permissions');
-													}
-
-													return (
-														<Button
-															primary
-															content="View"
-															onClick={() => this.showSubject(subj)}
-														/>
-													);
-												}
-											}
-										}}
-									/>
-								</Segment>
-							);
-						}
-					}))}
+					panes={panes}
 				/>
 
-				{subject &&
-					subject.permissions && (
-						<Modal
-							open={modal}
-							onClose={() => this.toggleModal()}
-							size="fullscreen"
-							className="scrolling"
-						>
-							<Modal.Header>
-								<Trans i18nKey="GameRulesTitle">
-									Permissions for '{subject.id}'
-								</Trans>
-							</Modal.Header>
-							<Modal.Content>
-								<Input
-									type="text"
-									placeholder="Filter..."
-									value={this.state.filter}
-									onChange={(e, props) =>
-										this.setState({ filter: props.value })
-									}
-								/>
-								<Table basic compact>
-									<Table.Body>
-										{Object.keys(subject.permissions)
-											.filter(key => key.indexOf(this.state.filter) >= 0)
-											.map(key => (
-												<Table.Row key={key}>
-													<Table.Cell>{key}</Table.Cell>
-													<Table.Cell>
-														<Icon
-															color={
-																(subject.permissions as any)[key]
-																	? 'green'
-																	: 'red'
-															}
-															name={
-																(subject.permissions as any)[key]
-																	? 'check'
-																	: 'delete'
-															}
-														/>
-													</Table.Cell>
-												</Table.Row>
-											))}
-									</Table.Body>
-								</Table>
-							</Modal.Content>
-							<Modal.Actions>
-								<Button primary onClick={() => this.toggleModal()}>
-									{_t('OK')}
-								</Button>
-							</Modal.Actions>
-						</Modal>
-					)}
+				{this.renderSubject(subject)}
 			</Segment>
+		);
+	}
+
+	private renderSubject(subject: Subject | undefined) {
+		if (!subject || !subject.permissions) {
+			return null;
+		}
+
+		const { t } = this.props;
+
+		const onChange = (e: any, props: any) =>
+			this.setState({ filter: props.value });
+
+		const perms = Object.keys(subject.permissions)
+			.filter(key => key.indexOf(this.state.filter) >= 0)
+			.map(key => (
+				<Table.Row key={key}>
+					<Table.Cell>{key}</Table.Cell>
+					<Table.Cell>
+						<Icon
+							color={(subject.permissions as any)[key] ? 'green' : 'red'}
+							name={(subject.permissions as any)[key] ? 'check' : 'delete'}
+						/>
+					</Table.Cell>
+				</Table.Row>
+			));
+
+		return (
+			<Modal
+				open={this.state.modal}
+				onClose={this.toggleModal}
+				size="fullscreen"
+				className="scrolling"
+			>
+				<Modal.Header>
+					<Trans i18nKey="GameRulesTitle">Permissions for '{subject.id}'</Trans>
+				</Modal.Header>
+				<Modal.Content>
+					<Input
+						type="text"
+						placeholder="Filter..."
+						value={this.state.filter}
+						onChange={onChange}
+					/>
+					<Table basic compact>
+						<Table.Body>{perms}</Table.Body>
+					</Table>
+				</Modal.Content>
+				<Modal.Actions>
+					<Button primary onClick={this.toggleModal}>
+						{t('OK')}
+					</Button>
+				</Modal.Actions>
+			</Modal>
 		);
 	}
 }
@@ -222,4 +220,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Permissions')(Permissions));
+)(withTranslation('Permissions')(Permissions));

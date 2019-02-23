@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form } from 'semantic-ui-react';
@@ -15,7 +15,7 @@ import {
 	ShowNotificationAction
 } from '../../actions/notification';
 import Autosuggest from '../../components/Autosuggest';
-import DataViewFunc from '../../components/DataView';
+import DataViewFunc, { DataViewFields } from '../../components/DataView';
 import {
 	checkPermissions,
 	formatSource,
@@ -24,9 +24,10 @@ import {
 import { Command, CommandCall } from '../../fetch';
 import { AppState, PermissionTree } from '../../types';
 
+// tslint:disable-next-line:variable-name
 const DataView = DataViewFunc('history/cmd', 'timestamp');
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface Props extends WithTranslation {
 	commands: Command[];
 	perms: PermissionTree;
 	requestCommands: () => ListRequestAction;
@@ -48,7 +49,7 @@ interface ExtendedCommand extends Command {
 }
 
 class Commands extends React.Component<Props, {}> {
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.state = {};
@@ -56,7 +57,7 @@ class Commands extends React.Component<Props, {}> {
 		this.getSuggestions = this.getSuggestions.bind(this);
 	}
 
-	getSuggestions(newValue: string) {
+	private getSuggestions(newValue: string) {
 		const val = newValue.trim().toLowerCase();
 		const parts = val.split(' ');
 		const isExact = _.endsWith(newValue, ' ') || parts.length > 1;
@@ -127,112 +128,111 @@ class Commands extends React.Component<Props, {}> {
 		});
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		this.props.requestCommands();
 	}
 
-	render() {
-		const _t = this.props.t;
-
+	public render() {
+		const { t } = this.props;
 		const canExec = checkPermissions(this.props.perms, ['cmd', 'run']);
 		const canViewHistory = checkPermissions(this.props.perms, [
 			'history',
 			'cmd'
 		]);
 
+		const fields: DataViewFields<any> = {
+			timestamp: {
+				label: t('Timestamp'),
+				view: (cmd: CommandCall) => moment(cmd.timestamp).calendar()
+			},
+			source: {
+				label: t('Source'),
+				filter: true,
+				filterValue: (cmd: any) => {
+					if (cmd.cause.causes) {
+						return formatSource(cmd.cause.causes[0]);
+					} else {
+						const c = cmd as any;
+						return formatSource(c.cause.source);
+					}
+				},
+				view: (cmd: any) => {
+					if (cmd.cause.causes) {
+						return sourceLabel(cmd.cause.causes[0]);
+					} else {
+						const c = cmd as any;
+						return sourceLabel(c.cause.source);
+					}
+				}
+			},
+			command: {
+				label: t('Command'),
+				filter: true,
+				filterValue: (cmd: CommandCall) => cmd.command + ' ' + cmd.args,
+				wide: true,
+				view: (cmd: CommandCall) => cmd.command + ' ' + cmd.args
+			},
+			create: {
+				view: false,
+				isGroup: true,
+				create: view => (
+					<>
+						<Form.Field
+							control={Autosuggest}
+							name="execCmd"
+							placeholder={t('ExecuteCommand')}
+							getSuggestions={this.getSuggestions}
+							onChange={view.handleChange}
+						/>
+
+						<Form.Group widths="equal">
+							<Form.Input
+								name="waitLines"
+								placeholder={t('WaitLinesDescr')}
+								label={t('WaitLines')}
+								type="number"
+								onChange={view.handleChange}
+							/>
+
+							<Form.Input
+								name="waitTime"
+								placeholder={t('WaitTimeDescr')}
+								label={t('WaitTime')}
+								type="number"
+								onChange={view.handleChange}
+							/>
+						</Form.Group>
+					</>
+				)
+			}
+		};
+
 		return (
 			<DataView
-				title={_t('Commands')}
+				title={t('Commands')}
 				icon="terminal"
 				static={!canViewHistory}
-				createTitle={canExec ? _t('ExecuteCommand') : undefined}
-				createButton={_t('Execute')}
+				createTitle={canExec ? t('ExecuteCommand') : undefined}
+				createButton={t('Execute')}
 				checkCreatePerm={false}
-				filterTitle={_t('FilterCommands')}
-				fields={{
-					timestamp: {
-						label: _t('Timestamp'),
-						view: (cmd: CommandCall) => moment(cmd.timestamp).calendar()
-					},
-					source: {
-						label: _t('Source'),
-						filter: true,
-						filterValue: (cmd: any) => {
-							if (cmd.cause.causes) {
-								return formatSource(cmd.cause.causes[0]);
-							} else {
-								const c = cmd as any;
-								return formatSource(c.cause.source);
-							}
-						},
-						view: (cmd: any) => {
-							if (cmd.cause.causes) {
-								return sourceLabel(cmd.cause.causes[0]);
-							} else {
-								const c = cmd as any;
-								return sourceLabel(c.cause.source);
-							}
-						}
-					},
-					command: {
-						label: _t('Command'),
-						filter: true,
-						filterValue: (cmd: CommandCall) => cmd.command + ' ' + cmd.args,
-						wide: true,
-						view: (cmd: CommandCall) => cmd.command + ' ' + cmd.args
-					},
-					create: {
-						view: false,
-						isGroup: true,
-						create: view => (
-							<>
-								<Form.Field
-									control={Autosuggest}
-									name="execCmd"
-									placeholder={_t('ExecuteCommand')}
-									getSuggestions={this.getSuggestions}
-									onChange={view.handleChange}
-								/>
-
-								<Form.Group widths="equal">
-									<Form.Input
-										name="waitLines"
-										placeholder={_t('WaitLinesDescr')}
-										label={_t('WaitLines')}
-										type="number"
-										onChange={view.handleChange}
-									/>
-
-									<Form.Input
-										name="waitTime"
-										placeholder={_t('WaitTimeDescr')}
-										label={_t('WaitTime')}
-										type="number"
-										onChange={view.handleChange}
-									/>
-								</Form.Group>
-							</>
-						)
-					}
-				}}
-				onCreate={(obj, view) => {
-					if (!obj.execCmd) {
-						this.props.showNotification(
-							'error',
-							'Command',
-							'You must enter a command'
-						);
-						return;
-					}
-					this.props.requestExecute(
-						obj.execCmd.trim(),
-						obj.waitLines,
-						obj.waitTime
-					);
-				}}
+				filterTitle={t('FilterCommands')}
+				fields={fields}
+				onCreate={this.onCreate}
 			/>
 		);
 	}
+
+	private onCreate = (obj: any) => {
+		if (!obj.execCmd) {
+			this.props.showNotification(
+				'error',
+				'Command',
+				'You must enter a command'
+			);
+			return;
+		}
+		this.props.requestExecute(obj.execCmd.trim(), obj.waitLines, obj.waitTime);
+	};
 }
 
 const mapStateToProps = (state: AppState) => {
@@ -255,4 +255,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Commands')(Commands));
+)(withTranslation('Commands')(Commands));

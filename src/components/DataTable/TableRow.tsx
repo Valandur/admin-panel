@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { WithTranslation } from 'react-i18next';
 import { Button, Dropdown, Form, Icon, Table } from 'semantic-ui-react';
 
 import { DataFieldRaw, DataTableRef } from '../../types';
 import { get, HandleChangeFunc } from '../Util';
 
-export interface Props<T> extends reactI18Next.InjectedTranslateProps {
+export interface Props<T> extends WithTranslation {
 	obj: T;
 	tableRef: DataTableRef;
 	actionable: boolean;
@@ -12,7 +13,7 @@ export interface Props<T> extends reactI18Next.InjectedTranslateProps {
 	canDelete?: (data: T) => boolean;
 	editing: boolean;
 	fields: DataFieldRaw<T>[];
-	onEdit: (data: T | null, view: DataTableRef) => void;
+	onEdit: (data: T | undefined, view: DataTableRef) => void;
 	onSave?: (data: T, newData: any, view: DataTableRef) => void;
 	onDelete?: (data: T, view: DataTableRef) => void;
 	actions?: (data: T, view: DataTableRef) => JSX.Element | undefined;
@@ -21,7 +22,7 @@ export interface Props<T> extends reactI18Next.InjectedTranslateProps {
 }
 
 export default class TableRow<T> extends React.Component<Props<T>> {
-	shouldComponentUpdate(nextProps: Props<T>, nextState: any) {
+	public shouldComponentUpdate(nextProps: Props<T>, nextState: any) {
 		return (
 			nextProps.obj !== this.props.obj ||
 			nextProps.editing !== this.props.editing ||
@@ -30,7 +31,60 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 		);
 	}
 
-	renderEdit(obj: T, col: DataFieldRaw<T>) {
+	private onSave = () => {
+		const { obj, tableRef } = this.props;
+
+		if (this.props.onSave) {
+			this.props.onSave(obj, this.props.newData, tableRef);
+		}
+	};
+
+	private onEditEmpty = () => {
+		this.props.onEdit(undefined, this.props.tableRef);
+	};
+
+	private onEdit = () => {
+		this.props.onEdit(this.props.obj, this.props.tableRef);
+	};
+
+	private onDelete = () => {
+		if (this.props.onDelete) {
+			this.props.onDelete(this.props.obj, this.props.tableRef);
+		}
+	};
+
+	public render() {
+		return (
+			<Table.Row>
+				{this.renderFields()}
+				{this.renderActions()}
+			</Table.Row>
+		);
+	}
+
+	private renderFields() {
+		const { fields } = this.props;
+
+		return fields.map((field, j) => (
+			<Table.Cell key={j} collapsing={!field.wide}>
+				{this.renderField(field)}
+			</Table.Cell>
+		));
+	}
+
+	private renderField(field: DataFieldRaw<T>) {
+		const { obj, editing, tableRef } = this.props;
+
+		return field.edit && editing
+			? typeof field.edit === 'function'
+				? field.edit(obj, tableRef)
+				: this.renderEdit(obj, field)
+			: typeof field.view === 'function'
+			? field.view(obj, tableRef)
+			: get(obj, field.name);
+	}
+
+	private renderEdit(obj: T, col: DataFieldRaw<T>) {
 		if (col.options) {
 			return (
 				<Form.Field
@@ -58,10 +112,9 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 		);
 	}
 
-	render() {
+	private renderActions() {
 		const {
 			actions,
-			fields,
 			obj,
 			actionable,
 			canEdit,
@@ -74,74 +127,67 @@ export default class TableRow<T> extends React.Component<Props<T>> {
 		const _canDelete =
 			typeof canDelete === 'function' ? canDelete(obj) : canEdit;
 
+		if (!actions && !actionable) {
+			return null;
+		}
+
+		let edit = null;
+		if (_canEdit && editing) {
+			edit = (
+				<Table.Cell collapsing>
+					<Button
+						primary
+						disabled={(obj as any).updating}
+						loading={(obj as any).updating}
+						onClick={this.onSave}
+					>
+						<Icon name="save" /> {this.props.t('Save')}
+					</Button>
+					<Button
+						secondary
+						disabled={(obj as any).updating}
+						loading={(obj as any).updating}
+						onClick={this.onEditEmpty}
+					>
+						<Icon name="cancel" /> {this.props.t('Cancel')}
+					</Button>
+				</Table.Cell>
+			);
+		} else if (_canEdit) {
+			edit = (
+				<Table.Cell collapsing>
+					<Button
+						primary
+						disabled={(obj as any).updating}
+						loading={(obj as any).updating}
+						onClick={this.onEdit}
+					>
+						<Icon name="edit" /> {this.props.t('Edit')}
+					</Button>
+				</Table.Cell>
+			);
+		}
+
+		let del = null;
+		if (_canDelete) {
+			del = (
+				<Button
+					negative
+					disabled={(obj as any).updating}
+					loading={(obj as any).updating}
+					onClick={this.onDelete}
+				>
+					<Icon name="trash" /> {this.props.t('Remove')}
+				</Button>
+			);
+		}
+
 		return (
-			<Table.Row>
-				{fields.map((field, j) => (
-					<Table.Cell key={j} collapsing={!field.wide}>
-						{field.edit && editing
-							? typeof field.edit === 'function'
-								? field.edit(obj, tableRef)
-								: this.renderEdit(obj, field)
-							: typeof field.view === 'function'
-								? field.view(obj, tableRef)
-								: get(obj, field.name)}
-					</Table.Cell>
-				))}
-				{actions || actionable ? (
-					<Table.Cell collapsing>
-						{_canEdit && editing ? (
-							[
-								<Button
-									key="save"
-									primary
-									disabled={(obj as any).updating}
-									loading={(obj as any).updating}
-									onClick={() => {
-										if (this.props.onSave) {
-											this.props.onSave(obj, this.props.newData, tableRef);
-										}
-									}}
-								>
-									<Icon name="save" /> {this.props.t('Save')}
-								</Button>,
-								<Button
-									key="cancel"
-									secondary
-									disabled={(obj as any).updating}
-									loading={(obj as any).updating}
-									onClick={() => this.props.onEdit(null, tableRef)}
-								>
-									<Icon name="cancel" /> {this.props.t('Cancel')}
-								</Button>
-							]
-						) : _canEdit ? (
-							<Button
-								primary
-								disabled={(obj as any).updating}
-								loading={(obj as any).updating}
-								onClick={() => this.props.onEdit(obj, tableRef)}
-							>
-								<Icon name="edit" /> {this.props.t('Edit')}
-							</Button>
-						) : null}
-						{_canDelete && (
-							<Button
-								negative
-								disabled={(obj as any).updating}
-								loading={(obj as any).updating}
-								onClick={() => {
-									if (this.props.onDelete) {
-										this.props.onDelete(obj, tableRef);
-									}
-								}}
-							>
-								<Icon name="trash" /> {this.props.t('Remove')}
-							</Button>
-						)}
-						{actions ? actions(obj, tableRef) : null}
-					</Table.Cell>
-				) : null}
-			</Table.Row>
+			<Table.Cell collapsing>
+				{edit}
+				{del}
+				{actions ? actions(obj, tableRef) : null}
+			</Table.Cell>
 		);
 	}
 }

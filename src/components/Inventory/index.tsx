@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Accordion, Button, Radio } from 'semantic-ui-react';
 
 import { Inventory, ItemStack } from '../../fetch';
@@ -16,7 +16,7 @@ const customizer: (
 	return undefined;
 };
 
-export interface AppProps extends reactI18Next.InjectedTranslateProps {
+export interface AppProps extends WithTranslation {
 	inventory: Inventory;
 	dontStack?: boolean;
 	stackOption?: boolean;
@@ -29,7 +29,7 @@ interface AppState {
 }
 
 class InventoryComp extends React.Component<AppProps, AppState> {
-	constructor(props: AppProps) {
+	public constructor(props: AppProps) {
 		super(props);
 
 		this.state = {
@@ -40,13 +40,13 @@ class InventoryComp extends React.Component<AppProps, AppState> {
 		this.toggle = this.toggle.bind(this);
 	}
 
-	toggle() {
+	private toggle() {
 		this.setState({
 			shown: !this.state.shown
 		});
 	}
 
-	render() {
+	public render() {
 		const { t, inventory } = this.props;
 
 		if (inventory.slots.length === 0) {
@@ -57,30 +57,10 @@ class InventoryComp extends React.Component<AppProps, AppState> {
 			);
 		}
 
-		let items = _.sortBy(inventory.slots.map(s => s.stack), 'type.name');
-		if (!this.props.dontStack && this.state.stacked) {
-			const itemGroups = _.groupBy(items, 'type.id');
-			items = _.map(itemGroups, itemGroup => {
-				let item = _.merge({}, _.first(itemGroup));
-				_.tail(itemGroup).forEach(
-					newItem => (item = _.mergeWith(item, newItem, customizer))
-				);
-				return _.merge(item, { quantity: _.sumBy(itemGroup, 'quantity') });
-			});
-		}
-
 		const content = (
 			<div>
-				{this.props.stackOption && [
-					<Radio
-						toggle
-						key="radio"
-						checked={this.state.stacked}
-						onClick={() => this.setState({ stacked: !this.state.stacked })}
-					/>,
-					<br key="newline" />
-				]}
-				{items.map((item, i) => <ItemStackComp key={i} item={item} />)}
+				{this.renderStackToggle()}
+				{this.renderItems()}
 			</div>
 		);
 
@@ -104,6 +84,43 @@ class InventoryComp extends React.Component<AppProps, AppState> {
 			</Accordion>
 		);
 	}
+
+	private renderStackToggle() {
+		return this.props.stackOption ? (
+			<>
+				<Radio
+					toggle
+					checked={this.state.stacked}
+					onChange={this.toggleStacked}
+				/>
+				<br />
+			</>
+		) : null;
+	}
+
+	private renderItems() {
+		let items = _.sortBy(
+			this.props.inventory.slots.map(s => s.stack),
+			'type.name'
+		);
+
+		if (!this.props.dontStack && this.state.stacked) {
+			const itemGroups = _.groupBy(items, 'type.id');
+			items = _.map(itemGroups, itemGroup => {
+				let item = _.merge({}, _.first(itemGroup));
+				_.tail(itemGroup).forEach(
+					newItem => (item = _.mergeWith(item, newItem, customizer))
+				);
+				return _.merge(item, { quantity: _.sumBy(itemGroup, 'quantity') });
+			});
+		}
+
+		return items.map((item, i) => <ItemStackComp key={i} item={item} />);
+	}
+
+	private toggleStacked = () => {
+		this.setState({ stacked: !this.state.stacked });
+	};
 }
 
-export default translate('Inventory')(InventoryComp);
+export default withTranslation('Inventory')(InventoryComp);

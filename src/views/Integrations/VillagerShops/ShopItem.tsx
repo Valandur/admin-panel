@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { WithTranslation } from 'react-i18next';
 import {
 	Button,
 	Dropdown,
@@ -11,39 +12,23 @@ import {
 import { renderCatalogTypeOptions } from '../../../components/Util';
 import { CatalogType, VillagerShopsStockItem } from '../../../fetch';
 
-interface Props extends reactI18Next.InjectedTranslateProps {
+interface Props extends WithTranslation {
 	item: VillagerShopsStockItem;
 	itemTypes: CatalogType[];
 	currencies: CatalogType[];
 	onChange: (
+		item: VillagerShopsStockItem,
 		event: React.SyntheticEvent<HTMLElement>,
 		data?: DropdownProps
 	) => void;
-	onRemove: () => void;
+	onRemove: (item: VillagerShopsStockItem) => void;
 }
 
 interface OwnState {}
 
 class ShopItem extends React.Component<Props, OwnState> {
-	shouldComponentUpdate(nextProps: Props, nextState: OwnState) {
-		console.log(this.props);
-		console.log(nextProps);
-		return (
-			!nextProps.item ||
-			!this.props.item ||
-			nextProps.item.id !== this.props.item.id ||
-			nextProps.item.item.quantity !== this.props.item.item.quantity ||
-			nextProps.item.item.type.id !== this.props.item.item.type.id ||
-			nextProps.item.buyPrice !== this.props.item.buyPrice ||
-			nextProps.item.sellPrice !== this.props.item.sellPrice ||
-			nextProps.item.stock !== this.props.item.stock ||
-			nextProps.item.maxStock !== this.props.item.maxStock ||
-			nextProps.item.currency.id !== this.props.item.currency.id
-		);
-	}
-
-	render() {
-		const { item, t, onChange, onRemove } = this.props;
+	public render() {
+		const { item, t } = this.props;
 
 		return (
 			<Table.Row>
@@ -56,7 +41,7 @@ class ShopItem extends React.Component<Props, OwnState> {
 						placeholder="Item"
 						value={item.item.type.id}
 						options={renderCatalogTypeOptions(this.props.itemTypes)}
-						onChange={(e: any, val: any) => onChange(e, val)}
+						onChange={this.onChange}
 					/>
 				</Table.Cell>
 				<Table.Cell>
@@ -65,7 +50,7 @@ class ShopItem extends React.Component<Props, OwnState> {
 						type="number"
 						name="item.quantity"
 						placeholder={t('Amount')}
-						onChange={e => onChange(e)}
+						onChange={this.onChange}
 						value={item.item.quantity}
 					/>
 				</Table.Cell>
@@ -75,7 +60,7 @@ class ShopItem extends React.Component<Props, OwnState> {
 						type="number"
 						name="buyPrice"
 						placeholder={t('BuyPrice')}
-						onChange={e => onChange(e)}
+						onChange={this.onChange}
 						value={item.buyPrice}
 					/>
 				</Table.Cell>
@@ -85,7 +70,7 @@ class ShopItem extends React.Component<Props, OwnState> {
 						type="number"
 						name="sellPrice"
 						placeholder={t('SellPrice')}
-						onChange={e => onChange(e)}
+						onChange={this.onChange}
 						value={item.sellPrice}
 					/>
 				</Table.Cell>
@@ -98,7 +83,7 @@ class ShopItem extends React.Component<Props, OwnState> {
 						placeholder="Currency"
 						value={item.currency.id}
 						options={renderCatalogTypeOptions(this.props.currencies)}
-						onChange={(e: any, val: any) => onChange(e, val)}
+						onChange={this.onChange}
 					/>
 				</Table.Cell>
 				<Table.Cell>
@@ -107,7 +92,7 @@ class ShopItem extends React.Component<Props, OwnState> {
 						type="number"
 						name="stock"
 						placeholder={t('Stock')}
-						onChange={e => onChange(e)}
+						onChange={this.onChange}
 						value={item.stock}
 					/>
 				</Table.Cell>
@@ -117,7 +102,7 @@ class ShopItem extends React.Component<Props, OwnState> {
 						type="number"
 						name="maxStock"
 						placeholder={t('MaxStock')}
-						onChange={e => onChange(e)}
+						onChange={this.onChange}
 						value={item.maxStock}
 					/>
 				</Table.Cell>
@@ -126,12 +111,20 @@ class ShopItem extends React.Component<Props, OwnState> {
 						negative
 						icon="delete"
 						content={t('Delete')}
-						onClick={e => onRemove()}
+						onClick={this.onRemove}
 					/>
 				</Table.Cell>
 			</Table.Row>
 		);
 	}
+
+	private onChange = (e: any, val: any) => {
+		this.props.onChange(this.props.item, e, val);
+	};
+
+	private onRemove = () => {
+		this.props.onRemove(this.props.item);
+	};
 }
 
 export default ShopItem;

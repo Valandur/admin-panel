@@ -1,19 +1,20 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Button, Form, Modal } from 'semantic-ui-react';
 
 import { AppAction } from '../../actions';
-import DataViewFunc from '../../components/DataView';
+import DataViewFunc, { DataViewFields } from '../../components/DataView';
 import { PermissionsTree } from '../../components/PermissionsTree';
 import { UserPermissionStruct } from '../../fetch';
 import { AppState, DataViewRef } from '../../types';
 
+// tslint:disable-next-line: variable-name
 const DataView = DataViewFunc('user', 'name');
 
-interface Props extends reactI18Next.InjectedTranslateProps {}
+interface Props extends WithTranslation {}
 
 interface State {
 	modal: boolean;
@@ -23,7 +24,7 @@ interface State {
 }
 
 class Users extends React.Component<Props, State> {
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -31,13 +32,111 @@ class Users extends React.Component<Props, State> {
 		};
 	}
 
-	toggleModal() {
+	public render() {
+		const { t } = this.props;
+
+		const fields: DataViewFields<UserPermissionStruct> = {
+			name: {
+				required: true,
+				label: t('Name'),
+				create: true,
+				filter: true
+			},
+			password: {
+				required: true,
+				create: (view: DataViewRef<UserPermissionStruct>) => (
+					<Form.Input
+						label={t('Password')}
+						type="password"
+						name="password"
+						placeholder="********"
+						value={view.state.password}
+						onChange={view.handleChange}
+					/>
+				),
+				view: false
+			},
+			permissions: {
+				label: t('Permissions'),
+				view: (user: UserPermissionStruct) => (
+					<PermissionsTree permissions={user.permissions} />
+				)
+			}
+		};
+
+		return (
+			<>
+				<DataView
+					canEdit
+					canDelete
+					icon="users"
+					createTitle={t('CreateUser')}
+					filterTitle={t('FilterUsers')}
+					title={t('Users')}
+					fields={fields}
+					onEdit={this.onEdit}
+					onCreate={this.onCreate}
+				/>
+				{this.renderModal()}
+			</>
+		);
+	}
+
+	private renderModal() {
+		const { t } = this.props;
+		const { user, modal, permissions } = this.state;
+
+		if (!user) {
+			return undefined;
+		}
+
+		return (
+			<Modal
+				open={modal}
+				onClose={this.toggleModal}
+				size="fullscreen"
+				className="scrolling"
+			>
+				<Modal.Header>{user.name} </Modal.Header>
+				<Modal.Content>
+					<PermissionsTree
+						canEdit
+						permissions={permissions}
+						onChange={this.handleChange}
+						onDelete={this.handleDelete}
+					/>
+				</Modal.Content>
+				<Modal.Actions>
+					<Button primary onClick={this.savePermissions}>
+						{t('Save')}
+					</Button>
+					&nbsp;
+					<Button secondary onClick={this.toggleModal}>
+						{t('Cancel')}
+					</Button>
+				</Modal.Actions>
+			</Modal>
+		);
+	}
+
+	private onEdit = (
+		user: UserPermissionStruct | undefined,
+		view: DataViewRef<UserPermissionStruct>
+	) => {
+		this.showDetails(user, view);
+	};
+
+	private onCreate = (data: any, view: DataViewRef<UserPermissionStruct>) => {
+		view.create({ username: data.name, password: data.password });
+	};
+
+	private toggleModal = () => {
 		this.setState({
 			modal: !this.state.modal
 		});
-	}
+	};
 
-	showDetails(
+	private showDetails(
 		user: UserPermissionStruct | undefined,
 		view: DataViewRef<UserPermissionStruct>
 	) {
@@ -49,7 +148,7 @@ class Users extends React.Component<Props, State> {
 		});
 	}
 
-	handleChange(key: string[], val: string | boolean) {
+	private handleChange = (key: string[], val: string | boolean) => {
 		const newPerms = _.merge({}, this.state.permissions);
 		if (val === '__custom__') {
 			_.set(newPerms, key, {});
@@ -57,15 +156,15 @@ class Users extends React.Component<Props, State> {
 			_.set(newPerms, key, val);
 		}
 		this.setState({ permissions: newPerms });
-	}
+	};
 
-	handleDelete(key: string[]) {
+	private handleDelete = (key: string[]) => {
 		const newPerms = _.merge({}, this.state.permissions);
 		_.unset(newPerms, key);
 		this.setState({ permissions: newPerms });
-	}
+	};
 
-	savePermissions() {
+	private savePermissions = () => {
 		if (!this.state.view || !this.state.user) {
 			return;
 		}
@@ -74,96 +173,7 @@ class Users extends React.Component<Props, State> {
 			permissions: this.state.permissions
 		});
 		this.toggleModal();
-	}
-
-	render() {
-		const { t } = this.props;
-
-		return (
-			<>
-				<DataView
-					canEdit
-					canDelete
-					icon="users"
-					createTitle={t('CreateUser')}
-					filterTitle={t('FilterUsers')}
-					title={t('Users')}
-					fields={{
-						name: {
-							required: true,
-							label: t('Name'),
-							create: true,
-							filter: true
-						},
-						password: {
-							required: true,
-							create: (view: DataViewRef<UserPermissionStruct>) => (
-								<Form.Input
-									label={t('Password')}
-									type="password"
-									name="password"
-									placeholder="********"
-									value={view.state.password}
-									onChange={view.handleChange}
-								/>
-							),
-							view: false
-						},
-						permissions: {
-							label: t('Permissions'),
-							view: (user: UserPermissionStruct) => (
-								<PermissionsTree permissions={user.permissions} />
-							)
-						}
-					}}
-					onEdit={(
-						user: UserPermissionStruct | undefined,
-						view: DataViewRef<UserPermissionStruct>
-					) => this.showDetails(user, view)}
-					onCreate={(data: any, view: DataViewRef<UserPermissionStruct>) =>
-						view.create({ username: data.name, password: data.password })
-					}
-				/>
-				{this.renderModal()}
-			</>
-		);
-	}
-
-	renderModal() {
-		const { t } = this.props;
-		const { user, modal, permissions } = this.state;
-
-		if (!user) {
-			return undefined;
-		}
-
-		return (
-			<Modal
-				open={modal}
-				onClose={() => this.toggleModal()}
-				size="fullscreen"
-				className="scrolling"
-			>
-				<Modal.Header>{user.name} </Modal.Header>
-				<Modal.Content>
-					<PermissionsTree
-						canEdit
-						permissions={permissions}
-						onChange={(key, val) => this.handleChange(key, val)}
-						onDelete={key => this.handleDelete(key)}
-					/>
-				</Modal.Content>
-				<Modal.Actions>
-					<Button primary onClick={() => this.savePermissions()}>
-						{t('Save')}
-					</Button>&nbsp;
-					<Button secondary onClick={() => this.toggleModal()}>
-						{t('Cancel')}
-					</Button>
-				</Modal.Actions>
-			</Modal>
-		);
-	}
+	};
 }
 
 const mapStateToProps = (state: AppState) => {
@@ -177,4 +187,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(translate('Users')(Users));
+)(withTranslation('Users')(Users));

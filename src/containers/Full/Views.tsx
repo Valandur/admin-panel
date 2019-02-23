@@ -27,10 +27,10 @@ export function load(
 	});
 }
 
+// tslint:disable:variable-name
 const Dashboard = load(() => import('../../views/Dashboard'));
 const Chat = load(() => import('../../views/Chat'));
 const Commands = load(() => import('../../views/Commands'));
-const Map = load(() => import('../../views/Map'));
 const Worlds = load(() => import('../../views/Worlds'));
 const Players = load(() => import('../../views/Players'));
 const Permissions = load(() => import('../../views/Permissions'));
@@ -41,9 +41,6 @@ const Users = load(() => import('../../views/Users'));
 
 const CmdScheduler = load(() =>
 	import('../../views/Integrations/CmdScheduler')
-);
-const HuskyCratesCrates = load(() =>
-	import('../../views/Integrations/HuskyCrates/Crates')
 );
 const MMCRestrictItems = load(() =>
 	import('../../views/Integrations/MMCRestrict/Items')
@@ -88,14 +85,6 @@ export const views: Array<ViewDefinition> = [
 		perms: [['history', 'cmd'], ['cmd', 'list']],
 		servlets: [['/history'], ['/cmd']],
 		component: Commands
-	},
-	{
-		title: 'Map',
-		path: '/map',
-		icon: 'map',
-		perms: ['map'],
-		servlets: ['/map'],
-		component: Map
 	},
 	{
 		title: 'Worlds',
@@ -169,21 +158,6 @@ export const views: Array<ViewDefinition> = [
 				icon: 'calendar',
 				perms: ['cmd-scheduler', 'list'],
 				component: CmdScheduler
-			}
-		]
-	},
-	{
-		title: 'HuskyCrates',
-		path: '/husky-crates',
-		perms: ['husky-crates'],
-		servlets: ['/husky-crates'],
-		views: [
-			{
-				title: 'HuskyCratesCrates',
-				path: '/husky-crates/crates',
-				icon: 'archive',
-				perms: ['husky-crates', 'crates', 'list'],
-				component: HuskyCratesCrates
 			}
 		]
 	},

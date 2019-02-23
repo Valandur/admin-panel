@@ -9,10 +9,10 @@ export interface Props<T> {
 	title: string;
 	valid: boolean;
 	fields: {
-		[x: string]: DataFieldRaw<T>
+		[x: string]: DataFieldRaw<T>;
 	};
 	values: {
-		[x: string]: string | string[]
+		[x: string]: string | string[];
 	};
 	onFilterChange: (key: string, value: string) => void;
 }
@@ -22,9 +22,9 @@ interface State {
 }
 
 class FilterForm<T> extends React.Component<Props<T>, State> {
-	handleChange: HandleChangeFunc;
+	private handleChange: HandleChangeFunc;
 
-	constructor(props: Props<T>) {
+	public constructor(props: Props<T>) {
 		super(props);
 
 		this.state = {
@@ -34,7 +34,7 @@ class FilterForm<T> extends React.Component<Props<T>, State> {
 		this.handleChange = handleChange.bind(this, this.props.onFilterChange);
 	}
 
-	shouldComponentUpdate(nextProps: Props<T>, nextState: State) {
+	public shouldComponentUpdate(nextProps: Props<T>, nextState: State) {
 		return (
 			nextProps.values !== this.props.values ||
 			nextProps.fields !== this.props.fields ||
@@ -43,13 +43,13 @@ class FilterForm<T> extends React.Component<Props<T>, State> {
 		);
 	}
 
-	handleClick() {
+	private handleClick = () => {
 		this.setState({
 			open: !this.state.open
 		});
-	}
+	};
 
-	render() {
+	public render() {
 		const { title, fields, values, valid } = this.props;
 
 		const fieldGroups: DataFieldGroup<T>[] = [];
@@ -72,44 +72,35 @@ class FilterForm<T> extends React.Component<Props<T>, State> {
 			}
 		});
 
+		const fs = fieldGroups.map((fg, i) => {
+			if (fg.only) {
+				return this.renderField(fg.only, _.get(values, fg.only.name), !valid);
+			}
+
+			const first = fg.first
+				? this.renderField(fg.first, _.get(values, fg.first.name), !valid)
+				: null;
+			const second = fg.second
+				? this.renderField(fg.second, _.get(values, fg.second.name), !valid)
+				: null;
+
+			return (
+				<Form.Group key={i} widths="equal">
+					{first}
+					{second}
+				</Form.Group>
+			);
+		});
+
 		return (
 			<Accordion styled fluid>
-				<Accordion.Title
-					active={this.state.open}
-					onClick={() => this.handleClick()}
-				>
+				<Accordion.Title active={this.state.open} onClick={this.handleClick}>
 					<Icon name="filter" fitted /> {title}
 				</Accordion.Title>
 
 				<Accordion.Content active={this.state.open}>
 					<Form>
-						{fieldGroups.map((fg, i) => {
-							if (fg.only) {
-								return this.renderField(
-									fg.only,
-									_.get(values, fg.only.name),
-									!valid
-								);
-							}
-
-							return (
-								<Form.Group key={i} widths="equal">
-									{fg.first &&
-										this.renderField(
-											fg.first,
-											_.get(values, fg.first.name),
-											!valid
-										)}
-
-									{fg.second &&
-										this.renderField(
-											fg.second,
-											_.get(values, fg.second.name),
-											!valid
-										)}
-								</Form.Group>
-							);
-						})}
+						{fs}
 						<Message
 							error
 							visible={!valid}
@@ -121,7 +112,7 @@ class FilterForm<T> extends React.Component<Props<T>, State> {
 		);
 	}
 
-	renderField(
+	private renderField(
 		field: DataFieldRaw<T>,
 		value: string | string[],
 		error: boolean

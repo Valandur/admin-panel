@@ -1,3 +1,4 @@
+import { History } from 'history';
 import { Action } from 'redux';
 import { ResponseError } from 'superagent';
 
@@ -32,10 +33,12 @@ export enum TypeKeys {
 
 export interface ServletsRequestAction extends Action {
 	type: TypeKeys.SERVLETS_REQUEST;
+	history: History;
 }
-export function requestServlets(): ServletsRequestAction {
+export function requestServlets(history: History): ServletsRequestAction {
 	return {
-		type: TypeKeys.SERVLETS_REQUEST
+		type: TypeKeys.SERVLETS_REQUEST,
+		history
 	};
 }
 
@@ -70,15 +73,18 @@ export function changeServer(server: Server): ChangeServerAction {
 
 export interface LoginRequestAction extends Action {
 	type: TypeKeys.LOGIN_REQUEST;
+	history: History;
 	username: string;
 	password: string;
 }
 export function requestLogin(
+	history: History,
 	username: string,
 	password: string
 ): LoginRequestAction {
 	return {
 		type: TypeKeys.LOGIN_REQUEST,
+		history,
 		username,
 		password
 	};
@@ -102,10 +108,12 @@ export function respondLogin(
 
 export interface LogoutRequestAction extends Action {
 	type: TypeKeys.LOGOUT_REQUEST;
+	history: History;
 }
-export function requestLogout(): LogoutRequestAction {
+export function requestLogout(history: History): LogoutRequestAction {
 	return {
-		type: TypeKeys.LOGOUT_REQUEST
+		type: TypeKeys.LOGOUT_REQUEST,
+		history
 	};
 }
 
@@ -115,24 +123,29 @@ export interface LogoutResponseAction extends Action {
 
 export interface CheckUserRequestAction extends Action {
 	type: TypeKeys.CHECK_USER_REQUEST;
+	history: History;
 }
-export function requestCheckUser(): CheckUserRequestAction {
+export function requestCheckUser(history: History): CheckUserRequestAction {
 	return {
-		type: TypeKeys.CHECK_USER_REQUEST
+		type: TypeKeys.CHECK_USER_REQUEST,
+		history
 	};
 }
 
 export interface CheckUserResponseAction extends Action {
 	type: TypeKeys.CHECK_USER_RESPONSE;
+	history: History;
 	ok: boolean;
 	data: PermissionStruct;
 }
 export function respondCheckUser(
+	history: History,
 	ok: boolean,
 	data: PermissionStruct
 ): CheckUserResponseAction {
 	return {
 		type: TypeKeys.CHECK_USER_RESPONSE,
+		history,
 		ok,
 		data
 	};

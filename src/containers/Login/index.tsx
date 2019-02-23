@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
 	Button,
@@ -23,7 +23,7 @@ import {
 	PreferenceKey,
 	Server,
 	Theme,
-	themesArray
+	THEMES_ARRAY
 } from '../../types';
 
 const imageUrl = require('../../assets/logo.png');
@@ -34,11 +34,10 @@ interface StateProps {
 	servers: Server[];
 	lang: Lang;
 	theme: Theme;
-	path: string;
 	ok: boolean;
 }
 
-interface Props extends StateProps, reactI18Next.InjectedTranslateProps {
+interface Props extends StateProps, RouteComponentProps, WithTranslation {
 	changeServer: (server: Server) => AppAction;
 	onLoginClick: (username: string, password: string) => AppAction;
 	setPref: (key: PreferenceKey, value: any) => AppAction;
@@ -52,9 +51,9 @@ interface OwnState {
 }
 
 class Login extends React.Component<Props, OwnState> {
-	handleChange: HandleChangeFunc;
+	private handleChange: HandleChangeFunc;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -67,7 +66,7 @@ class Login extends React.Component<Props, OwnState> {
 		this.handleLogin = this.handleLogin.bind(this);
 	}
 
-	handleChangeServer(key: string, value: string) {
+	private handleChangeServer(key: string, value: string) {
 		if (key === 'server') {
 			const server = this.props.servers.find(s => s.apiUrl === value);
 			if (server == null) {
@@ -79,19 +78,21 @@ class Login extends React.Component<Props, OwnState> {
 		}
 	}
 
-	handleLogin(event: React.MouseEvent<HTMLButtonElement>) {
+	private handleLogin(event: React.MouseEvent<HTMLButtonElement>) {
 		event.preventDefault();
 		this.props.onLoginClick(this.state.username, this.state.password);
 	}
 
-	render() {
-		if (this.props.ok) {
+	public render() {
+		const { t, ok } = this.props;
+
+		if (ok) {
 			return (
-				<Redirect to={{ pathname: '/', state: { from: this.props.path } }} />
+				<Redirect
+					to={{ pathname: '/', state: { from: this.props.location.pathname } }}
+				/>
 			);
 		}
-
-		const _t = this.props.t;
 
 		return (
 			<Grid
@@ -104,44 +105,24 @@ class Login extends React.Component<Props, OwnState> {
 
 					<Form size="large" loading={this.props.loggingIn}>
 						<Segment>
-							{this.props.servers.length > 1 ? (
-								<Form.Field
-									fluid
-									selection
-									name="server"
-									control={Dropdown}
-									placeholder={_t('Server')}
-									value={
-										this.props.server ? this.props.server.apiUrl : undefined
-									}
-									onChange={this.handleChange}
-									options={this.props.servers.map(s => ({
-										value: s.apiUrl,
-										text: s.name
-									}))}
-								/>
-							) : null}
+							{this.renderServerSelect()}
 
 							<Form.Field
 								selection
 								control={Dropdown}
-								placeholder={_t('ChangeTheme')}
-								options={themesArray}
+								placeholder={t('ChangeTheme')}
+								options={THEMES_ARRAY}
 								value={this.props.theme}
-								onChange={(e: Event, data: DropdownProps) =>
-									this.props.setPref(PreferenceKey.theme, data.value)
-								}
+								onChange={this.onChangeTheme}
 							/>
 
 							<Form.Field
 								selection
 								control={Dropdown}
-								placeholder={_t('ChangeLanguage')}
+								placeholder={t('ChangeLanguage')}
 								options={langArray}
 								value={this.props.lang}
-								onChange={(e: Event, data: DropdownProps) =>
-									this.props.setPref(PreferenceKey.lang, data.value)
-								}
+								onChange={this.onChangeLanguage}
 							/>
 
 							<Form.Input
@@ -149,7 +130,7 @@ class Login extends React.Component<Props, OwnState> {
 								name="username"
 								icon="user"
 								iconPosition="left"
-								placeholder={_t('Username')}
+								placeholder={t('Username')}
 								value={this.state.username}
 								onChange={this.handleChange}
 							/>
@@ -159,14 +140,14 @@ class Login extends React.Component<Props, OwnState> {
 								name="password"
 								icon="lock"
 								iconPosition="left"
-								placeholder={_t('Password')}
+								placeholder={t('Password')}
 								type="password"
 								value={this.state.password}
 								onChange={this.handleChange}
 							/>
 
 							<Button fluid primary size="large" onClick={this.handleLogin}>
-								{_t('Login')}
+								{t('Login')}
 							</Button>
 						</Segment>
 					</Form>
@@ -174,6 +155,40 @@ class Login extends React.Component<Props, OwnState> {
 			</Grid>
 		);
 	}
+
+	private renderServerSelect() {
+		const { servers, server, t } = this.props;
+
+		if (servers.length <= 1) {
+			return null;
+		}
+
+		const options = servers.map(s => ({
+			value: s.apiUrl,
+			text: s.name
+		}));
+
+		return (
+			<Form.Field
+				fluid
+				selection
+				name="server"
+				control={Dropdown}
+				placeholder={t('Server')}
+				value={server ? server.apiUrl : undefined}
+				onChange={this.handleChange}
+				options={options}
+			/>
+		);
+	}
+
+	private onChangeTheme = (e: Event, data: DropdownProps) => {
+		this.props.setPref(PreferenceKey.theme, data.value);
+	};
+
+	private onChangeLanguage = (e: Event, data: DropdownProps) => {
+		this.props.setPref(PreferenceKey.lang, data.value);
+	};
 }
 
 const mapStateToProps = (state: AppState): StateProps => {
@@ -183,23 +198,23 @@ const mapStateToProps = (state: AppState): StateProps => {
 		theme: state.preferences.theme,
 		loggingIn: state.api.loggingIn,
 		server: state.api.server,
-		servers: state.api.servers,
-
-		path: state.router.location ? state.router.location.pathname : ''
+		servers: state.api.servers
 	};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<AppAction>, props: Props) => {
 	return {
 		onLoginClick: (username: string, password: string): AppAction =>
-			dispatch(requestLogin(username, password)),
+			dispatch(requestLogin(props.history, username, password)),
 		changeServer: (server: Server): AppAction => dispatch(changeServer(server)),
 		setPref: (key: PreferenceKey, value: any): AppAction =>
 			dispatch(setPreference(key, value))
 	};
 };
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(translate('Login')(Login));
+export default withRouter(
+	connect(
+		mapStateToProps,
+		mapDispatchToProps
+	)(withTranslation('Login')(Login))
+);
