@@ -3,7 +3,7 @@
 // Based on post by Hassan Khan - https://github.com/josdejong/jsoneditor/issues/274#issuecomment-263986071
 // Wrapper By Ian Grossberg - https://gist.github.com/yoiang/6f82874f4fd8fc1a37631dc9cad27172
 // Wrapped into TypeScript definitions By Aleksey Musakhanov
-import JSONEditor, { JSONEditorNode } from 'jsoneditor';
+import JSONEditor, { Node } from 'jsoneditor';
 import 'jsoneditor/dist/jsoneditor.min.css';
 import * as _ from 'lodash';
 import * as React from 'react';
@@ -27,9 +27,7 @@ interface Props {
 	height?: number | string;
 	width?: number | string;
 	onChange?: (value: string) => void;
-	onEditable?: (
-		node: JSONEditorNode
-	) => boolean | { field: boolean; value: boolean };
+	onEditable?: (node: Node) => boolean | { field: boolean; value: boolean };
 	onError?: () => void;
 	onModeChange?: () => void;
 	escapeUnicode?: boolean;
@@ -109,19 +107,12 @@ export class ReactJSONEditor extends React.Component<Props, State> {
 
 	public render() {
 		const { className, height, width } = this.props;
-		return (
-			<div
-				id="jsonEditor"
-				className={className}
-				ref={this.getEditorRef}
-				style={{ height, width }}
-			/>
-		);
+		return <div id="jsonEditor" className={className} ref={this.getEditorRef} style={{ height, width }} />;
 	}
 
-	private getEditorRef(node: any): void {
+	private getEditorRef = (node: any): void => {
 		this.editorRef = node;
-	}
+	};
 
 	private createJSONEditorComponent(container: any) {
 		if (!container) {

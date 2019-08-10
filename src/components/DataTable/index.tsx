@@ -111,6 +111,7 @@ class DataTable<T> extends React.Component<AllProps<T>, OwnState> {
 		const page = Math.min(this.state.page, maxPage - 1);
 
 		const _t = this.props.t;
+		const tReady = this.props.tReady;
 		const editable = _.some(list, canEdit);
 		const deletable = _.some(list, canDelete);
 
@@ -126,14 +127,11 @@ class DataTable<T> extends React.Component<AllProps<T>, OwnState> {
 						canDelete={deletable}
 						i18n={i18n}
 						t={_t}
+						tReady={tReady}
 					/>
 					<Table.Body>{this.renderRows(fields, page)}</Table.Body>
 				</Table>
-				<Pagination
-					page={page}
-					maxPage={maxPage}
-					changePage={this.changePage}
-				/>
+				<Pagination page={page} maxPage={maxPage} changePage={this.changePage} />
 			</div>
 		);
 	}
@@ -153,12 +151,9 @@ class DataTable<T> extends React.Component<AllProps<T>, OwnState> {
 	}
 
 	private renderRows(fields: DataFieldRaw<T>[], page: number) {
-		const { list, canEdit, canDelete, actions, t } = this.props;
+		const { list, canEdit, canDelete, actions, t, tReady } = this.props;
 
-		const listPage = list.slice(
-			page * ITEMS_PER_PAGE,
-			(page + 1) * ITEMS_PER_PAGE
-		);
+		const listPage = list.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
 		const thisRef: DataTableRef = {
 			handleChange: this.handleChange,
@@ -190,6 +185,7 @@ class DataTable<T> extends React.Component<AllProps<T>, OwnState> {
 				handleChange={this.handleChange}
 				i18n={i18n}
 				t={t}
+				tReady={tReady}
 			/>
 		));
 	}

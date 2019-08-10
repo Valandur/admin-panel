@@ -11,15 +11,8 @@ import {
 	respondServlets,
 	TypeKeys
 } from '../actions';
-import {
-	respondExecute,
-	TypeKeys as CommandTypeKeys
-} from '../actions/command';
-import {
-	respondInfo,
-	respondStats,
-	TypeKeys as DashboardTypeKeys
-} from '../actions/dashboard';
+import { respondExecute, TypeKeys as CommandTypeKeys } from '../actions/command';
+import { respondInfo, respondStats, TypeKeys as DashboardTypeKeys } from '../actions/dashboard';
 import {
 	respondChange,
 	respondCreate,
@@ -29,35 +22,21 @@ import {
 	TypeKeys as DataViewTypeKeys
 } from '../actions/dataview';
 import { showNotification } from '../actions/notification';
-import {
-	respondCollections,
-	respondSubjects,
-	TypeKeys as PermissionTypeKeys
-} from '../actions/permission';
-import {
-	respondBanPlayer,
-	respondKickPlayer,
-	TypeKeys as PlayerTypeKeys
-} from '../actions/player';
+import { respondCollections, respondSubjects, TypeKeys as PermissionTypeKeys } from '../actions/permission';
+import { respondBanPlayer, respondKickPlayer, TypeKeys as PlayerTypeKeys } from '../actions/player';
 import {
 	respondPluginConfig,
 	respondPluginConfigSave,
 	respondPluginToggle,
 	TypeKeys as PluginTypeKeys
 } from '../actions/plugin';
-import {
-	respondSaveProperty,
-	TypeKeys as SettingTypeKeys
-} from '../actions/server-settings';
+import { respondSaveProperty, TypeKeys as SettingTypeKeys } from '../actions/server-settings';
 import { ExecuteMethodParam } from '../fetch';
 import { AppState } from '../types';
 
-const api = ({
-	getState,
-	dispatch
-}: MiddlewareAPI<Dispatch<AppAction>, AppState>) => (
-	next: Dispatch<Action>
-) => (action: AppAction): any => {
+const api = ({ getState, dispatch }: MiddlewareAPI<Dispatch<AppAction>, AppState>) => (next: Dispatch<Action>) => (
+	action: AppAction
+): any => {
 	next(action);
 
 	const state = getState();
@@ -71,8 +50,7 @@ const api = ({
 		(path.indexOf('?') >= 0 ? '&' : '?') +
 		(state.api.key ? 'key=' + state.api.key : '');
 
-	const errorHandler = (err: Response) =>
-		dispatch(showNotification('error', 'API Error', err.statusText));
+	const errorHandler = (err: Response) => dispatch(showNotification('error', 'API Error', err.statusText));
 
 	switch (action.type) {
 		case TypeKeys.SERVLETS_REQUEST:
@@ -178,15 +156,7 @@ const api = ({
 						command: 'ban ' + action.player.name
 					}
 				])
-				.then(results =>
-					next(
-						respondBanPlayer(
-							true,
-							action.player,
-							results[0].response!.join('\n')
-						)
-					)
-				)
+				.then(results => next(respondBanPlayer(true, action.player, results[0].response!.join('\n'))))
 				.catch(err => next(respondBanPlayer(false, action.player, err)));
 			break;
 
@@ -235,19 +205,13 @@ const api = ({
 					}
 				])
 				.then(results => next(respondExecute(results[0])))
-				.catch(err =>
-					next(respondExecute({ ok: false, cmd: action.command, error: err }))
-				);
+				.catch(err => next(respondExecute({ ok: false, cmd: action.command, error: err })));
 			break;
 
 		case DataViewTypeKeys.LIST_REQUEST:
 			const params = toQueryParams(action.query);
 			request
-				.get(
-					makeUrl(
-						action.endpoint + '?' + (action.details ? 'details&' : '') + params
-					)
-				)
+				.get(makeUrl(action.endpoint + '?' + (action.details ? 'details&' : '') + params))
 				.then(resp => next(respondList(action.endpoint, resp.body)))
 				.catch(err => next(respondList(action.endpoint, undefined, err)));
 			break;
@@ -255,47 +219,31 @@ const api = ({
 		case DataViewTypeKeys.DETAILS_REQUEST:
 			request
 				.get(makeUrl(action.endpoint + '/' + action.id(action.data)))
-				.then(resp =>
-					next(respondDetails(action.endpoint, action.id, resp.body))
-				)
-				.catch(err =>
-					next(respondDetails(action.endpoint, action.id, action.data, err))
-				);
+				.then(resp => next(respondDetails(action.endpoint, action.id, resp.body)))
+				.catch(err => next(respondDetails(action.endpoint, action.id, action.data, err)));
 			break;
 
 		case DataViewTypeKeys.CREATE_REQUEST:
 			request
 				.post(makeUrl(action.endpoint))
 				.send(action.data)
-				.then(resp =>
-					next(respondCreate(action.endpoint, action.id, resp.body))
-				)
-				.catch(err =>
-					next(respondCreate(action.endpoint, action.id, undefined, err))
-				);
+				.then(resp => next(respondCreate(action.endpoint, action.id, resp.body)))
+				.catch(err => next(respondCreate(action.endpoint, action.id, undefined, err)));
 			break;
 
 		case DataViewTypeKeys.CHANGE_REQUEST:
 			request
 				.put(makeUrl(action.endpoint + '/' + action.id(action.data)))
 				.send(action.newData)
-				.then(resp =>
-					next(respondChange(action.endpoint, action.id, resp.body))
-				)
-				.catch(err =>
-					next(respondChange(action.endpoint, action.id, action.data, err))
-				);
+				.then(resp => next(respondChange(action.endpoint, action.id, resp.body)))
+				.catch(err => next(respondChange(action.endpoint, action.id, action.data, err)));
 			break;
 
 		case DataViewTypeKeys.DELETE_REQUEST:
 			request
 				.delete(makeUrl(action.endpoint + '/' + action.id(action.data)))
-				.then(resp =>
-					next(respondDelete(action.endpoint, action.id, resp.body))
-				)
-				.catch(err =>
-					next(respondDelete(action.endpoint, action.id, action.data, err))
-				);
+				.then(resp => next(respondDelete(action.endpoint, action.id, resp.body)))
+				.catch(err => next(respondDelete(action.endpoint, action.id, action.data, err)));
 			break;
 
 		default:

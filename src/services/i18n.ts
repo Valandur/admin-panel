@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import * as LanguageDetector from 'i18next-browser-languagedetector';
+import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
 const de = require('../locale/de.json');
@@ -17,8 +17,7 @@ i18n
 		ns: ['translations'],
 		defaultNS: 'translations',
 
-		debug:
-			process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development',
+		debug: process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development',
 
 		interpolation: {
 			escapeValue: false // not needed for react!!

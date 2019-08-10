@@ -27,11 +27,9 @@ export interface ApiCollection {
 
 function setupApis(server: Server, apiKey?: string): ApiCollection {
 	const conf = {
-		apiKey: apiKey,
+		apiKey,
 		basePath:
-			(window.location.protocol === 'https:' && server.apiUrlHttps
-				? server.apiUrlHttps
-				: server.apiUrl) + '/api/v5'
+			(window.location.protocol === 'https:' && server.apiUrlHttps ? server.apiUrlHttps : server.apiUrl) + '/api/v5'
 	};
 
 	return {
@@ -54,7 +52,7 @@ export interface ApiState {
 	server: Server;
 	servers: Server[];
 	servlets: {
-		[x: string]: string
+		[x: string]: string;
 	};
 	types: { [x in CatalogTypeKeys]?: CatalogType[] };
 	permissions?: PermissionTree;
@@ -164,9 +162,7 @@ export default (state = initialState, action: AppAction) => {
 				...state,
 				types: {
 					...state.types,
-					[action.class]: action.types.filter(
-						(t, i) => action.types.findIndex(otherT => otherT.id === t.id) === i
-					)
+					[action.class]: action.types.filter((t, i) => action.types.findIndex(otherT => otherT.id === t.id) === i)
 				}
 			};
 

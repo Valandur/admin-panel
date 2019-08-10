@@ -3,29 +3,12 @@ import * as React from 'react';
 import { Trans, withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-	Button,
-	Dropdown,
-	DropdownProps,
-	Form,
-	Header,
-	Icon,
-	Modal,
-	Table
-} from 'semantic-ui-react';
+import { Button, Dropdown, DropdownProps, Form, Header, Icon, Modal, Table } from 'semantic-ui-react';
 
 import { AppAction, requestCatalog } from '../../../actions';
 import DataViewFunc, { DataViewFields } from '../../../components/DataView';
-import {
-	handleChange,
-	HandleChangeFunc,
-	renderCatalogTypeOptions
-} from '../../../components/Util';
-import {
-	CatalogType,
-	VillagerShopsShop,
-	VillagerShopsStockItem
-} from '../../../fetch';
+import { handleChange, HandleChangeFunc, renderCatalogTypeOptions } from '../../../components/Util';
+import { CatalogType, VillagerShopsShop, VillagerShopsStockItem } from '../../../fetch';
 import i18n from '../../../services/i18n';
 import { AppState, CatalogTypeKeys, DataViewRef } from '../../../types';
 
@@ -112,7 +95,7 @@ class Shops extends React.Component<Props, OwnState> {
 			return;
 		}
 
-		const { t } = this.props;
+		const { t, tReady } = this.props;
 
 		const items = this.state.items.map((item, i) => (
 			<ShopItem
@@ -120,6 +103,7 @@ class Shops extends React.Component<Props, OwnState> {
 				item={item}
 				t={t}
 				i18n={i18n}
+				tReady={tReady}
 				itemTypes={this.props.itemTypes}
 				currencies={this.props.currencies}
 				onChange={this.handleItemChange}
@@ -128,12 +112,7 @@ class Shops extends React.Component<Props, OwnState> {
 		));
 
 		return (
-			<Modal
-				open={this.state.modal}
-				onClose={this.toggleModal}
-				size="fullscreen"
-				className="scrolling"
-			>
+			<Modal open={this.state.modal} onClose={this.toggleModal} size="fullscreen" className="scrolling">
 				<Modal.Header>
 					<Trans i18nKey="ShopTitle">Edit '{this.state.shop.name}'</Trans>
 				</Modal.Header>
@@ -191,12 +170,7 @@ class Shops extends React.Component<Props, OwnState> {
 								{items}
 								<Table.Row>
 									<Table.Cell colSpan="8" textAlign="center">
-										<Button
-											positive
-											icon="plus"
-											content={t('Add')}
-											onClick={this.addItem}
-										/>
+										<Button positive icon="plus" content={t('Add')} onClick={this.addItem} />
 									</Table.Cell>
 								</Table.Row>
 							</Table.Body>
@@ -222,10 +196,7 @@ class Shops extends React.Component<Props, OwnState> {
 		});
 	}
 
-	private handleEdit(
-		shop: VillagerShopsShop,
-		view: DataViewRef<VillagerShopsShop>
-	) {
+	private handleEdit(shop: VillagerShopsShop, view: DataViewRef<VillagerShopsShop>) {
 		this.save = () => {
 			view.save(shop, {
 				name: this.state.name,
@@ -243,11 +214,7 @@ class Shops extends React.Component<Props, OwnState> {
 			shop,
 			name: shop ? shop.name : undefined,
 			type: shop ? shop.entityType.id : undefined,
-			items: shop
-				? shop.stockItems
-					? shop.stockItems.map(({ link, ...i }) => ({ ...i }))
-					: []
-				: []
+			items: shop ? (shop.stockItems ? shop.stockItems.map(({ link, ...i }) => ({ ...i })) : []) : []
 		});
 	}
 
@@ -288,9 +255,7 @@ class Shops extends React.Component<Props, OwnState> {
 			shopId: this.state.shop!.uid!
 		};
 
-		const items = this.state.items
-			? this.state.items.concat(newItem)
-			: [newItem];
+		const items = this.state.items ? this.state.items.concat(newItem) : [newItem];
 		this.setState({
 			items
 		});
