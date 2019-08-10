@@ -3,11 +3,7 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import {
-	AppAction,
-	CatalogRequestAction,
-	requestCatalog
-} from '../../../actions';
+import { AppAction, CatalogRequestAction, requestCatalog } from '../../../actions';
 import DataViewFunc, { DataViewFields } from '../../../components/DataView';
 import { renderCatalogTypeOptions } from '../../../components/Util';
 import { CatalogType, MMCRestrictItem } from '../../../fetch';
@@ -81,6 +77,11 @@ class Items extends React.Component<Props, OwnState> {
 				label: t('World'),
 				view: ban => <Icon ban={ban.worldBanned} />,
 				edit: (ban, view) => <Edit view={view} name="worldBanned" />
+			},
+			hidden: {
+				label: t('Hidden'),
+				view: ban => <Icon ban={ban.hidden} />,
+				edit: (ban, view) => <Edit view={view} name="hidden" />
 			}
 		};
 
