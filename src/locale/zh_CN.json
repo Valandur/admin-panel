@@ -1,0 +1,291 @@
+{
+	"Main": {
+		"ErrorHeader": "抱歉，系统出现问题！",
+		"FixHeader": "帮助我们修复此错误",
+		"FixText": "您可以单击下面的按钮并描述发生的事情来帮助解决此错误。",
+		"SubmitIssue": "提交错误"
+	},
+	"Menu": {
+		"CPU": "CPU",
+		"Memory": "内存",
+		"Disk": "磁盘",
+
+		"Dashboard": "控制面板",
+		"Chat": "聊天",
+		"Commands": "指令",
+		"Map": "地图",
+		"Worlds": "世界",
+		"Players": "玩家",
+		"Entities": "实体",
+		"TileEntities": "Tile Entities",
+		"BlockOperations": "操作方块",
+		"Plugins": "插件",
+		"ServerSettings": "服务器设置",
+		"Settings": "设置",
+		"Logout": "退出登录",
+		"APILink": "API",
+		"SpongeLink": "Sponge",
+		"DocsLink": "文档",
+		"IssuesLink": "错误",
+
+		"HuskyCrates": "Husky Crates",
+		"HuskyCratesCrates": "Crates",
+
+		"MMCRestrict": "MMCRestrict",
+		"MMCRestrictRestrictedItems": "限制物品",
+
+		"MMCTickets": "MMCTickets",
+		"MMCTicketsTickets": "Tickets",
+
+		"Nucleus": "Nucleus",
+		"NucleusKits": "礼包",
+		"NucleusJails": "监狱",
+
+		"WebBooks": "Web Books",
+		"WebBooksBooks": "Books",
+
+		"UniversalMarket": "通用市场",
+		"UniversalMarketItems": "商品"
+	},
+
+	"Login": {
+		"Login": "登录",
+		"Username": "用户名",
+		"Password": "密码"
+	},
+	"Dashboard": {
+		"WIPTitle": "工作仍在进行中！!",
+		"WIPText": "Web-API 管理面板仍在开发中，尚未完全实现其所有功能。这意味着使用管理面板时可能存在错误和其他问题！<1 /> 请您在<3>Github</3>上报告所有的错误",
+		"PlayersOnline": "在线玩家",
+		"CurrentTPS": "当前 TPS",
+		"UptimeTicks": "正常运行时间",
+		"OnlineMode": "正版验证",
+		"ServerAddress": "服务器地址",
+		"MinecraftVersion": "Minecraft 版本",
+		"APIVersion": "API 版本",
+		"SpongeVersion": "Sponge 版本",
+		"GraphTitleInfo": "在线玩家数 & TPS",
+		"GraphTitleStats": "服务器统计",
+		"AverageTPS": "平均 TPS",
+		"OnlinePlayers": "在线玩家数",
+		"CPULoad": "CPU",
+		"MemoryLoad": "内存",
+		"DiskUsage": "磁盘",
+		"NumPlayers": "玩家 [1]",
+		"NumTPS": "TPS [ticks]",
+		"Load": "Load [%]",
+		"NoData": "没有数据！"
+	},
+	"Chat": {
+		"Messages": "消息",
+		"FilterMessages": "过滤消息",
+		"Timestamp": "时间",
+		"Sender": "发送者",
+		"Message": "发送内容"
+	},
+	"Commands": {
+		"Commands": "指令",
+		"ExecuteCommand": "执行一个指令",
+		"Execute": "执行",
+		"FilterCommands": "过滤指令",
+		"Timestamp": "时间",
+		"Source": "来源",
+		"Command": "指令",
+		"WaitLines": "Wait lines",
+		"WaitLinesDescr": "# of response lines to wait for",
+		"WaitTime": "Wait time",
+		"WaitTimeDescr": "Milliseconds to wait for a response"
+	},
+	"Entities": {
+		"SpawnEntity": "生成一个实体",
+		"FilterEntities": "过滤实体",
+		"Type": "类型",
+		"World": "世界",
+		"Location": "地址",
+		"Position": "位置",
+		"Health": "生命值",
+		"Info": "信息",
+		"AI": "AI",
+		"Age": "Age",
+		"Adult": "Adult",
+		"Breedable": "Breedable",
+		"Career": "Career",
+		"Flying": "Flying",
+		"Glowing": "Glowing",
+		"Silent": "Silent",
+		"Sneaking": "Sneaking",
+		"Sprinting": "Sprinting"
+	},
+	"TileEntities": {
+		"TileEntities": "Tile Entities",
+		"FilterEntities": "Filter tile entities",
+		"Type": "Type",
+		"World": "World",
+		"Position": "Position",
+		"Info": "Info",
+		"MobSpawner": "Mob Spawner"
+	},
+	"BlockOperations": {
+		"BlockOperations": "操作方块",
+		"StartOperation": "开始操作",
+		"Type": "类型",
+		"UUID": "UUID",
+		"World": "世界",
+		"Block": "方块",
+		"Min": "Min",
+		"Max": "Max",
+		"Status": "状态",
+		"Progress": "进度",
+		"Done": "完成",
+		"TimeRemaining": "剩余 <0>{{time}}</0>",
+		"Details": "详情",
+		"Pause": "暂停",
+		"Resume": "恢复",
+		"Stop": "停止",
+		"OperationTitle": "操作 <1>{{uuid}}</1>"
+	},
+	"Plugins": {
+		"Plugins": "已安装插件",
+		"WarnTitle": "请小心编辑配置文件！",
+		"WarnText": "Web-API在保存配置之前会自动对您的配置进行备份，但是在更改配置值时仍建议谨慎。  要应用新配置，请使用 <1><0 /></1>. 无需使用插件来实现重载事件，因此这可能不适用于所有插件。 需要时重启服务器。",
+		"Id": "Id",
+		"Name": "名字",
+		"Version": "版本",
+		"Details": "详情",
+		"Save": "保存",
+		"Cancel": "取消"
+	},
+	"Players": {
+		"Players": "玩家",
+		"FilterPlayers": "过滤玩家",
+		"NameUUID": "名字 & UUID",
+		"World": "世界",
+		"Location": "位置",
+		"HealthFood": "生命值 & 饱食度",
+		"Info": "信息",
+		"Level": "等级",
+		"Inventory": "背包",
+		"Kick": "踢出",
+		"Ban": "封禁",
+		"InventoryTitle": "<0>{{name}}</0>的背包"
+	},
+	"Worlds": {
+		"Worlds": "世界",
+		"CreateWorld": "创建一个世界",
+		"Name": "名字",
+		"Dimension": "大小",
+		"Generator": "生成器",
+		"Difficulty": "难度",
+		"GameMode": "游戏模式",
+		"Features": "特性",
+		"LoadOnStartup": "启动时加载",
+		"KeepSpawnLoaded": "保持出生地加载",
+		"CommandsAllowed": "允许指令",
+		"GenerateBonusChest": "产生奖励箱",
+		"EnableMapFeatures": "启用地图",
+		"Info": "信息",
+		"Status": "状态",
+		"GameRules": "游戏 规则",
+		"Loaded": "已加载",
+		"Unloaded": "已卸载",
+		"Load": "加载",
+		"Unload": "卸载",
+		"Delete": "删除",
+		"GameRulesTitle": "Game Rules for '<1>{{name}}</1>'",
+		"Value": "Value",
+		"Save": "保存",
+		"Cancel": "取消"
+	},
+	"ServerSettings": {
+		"ServerSettings": "服务器设置",
+		"InfoTitle": "重启服务器",
+		"InfoText": "必须重新启动服务器才能使这些设置生效！"
+	},
+
+	"Integrations": {
+		"MMCRestrict": {
+			"RestrictedItems": "被限制的物品",
+			"CreateRestrictedItem": "限制一个物品",
+			"Item": "物品",
+			"Reason": "原因",
+			"Usage": "使用",
+			"Breaking": "破坏",
+			"Placing": "放置",
+			"Ownership": "拥有",
+			"Drop": "掉落",
+			"World": "世界"
+		},
+
+		"MMCTickets": {
+			"Tickets": "Tickets",
+			"FilterTickets": "Filter tickets",
+			"Id": "Id",
+			"Timestamp": "Timestamp",
+			"Status": "Status",
+			"Sender": "Sender",
+			"Assigned": "Assigned",
+			"Message": "Message",
+			"Comment": "Comment",
+			"Open": "Open",
+			"Claimed": "Claimed",
+			"Held": "Held",
+			"Closed": "Closed"
+		},
+
+		"Nucleus": {
+			"Jails": "监狱",
+			"FilterJails": "过滤监狱",
+			"CreateJail": "创建一个监狱",
+			"Name": "名称",
+			"World": "世界",
+			"Location": "位置",
+
+			"Kits": "礼包",
+			"FilterKits": "过滤礼包",
+			"CreateKit": "创建一个礼包",
+			"Cost": "花费",
+			"Cooldown": "冷却",
+			"Commands": "指令",
+			"Stacks": "Stacks",
+			"Add": "添加",
+			"Type": "类型",
+			"Amount": "数量"
+		},
+
+		"UniversalMarket": {
+			"Items": "商品",
+			"FilterItems": "过滤商品",
+			"Item": "商品",
+			"Price": "价格",
+			"Expires": "过期",
+			"Seller": "卖家"
+		},
+
+		"WebBooks": {
+			"WebBooks": "WebBooks",
+			"FilterBooks": "Filter WebBooks",
+			"CreateBook": "Create a WebBook",
+			"Id": "Id",
+			"Title": "Title",
+			"Content": "Content",
+			"Link": "Link",
+			"NewLine": "New line"
+		}
+	},
+
+	"DataTable": {
+		"Actions": "Actions",
+		"Save": "保存",
+		"Cancel": "取消",
+		"Edit": "编辑",
+		"Remove": "删除"
+	},
+	"CreateForm": {
+		"Create": "创建"
+	},
+	"Inventory": {
+		"EmptyInventory": "空的背包",
+		"ShowInventory": "显示背包",
+		"HideInventory": "隐藏背包"
+	}
+}
