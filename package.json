@@ -37,7 +37,7 @@
 		"i18next-browser-languagedetector": "3.0.3",
 		"jsoneditor": "6.2.1",
 		"konva": "4.0.3",
-		"lodash": "4.17.15",
+		"lodash": "4.17.19",
 		"moment": "2.24.0",
 		"normalizr": "3.4.1",
 		"portable-fetch": "3.0.0",
