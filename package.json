@@ -29,7 +29,7 @@
 		"typestrict": "^1.0.2"
 	},
 	"dependencies": {
-		"chart.js": "2.8.0",
+		"chart.js": "2.9.4",
 		"copy-to-clipboard": "3.2.0",
 		"history": "4.9.0",
 		"hoist-non-react-statics": "3.3.0",
