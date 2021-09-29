@@ -35,7 +35,7 @@
 		"hoist-non-react-statics": "3.3.0",
 		"i18next": "17.0.10",
 		"i18next-browser-languagedetector": "3.0.3",
-		"jsoneditor": "6.2.1",
+		"jsoneditor": "9.5.6",
 		"konva": "4.0.3",
 		"lodash": "4.17.15",
 		"moment": "2.24.0",
