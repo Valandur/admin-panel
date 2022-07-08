@@ -38,7 +38,7 @@
 		"jsoneditor": "6.2.1",
 		"konva": "4.0.3",
 		"lodash": "4.17.15",
-		"moment": "2.24.0",
+		"moment": "2.29.4",
 		"normalizr": "3.4.1",
 		"portable-fetch": "3.0.0",
 		"raven-for-redux": "1.4.0",
