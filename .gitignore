@@ -1,15 +1,11 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
-
-# dependencies
-node_modules
-
-# testing
-coverage
-
-# production
-build
-
-# misc
 .DS_Store
+node_modules
+/build
+/.svelte-kit
+/package
 .env
-npm-debug.log
+.env.*
+!.env.example
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+/src/lib/api
