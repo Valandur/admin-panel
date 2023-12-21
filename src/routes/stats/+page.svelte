@@ -55,18 +55,18 @@
 
 		<Pancake.Svg>
 			<Pancake.SvgLine data={cpuPoints} let:d>
-				<path class="stroke-blue-800 fill-none" {d} />
+				<path class="stroke-blue-800 stroke-2 fill-none" {d} />
 			</Pancake.SvgLine>
 			<Pancake.SvgLine data={memPoints} let:d>
-				<path class="stroke-red-600 fill-none" {d} />
+				<path class="stroke-red-600 stroke-2 fill-none" {d} />
 			</Pancake.SvgLine>
 			<Pancake.SvgLine data={diskPoints} let:d>
-				<path class="stroke-green-800 fill-none" {d} />
+				<path class="stroke-green-700 stroke-2 fill-none" {d} />
 			</Pancake.SvgLine>
 
 			{#if closest}
 				<Pancake.SvgLine data={closest.data} let:d>
-					<path class="stroke-yellow-400 stroke-2 fill-none" {d} />
+					<path class="stroke-yellow-400 stroke-[4px] fill-none" {d} />
 				</Pancake.SvgLine>
 			{/if}
 		</Pancake.Svg>
