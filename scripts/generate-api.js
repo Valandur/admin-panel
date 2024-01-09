@@ -1,10 +1,11 @@
 import { exec } from 'child_process';
 import { mkdir, rm, writeFile } from 'fs/promises';
 
+const URL = process.env.PUBLIC_API_URL;
 const API_KEY = process.env.PUBLIC_API_KEY;
 
 const name = 'Web-API';
-const specSourceLocal = `http://localhost:8080/openapi.json?key=${API_KEY}`;
+const specSourceLocal = `${URL}/openapi.json?key=${API_KEY}`;
 const localRoot = 'src/lib/api';
 const localOpenApiPath = `${localRoot}/openapi.json`;
 
