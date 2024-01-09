@@ -31,6 +31,10 @@
 			<td>{data.minecraftVersion}</td>
 		</tr>
 		<tr>
+			<td>Flavour</td>
+			<td>{data.flavour} ({data.flavourVersion})</td>
+		</tr>
+		<tr>
 			<td>Web-API Version</td>
 			<td>{data.webapiVersion}</td>
 		</tr>
