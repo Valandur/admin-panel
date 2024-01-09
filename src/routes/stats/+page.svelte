@@ -7,6 +7,7 @@
 	export let data: PageData;
 
 	let closest: any;
+	let closest2: any;
 
 	$: stats = data.stats;
 
@@ -17,6 +18,7 @@
 		data: [] as any[]
 	}));
 	$: cpuPoints.forEach((p) => (p.data = cpuPoints));
+
 	$: memPoints = stats.map((s) => ({
 		name: 'Memory',
 		x: s.timestamp.getTime(),
@@ -24,21 +26,27 @@
 		data: [] as any[]
 	}));
 	$: memPoints.forEach((p) => (p.data = memPoints));
+
 	$: diskPoints = stats.map((s) => ({
 		name: 'Disk',
 		x: s.timestamp.getTime(),
 		y: s.diskUsage * 100,
 		data: [] as any[]
 	}));
-	$: diskPoints.forEach((p) => (p.data = diskPoints));
+	$: memPoints.forEach((p) => (p.data = memPoints));
+
+	$: playerPoints = stats.map((s) => ({
+		name: 'Players',
+		x: s.timestamp.getTime(),
+		y: s.onlinePlayers,
+		data: [] as any[]
+	}));
+	$: playerPoints.forEach((p) => (p.data = playerPoints));
+
 	$: points = cpuPoints.concat(memPoints, diskPoints);
 
 	$: xMin = points.reduce((curr, p) => Math.min(curr, p.x), Number.MAX_SAFE_INTEGER);
 	$: xMax = points.reduce((curr, p) => Math.max(curr, p.x), Number.MIN_SAFE_INTEGER);
-
-	function pct(value: number) {
-		return (value * 100).toFixed(1);
-	}
 </script>
 
 <h1>Stats</h1>
@@ -50,7 +58,7 @@
 		</Pancake.Grid>
 
 		<Pancake.Grid vertical count={8} let:value>
-			<span class="x-label">{format(value, 'dd.MM.yyyy hh:mm')}</span>
+			<span class="x-label">{format(value, 'dd.MM.yyyy HH:mm')}</span>
 		</Pancake.Grid>
 
 		<Pancake.Svg>
@@ -79,12 +87,51 @@
 					style="transform: translate(-{100 * ((closest.x - xMin) / (xMax - xMin))}%,0)"
 				>
 					<div>{closest.name}</div>
-					<div>{format(new Date(closest.x), 'dd.MM.yyyy hh:mm:ss')}: {closest.y.toFixed(2)}%</div>
+					<div>{format(new Date(closest.x), 'dd.MM.yyyy HH:mm:ss')}: {closest.y.toFixed(2)}%</div>
 				</div>
 			</Pancake.Point>
 		{/if}
 
 		<Pancake.Quadtree data={points} bind:closest />
+	</Pancake.Chart>
+</div>
+
+<div class="h-[600px] p-8 ps-10 bg-gray-100">
+	<Pancake.Chart x1={xMin} x2={xMax} y1={0} y2={10}>
+		<Pancake.Grid horizontal count={5} let:value>
+			<div class="grid-line horizontal"><span>{value}</span></div>
+		</Pancake.Grid>
+
+		<Pancake.Grid vertical count={8} let:value>
+			<span class="x-label">{format(value, 'dd.MM.yyyy HH:mm')}</span>
+		</Pancake.Grid>
+
+		<Pancake.Svg>
+			<Pancake.SvgLine data={playerPoints} let:d>
+				<path class="stroke-blue-800 stroke-2 fill-none" {d} />
+			</Pancake.SvgLine>
+
+			{#if closest2}
+				<Pancake.SvgLine data={closest2.data} let:d>
+					<path class="stroke-yellow-400 stroke-[4px] fill-none" {d} />
+				</Pancake.SvgLine>
+			{/if}
+		</Pancake.Svg>
+
+		{#if closest2}
+			<Pancake.Point x={closest2.x} y={closest2.y}>
+				<span class="annotation-point" />
+				<div
+					class="absolute bg-black text-white p-1 whitespace-nowrap"
+					style="transform: translate(-{100 * ((closest2.x - xMin) / (xMax - xMin))}%,0)"
+				>
+					<div>{closest2.name}</div>
+					<div>{format(new Date(closest2.x), 'dd.MM.yyyy HH:mm:ss')}: {closest2.y}</div>
+				</div>
+			</Pancake.Point>
+		{/if}
+
+		<Pancake.Quadtree data={playerPoints} bind:closest={closest2} />
 	</Pancake.Chart>
 </div>
 
